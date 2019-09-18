@@ -1,9 +1,28 @@
 [
   {
-    "platform": "MSDOS",
+    "release": "MSDOS",
     "website": "https://www.classicgames.me/another-world-on-msdos.html",
     "download": "https://downloaddosgames.classicgames.me/d.php?game=72c55ce42569b90596b5d4",
+    "download-date": "2019-09-16",
     "rootdir": "aworld/aworld",
     "md5sum": "076117919d1dca51e486f33b8f7817e3"
+  },
+  {
+    "release": "WindowsXP-hires-1.1c",
+    "website": "http://www.anotherworld.fr/anotherworld_uk/telechargement.htm",
+    "download": "http://www.anotherworld.fr/download/AnotherWorld_Demo.exe",
+    "download-date": "2019-09-18",
+    "rootdir": ".",
+    "md5sum": "135375d23845898dd91ad5d6a6fc35fb",
+    "note": "The game resources are inside Data/Pak01.pak - we need to figure out how to extract that."
+  },
+  {
+    "release": "Amiga-retro-presskit",
+    "website": "http://www.thedigitalounge.com/presskit.html",
+    "download": "http://www.thedigitalounge.com/dl/AnotherWorld-Retro-presskit.zip",
+    "download-date": "2019-09-18",
+    "rootdir": ".",
+    "md5sum": "5dca377e0e1506d5cf83317b1495f3e8",
+    "note": "Need to double-unzip, then extract files from AnotherWorld_DiskA_nologo_noprotec.adf and AnotherWorld_DiskB_nologo_noprotec.adf"
   }
 ]

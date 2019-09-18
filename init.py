@@ -31,7 +31,7 @@ class Bank():
       self.buf = list(f.read(me["packedSize"]))
       self.buf.extend([0] * (me["size"]-me["packedSize"]))
       self._iBuf = me["packedSize"] - 4
-      print(len(self.buf))
+      #print(len(self.buf))
       return self.unpack()
 
 
@@ -169,32 +169,35 @@ def get_files(entry):
 
 metadata = json.loads(open("metadata.json").read())
 for md in metadata:
+  print("Processing '{}'...".format(md["md5sum"]))
   fullpath = get_files(md)
   # TODO:
   # create a directory using the md5sum as the dirname and extract the files there
-  if 0:
+  if not os.path.exists(md["md5sum"]):
     os.mkdir(md["md5sum"])
     os.mkdir(md["md5sum"] + "/bin")
     os.mkdir(md["md5sum"] + "/original")
     os.mkdir(md["md5sum"] + "/disasm")
 
-  # parse memlist and extract resources from the banks
-  path = os.path.join(md["md5sum"], "original", md["rootdir"])
-  memlist = read_mem_entries(path)
-  resource_count = 0
-  for entry in memlist:
-    print(entry)
-    bank = Bank(path)
-    filename = "{}-{}.bin".format(hex(resource_count),
-                                  ResourceType(entry["type"]).name)
-    filepath = os.path.join(md["md5sum"], "bin", filename)
-    open(filepath, "wb").write(bank.read(entry))
-    resource_count += 1
-      
-    if entry["type"] == ResourceType.BYTECODE:
-      # run the another world bytecode disassembler
-      pass
-
+  try:
+    # parse memlist and extract resources from the banks
+    path = os.path.join(md["md5sum"], "original", md["rootdir"])
+    memlist = read_mem_entries(path)
+    resource_count = 0
+    for entry in memlist:
+      #print(entry)
+      bank = Bank(path)
+      filename = "{}-{}.bin".format(hex(resource_count),
+                                    ResourceType(entry["type"]).name)
+      filepath = os.path.join(md["md5sum"], "bin", filename)
+      open(filepath, "wb").write(bank.read(entry))
+      resource_count += 1
+        
+      if entry["type"] == ResourceType.BYTECODE:
+        # run the another world bytecode disassembler
+        pass
+  except:
+    print ("FAILED")
 
 # After we get the source listings of the bytecode for all releases we may perform comparisons between them to figure out their differences.
 # We may also build a local git repo with branches for each of the releases, or something like that...
