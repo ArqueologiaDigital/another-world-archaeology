@@ -3,6 +3,14 @@
 # Frozen reference material — see references/README.md for the policy.
 # Format: standard sha256sum output (`<64-hex-hash>  <path>`).
 # Verified by `make verify-references`.
-#
-# (No entries yet — the first will be the gamefaqs walkthrough archived
-# from the Wayback Machine.)
+
+# gamefaqs.com walkthrough for "Another World: 20th Anniversary Edition" (3DS),
+# by user "GuideWriter1984". Provenance:
+#   live URL:    https://gamefaqs.gamespot.com/3ds/805514-another-world-20th-anniversary-edition/faqs/78570
+#   wayback:     https://web.archive.org/web/20260429192338/https://gamefaqs.gamespot.com/3ds/805514-another-world-20th-anniversary-edition/faqs/78570
+#   captured:    2026-04-29 (fetched via the wayback `id_/` raw-content endpoint)
+# The .html file is the raw archived payload as captured by the Wayback Machine.
+# The .txt file is a plain-text rendering of the #faqwrap div for diff-friendly
+# comparison; it is derivative but committed as-is and frozen alongside the html.
+daade6d47601f3eff363faf05feead458c68efa20f76cae320afa826085e4e0d  walkthroughs/2026-04-29-gamefaqs-aw-78570.html
+783bf9a2c6ef009d3307ad16241742c9085913f77fcf448de236df9e74d595a2  walkthroughs/2026-04-29-gamefaqs-aw-78570.txt
