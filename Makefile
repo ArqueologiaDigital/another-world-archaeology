@@ -33,8 +33,7 @@ fetch:
 	@exit 1
 
 extract:
-	@echo "make extract: not yet implemented (TODO: extractor dispatch keyed on metadata.json[*].format; only dos-bank is implemented today, in init.py — pending refactor into extractors/)"
-	@exit 1
+	@$(PYTHON) extract.py $(if $(SLUG),--slug $(SLUG))
 
 disasm:
 	@echo "make disasm: not yet implemented (depends on AWVM_Tools sibling clone + extract output)"
@@ -45,6 +44,6 @@ verify-references:
 	@exit 1
 
 clean:
-	rm -rf docs/data/
-	@echo "cleaned: docs/data/"
-	@echo "(preserved: original_files/, cruft/, sessions/, per-release working dirs)"
+	rm -rf docs/data/ work/
+	@echo "cleaned: docs/data/, work/"
+	@echo "(preserved: original_files/, cruft/, sessions/)"
