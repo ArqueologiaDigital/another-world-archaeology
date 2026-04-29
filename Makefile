@@ -40,8 +40,7 @@ disasm:
 	@exit 1
 
 verify-references:
-	@echo "make verify-references: not yet implemented (TODO: references/MANIFEST.sha256 + tools/verify_references.py)"
-	@exit 1
+	@$(PYTHON) tools/verify_references.py
 
 clean:
 	rm -rf docs/data/ work/

@@ -1,0 +1,8 @@
+# references/MANIFEST.sha256
+#
+# Frozen reference material — see references/README.md for the policy.
+# Format: standard sha256sum output (`<64-hex-hash>  <path>`).
+# Verified by `make verify-references`.
+#
+# (No entries yet — the first will be the gamefaqs walkthrough archived
+# from the Wayback Machine.)
