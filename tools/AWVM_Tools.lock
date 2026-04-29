@@ -1,0 +1,11 @@
+{
+  "name": "AnotherWorld_VMTools",
+  "url": "https://github.com/felipesanches/AnotherWorld_VMTools.git",
+  "pinned_commit": "143268d5eeb77d9f3d0b1a2b999833a10f478c37",
+  "pinned_date": "2024-02-24",
+  "pinned_subject": "a missing \"import sys\"",
+  "expected_sibling_path": "../AnotherWorld_VMTools",
+  "change_review_required": true,
+  "purpose": "Bytecode disassembler and assembler for the Another World VM, used by the extract pipeline to produce diff-friendly source-like output from BYTECODE resources. Round-trips: `awvm-asm.py` rebuilds bytecode byte-identical to the input of `awvm-disasm.py`.",
+  "depends_on": ["exectrace==0.0.5", "pycairo==1.21.0"]
+}
