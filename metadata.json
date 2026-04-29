@@ -24,5 +24,23 @@
     "rootdir": ".",
     "md5sum": "5dca377e0e1506d5cf83317b1495f3e8",
     "note": "Need to double-unzip, then extract files from AnotherWorld_DiskA_nologo_noprotec.adf and AnotherWorld_DiskB_nologo_noprotec.adf"
+  },
+  {
+    "release": "SNES",
+    "website": "https://wowroms.com/en/roms/super-nintendo/another-world-europe/26953.html",
+    "download": "https://wowroms.com/en/roms/super-nintendo/download-another-world-europe/26953.html"
+    "download-date": "2019-09-18",
+    "rootdir": ".",
+    "md5sum": "f65e3d6efe35900c0015bcb751ee567e",
+    "note": "ZIP containing a Super Nintendo cartridge ROM. Still need to figure out how to extract resources."
+  },
+  {
+   "release": "SEGA-Genesis-Europe",
+   "website": "https://wowroms.com/en/roms/sega-genesis-megadrive/download-another-world-europe/25230.html",
+   "download": "https://slave6t.wowroms.com/d/roms/g/xXs9U89koudbqQCWuDui/k1/a5a9c5a532575a1/k2/0c628c62c5bf294",
+    "download-date": "2022-04-02",
+    "rootdir": ".",
+    "md5sum": "",
+    "note": "ZIP containing a SEGA Genesis cartridge ROM. Still need to figure out how to extract resources."
   }
 ]
