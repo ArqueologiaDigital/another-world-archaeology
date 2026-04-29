@@ -1,0 +1,31 @@
+This repository was created many years ago when I was starting to apply a methodology similar to the MAME approach of tracking historical assets (ROM files) by their checksums.
+
+The goal is to create a full collection of another world assets, for computer game dev history research via comparative analysis of the many existing ports of the Another World game.
+
+I am interested in comparing all versions so that we can catalog what are the differences. And maybe even figure out a "genealogy tree" of the many releases (which port first introced any given feature or bug?)
+
+We do not commit to othe repo any of the actual original game files. We only commit metadata: filename, checksum, asset type (polygon data, executable bytecode, bitmaps, sound samples, music, text strings, etc), and we also implement a python library that implements the algorithms for extracting assets from the original data files (each releases packages the game in some different way: with compressed "bank"/"resources" files, or as a video game cartridge ROM, or as specific floppy disk image formats, etc...)
+
+Checksums are used at two differente levels: (a) for the raw individual resources, but also for (b) the packaged release files.
+
+We also track provenance of all files. So that if they are available online, we should keep track of which URL we used to fetch it for research purposes. And when the copy was fetched. And we should also ensure that such URLs are archived on the Internet Archive's WayBack Machine. If we have any other context about the provenance, we should keep a text description of such context.
+
+The project should have a centralized Makefile that runs the full process of fetching all files from the cataloged places (or from the archived reference copies, or from a local cache, if available). It should then automatically extract all resources to a (not version controlled) directory. From that directory, it should perform disassembly of all bytecode, extract all polygon data (plus color palettes and whatever other assets) to reasonable "source code"-like format. The goal is to enable these sibling trees of regenerated game sources to be compared for analysis.
+
+I also have a version of ExecTrace that supports disassembling Another World Bytecode. This should be used as a tool. So please clone the AWVM_Tools repo (https://github.com/felipesanches/AnotherWorld_VMTools) and use it. You can also propose improvements to it, in case you find bugs, or if you consider that additional features would be useful. But I want to review any proposal of changes before you implement them.
+
+I want you to make a thorough plan and also let me know if there's any methodology gaps I forgot to describe. 
+
+Then, we'll also start the research with the initial question listed below.
+
+
+=== FIRST RESEARCH QUESTION ===
+
+Please save a git-versioned, but not modifiable, backup verbatim copy of the walkthrough available at https://gamefaqs.gamespot.com/3ds/805514-another-world-20th-anniversary-edition/faqs/78570 (which I also archived at https://web.archive.org/web/20260429192338/https://gamefaqs.gamespot.com/3ds/805514-another-world-20th-anniversary-edition/faqs/78570)
+
+
+The walktrough mentions: "the gun doesn’t have unlimited ammo"
+I also know that in some places there are charging stations for the gun.
+But it is not clear to me how the gun is handled in the code. Is there a counter? What does it count? Simple shots, shield-shots, or mega-blast shots? If there's a usage quota, how can we precisely describe it?
+
+I will have other similar questions later. But I want to first validate what you are able to do with the codebase, by starting with this research question.
