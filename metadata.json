@@ -1,46 +1,66 @@
 [
   {
+    "slug": "dos",
     "release": "MSDOS",
+    "format": "dos-bank",
     "website": "https://www.classicgames.me/another-world-on-msdos.html",
     "download": "https://downloaddosgames.classicgames.me/d.php?game=72c55ce42569b90596b5d4",
-    "download-date": "2019-09-16",
+    "download_date": "2019-09-16",
+    "wayback_url": null,
+    "wayback_date": null,
     "rootdir": "aworld/aworld",
     "md5sum": "076117919d1dca51e486f33b8f7817e3"
   },
   {
+    "slug": "winxp-1.1c",
     "release": "WindowsXP-hires-1.1c",
+    "format": "winxp-pak",
     "website": "http://www.anotherworld.fr/anotherworld_uk/telechargement.htm",
     "download": "http://www.anotherworld.fr/download/AnotherWorld_Demo.exe",
-    "download-date": "2019-09-18",
+    "download_date": "2019-09-18",
+    "wayback_url": null,
+    "wayback_date": null,
     "rootdir": ".",
     "md5sum": "135375d23845898dd91ad5d6a6fc35fb",
     "note": "The game resources are inside Data/Pak01.pak - we need to figure out how to extract that."
   },
   {
+    "slug": "amiga-retro-presskit",
     "release": "Amiga-retro-presskit",
+    "format": "amiga-adf",
     "website": "http://www.thedigitalounge.com/presskit.html",
     "download": "http://www.thedigitalounge.com/dl/AnotherWorld-Retro-presskit.zip",
-    "download-date": "2019-09-18",
+    "download_date": "2019-09-18",
+    "wayback_url": null,
+    "wayback_date": null,
     "rootdir": ".",
     "md5sum": "5dca377e0e1506d5cf83317b1495f3e8",
     "note": "Need to double-unzip, then extract files from AnotherWorld_DiskA_nologo_noprotec.adf and AnotherWorld_DiskB_nologo_noprotec.adf"
   },
   {
-    "release": "SNES",
+    "slug": "snes-eu",
+    "release": "SNES (Europe)",
+    "format": "snes-rom",
     "website": "https://wowroms.com/en/roms/super-nintendo/another-world-europe/26953.html",
-    "download": "https://wowroms.com/en/roms/super-nintendo/download-another-world-europe/26953.html"
-    "download-date": "2019-09-18",
+    "download": "https://wowroms.com/en/roms/super-nintendo/download-another-world-europe/26953.html",
+    "download_date": "2019-09-18",
+    "wayback_url": null,
+    "wayback_date": null,
     "rootdir": ".",
     "md5sum": "f65e3d6efe35900c0015bcb751ee567e",
     "note": "ZIP containing a Super Nintendo cartridge ROM. Still need to figure out how to extract resources."
   },
   {
-   "release": "SEGA-Genesis-Europe",
-   "website": "https://wowroms.com/en/roms/sega-genesis-megadrive/download-another-world-europe/25230.html",
-   "download": "https://slave6t.wowroms.com/d/roms/g/xXs9U89koudbqQCWuDui/k1/a5a9c5a532575a1/k2/0c628c62c5bf294",
-    "download-date": "2022-04-02",
+    "slug": "genesis-eu",
+    "release": "SEGA Genesis (Europe)",
+    "format": "genesis-rom",
+    "website": "https://wowroms.com/en/roms/sega-genesis-megadrive/download-another-world-europe/25230.html",
+    "download": "https://slave6t.wowroms.com/d/roms/g/xXs9U89koudbqQCWuDui/k1/a5a9c5a532575a1/k2/0c628c62c5bf294",
+    "download_date": "2022-04-02",
+    "wayback_url": null,
+    "wayback_date": null,
     "rootdir": ".",
-    "md5sum": "",
-    "note": "ZIP containing a SEGA Genesis cartridge ROM. Still need to figure out how to extract resources."
+    "md5sum": null,
+    "note": "ZIP containing a SEGA Genesis cartridge ROM. md5sum not yet recorded; the locally-cached file at original_files/f15f23e1e0fa8d827c4b045d7ce3cf90/ is a candidate match that still needs verification."
   }
 ]
