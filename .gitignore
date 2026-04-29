@@ -16,6 +16,10 @@
 # Generated docs data (regenerated from sessions/*.jsonl by tools/gen_docs_data.py)
 /docs/data/
 
+# Local-only archives of uncommitted scratch work (e.g. one-off backups
+# of pre-existing extraction outputs preserved at project setup).
+/cruft/
+
 # Misc
 *.pyc
 __pycache__/
