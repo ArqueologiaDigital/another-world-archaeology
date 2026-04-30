@@ -1,6 +1,7 @@
 # Local PERMANENT ARCHIVE of fetched original game assets — never committed
-# and (per strict project policy) never deleted from disk either.
-# Layout: original_files/<key>/<original_filename>
+# in this repo (the symlink to ../another-world-archive IS tracked, but the
+# files reachable through it are not — they live in their own sibling repo).
+# Layout: original_files/<slug>/<original_filename>  (resolves through symlink)
 /original_files/
 
 # Per-release extraction output (named by package md5sum) — binaries,
