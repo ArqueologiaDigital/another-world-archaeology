@@ -21,6 +21,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 SESSIONS_DIR = REPO / "sessions"
 CONTENT_DIR = REPO / "docs" / "content"
+ISSUES_DIR = REPO / "issues"
 DATA_DIR = REPO / "docs" / "data"
 
 
@@ -82,11 +83,23 @@ def load_sessions():
 
 def load_content():
     out = {}
-    if not CONTENT_DIR.is_dir():
-        return out
-    for path in sorted(CONTENT_DIR.rglob("*.md")):
-        key = path.relative_to(CONTENT_DIR).with_suffix("").as_posix()
-        out[key] = path.read_text(encoding="utf-8")
+    if CONTENT_DIR.is_dir():
+        for path in sorted(CONTENT_DIR.rglob("*.md")):
+            key = path.relative_to(CONTENT_DIR).with_suffix("").as_posix()
+            out[key] = path.read_text(encoding="utf-8")
+    # Also surface the issue tracker — the structured issue files in
+    # `issues/` (not under docs/content/) need to be browsable from
+    # the static site. Keys are namespaced under `issues/<id-slug>`,
+    # plus the auto-generated index at `issues` and the schema at
+    # `issues/SCHEMA`.
+    if ISSUES_DIR.is_dir():
+        for path in sorted(ISSUES_DIR.rglob("*.md")):
+            rel = path.relative_to(ISSUES_DIR).with_suffix("")
+            if rel.as_posix() == "README":
+                key = "issues"
+            else:
+                key = "issues/" + rel.as_posix()
+            out[key] = path.read_text(encoding="utf-8")
     return out
 
 
