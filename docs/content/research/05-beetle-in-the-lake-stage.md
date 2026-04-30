@@ -238,6 +238,46 @@ port's explicit suppression argues mildly for the former — if it
 were a designed easter egg, you'd expect the porters to keep it
 intact.
 
+### Does the beetle fly?
+
+**Yes — and the "flipping-upside-down" frames the user remembered
+are not a death animation; they're a *stunned* state from which
+the beetle recovers and escapes by flying away.**
+
+The full sequence after a kick connects:
+
+1. **Wing-opening + flap loop** (`LABEL_358B` body, ~25–35 frames):
+   the beetle hops back, opens its wings, flaps in place.
+2. **Falling onto its back** (3 frames `CINEMATIC_670..672`).
+3. **Stunned-on-back** (~10 frames): channel `0x09` is switched to
+   `LABEL_35ED`, an infinite 2-frame loop of `CINEMATIC_659..660`.
+   Channel `0x2E` is simultaneously kicked over to `LABEL_36DB`,
+   which sleeps 10 frames before doing anything.
+4. **Wings re-engage and lift-off begins**: channel `0x2E` writes
+   `setup channel=0x09, address=LABEL_36A4` — switching the
+   render to the upside-down *flapping* loop (`CINEMATIC_657..658`),
+   which itself decrements `var 0x0B` by 1 per frame.
+5. **Slow lift-off** (8 frames): controller subtracts 2 from `var
+   0x0B` and adds 1 to `var 0x0A` per frame. Combined with the
+   render loop's −1, the beetle rises at ~3 px/frame and drifts
+   slightly right.
+6. **Fast escape** (until X ≥ 360, ~screen-right): controller
+   switches to `Y −= 2; X += 12` per frame. The beetle banks up and
+   to the right, off-screen.
+7. **Final settle**: `mov [0x0B], 0x0092` (Y = 146); the channel
+   ends. The beetle is gone.
+
+The take-off code is **byte-identical between Amiga (`LABEL_36DB`)
+and DOS (`LABEL_3825`)** — same constants, same control flow.
+
+So the creature isn't a "ground beetle that dies when kicked" — it's
+a **flying beetle** that walks across the ground when at rest, falls
+on its back when startled, and **escapes by flying off-screen**,
+still inverted. The wings serve a real mechanical purpose. From a
+naturalism standpoint, this is a remarkably small detail to ship in a
+1991 cinematic-platformer's first level — for a creature that has no
+gameplay consequence whatsoever.
+
 ### Can the beetle hurt Lester?
 
 **No.** The bytecode contains no offensive code on the beetle's
@@ -349,3 +389,14 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   check and no kill-Lester trigger. Compared against the beast's
   full three-part hazard structure (position variable +
   collision routine + kill trigger) for context.
+- **2026-04-30** (same day, follow-up) — added "Does the beetle
+  fly?" subsection in response to the owner's follow-up. The
+  bytecode at `LABEL_36DB` (Amiga) / `LABEL_3825` (DOS) is a
+  full take-off sequence: 10-frame stun beat, 8-frame slow
+  lift-off (`Y −= 2`, `X += 1`), then accelerated escape
+  (`Y −= 2`, `X += 12`) until the beetle is off-screen right.
+  Combined with the rendering loop's own `sub [0x0B], 0x0001`,
+  the beetle rises at ~3 px/frame. So the "flipping-upside-down"
+  frames are a *stunned* state from which the beetle recovers
+  and escapes — not a death animation. The take-off code is
+  byte-identical between Amiga and DOS.

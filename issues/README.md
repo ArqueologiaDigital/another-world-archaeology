@@ -37,7 +37,7 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 - ○ [#0010](./0010-apple-iigs-woz-prodos-extractor.md) — WOZ2 → 3.5" GCR → ProDOS extractor for Apple IIgs `extractor` `apple-iigs` `format-rev`
 - ○ [#0011](./0011-symbian-aw-resources-from-lzma1.md) — Walk LZMA1 chunks inside the Symbian SIS payload-01 to surface AW VM resources `extractor` `symbian` `format-rev`
 - ○ [#0012](./0012-sega-cd-heart-of-alien-acquisition.md) — Acquire and extract the Sega CD Heart of the Alien (mega-cd-heart-of-alien-1994) `acquisition` `sega-cd` `extractor`
-- ○ [#0046](./0046-propose-adding-beetle-wings-opening-beetle-lying-upside-down.md) — Propose adding BEETLE_WINGS_OPENING / BEETLE_LYING_UPSIDE_DOWN labels to AWVM_Tools `tooling` `awvm-tools` `labels`
+- ○ [#0046](./0046-propose-adding-beetle-wings-opening-beetle-lying-upside-down.md) — Propose BEETLE_WINGS_OPENING / BEETLE_FLYING_UPSIDE_DOWN labels for AWVM_Tools `tooling` `awvm-tools` `labels`
 
 ### Tier C
 
