@@ -6,10 +6,13 @@ added pointing at the finding).
 
 ## Active questions
 
-- [01 — Gun ammo](#/open-questions/01-gun-ammo): how is the gun's
-  shot quota tracked in the bytecode? Is it a counter per shot type,
-  per energy unit, or something else? How do charging stations
-  refill it?
+*None yet — this list grows as new questions arrive.*
+
+## Resolved
+
+- ✅ [01 — Gun ammo](#/open-questions/01-gun-ammo) — resolved
+  2026-04-30. Full answer at
+  [research/01-gun-ammo](#/research/01-gun-ammo).
 
 ## Convention
 

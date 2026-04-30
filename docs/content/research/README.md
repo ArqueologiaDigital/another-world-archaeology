@@ -6,6 +6,15 @@ finding is comparative) records which releases it applies to.
 
 ## Findings
 
+- [01 — Gun ammo / shot quota in the bytecode](#/research/01-gun-ammo):
+  resolves the original gun-ammo open question. Energy is var `0x06`;
+  costs are −1 / −10 / −50 (−100 in Prison) for tap / regular /
+  superblast; shield is free; single recharge station clamps to 1000;
+  per-level entry values are 199 / 990 / 990. **The mechanics are
+  byte-for-byte identical between DOS, Amiga, and Genesis-EU** — the
+  first definitive cross-release identity at the level of
+  game-mechanic constants we've found.
+
 - [02 — Amiga codewheel protection patch](#/research/02-amiga-codewheel-protection):
   the `amiga-retro-presskit` (2014) and `amiga-archive-org` (2020
   CC0) dumps share 143 of 144 resources byte-for-byte; the
@@ -22,9 +31,6 @@ finding is comparative) records which releases it applies to.
   demake, generic Symbian SIS), two confirmed gaps (clean SNES USA,
   Atari Jaguar), and nine candidate parallel slugs surfaced as
   side findings.
-
-*Pending: open question [01 — gun ammo](#/open-questions/01-gun-ammo)
-— investigation in progress in a parallel research agent.*
 
 ## Convention
 
