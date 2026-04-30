@@ -238,6 +238,51 @@ port's explicit suppression argues mildly for the former — if it
 were a designed easter egg, you'd expect the porters to keep it
 intact.
 
+### Can the beetle hurt Lester?
+
+**No.** The bytecode contains no offensive code on the beetle's
+side. To put it in context, the beast in the same level *does*
+hurt Lester, and its hazard mechanism is straightforward:
+
+```
+CHECK_IF_THE_BEAST_HAS_ALREADY_REACHED_LESTER:
+  mov [0x11], [0x0E]                   ; copy beast X (var 0x0E)
+  sub [0x11], 0x0028                   ; beast X − 40
+  jg [0x11], [0x01], THE_BEAST_IS_STILL_AT_A_DISTANCE  ; if Lester is more than 40 pixels right of beast, ok
+  ; ... otherwise:
+  setup channel=0x28, address=THE_BEAST_KILLS_LESTER   ; trigger Lester's death cinematic
+```
+
+The beast has all three components of a hazard:
+1. A **position-tracking variable** (`var 0x0E` = beast X)
+2. A **collision-detection routine** that polls each frame and
+   compares the beast's position against Lester's (`var 0x01`)
+3. A **kill trigger** that swaps in `THE_BEAST_KILLS_LESTER` on
+   channel `0x28`
+
+The beetle has none of these. Across both Amiga and DOS level-2
+disassemblies, every single read of `var 0x0A` (beetle X) and
+`var 0x0B` (beetle Y) falls into exactly three categories:
+
+| Read site | Purpose | Threatens Lester? |
+|---|---|---|
+| `BEETLE_WALKING_RIGHT` / `_LEFT` | Render the walk animation at the beetle's current X / Y | No |
+| Cleanup watcher (`LABEL_3497`) | `jg [0x0A], 0x014A` — when the beetle walks off the right edge of the screen, kill its channel | No |
+| Kick-detector (`LABEL_34AA`) | `[0x0A]` vs `[0x04] ± 4` — checks if Lester's *kick* impact connects with the beetle | No (the opposite direction — Lester hurts the beetle) |
+
+There is **no comparison of `var 0x0A` against `var 0x01` (Lester
+X)** anywhere in level 2. The wing-flip routines (`LABEL_358B`,
+`LABEL_3633` and their DOS counterparts) likewise contain only
+`video` rendering calls and a few state-mode writes against `var
+0x09` (the inner flap-loop counter) — no setup of a kill channel,
+no Lester-state writes, no damage triggers of any kind.
+
+So the beetle is **strictly an aesthetic prop**: it walks, it can
+be kicked (which plays its wing-opening + flipping-upside-down
+death animation), and that's the entirety of its interaction with
+the rest of the level. A player ignoring it pays no penalty;
+there's nothing to dodge.
+
 ## Open follow-up questions
 
 These are tracked as separate issues:
@@ -297,3 +342,10 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   observing the beetle on Amiga but not on DOS, and asking whether
   the wing-opening + flipping-upside-down polygons they remembered
   are reachable in gameplay.
+- **2026-04-30** (same day, follow-up) — added "Can the beetle
+  hurt Lester?" subsection in response to the owner's follow-up
+  question. Confirmed by exhaustive enumeration of `var 0x0A` /
+  `var 0x0B` reads that the beetle has no collision-with-Lester
+  check and no kill-Lester trigger. Compared against the beast's
+  full three-part hazard structure (position variable +
+  collision routine + kill trigger) for context.
