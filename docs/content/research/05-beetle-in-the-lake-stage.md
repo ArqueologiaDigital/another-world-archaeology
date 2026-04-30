@@ -267,33 +267,116 @@ in the lake stage (kick animation plays correctly), but the beetle
 walks past unaffected. Direct match for "the kick-detector is dead
 even on Amiga". Recorded against issue #0045.
 
-### Reachability summary (across all four currently-disassembled ports)
+### Reachability summary (across all six currently-disassembled ports)
 
-| Animation | Amiga (1991) | Atari ST (1991) | DOS (1992) | Genesis-EU (1993) |
-|---|---|---|---|---|
-| Beetle walking left/right | **Yes** | **Yes** | No (gate 2) | No (gate 2) |
-| Wing-flip (right side) | No (gate 1) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
-| Wing-flip (left side, mirror) | No (gate 1) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
-| Falling onto back | No | No | No | No |
-| Flying upside-down + take-off | No | No | No | No |
+| Animation | Amiga 1991 | Atari ST 1991 | DOS 1992 | SNES-EU 1992 | Genesis-EU 1993 | GBA 2004 |
+|---|---|---|---|---|---|---|
+| Beetle walking left/right | **Yes** | **Yes** | No (g2) | No (g2) | No (g2) | No (g2) |
+| Wing-flip (right side) | No (g1) | No (g1) | No (g1+g2) | No (g1+g2) | No (g1+g2) | No (g1+g2) |
+| Wing-flip (left side, mirror) | No (g1) | No (g1) | No (g1+g2) | No (g1+g2) | No (g1+g2) | No (g1+g2) |
+| Falling onto back | No | No | No | No | No | No |
+| Flying upside-down + take-off | No | No | No | No | No | No |
 
-The wing-flip is **dead in all four ports**. Only the two 1991 ports
-(Amiga + Atari ST) show the beetle visually at all.
+The wing-flip is **dead in all six ports**. Only the two 1991 ports
+(Amiga + Atari ST) show the beetle visually at all. Apple IIgs
+(Interplay 1993) has not yet been extracted — its bytecode is gated
+on a WOZ flux-level reader (issue #0014).
 
-### Four-port comparison: which gates each port carries
+### Six-port comparison: which gates each port carries
 
-| Port | Beetle spawn | 2nd `setup ch=0x09` (gate 2) | Kick-detector | 2nd `setup ch=0x2E` (gate 1) |
-|---|---|---|---|---|
-| **Amiga** (1991)        | `LABEL_3510` (0x3510) | (none) | `LABEL_34AA` (0x34AA) | `LABEL_3497` cleanup |
-| **Atari ST** (1991)     | `LABEL_3510` (0x3510) | (none) | `LABEL_34AA` (0x34AA) | `LABEL_3497` cleanup |
-| **DOS** (1992)          | `LABEL_365A` (0x365A) | `KILL_CHANNEL_ROUTINE` | `LABEL_35F4` (0x35F4) | `LABEL_35E1` cleanup |
-| **Genesis-EU** (1993)   | `LABEL_36FD` (0x36FD) | `KILL_CHANNEL_ROUTINE` | `LABEL_3697` (0x3697) | `LABEL_3684` cleanup |
+| Port | Year | Author | Beetle spawn | 2nd `setup ch=0x09` (g2) | Kick-detector | 2nd `setup ch=0x2E` (g1) |
+|---|---|---|---|---|---|---|
+| **Amiga**        | 1991 | Chahi    | `0x3510` | (none) | `0x34AA` | `0x3497` cleanup |
+| **Atari ST**     | 1991 | Chahi    | `0x3510` | (none) | `0x34AA` | `0x3497` cleanup |
+| **DOS**          | 1992 | Heineman | `0x365A` | `KILL_CHANNEL_ROUTINE` | `0x35F4` | `0x35E1` cleanup |
+| **SNES-EU**      | 1992 | Heineman | `0x36FD` | `KILL_CHANNEL_ROUTINE` | `0x3697` | `0x3684` cleanup |
+| **Genesis-EU**   | 1993 | Heineman | `0x36FD` | `KILL_CHANNEL_ROUTINE` | `0x3697` | `0x3684` cleanup |
+| **GBA (Foxy)**   | 2004 | Foxy     | `0x3721` | `KILL_CHANNEL_ROUTINE` | `0x36BB` | `0x36A8` cleanup |
 
-Same kick-detector code is intact on all four ports (just unrunnable
+Same kick-detector code is intact on all six ports (just unrunnable
 because of gate 1) — confirmed by reading the kick-detector body in
 each port: same `je [0x06], 0x00`/`jg [0x06], 0x02` guards, same
 `[0x04] ± 4` bounds checks, same `setup channel=0x09, address=…`
-wing-flip dispatch.
+wing-flip dispatch. The kick-dispatch logic was preserved verbatim
+across thirteen years and four CPU architectures (68k, x86, 65816,
+68000, ARM).
+
+### Cartridge port cross-check: SNES-EU + Genesis-EU share byte-identical bytecode
+
+Verified empirically (2026-04-30): the SNES-EU and Genesis-EU
+**lake-stage bytecode resources are byte-identical** —
+md5 `68b4c327f8eec279e01e6c44ecce178d`, 20,863 raw operand bytes
+emitted by the disassembler — even though they ship on completely
+different cartridge formats with different CPU architectures
+(SNES = 65816; Genesis = 68000).
+
+The five-port lake-stage bytecode hash matrix:
+
+| Port | Lake-stage bytecode md5 | raw-byte size |
+|---|---|---|
+| **Amiga** 1991                  | `6f5ab0e0868cc23025c7551eea549e85` | 19,332 |
+| **Atari ST** 1991 (resource md5) | `860362f3718ca4fe4a8e65cdbe40f155` | 19,458 |
+| **DOS** 1992                    | `3e95437f541f27ef9d121e31fa06ce52` | 20,684 |
+| **SNES-EU** 1992                | `68b4c327f8eec279e01e6c44ecce178d` | 20,863 |
+| **Genesis-EU** 1993             | `68b4c327f8eec279e01e6c44ecce178d` | 20,863 |
+| **GBA (Foxy)** 2004             | `37487368811666a6b3103a63434db002` | 19,717 |
+
+(Atari ST disasm hash is the resource's raw uncompressed bytes —
+disasm itself is gated on issue #0004. The Atari ST resource is
+**byte-identical to the Amiga resource**, which has md5 `6f5ab0e0…`
+*after disasm extraction* but `860362f3…` *as the raw resource*.
+The two hashes refer to different views of the same bytes.)
+
+This is decisive lineage data:
+
+- **Amiga + Atari ST 1991** = single Chahi master, distributed on
+  two SKUs.
+- **SNES-EU 1992 + Genesis-EU 1993** = single Heineman build, ported
+  to two cartridge platforms with the AW VM bytecode resource
+  reused verbatim. Heineman's 1993 Genesis-EU port did **not**
+  re-derive bytecode from his earlier DOS port (which has its own
+  hash `3e95437f…`); it built on the SNES-EU bytecode.
+- **DOS 1992** = its own Heineman build, distinct from the SNES
+  build despite sharing the gates 1+2 editorial choices.
+- **GBA 2004 (Foxy)** = a separate later branch with modified
+  bytecode (size 19,717), differing from all of the original 1991-93
+  ports. The gates remained intact through Foxy's modifications.
+
+The two-tier branching:
+
+```
+                 Pre-1991 dev master (Chahi)
+                          │
+                          ▼
+                 1991 release master (Chahi, gate 1 added)
+                  ├── Amiga 1991       ┐  byte-identical
+                  └── Atari ST 1991    ┘  level-2 bytecode
+                          │
+                          ▼  (separate port: Heineman, gates 1+2)
+                  ┌────── DOS 1992 ──────┐  (own bytecode hash)
+                  │                      │
+                  │ ┌── SNES-EU 1992 ─┐  │  byte-identical
+                  │ └── Genesis-EU 1993 ┘  level-1/0 bytecode
+                  │                      │
+                  └──────────────────────┘
+                          │
+                          ▼  (later derivative: Foxy/Magic Pockets)
+                       GBA 2004 (own bytecode; gates preserved)
+```
+
+The DOS-vs-SNES distinction is the most surprising data point.
+Heineman shipped both in 1992; if he'd worked from a single
+internal codebase the bytecode would match. The fact that they
+differ — but DOS and Amiga also differ from each other in different
+ways — suggests Heineman maintained two parallel ports rather than
+a shared bytecode source. Hypotheses to investigate:
+
+- Different per-port byte-layout post-processors (e.g. a tool that
+  recompresses or reorders resources for cartridge ROM packing).
+- Different snapshots: the SNES port may have been forked from DOS
+  at an earlier point in development and diverged independently.
+- Active per-port edits — bug-fixes or platform-specific tweaks
+  applied to one branch but not the other.
 
 ### Atari ST and Amiga share byte-identical level-2 bytecode
 
@@ -634,3 +717,25 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   Reachability table widened to four columns. Lineage diagram
   updated to show the Amiga + Atari ST 1991 dual release as one
   branch with byte-identical bytecode. Issue #0049 closed.
+- **2026-04-30** (same day, follow-up — cartridge port cross-check) —
+  SNES-EU 1992 and GBA Foxy 2004 inspected. Both carry **gates 1 +
+  2**, matching DOS / Genesis-EU exactly. The kick-detector
+  bounds-check + dispatch logic is structurally intact in all six
+  ports (`[0x04] ± 4`, `setup channel=0x09, address=…`).
+
+  Genealogy bonus: the **SNES-EU lake-stage bytecode is
+  byte-identical to Genesis-EU's** — md5
+  `68b4c327f8eec279e01e6c44ecce178d`, 20,863 raw operand bytes —
+  even though they ship on completely different cartridge formats
+  (SNES = 65816 CPU, Genesis = 68000). The DOS bytecode hash
+  (`3e95437f…`) differs from both, so Heineman's three Heineman-era
+  ports (DOS / SNES-EU / Genesis-EU) carry **two distinct bytecode
+  branches**, not one. The Genesis-EU port descends from the
+  SNES-EU branch, not from DOS, even though DOS shipped first.
+
+  GBA bytecode (`37487368…`, 19,717 bytes) is distinct from all
+  earlier ports — Foxy / Magic Pockets modified the bytecode for
+  the 2004 GBA port but preserved the gates. Reachability +
+  comparison tables widened to six columns (Apple IIgs still
+  pending — gated on the WOZ extractor, issue #0014). Lineage
+  diagram updated with the SNES↔Genesis byte-identity branch.

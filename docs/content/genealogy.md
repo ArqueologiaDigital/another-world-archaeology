@@ -115,18 +115,23 @@ in the bytecode itself**, distinct from per-port editorial cuts.
 The original Amiga build *as shipped in 1991* already contains the
 gate-1 cut; the DOS port inherits it, plus adds gate-2 of its own.
 
-**Cross-checks across four ports (2026-04-30)**: the gates have
-been verified across all four currently-disassembled bank-format
-ports.
+**Cross-checks across six ports (2026-04-30)**: the gates have
+been verified across all six currently-disassembled ports
+(bank-format + cartridge formats).
 
-| Port | Year | Author | Gate 1 | Gate 2 |
-|---|---|---|---|---|
-| Amiga       | 1991 | Chahi    | yes | no |
-| Atari ST    | 1991 | Chahi    | yes | no |
-| DOS         | 1992 | Heineman | yes | yes |
-| Genesis-EU  | 1993 | Heineman | yes | yes |
+| Port | Year | Author | Gate 1 | Gate 2 | Lake-stage bytecode md5 |
+|---|---|---|---|---|---|
+| Amiga       | 1991 | Chahi    | yes | no  | `6f5ab0e0…` (19,332b) |
+| Atari ST    | 1991 | Chahi    | yes | no  | (resource = `860362f3…`, byte-identical to Amiga) |
+| DOS         | 1992 | Heineman | yes | yes | `3e95437f…` (20,684b) |
+| SNES-EU     | 1992 | Heineman | yes | yes | `68b4c327…` (20,863b) |
+| Genesis-EU  | 1993 | Heineman | yes | yes | `68b4c327…` (20,863b — **identical to SNES-EU**) |
+| GBA (Foxy)  | 2004 | Foxy     | yes | yes | `37487368…` (19,717b) |
 
-Two cleanly distinguishable branches emerge:
+(Apple IIgs is fetched but blocked on a WOZ reader — issue
+[#0052](#/issues).)
+
+Three cleanly distinguishable branches emerge:
 
 - **1991 Chahi master** (Amiga + Atari ST): gate 1 only. The
   Atari ST level-2 bytecode is **byte-identical to Amiga**
@@ -134,10 +139,28 @@ Two cleanly distinguishable branches emerge:
   bank/offset). The 1991 release is a single dev master shipped
   on two SKUs.
 
-- **Heineman lineage** (DOS 1992 + Genesis-EU 1993): gates 1 + 2.
-  Cinematic offsets in DOS and Genesis-EU are byte-identical and
-  different from Amiga, indicating Heineman built Genesis-EU from
-  his DOS port rather than re-deriving from Amiga.
+- **Heineman cartridge branch** (SNES-EU 1992 + Genesis-EU 1993):
+  gates 1 + 2. **The SNES-EU and Genesis-EU lake-stage bytecode is
+  byte-identical** (md5 `68b4c327…`, 20,863 raw operand bytes),
+  even though they ship on completely different cartridge formats
+  with different CPUs (SNES = 65816, Genesis = 68000). Heineman
+  ported the Genesis cartridge from the SNES bytecode resource
+  verbatim — no re-derivation. The kick-detector + dispatch
+  pattern is structurally identical to DOS but at slightly shifted
+  addresses.
+
+- **Heineman DOS branch** (DOS 1992): its own bytecode hash
+  (`3e95437f…`), distinct from both Amiga and SNES-EU. Gates +
+  cinematic structure are *editorially* identical to the
+  cartridge branch but the bytes differ. The DOS-vs-cartridge
+  divergence — same author, same year, same gates, *different
+  bytes* — is a genealogy puzzle tracked as [issue #0051](#/issues).
+
+- **Foxy 2004 GBA branch** (GBA): own modified bytecode
+  (`37487368…`, 19,717 bytes), separate from all earlier ports.
+  Gates 1 + 2 preserved through the modifications. The kick-
+  dispatch logic was preserved verbatim across thirteen years and
+  four CPU architectures (68k, x86, 65816, ARM).
 
 Lineage diagram:
 
@@ -149,22 +172,26 @@ Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
    ├── Amiga                 ↘  byte-identical level-2 bytecode
    └── Atari ST              ↗  (same memlist contents, same bank layout)
         │
+        ▼ (Heineman ports — separate branch from Chahi master)
+   ┌── DOS 1992 ────────────────── own bytecode hash `3e95437f…`
+   │                               gates 1 + 2 added
+   │
+   └── SNES-EU 1992 ──┐
+                      ├── byte-identical bytecode `68b4c327…`
+       Genesis-EU 1993 ┘   (cartridge cross-port reuse)
+        │                  gates 1 + 2 added
         ▼
-1992 DOS port (Heineman):    inherits gate 1; adds gate 2 — beetle hidden too
-        │                    cinematic resource laid out at new offsets
-        ▼
-1993 Genesis-EU (Heineman):  inherits gate 1 + gate 2 + DOS cinematic offsets
-                             — does NOT re-derive from Amiga
+2004 GBA Foxy/Magic Pockets: own modified bytecode `37487368…`
+                             gates 1 + 2 preserved
 ```
 
 See [research finding 05](#/research/05-beetle-in-the-lake-stage)
 for the full bytecode trace, kick-detector dispatch logic, take-off
-sequence, four-port comparison table, and unlabeled wing-flip
+sequence, six-port comparison table, and unlabeled wing-flip
 cinematic offsets. Issues #0047 and #0049 closed with these
-outcomes; issue #0048 (whether gate 1 is intentional vs accidental)
-remains open. The byte-identical Atari ST/Amiga finding doesn't
-decide #0048 — both SKUs share the same dev master, so a single
-editorial decision (or a single accident) propagates to both.
+outcomes; issues #0048 (whether gate 1 is intentional vs accidental),
+#0050 (SNES-US fetch), #0051 (DOS-vs-SNES bytecode divergence), and
+#0052 (Apple IIgs WOZ extraction) remain open.
 
 ## Working hypothesis
 
@@ -192,10 +219,20 @@ Secondary signals to check as the data fills in:
 
 ## Open lines of inquiry
 
-- **SNES / GBA / Apple IIgs cross-checks for var `0x06`.** These
-  ports use the abridged 2-level demo engine, so the prison/cave
-  levels (where the gun mechanics live) aren't yet disassembled.
-  Wiring the full level extraction would close the loop on
+- **SNES-US** (Interplay 1992) and **Apple IIgs** (Interplay 1993)
+  cross-checks for the beetle gates. SNES-EU + GBA confirmed both
+  gates 1 + 2 (2026-04-30); the natural follow-ups are the SNES-US
+  ROM and the Apple IIgs WOZ disk image (issues
+  [#0050](#/issues), [#0052](#/issues)).
+- **Why does DOS 1992 bytecode differ from SNES-EU 1992 bytecode?**
+  Same author (Heineman), same year, same gate-1+2 editorial
+  decisions — yet different bytes. Issue [#0051](#/issues) tracks
+  the investigation.
+- **var `0x06` cross-check on the cartridge ports.** SNES-EU + GBA
+  + Genesis-EU all carry only 2 disassembled levels (lake stage
+  primarily). The prison/cave levels — where the gun mechanics
+  live — aren't disassembled in those ports. Wiring full level
+  extraction for cartridge formats would close the loop on
   finding 01.
 - **Atari ST 1991 bank format.** Same 68000 generation as the
   Amiga. The directory is embedded in `START.PRG`; once parsed,
