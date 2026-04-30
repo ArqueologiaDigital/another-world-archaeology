@@ -17,10 +17,11 @@ and analysis*.
 - **Round-trip parity:** confirmed byte-identical disasm + reassembly
   for `dos`, `amiga` (both retro-presskit and archive-org), `snes-eu`,
   `genesis-eu`, `gba-foxy-2004`. SNES USA aliased.
-- **Comparative findings landed:** Amiga codewheel-protection patch
-  (research finding 02), Tier 1 acquisition sweep summary (finding 03).
-- **Open research questions:** gun ammo (#01) — investigation in
-  flight in a parallel agent at the time of writing.
+- **Comparative findings landed:** gun ammo (research finding 01),
+  Amiga codewheel-protection patch (02), Tier 1 acquisition sweep
+  summary (03), Mac patch chain v1.0 → v1.0.2 → v1.0.3 (04).
+- **Open research questions:** none currently active in the
+  open-questions queue.
 
 ## Forward work, ranked
 
@@ -29,23 +30,13 @@ and analysis*.
 These build on what we already have and would unlock concrete
 genealogy results.
 
-1. **Mac resource-fork walker.** The `mac-stuffit-extract` binary
-   yields three .rsrc blobs (v1.0 / v1.0.2 / v1.0.3) totaling ~1.6 MB
-   of 68k Mac code + AW VM resources. Adding a `MacBinary`-using
-   resource-fork walker would surface individual TYPE+ID-keyed Mac
-   resources (likely `BANK`, `POLY`, plus engine code in `CODE` /
-   `DATA` / `SIZE` etc.). The `macbinary` crate is already in the
-   AWVM_Tools workspace deps. Output: per-resource binaries indexed
-   by `(TYPE, ID)`, plus a 68k-binary version of the engine code
-   that becomes the closest 68k-Mac sibling to the Anniversary
-   editions for genealogy.
+1. ~~**Mac resource-fork walker.**~~ ✅ Done 2026-04-30 —
+   `mac-rsrc-walk` binary in AWVM_Tools, wired into
+   `extractors/mac_classic.py`. End-to-end yields 1697 per-resource
+   blobs across 50 forks.
 
-2. **Mac v1.0 vs v1.0.2 vs v1.0.3 binary diff.** Once (1) is done,
-   diff the three Mac builds — three close versions of the same
-   port give a high-density signal about what the patches actually
-   changed (bug fixes? feature additions? localisation?). Per the
-   strict "compare ALL assets" policy, do this at the per-resource
-   md5 level, not just on the engine binary.
+2. ~~**Mac v1.0 vs v1.0.2 vs v1.0.3 binary diff.**~~ ✅ Done
+   2026-04-30 — see [research finding 04](#/research/04-mac-port-patch-chain).
 
 3. **3DO file ↔ canonical AW resource index mapping.** The
    `three_do_opera` extractor yields 423 on-disc files including
@@ -64,11 +55,41 @@ genealogy results.
    68000 engine generation, so non-trivial differences are
    first-order genealogy signal.
 
-5. **Resolve the gun-ammo question.** The agent currently running
-   should produce a finding (research/01-gun-ammo.md). Once it lands,
-   cross-validate the finding across all releases that already
-   disassemble (DOS / Amiga / Genesis / GBA / SNES) — variation
-   across versions is genealogy gold.
+5. **Cross-validate gun-ammo finding (#01) on more releases.** The
+   2026-04-30 finding established that DOS / Amiga / Genesis-EU
+   share the gun mechanic byte-for-byte. SNES-EU and GBA-Foxy
+   disassemblies are currently limited to levels 0/1 by the
+   AWVM_Tools pipeline (those ports use the abridged 2-level "demo"
+   engine), so cross-checking the prison/cave levels there is open
+   work. Apple IIgs disassembly will follow once tier B item 6
+   lands.
+
+6. **Map second recharge-zone scene flag to game location.** The
+   gun-ammo finding (#01) shows two recharge zones in level 4
+   sharing one handler `LABEL_3473`, parameterised by `HACK_VAR_67`:
+   the default scene fires on `X ≤ 103` (any Y), the alternate scene
+   `HACK_VAR_67 == 0x4F` requires `X ≤ 110 && Y ≤ 100`. The
+   default-scene one matches the walkthrough's "strange looking
+   room". The alternate-scene one's in-game location needs to be
+   identified — it's somewhere later in level 4. (Spotted by the
+   project owner during review of finding 01; resolution pending
+   their answer.)
+
+7. **Investigate `Estr` 192-entry resource type in the Mac port.**
+   The 1993 Mac port's resource fork has exactly 192 `Estr`
+   resources totalling 6,114 bytes, byte-stable across all three
+   build versions. 192 doesn't match the canonical 144 AW resource
+   indices, but is suspicious. Could be event/error strings, or a
+   different indexing scheme. A trivial cross-version diff would
+   confirm whether any string changed across the patch chain.
+
+8. **68k disassembler for Mac CODE segments.** The Mac patch-chain
+   finding (research/04) identified WHICH segments changed across
+   v1.0 / 1.0.2 / 1.0.3 by md5 alone, but doesn't tell us *what*
+   changed. A 68k disassembler against the v1.0 vs v1.0.2 CODE 2 /
+   3 / 5 deltas would surface the actual bug-fix pattern. Confirms
+   or refutes the hypothesis that v1.0.3's `MacTraps2_ANSI`
+   replacement segment is a Symantec C runtime upgrade.
 
 ### Tier B — Format work that unlocks more comparisons
 
@@ -168,3 +189,9 @@ at the bottom.
 - **2026-04-30** — initial draft, written at the end of the Tier 1
   acquisition + extractor sweep session. 14/29 archived, 13/14
   extracting. Gun-ammo agent in flight.
+- **2026-04-30** (later that day) — gun-ammo finding (#01) landed +
+  corrected; Mac resource-fork walker (tier A 1+2) landed; finding
+  #04 published. Reranked tier A: items 1+2 marked done; new items
+  6 (locate alternate recharge-zone scene), 7 (`Estr` 192-entry
+  investigation), 8 (68k disassembler for Mac CODE deltas) added
+  to the active list.
