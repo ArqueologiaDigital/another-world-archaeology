@@ -624,6 +624,60 @@ single accident) propagates to both. The Atari ST data point
 doesn't move the needle on intent — it just proves the 1991 master
 is a single artifact.
 
+## Verification hack: re-enable the beetle kick on Amiga (2026-04-30)
+
+A surgical 2-byte patch that makes the wing-flip animation
+reachable in real gameplay (rather than only by reading the
+bytecode) lives in the sibling
+[`another-world-hacks`](https://github.com/felipesanches/another-world-hacks)
+repo, under `01-amiga-beetle-kick-reenable/`.
+
+The patch swaps the two address operands in the gate-1 instruction
+pair so the kick-detector overrides the cleanup-watcher (rather
+than the other way around) on channel `0x2E`:
+
+```
+; original (gate-1 dead — kick-detector overwritten):
+082E34AA 082E3497   = setup ch=0x2E addr=0x34AA   (kick-detector)
+                     setup ch=0x2E addr=0x3497   (cleanup, overrides)
+
+; patched (gate-1 inverted — kick-detector wins):
+082E3497 082E34AA   = setup ch=0x2E addr=0x3497   (cleanup)
+                     setup ch=0x2E addr=0x34AA   (kick-detector, overrides)
+```
+
+The patch lives at BANK02 offset `0x008934` (= level-2 BYTECODE
+resource offset `0x041e`), and on the archive.org 2020 Amiga
+Disk1.adf it lands at ADF offset `0x0255f4` inside OFS data block
+#298 (file BANK02's 72nd data block). The hacks repo provides two
+patchers:
+
+- `patch_bank02.py` — operates on a raw extracted BANK02 file.
+- `patch_adf.py` — operates directly on Disk1.adf, recomputes the
+  OFS data-block checksum, and writes a fully bootable patched
+  ADF that any Amiga emulator (MAME, FS-UAE, WinUAE) can load.
+
+After the patch, the wing-flip + falling + take-off sequence
+that's encoded in the level-2 bytecode but normally unreachable
+becomes reachable: kick the beetle in the lake stage and watch
+it open its wings, fall onto its back, lie stunned briefly, and
+fly off-screen upside-down. This is the runtime-level
+confirmation of the bytecode-level finding.
+
+The patch is intentionally minimal (2 bytes — the smallest
+possible change that flips gate 1) so that any other behavioural
+delta in the patched game definitively comes from removing
+gate 1, not from a side effect of a larger edit. The
+cleanup-watcher (which tears down the beetle when it walks
+off-screen in scene 1) is the regression — it's the one that
+gets overwritten now — but the beetle is on-screen for under
+five seconds in normal play, so this rarely matters.
+
+A future revision could put the cleanup-watcher on a different
+unused channel slot (e.g. `0x3D`) instead of just swapping —
+that would preserve both the kick-detector AND the cleanup. Not
+done in v1 to keep the patch surgically minimal.
+
 ## Files referenced
 
 - `/tmp/amiga-disasm/output/amiga/disasm/level_2/amiga_level-2.asm`
@@ -739,3 +793,15 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   comparison tables widened to six columns (Apple IIgs still
   pending — gated on the WOZ extractor, issue #0014). Lineage
   diagram updated with the SNES↔Genesis byte-identity branch.
+- **2026-04-30** (same day, follow-up — verification hack landed) —
+  set up the sibling `another-world-hacks` repo and committed
+  `01-amiga-beetle-kick-reenable/`: a 2-byte ADF patch that swaps
+  the gate-1 instruction pair so the kick-detector overrides the
+  cleanup-watcher (rather than the other way around). The patch
+  generates a fully bootable `Another_World_Disk1_BEETLE_KICK.adf`
+  with exactly 2 byte changes (`0x0255f7` and `0x0255fb`) and a
+  recomputed OFS data-block checksum. This is the runtime-level
+  artifact that converts the bytecode-level gate-1 finding into a
+  reproducible visual: kick the beetle, watch the wing-flip /
+  fall / take-off animation that the unmodified game silences.
+  Documented as a new "Verification hack" subsection above.
