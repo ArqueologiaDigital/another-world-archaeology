@@ -78,36 +78,63 @@ CPU-independent, so the cartridge chunks are identical.
 
 ## Implications for source reconstruction
 
-This is the **foundation for Phase 1** of the
-[source-reconstruction project](https://github.com/felipesanches/another-world-source-reconstruction).
-The reconstruction loop is now demonstrably:
+This is the **foundation for the source-reconstruction project**.
+The reconstruction loop is:
 
 1. User supplies original game files.
-2. `awvm-disasm` extracts `.asm` files.
+2. `awvm-disasm` extracts `.asm` files + raw asset bins.
 3. `awvm-asm` re-assembles `.asm` to byte-matching binaries.
+4. Raw assets pass through verbatim, verified by md5.
 
-What's still pending for **full** byte-matching builds (Phase 2):
+### Companion: raw-asset md5 verification
 
-- **Polygon resource builder** — the inverse of
-  `tools/polygon_render.py`. Given an SVG / structured rep,
-  emit AW polygon bytes.
-- **Palette resource builder** — trivial; copy bytes verbatim.
-- **Sound + music resources** — trivial; copy bytes verbatim.
-- **Bank packing** — the DOS/Amiga banks (`memlist.bin` +
-  `bank01..bank0d`) need a packer that produces byte-matching
-  output.
-- **Cartridge ROM packing** — for SNES/Genesis/GBA: assemble the
-  cartridge ROM from its constituent .rom files (bytecode.rom,
-  palettes.rom, etc.) at the right offsets with the right
-  metadata.
-- **Engine binary** — likely deferred, with the original engine
-  binary copied as-is until the engine itself can be
-  reconstructed from C source.
+`tools/verify_resources.py` does the analogous check for
+**non-bytecode** resources. For each port, every extracted
+`resource-0xNN.bin` (Amiga/DOS-style) or `<name>.rom`
+(cartridge-style) is hashed and compared against a committed
+manifest at `another-world-source-reconstruction/releases/<port>.resources.json`.
 
-Phase 3 (unified source with conditional compilation flags)
-becomes meaningful once Phase 2 reference builds exist for all
-ports — only then can we identify divergences systematically and
-flag them.
+First run results:
+
+| Port | Raw asset files |
+|---|---|
+| amiga | 151 |
+| msdos | 153 |
+| gba_usa | 4 (cartridge .rom files) |
+| genesis_europe | 4 |
+| snes_eu | 4 |
+
+**316 raw asset files across 5 ports**, all md5-matched against
+their reference manifests.
+
+### Scope: packaging is OUT
+
+Per the source-reconstruction project's 2026-05-01 scope
+reduction, packaging is **out of scope**:
+
+- No bank-packer (memlist.bin + bank01..bank0d).
+- No ADF / cartridge ROM repacker.
+- No engine binary reconstruction.
+
+The project produces byte-matching SETS OF RESOURCES (bytecode +
+raw assets), not byte-matching distribution packages. If you need
+a runnable game, copy the produced resources back into your
+original ADF/ROM/zip with an external tool of your choice.
+
+### What's next: Phase 3 — unified source via conditional compilation
+
+Now that bytecode + raw assets are byte-matched per-port, the
+remaining research goal is to merge the per-port `.asm` files
+into a unified source tree with conditional compilation flags
+(see [docs/glossary.md](https://github.com/felipesanches/another-world-source-reconstruction/blob/main/docs/glossary.md)).
+Initially this'll touch only bytecode (raw assets stay
+passthrough), with 4 distinct branches to merge:
+1. Chahi 1991 (Amiga + Atari ST)
+2. Heineman DOS 1992
+3. Heineman cartridge 1992-93 (SNES-EU + Genesis-EU)
+4. Foxy GBA 2004
+
+Tracked as issue #0061.
 
 ## What's not covered yet
 

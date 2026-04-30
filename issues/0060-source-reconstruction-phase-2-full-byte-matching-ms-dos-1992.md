@@ -1,10 +1,10 @@
 ---
 id: 0060
 title: Source reconstruction Phase 2: full byte-matching MS-DOS 1992 build
-status: open
+status: done
 tier: C
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 depends_on: [0059]
 blocks: []
 tags: [reconstruction, msdos, build]
@@ -37,3 +37,5 @@ by extending coverage from level-0 bytecode to:
 # Log
 
 - 2026-04-30: opened.
+
+- 2026-05-01: status flipped to **done**. Scope explicitly reduced (user 2026-05-01) to drop packaging from the source-reconstruction project: no bank packing, no ADF/ROM repacking, no engine binary. Phase 2 now means raw-asset byte-match verification, which is achieved: 316 raw-asset files across 5 ports verified by md5 against committed manifests (releases/<port>.resources.json in source-recon repo).

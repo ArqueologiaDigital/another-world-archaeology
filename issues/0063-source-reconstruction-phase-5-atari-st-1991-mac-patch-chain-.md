@@ -1,10 +1,10 @@
 ---
 id: 0063
 title: Source reconstruction Phase 5+: Atari ST 1991, Mac patch chain, less-common ports
-status: open
+status: wontfix
 tier: C
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 depends_on: [0062]
 blocks: []
 tags: [reconstruction, atari-st, macintosh, build]
@@ -38,3 +38,5 @@ Less-common targets:
 # Log
 
 - 2026-04-30: opened.
+
+- 2026-05-01: status flipped to **wontfix**. Per scope reduction (2026-05-01), packaging is out of scope, so phases 5+ collapse to 'wire each new port into the byte-match verification once its extractor lands'. Atari ST gated on issue #0004 (memlist parser). Mac, Apple IIgs, etc. each have their own extractor issues. Closing this umbrella issue; per-port follow-ups will track when those extractors land.
