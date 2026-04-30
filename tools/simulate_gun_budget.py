@@ -6,16 +6,20 @@ player can fire from a given starting energy. Output is meant to be
 read on its own, or appended verbatim to
 `docs/content/research/01-gun-ammo.md` as an appendix.
 
-The numbers are derived directly from the disassembled DOS bytecode
-constants documented in research/01:
+The numbers are derived directly from the disassembled DOS bytecode.
+**Important:** every press cycle unconditionally fires a tap on the
+first frame (the state machine at LABEL_EF03 calls LABEL_6588
+unconditionally when var 0x0F == 0). The firing thread that produces
+the regular or superblast runs in parallel and never cancels the
+tap. So the actual per-action costs are *compound*:
 
-    tap shot       costs 1 energy
-    regular shot   costs 10 energy
-    superblast     costs 50 energy in levels 4 and 6
-    superblast     costs 100 energy in level 3 (Prison) — anomaly!
-    shield         is free (no decrement)
-    recharge       clamps energy to 1000 (mov, not add)
-    recharge guard fires only when energy <= 990
+    quick tap (released ≤ 4 frames)              =  -1 energy
+    regular shot (held + released)                = -11 energy (-1 tap + -10 regular)
+    superblast (held ≥ 20 frames)                 = -51 energy (-1 tap + -50 superblast)
+    superblast in level 3 Prison                  = -101 energy (-1 tap + -100 prison superblast)
+    shield (held briefly, no extra shot)          =  -1 energy (still pays for the unconditional tap)
+    recharge                                      = clamp to 1000 (mov, not add)
+    recharge guard                                = fires only when energy <= 990
 
 Per-level entry energy:
 
@@ -37,11 +41,20 @@ from __future__ import annotations
 import argparse
 import sys
 
-# Costs per level, derived from the disassembly (see research/01).
-COST_TAP = 1
-COST_REGULAR = 10
-COST_SUPERBLAST_DEFAULT = 50
-COST_SUPERBLAST_PRISON = 100
+# Per-opcode decrements from the disassembly (see research/01 §"Cost model").
+COST_TAP_OPCODE = 1
+COST_REGULAR_OPCODE = 10
+COST_SUPERBLAST_OPCODE_DEFAULT = 50
+COST_SUPERBLAST_OPCODE_PRISON = 100
+
+# Compound per-action costs: every press cycle fires an unconditional
+# tap (LABEL_6588), and the firing thread fires a regular or superblast
+# IN ADDITION when its conditions are met. So a "regular shot" really
+# costs the tap PLUS the regular's decrement.
+COST_QUICK_TAP = COST_TAP_OPCODE                                 # = 1
+COST_REGULAR = COST_TAP_OPCODE + COST_REGULAR_OPCODE             # = 11
+COST_SUPERBLAST_DEFAULT = COST_TAP_OPCODE + COST_SUPERBLAST_OPCODE_DEFAULT   # = 51
+COST_SUPERBLAST_PRISON = COST_TAP_OPCODE + COST_SUPERBLAST_OPCODE_PRISON     # = 101
 
 # Per-level entry energy.
 ENTRY_ENERGY = {
@@ -64,7 +77,7 @@ def _bar(n: int, width: int = 40, max_n: int = 1000) -> str:
 
 def pure_action_capacity(starting: int, sup_cost: int) -> dict[str, int]:
     return {
-        "tap":         starting // COST_TAP,
+        "tap":         starting // COST_QUICK_TAP,
         "regular":     starting // COST_REGULAR,
         "superblast":  starting // sup_cost,
     }
@@ -73,10 +86,10 @@ def pure_action_capacity(starting: int, sup_cost: int) -> dict[str, int]:
 def md_pure_actions_table(starting: int, sup_cost: int) -> list[str]:
     caps = pure_action_capacity(starting, sup_cost)
     rows = [
-        ("Tap shot",        COST_TAP,    caps["tap"]),
-        ("Regular shot",    COST_REGULAR, caps["regular"]),
-        ("Superblast",      sup_cost,    caps["superblast"]),
-        ("Shield (free)",   0,           "∞"),
+        ("Tap shot (release ≤4 frames)",      COST_QUICK_TAP, caps["tap"]),
+        ("Regular shot (tap + regular)",      COST_REGULAR,   caps["regular"]),
+        ("Superblast (tap + superblast)",     sup_cost,       caps["superblast"]),
+        ("Shield-pose hold (just the −1 tap)", COST_QUICK_TAP, caps["tap"]),
     ]
     out = [
         "| Mode | Cost | Pure-mode capacity |",
@@ -89,15 +102,18 @@ def md_pure_actions_table(starting: int, sup_cost: int) -> list[str]:
 
 def mixed_strategy_examples(energy: int, sup_cost: int) -> list[tuple[str, int, int, int, int]]:
     """Return a list of (label, S, R, T, used) for illustrative mixes
-    that just barely stay inside `energy`."""
+    that just barely stay inside `energy`. S is # of superblasts
+    (each costing sup_cost = tap + superblast-opcode), R is # of
+    regulars (each costing 11 = tap + regular-opcode), T is # of
+    quick taps (each costing 1)."""
     examples: list[tuple[str, int, int, int, int]] = []
 
     def add(label: str, s: int, r: int, t: int):
-        used = s * sup_cost + r * COST_REGULAR + t * COST_TAP
+        used = s * sup_cost + r * COST_REGULAR + t * COST_QUICK_TAP
         if used <= energy:
             examples.append((label, s, r, t, used))
 
-    add("Pure tap (panic-fire)",        0, 0, energy // COST_TAP)
+    add("Pure tap (panic-fire)",        0, 0, energy // COST_QUICK_TAP)
     add("Pure regular",                 0, energy // COST_REGULAR, 0)
     add("Pure superblast",              energy // sup_cost, 0, 0)
     # Cautious: half regulars, the rest taps
@@ -126,7 +142,7 @@ def mixed_strategy_examples(energy: int, sup_cost: int) -> list[tuple[str, int, 
 def md_mixed_strategy_table(energy: int, sup_cost: int) -> list[str]:
     rows = mixed_strategy_examples(energy, sup_cost)
     out = [
-        f"| Strategy | Superblasts (×{sup_cost}) | Regular (×{COST_REGULAR}) | Tap (×{COST_TAP}) | Total spent |",
+        f"| Strategy | Superblasts (×{sup_cost}) | Regular (×{COST_REGULAR}) | Tap (×{COST_QUICK_TAP}) | Total spent |",
         "|---|---:|---:|---:|---:|",
     ]
     for label, s, r, t, used in rows:
@@ -170,31 +186,32 @@ def md_level_block(level: int) -> list[str]:
 
 
 def md_visual_capacity_chart() -> list[str]:
-    """An at-a-glance bar chart of pure-mode capacity at full charge."""
+    """An at-a-glance bar chart of pure-mode capacity at full charge,
+    using compound costs (each shot includes the unconditional tap)."""
     out = [
-        "After a full recharge in level 4 or 6 (energy = 1000, superblast cost = 50):",
+        "After a full recharge in level 4 or 6 (energy = 1000, regular costs",
+        f"{COST_REGULAR} = -1 tap + -10 regular, superblast costs {COST_SUPERBLAST_DEFAULT}"
+        f" = -1 tap + -50 superblast):",
         "",
         "```",
     ]
     full = 1000
-    for label, cost in [("Tap shot     ", COST_TAP),
+    for label, cost in [("Quick tap    ", COST_QUICK_TAP),
                         ("Regular shot ", COST_REGULAR),
                         ("Superblast   ", COST_SUPERBLAST_DEFAULT)]:
         n = full // cost
-        # Scale the bar by *count*, not energy: tap=1000 gets a full bar;
-        # superblast=20 gets a tiny bar — visual emphasis on how cheap
-        # taps are vs superblasts.
         bar = _bar(n, width=40, max_n=full)
         out.append(f"  {label} {bar:<40} {n:>5}")
     out += [
         "```",
         "",
-        "And under the level-3 anomaly (entry energy 199, superblast cost 100):",
+        f"And under the level-3 anomaly (entry energy 199, superblast costs"
+        f" {COST_SUPERBLAST_PRISON} = -1 tap + -100 prison superblast):",
         "",
         "```",
     ]
     e = 199
-    for label, cost in [("Tap shot     ", COST_TAP),
+    for label, cost in [("Quick tap    ", COST_QUICK_TAP),
                         ("Regular shot ", COST_REGULAR),
                         ("Superblast   ", COST_SUPERBLAST_PRISON)]:
         n = e // cost

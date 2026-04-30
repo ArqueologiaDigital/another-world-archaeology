@@ -13,14 +13,27 @@
 ## Answer (summary)
 
 - The gun energy is stored in **VM variable `0x06`**.
-- **Three weapon modes consume different amounts of energy:**
-  - **Tap shot** (instant fire on press): **−1 energy**
-  - **Regular shot** (≥ 4-frame hold then release): **−10 energy**
-  - **Superblast** (held ≥ 20 frames): **−50** in level 4 / 6 / **−100
-    in level 3** (Prison Escape)
+- **Three weapon modes are dispatched by hold-time, with compound
+  energy costs**: pressing the action button always fires a small
+  "tap" projectile *unconditionally* on the first frame, and if the
+  button is held longer a *separate* projectile (regular or
+  superblast) fires later from a parallel "firing thread". So the
+  total cost of each player action is:
+  - **Quick tap** (release within 4 frames): **−1** (just the tap)
+  - **Regular shot** (held + released): **−1 + −10 = −11** (tap + regular)
+  - **Superblast** (held ≥ 20 frames): **−1 + −50 = −51** (tap + superblast,
+    or **−101** in level 3 Prison Escape where the superblast costs
+    −100)
+- The tap and the regular are **two different bullets**, not two
+  states of the same bullet — they use separate spawn routines,
+  separate bullet-tracking slot tables, separate sounds, and the
+  regular has a visible muzzle-flash polygon (`CINEMATIC_037`) the
+  tap doesn't. See the "Visual / mechanical semantics of each shot
+  type" section below.
 - **The shield is free** — the visual shield is the gun-drawn
   animation rendered while the action button is held; no decrement
-  happens while it's up.
+  happens while it's up. (But entering the shield still costs the
+  unconditional −1 tap that fires the moment the button goes down.)
 - The dispatch is **two cooperating VM threads** — a state-machine
   thread that handles animation and a firing thread that counts
   held-frames and branches on threshold.
@@ -114,18 +127,41 @@ shooting.
 
 ### Cost model
 
-| Action | Energy cost | Site |
+Per-opcode `sub [0x06], …` decrements (each fires when its specific
+code path runs, *not* alternatively):
+
+| Decrement site | Amount | Site |
 |---|---|---|
 | Tap shot (instant fire on press) | **−1** | `LABEL_6588` / `LABEL_6600` (`level_4.asm:10873`, `10915`) |
 | Regular shot (≥ 4-frame hold then release) | **−10** | `LABEL_75E9` (`level_4.asm:12460`) — `sub [0x06], 0x000A` |
 | Superblast (held ≥ 20 frames) | **−50** | `LABEL_76C6` (`level_4.asm:12524`) — `sub [0x06], 0x0032` |
+
+**These decrements compound within a single press cycle.** The state
+machine fires the tap **unconditionally** the moment the action button
+is pressed (`LABEL_EF03` at `level_4.asm:23721` — `call LABEL_6588`
+runs whenever `var 0x0F == 0`, which is the entry condition for the
+press state). A *separate* "firing thread" is then `setup`'d on
+channel `0x17` (`LABEL_74C1`); that thread independently decides
+whether to fire a regular or a superblast later, but it never
+cancels the tap that already fired. The result:
+
+| Player action | Energy cost | What fires |
+|---|---|---|
+| Quick tap-and-release (released within 4 frames) | **−1** | Just the tap |
+| Hold 4–19 frames, then release | **−1 + −10 = −11** | Tap + regular |
+| Hold ≥ 20 frames (full charge) | **−1 + −50 = −51** | Tap + superblast |
+
+(In the Prison level the superblast cost is −100, so a charged shot
+there is −101 total — see "The level-3 superblast anomaly" below.)
 
 **Shield is FREE.** The "shield" visual is the gun-drawn animation
 rendered while action is held (`LABEL_9D49` at `level_4.asm:16170`);
 no `sub [0x06]` happens while it's up. The mid-charge release path
 falls through `LABEL_75E1` → `LABEL_75E9`, so a button-release during
 the charge animation pays the same −10 as a regular shot — i.e.,
-**releasing always fires**.
+**releasing always fires**. (Note: even "just shielding" implicitly
+costs −1, since the unconditional tap fires the moment the player
+presses the button.)
 
 **The level-3 superblast anomaly.** In level 3 (Prison Escape) the
 superblast cost is **−100** (`level_3.asm:7976`: `sub [0x06], 0x0064`),
@@ -224,6 +260,60 @@ cross-checking the prison/cave levels there is future work — but the
 −10 constant is already visible in non-gun contexts of GBA L0 and
 SNES L0, suggesting var `0x06` conventions persist there too.
 
+### Visual / mechanical semantics of each shot type
+
+The tap, the regular, and the superblast are **three distinct
+projectiles**, each spawned by its own routine, each tracked in its
+own slot table, each with its own sound and (for the regular and
+superblast) its own muzzle/blast cinematic.
+
+| Property | Tap | Regular | Superblast |
+|---|---|---|---|
+| Spawn site | `LABEL_6588` (right) / `LABEL_6600` (left) | `LABEL_75E9` → `LABEL_70DD` | `LABEL_7655` → `LABEL_76C6` |
+| Energy cost (per opcode) | −1 | −10 | −50 (−100 in level 3) |
+| Fires when | First frame of press, **unconditionally** | Released after 4–19 frames of hold | Held ≥ 20 frames |
+| Bullet flag (var `0x27` / `0x88` / `0x91`) | `OR 0x4000 \| 0x0C00` | (no 0x4000 — different metadata) | `OR 0x8000` (almost certainly the **shield-piercing flag** the walkthrough notes) |
+| Bullet slot table | `0x88` / `0x89` / `0x8A` (positions in `0x90..0x95`) — up to **3 simultaneous taps** | `0xA0` / `0xA3` / `0xA6` (positions in `0xA0..0xA8`) — up to **3 simultaneous regulars**, **tracked independently from taps** | Single dedicated slot (`0x88` reused for the superblast bullet's HP / damage = `0x64` = 100) |
+| Sound played | `id=0x0052, freq=0x1C` (quick "pew") | `id=0x0058, freq=0x14` (louder "pow") | `id=0x0059` then `id=0x005B` (charge → boom) |
+| Muzzle / charge polygon | **None** at fire site | `CINEMATIC_037` rendered at the gun's tip | `CINEMATIC_068` (large blast cinematic) |
+| Pre-fire animation | `LABEL_9D73` (Lester raises gun) | `CINEMATIC_063..066` charge animation (4 frames) + `CINEMATIC_063..066` continued, with `id=0x005B` charge-complete tone | Same charge animation, then continues past frame 20 |
+
+The visual experience the player sees:
+
+- **Tap.** The instant the button goes down, Lester raises the gun
+  and a small horizontal pellet shoots out. You can have up to 3 of
+  these airborne. They're fast and weak. The tap fires *every time*
+  you press — there's no "draw without firing" mode.
+
+- **Regular.** Press, hold, watch Lester complete the gun-up
+  animation, see the charge animation play (the gun's silhouette
+  brightens / pulses across `CINEMATIC_063..066`), hear the
+  charge-complete tone, then release — at which point a *bigger*
+  bullet fires from the gun with a visible muzzle flash polygon
+  (`CINEMATIC_037`) and a louder report. The first tap that fired
+  on press is already in flight at this point.
+
+- **Superblast.** Same charge sequence, but you keep holding past
+  the charge-complete tone. The firing thread enters a second,
+  longer charge loop, and at frame 20+ the superblast fires with
+  its own distinctive blast cinematic and the shield-piercing flag.
+  Like the regular, this is in addition to the tap that already
+  fired on press.
+
+This explains the energy accounting: the per-opcode `sub [0x06], …`
+sites the agent originally found (−1, −10, −50) are correct in
+isolation, but they **compound within a single press cycle** because
+the tap fires unconditionally and the firing thread runs in parallel
+on a separate channel. So the player's true cost per action is
+−1 / −11 / −51 (or −101 for a Prison superblast).
+
+The shield (the walkthrough's "Hold A for short time") is just the
+first 4 frames of any press: while the firing thread is in its
+4-frame initial wait, the state machine renders `LABEL_9D49` (the
+shield-pose animation). Releasing within those 4 frames keeps the
+shield up briefly with no additional shot fired — but the press
+still cost −1 for the tap that fired on frame 0.
+
 ## Genealogy implications
 
 This finding is the first **definitive cross-release identity** at
@@ -248,25 +338,28 @@ wired up.
 ## Appendix: simulated quotas
 
 Generated by [`tools/simulate_gun_budget.py`](#) — re-run the script
-to refresh these tables if cost constants change.
+to refresh these tables if cost constants change. **All costs are
+compound** (every press fires the unconditional tap, so a regular
+shot pays −1 + −10 = −11 and a superblast pays −1 + −50 = −51,
+or −101 in the Prison anomaly).
 
 ### At-a-glance pure-mode capacity
 
-After a full recharge in level 4 or 6 (energy = 1000, superblast
-cost = 50):
+After a full recharge in level 4 or 6 (energy = 1000, regular
+costs 11, superblast costs 51):
 
 ```
-  Tap shot      ████████████████████████████████████████  1000
-  Regular shot  ████                                       100
-  Superblast    █                                           20
+  Quick tap     ████████████████████████████████████████  1000
+  Regular shot  ████                                        90
+  Superblast    █                                           19
 ```
 
-And under the level-3 anomaly (entry energy 199, superblast cost
-100):
+And under the level-3 anomaly (entry energy 199, superblast costs
+101):
 
 ```
-  Tap shot      ████████████████████████████████████████   199
-  Regular shot  ████                                        19
+  Quick tap     ████████████████████████████████████████   199
+  Regular shot  ████                                        18
   Superblast    █                                            1
 ```
 
@@ -274,30 +367,30 @@ And under the level-3 anomaly (entry energy 199, superblast cost
 
 #### Level 3 — Prison Escape (where Lester finds the gun)
 
-Entry energy: **199**. Superblast cost: **100**. Recharge zones:
+Entry energy: **199**. Superblast cost: **101**. Recharge zones:
 **0**.
 
 | Mode | Cost | Pure-mode capacity |
 |---|---|---|
-| Tap shot | 1 | 199 |
-| Regular shot | 10 | 19 |
-| Superblast | 100 | 1 |
-| Shield (free) | 0 | ∞ |
+| Quick tap (release ≤4 frames) | 1 | 199 |
+| Regular shot (tap + regular) | 11 | 18 |
+| Superblast (tap + Prison superblast) | 101 | 1 |
+| Shield-pose hold (just the −1 tap) | 1 | 199 |
 
 Mixed-strategy budgets at level entry:
 
-| Strategy | Superblasts (×100) | Regular (×10) | Tap (×1) | Total spent |
+| Strategy | Superblasts (×101) | Regular (×11) | Tap (×1) | Total spent |
 |---|---:|---:|---:|---:|
 | Pure tap (panic-fire) | 0 | 0 | 199 | 199 / 199 |
-| Pure regular | 0 | 19 | 0 | 190 / 199 |
-| Pure superblast | 1 | 0 | 0 | 100 / 199 |
-| Cautious (no superblast) | 0 | 9 | 109 | 199 / 199 |
-| Balanced 25/25/50 | 1 | 4 | 59 | 199 / 199 |
-| Sniper (no taps) | 0 | 19 | 0 | 190 / 199 |
+| Pure regular | 0 | 18 | 0 | 198 / 199 |
+| Pure superblast | 1 | 0 | 0 | 101 / 199 |
+| Cautious (no superblast) | 0 | 9 | 100 | 199 / 199 |
+| Balanced 25/25/50 | 1 | 4 | 54 | 199 / 199 |
+| Sniper (no taps) | 0 | 18 | 0 | 198 / 199 |
 
 #### Level 4 — Gas Tunnels (the level with both recharge zones)
 
-Entry energy: **990**. Superblast cost: **50**. Recharge zones:
+Entry energy: **990**. Superblast cost: **51**. Recharge zones:
 **2** (both clamp to 1000). **Theoretical maximum burnable energy**
 if both zones are visited at energy = 0: **2990**.
 
@@ -305,75 +398,74 @@ At level entry (no recharge yet):
 
 | Mode | Cost | Pure-mode capacity |
 |---|---|---|
-| Tap shot | 1 | 990 |
-| Regular shot | 10 | 99 |
-| Superblast | 50 | 19 |
-| Shield (free) | 0 | ∞ |
+| Quick tap (release ≤4 frames) | 1 | 990 |
+| Regular shot (tap + regular) | 11 | 90 |
+| Superblast (tap + superblast) | 51 | 19 |
+| Shield-pose hold (just the −1 tap) | 1 | 990 |
 
 Mixed-strategy budgets at level entry:
 
-| Strategy | Superblasts (×50) | Regular (×10) | Tap (×1) | Total spent |
+| Strategy | Superblasts (×51) | Regular (×11) | Tap (×1) | Total spent |
 |---|---:|---:|---:|---:|
 | Pure tap (panic-fire) | 0 | 0 | 990 | 990 / 990 |
-| Pure regular | 0 | 99 | 0 | 990 / 990 |
-| Pure superblast | 19 | 0 | 0 | 950 / 990 |
-| Cautious (no superblast) | 0 | 49 | 500 | 990 / 990 |
-| Balanced 25/25/50 | 4 | 39 | 400 | 990 / 990 |
-| Heavy combat (~50% energy on superblasts) | 9 | 27 | 270 | 990 / 990 |
-| Sniper (no taps) | 4 | 79 | 0 | 990 / 990 |
+| Pure regular | 0 | 90 | 0 | 990 / 990 |
+| Pure superblast | 19 | 0 | 0 | 969 / 990 |
+| Cautious (no superblast) | 0 | 45 | 495 | 990 / 990 |
+| Balanced 25/25/50 | 4 | 35 | 401 | 990 / 990 |
+| Heavy combat (~50% energy on superblasts) | 9 | 24 | 267 | 990 / 990 |
+| Sniper (no taps) | 4 | 71 | 0 | 985 / 990 |
 
 Immediately after a recharge (energy = 1000):
 
 | Mode | Cost | Pure-mode capacity |
 |---|---|---|
-| Tap shot | 1 | 1000 |
-| Regular shot | 10 | 100 |
-| Superblast | 50 | 20 |
-| Shield (free) | 0 | ∞ |
+| Quick tap (release ≤4 frames) | 1 | 1000 |
+| Regular shot (tap + regular) | 11 | 90 |
+| Superblast (tap + superblast) | 51 | 19 |
+| Shield-pose hold (just the −1 tap) | 1 | 1000 |
 
 Mixed-strategy budgets after recharge:
 
-| Strategy | Superblasts (×50) | Regular (×10) | Tap (×1) | Total spent |
+| Strategy | Superblasts (×51) | Regular (×11) | Tap (×1) | Total spent |
 |---|---:|---:|---:|---:|
 | Pure tap (panic-fire) | 0 | 0 | 1000 | 1000 / 1000 |
-| Pure regular | 0 | 100 | 0 | 1000 / 1000 |
-| Pure superblast | 20 | 0 | 0 | 1000 / 1000 |
-| Cautious (no superblast) | 0 | 50 | 500 | 1000 / 1000 |
-| Balanced 25/25/50 | 5 | 37 | 380 | 1000 / 1000 |
-| Heavy combat (~50% energy on superblasts) | 10 | 25 | 250 | 1000 / 1000 |
-| Sniper (no taps) | 5 | 75 | 0 | 1000 / 1000 |
+| Pure regular | 0 | 90 | 0 | 990 / 1000 |
+| Pure superblast | 19 | 0 | 0 | 969 / 1000 |
+| Cautious (no superblast) | 0 | 45 | 505 | 1000 / 1000 |
+| Balanced 25/25/50 | 5 | 33 | 382 | 1000 / 1000 |
+| Heavy combat (~50% energy on superblasts) | 9 | 24 | 277 | 1000 / 1000 |
+| Sniper (no taps) | 4 | 72 | 0 | 996 / 1000 |
 
 #### Level 6 — Final Action
 
-Entry energy: **990**. Superblast cost: **50**. Recharge zones:
+Entry energy: **990**. Superblast cost: **51**. Recharge zones:
 **0** (no refills available in this level).
 
 Pure-mode capacity at level entry is identical to level 4 entry:
-**990 tap / 99 regular / 19 superblasts**. Without recharge zones,
-this is the *entire budget* for the level — players come into the
-final stretch with whatever discipline they've trained.
+**990 quick tap / 90 regular / 19 superblasts**. Without recharge
+zones, this is the *entire budget* for the level — players come
+into the final stretch with whatever discipline they've trained.
 
 ### Notable consequences
 
-- **In the Prison level (level 3) a player can afford exactly one
-  superblast.** A superblast costs half the entry energy. With 99
-  left over they can fit **9 more regular shots, or 99 taps**, but
-  no second superblast. This forces the player to budget the
-  superblast — and matches the level's narrative (a single
-  decisive shot to break out of the cell).
+- **In the Prison level a player can afford exactly one
+  superblast.** Even with the corrected compound cost (101), one
+  superblast costs more than half the entry energy. With 98 left
+  over after a superblast they can fit *9 more regular shots
+  (=99), or 98 taps* — but no second superblast.
 
-- **The level 3 superblast costs 2× as much as the same superblast
-  in levels 4 and 6.** Same opcode, same code path, different
-  constant. The inconsistency persists byte-for-byte across DOS,
-  Amiga, and Genesis-EU — see "Cross-release uniformity" above.
+- **The "shield" is technically not free.** Pressing the action
+  button to enter the shield pose costs −1 for the unconditional
+  tap that fires on press. The shield itself doesn't decrement
+  energy, but you can't get into it without that initial tap.
 
 - **Level 4's two recharge zones triple the level's budget**: the
   burnable cap goes from 990 (no recharges) to 2990 (both
-  recharges hit at zero). At 2990 the player has up to **59
-  superblasts** to play with — comfortably more than enough for
-  the level's combat encounters, suggesting the recharges were
-  designed primarily to soak up *failed-attempts* energy rather
-  than as a strict balance constraint.
+  recharges hit at zero). At 2990 the player has up to **58
+  superblasts** with 32 energy left over — comfortably more than
+  enough for the level's combat encounters, suggesting the
+  recharges were designed primarily to soak up *failed-attempts*
+  energy rather than as a strict balance constraint.
 
 - **Level 6 has no recharges.** Whatever the player carries in
   from level 5 is what they have for the entire ending — under
@@ -382,6 +474,12 @@ final stretch with whatever discipline they've trained.
   unconditionally, so any leftover from level 5 is discarded —
   see `level_6.asm:18221` and the "Initial value per level" table
   above.)
+
+- **The "regular shot is two bullets" insight has a side effect**:
+  if you fire a regular at close range, the tap projectile and the
+  regular projectile may both impact the target. Whether this
+  means double damage in practice depends on the target's hit
+  semantics — open follow-up.
 
 ## See also
 
@@ -411,3 +509,19 @@ final stretch with whatever discipline they've trained.
   level's burnable budget (990 → 2990); level 6 has no recharges
   and discards any leftover from level 5 by setting energy to
   990 unconditionally on entry.
+- **2026-04-30** (same day) — **major correction:** the cost
+  model originally listed −1, −10, −50 as alternatives, but the
+  bytecode shows the tap fires *unconditionally* on the first
+  frame of every press (`LABEL_EF03` calls `LABEL_6588`
+  whenever `var 0x0F == 0`), and the firing thread that
+  produces the regular or superblast runs in parallel on a
+  separate channel and never cancels the tap. So per-action
+  costs are compound: −1 (quick tap) / −11 (tap + regular) /
+  −51 (tap + superblast) / −101 (tap + Prison superblast).
+  Added a new section "Visual / mechanical semantics of each
+  shot type" documenting the three projectiles' separate spawn
+  routines, sounds, polygons, and bullet-slot tables. The
+  appendix tables and `tools/simulate_gun_budget.py` updated
+  with the corrected compound costs. Triggered by the project
+  owner asking what the tap-vs-regular distinction *means* in
+  the game.
