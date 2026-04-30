@@ -23,6 +23,7 @@ from . import (
     atari_st_pasti,
     cartridge_rom,
     dos_bank,
+    symbian_sis,
     three_do_opera,
     winxp_pak,
     zip_unpack,
@@ -39,6 +40,7 @@ EXTRACTORS = {
     "atari-st-pasti": atari_st_pasti.extract,
     "nds-rom": zip_unpack.extract,
     "apple-ii-demake": zip_unpack.extract,
+    "symbian-sis": symbian_sis.extract,
 }
 
 
