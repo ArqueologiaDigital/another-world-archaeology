@@ -1,12 +1,12 @@
 ---
 id: 0045
 title: Test Amiga: does kicking the beetle in the lake stage trigger the wing-flip in-game
-status: open
+status: done
 tier: A
 created: 2026-04-30
 updated: 2026-04-30
 depends_on: []
-blocks: []
+blocks: [0048]
 tags: [research, beetle, emulator-testing]
 ---
 
@@ -49,3 +49,18 @@ of Amiga's level 2 in an emulator and trying to kick the beetle.
 
 - 2026-04-30: opened. Surfaced from the level-2 beetle
   investigation in research/05.
+- 2026-04-30: **resolved** — owner tested in MAME (`a500` driver,
+  `Another_World_Disk1.adf` from `amiga-archive-org`). Lester's
+  kick animation fires correctly when the action button is pressed
+  with no direction, but the beetle walks past unaffected by every
+  attempted kick (standing or crouching, repeated tries with
+  varied positions and timing).
+  This empirically confirms that the wing-flip is *not* reachable
+  through normal player input, and triggered the discovery that
+  the level-entry script's channel-0x2E *kick-detector* setup is
+  immediately overwritten by the *cleanup-watcher* setup on the
+  same channel — a separate gate (gate 1) on top of the DOS-only
+  beetle-suppression gate (gate 2). research/05 has been
+  restructured around this finding (see "major correction"
+  changelog entry of 2026-04-30). Open follow-up: issue #0048
+  (whether gate 1 is intentional vs accidental).

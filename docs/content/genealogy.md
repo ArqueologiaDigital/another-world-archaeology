@@ -79,27 +79,54 @@ changes per version: v1.0 = `©1992 MacPlay.`, v1.0.2 =
 See [research finding 04](#/research/04-mac-port-patch-chain) for
 the full per-segment table.
 
-### First port-specific deliberate bytecode edit (2026-04-30)
+### Pre-shipping content cuts visible in the bytecode (2026-04-30)
 
-The DOS port of level 2 (the lake / beast-chase stage) suppresses
-the **walking beetle** that's visible on Amiga, by adding a single
-extra `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
-instruction immediately after the beetle's spawn line in the
-level-entry script. The beetle's bytecode routines, the
-kick-detector that turns it into a wing-flip death animation, and
-all the corresponding polygon data are **byte-identical between
-DOS and Amiga** — only that one extra suppression instruction
-distinguishes the two ports.
+Level 2 of *Another World* contains a complete walking-beetle
+creature with a kick-it-and-it-flies-off animation — wings
+opening, wing-flap loop, falling onto its back, then taking off
+upside-down. The polygon data and the kick-dispatch bytecode are
+**byte-identical between DOS and Amiga**.
 
-This is the first known case of a port **deliberately editing the
-bytecode to gate off content**, not just preserving the upstream
-verbatim. The natural follow-up is whether Genesis-EU (the 1993
-Heineman port) inherits the suppression bit or the original Amiga
-behaviour — see [issue #0047](#/issues).
+But the wing-flip is **never visible in normal play on either
+port**, because of two distinct setup-then-overwrite gates added
+to the level-entry script:
+
+- **Gate 1 (channel 0x2E, on *both* ports)**: the kick-detector
+  thread is registered on channel `0x2E` and immediately overwritten
+  by a cleanup-watcher thread on the same channel, so the
+  detector never gets a thread to run on. The kicks fire (visibly!)
+  but no thread is polling for the kick-connect signal, so the
+  wing-flip dispatch never executes.
+- **Gate 2 (channel 0x09, DOS only)**: on top of gate 1, the DOS
+  port also kills the beetle's rendering channel itself —
+  rendering it invisible from the start.
+
+Both gates use the same authorial trick (two consecutive `setup`
+calls on the same channel; the second wins). The DOS-only gate-2
+is unambiguously deliberate, since the user empirically confirms
+the beetle is visible on Amiga but invisible on DOS. Whether
+gate-1 is *also* deliberate (a feature cut before initial release)
+or an authorial accident (the cleanup watcher could have been put
+on a different channel) is currently undecidable — tracked as
+[issue #0048](#/issues).
+
+This is the first finding of **pre-shipping content cuts visible
+in the bytecode itself**, distinct from per-port editorial cuts.
+The original Amiga build *as shipped in 1991* already contains the
+gate-1 cut; the DOS port inherits it, plus adds gate-2 of its own.
+
+The natural cross-validation is whether Genesis-EU (the 1993
+Heineman port) inherits gate 1 only (matches Amiga's published
+behaviour, beetle visible / not kickable), gate 1 + gate 2 (matches
+DOS, beetle not visible), or *neither* (preserves an even earlier
+upstream that didn't have either gate, with the wing-flip live!) —
+see [issue #0047](#/issues). A "neither" outcome would be a major
+finding: it would imply Heineman ported from a snapshot that
+predates the Amiga's 1991 release-candidate cuts.
 
 See [research finding 05](#/research/05-beetle-in-the-lake-stage)
-for the full bytecode trace, kick-detector dispatch logic, and
-unlabeled wing-flip cinematic offsets.
+for the full bytecode trace, kick-detector dispatch logic, take-off
+sequence, and unlabeled wing-flip cinematic offsets.
 
 ## Working hypothesis
 

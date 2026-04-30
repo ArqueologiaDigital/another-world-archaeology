@@ -1,4 +1,4 @@
-# 05 — Beetle in the lake stage: hidden on DOS, kickable on Amiga
+# 05 — Beetle in the lake stage: dead-coded on both ports, hidden on DOS
 
 ## Question
 
@@ -18,44 +18,69 @@ The beetle is in **level 2** (the "Arrival at the Lake & Beast Chase"
 stage — level 1 is the DNA-helix intro). Both the DOS and Amiga
 ports contain the same beetle code, the same walking-cycle
 polygons (7 frames each direction), the same wing-opening +
-flipping-upside-down animation polygons, and the same
-kick-detection dispatch. **The polygon data is byte-identical
-between the two ports** (modulo offset renumbering) — same polygon
-counts, same byte sizes per frame.
+flying-upside-down animation polygons, and the same kick-detection
+dispatch. **The polygon data is byte-identical between the two
+ports** (modulo offset renumbering) — same polygon counts, same
+byte sizes per frame.
 
-What differs is **one extra bytecode instruction in the DOS
-level-entry script** that *suppresses the beetle from rendering*:
+**The wing-flip is unreachable in normal gameplay on *both* ports.**
+Confirmed empirically: kicks visibly fire on Amiga but the beetle
+walks past them unaffected. Two distinct gates suppress the wing-flip:
+
+**Gate 1 — kick-detector overwrite** (present on **both** ports).
+The level-entry script registers the kick-detector and then
+*immediately overwrites it* with the cleanup-watcher on the same
+channel:
 
 ```
-; Amiga level 2 entry (line 1146):
-setup channel=0x09, address=LABEL_3510            ; spawn the beetle
-setup channel=0x2E, address=LABEL_34AA            ; spawn the kick-detector
-setup channel=0x2E, address=LABEL_3497            ; spawn the cleanup watcher
+; Amiga level 2 entry (line 1147–1148):
+setup channel=0x2E, address=LABEL_34AA   ; the kick-detector
+setup channel=0x2E, address=LABEL_3497   ; cleanup watcher OVERWRITES it
 
-; DOS level 2 entry (line 1222):
+; DOS level 2 entry (line 1224–1225):
+setup channel=0x2E, address=LABEL_35F4   ; the kick-detector
+setup channel=0x2E, address=LABEL_35E1   ; cleanup watcher OVERWRITES it
+```
+
+By AW VM semantics — confirmed empirically by the DOS beetle-
+suppression pattern below — two consecutive setups on the same
+channel cause the second to override the first. So channel `0x2E`
+ends up running the *cleanup watcher* (which only kills the beetle
+when it walks off-screen in scene 1), and the *kick-detector*
+never runs at all. Lester's kicks fire, `var 0x06` gets set to 1
+or 2 briefly, but **no thread is polling for that value**, so the
+wing-flip is never dispatched.
+
+**Gate 2 — beetle suppression** (DOS only). On top of gate 1, the
+DOS port also kills the beetle's rendering channel itself:
+
+```
+; DOS level 2 entry (line 1222–1223):
 setup channel=0x09, address=LABEL_365A            ; spawn the beetle
-setup channel=0x09, address=KILL_CHANNEL_ROUTINE  ; ← OVERWRITES IT
-setup channel=0x2E, address=LABEL_35F4            ; spawn the kick-detector
-setup channel=0x2E, address=LABEL_35E1            ; spawn the cleanup watcher
+setup channel=0x09, address=KILL_CHANNEL_ROUTINE  ; ← second gate (DOS only)
+
+; Amiga has only the first line — beetle is rendered.
 ```
 
-The DOS port's second `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
-overwrites the beetle handler with a no-op kill routine, so the
-beetle is never rendered on DOS — even though all of its code and
-polygon data are present in the bytecode.
+So:
 
-The wing-opening + flipping-upside-down animations are **reachable
-in Amiga via Lester's kick** at the right position. They are
-*technically* reachable on DOS too (the kick-detector dispatch is
-identical), but since the beetle is never spawned, var `0x0A` (the
-beetle's X coordinate) is never initialised in level 2, so the
-kick-detector's bounds check against an uninitialised value is
-unlikely to ever pass — and even if it did, the animation would
-render at junk coordinates.
+- **On Amiga**: the beetle is visible (gate 2 not present), but the
+  kick-detector is dead (gate 1). You see the beetle walking; kicks
+  fire but have no effect on it.
+- **On DOS**: both gates active. The beetle isn't rendered at all,
+  and even if it were, the kick-detector wouldn't connect.
 
-This looks like a **deliberate cut**: the DOS port shipped with the
-beetle present in the resource files but actively gated off, rather
-than removing it entirely.
+**The wing-flip animation is therefore content that exists fully in
+both ports' bytecode + polygon data, but is gated off at runtime on
+both.** It's reachable only by hacking the bytecode (e.g., removing
+the second `setup channel=0x2E` line, or using a debugger to redirect
+channel 0x2E mid-run).
+
+This is a stronger statement than the original 2026-04-30 reading of
+this finding, which thought gate 2 (DOS-only) was the only mechanism
+and that the wing-flip was reachable via kicks on Amiga. Empirical
+testing in MAME (Amiga emulation) — kicks fire but no wing-flip —
+revealed gate 1, which is the deeper and earlier mechanism.
 
 ---
 
@@ -140,6 +165,14 @@ So the kick-detector polls each frame for the brief window when
 the impact point, and if so, replaces the beetle's animation
 channel with the wing-flip routine.
 
+**That's what the kick-detector *would* do — but it never gets a
+chance.** As [described in the Answer](#answer-summary), the
+level-entry script's second `setup channel=0x2E` overwrites the
+kick-detector address with the cleanup-watcher address, on both
+ports. The kick-detector code is correct and intact in the bytecode;
+it is simply never given a thread to run on. See "The
+suppression mechanisms" section below for the full picture.
+
 ### The wing-flip animation
 
 `LABEL_358B` (Amiga) / `LABEL_36D5` (DOS) is the **right-side wing-flip
@@ -170,73 +203,125 @@ cinematic resource) but the actual polygon data is byte-stable:
 | Falling onto its back | `CINEMATIC_670..672` | `CINEMATIC_610..612` | 5 | 673–675 |
 | Lying upside-down (loop) | `CINEMATIC_657..660` | `CINEMATIC_597..600` | 8 | 962–964 |
 
-### The DOS suppression mechanism
+### The suppression mechanisms
 
-The DOS level-2 entry script (around bytecode address `0x04C8` —
-identifiable by the surrounding `OUTSIDE_POOL_SCREEN` jump) runs:
+There are **two distinct gates** at play, sitting in different places
+in the level-entry script:
+
+#### Gate 1 — the channel-0x2E overwrite (BOTH ports)
 
 ```
-... clear-channels boilerplate ...
-setup channel=0x14, address=GETTING_OUT_OF_THE_POOL__ANIMATION_PART_4
-setup channel=0x09, address=LABEL_365A             ; spawn beetle (Amiga: LABEL_3510)
-setup channel=0x09, address=KILL_CHANNEL_ROUTINE   ; ← THE SUPPRESSION
-setup channel=0x2E, address=LABEL_35F4             ; kick-detector (Amiga: LABEL_34AA)
-setup channel=0x2E, address=LABEL_35E1             ; cleanup watcher
-...
-jmp OUTSIDE_POOL_SCREEN
+; Amiga level 2 entry (line 1147–1148):
+setup channel=0x2E, address=LABEL_34AA   ; kick-detector
+setup channel=0x2E, address=LABEL_3497   ; cleanup watcher OVERWRITES it
+
+; DOS level 2 entry (line 1224–1225):
+setup channel=0x2E, address=LABEL_35F4   ; kick-detector
+setup channel=0x2E, address=LABEL_35E1   ; cleanup watcher OVERWRITES it
 ```
 
-Amiga's equivalent line *does not* have the second
-`setup channel=0x09, address=KILL_CHANNEL_ROUTINE`. That single
-extra instruction is the entire mechanism gating the beetle off in
-the DOS port.
+Because `setup channel=N, …` queues the channel's next program until
+the next sync point (and queueing twice in the same instruction
+stream just leaves the second value in the queue), channel 0x2E
+ends up running the **cleanup watcher** (`LABEL_3497` Amiga /
+`LABEL_35E1` DOS) and **never the kick-detector**. The cleanup
+watcher's job is just to kill the beetle when it walks off-screen
+in scene 1; it doesn't poll `var 0x06`. So `var 0x06` going to 1 or
+2 (when Lester kicks) has no observer, and the wing-flip dispatch
+at `setup channel=0x09, address=LABEL_358B` never executes.
 
-The kick-detector on channel `0x2E` is still spawned on DOS — it
-runs every frame of level 2, polling for `var 0x06 ∈ {1, 2}`. So
-in theory, on DOS, kicking at the right X position could still
-overwrite channel `0x09` with the wing-flip animation. **But:**
-because the beetle's spawn routine (`LABEL_365A`, which sets var
-`0x0A` and `0x0B`) is killed before it ever runs, var `0x0A` is
-never initialised in level 2 on DOS — the kick-detector's
-`±4`-of-`var 0x0A` bounds check compares against uninitialised
-data and is overwhelmingly likely to fail, and even on the rare
-occasion it passes, the wing-flip animation would render at the
-junk coordinates rather than at any visible location.
+This gate is **on both ports**.
+
+#### Gate 2 — the channel-0x09 overwrite (DOS only)
+
+On top of gate 1, the DOS port also kills the beetle's rendering
+channel:
+
+```
+; DOS level 2 entry (line 1222–1223):
+setup channel=0x09, address=LABEL_365A            ; spawn beetle (Amiga: LABEL_3510)
+setup channel=0x09, address=KILL_CHANNEL_ROUTINE  ; ← second gate (DOS only)
+```
+
+Amiga's level-entry has only the first line — beetle is rendered.
+DOS has both lines — beetle's rendering channel is killed before it
+ever runs, so the beetle is invisible.
+
+This gate is **DOS-only**.
+
+#### Why the same authorial pattern shows up twice
+
+Both gates use the same trick: register a thing on a channel, then
+register a different thing on the same channel in the very next
+instruction. The second `setup` overrides the first. **Empirical
+confirmation that the override is real**: the beetle is invisible
+on DOS (proving gate 2 works as described). By the same VM
+semantic, gate 1 is also real — the kick-detector is dead on both
+ports, even though there's no comparable visual evidence (you can't
+"see" a polling loop not running).
+
+#### Empirical validation of gate 1
+
+Testing in MAME (Amiga, retro-presskit ADFs): Lester visibly kicks
+in the lake stage (kick animation plays correctly), but the beetle
+walks past unaffected. Direct match for "the kick-detector is dead
+even on Amiga". Recorded against issue #0045.
 
 ### Reachability summary
 
 | Animation | Amiga reachable? | DOS reachable? |
 |---|---|---|
-| Beetle walking left/right | **Yes** — fires automatically on level entry | No — channel 0x09 killed at entry |
-| Wing-flip (right side) | **Yes** — kick the beetle while facing right | Effectively no — junk coordinates |
-| Wing-flip (left side, mirror) | **Yes** — kick the beetle while facing left | Effectively no |
-| Lying upside-down (looping endpoint) | **Yes** — survives after wing-flip | Effectively no |
+| Beetle walking left/right | **Yes** — fires automatically on level entry | No — channel 0x09 killed at entry (gate 2) |
+| Wing-flip (right side) | **No** — kick-detector is dead (gate 1) | No — gates 1 + 2 both active |
+| Wing-flip (left side, mirror) | **No** — gate 1 | No — gates 1 + 2 |
+| Falling onto back | **No** — only reachable via wing-flip | No |
+| Flying upside-down + take-off | **No** — only reachable via wing-flip | No |
 
-### Why is this almost-never seen even on Amiga?
+### What about the bounds check that the kick-detector implements?
 
-The kick-detector's bounds check is **±4 pixels in X**. The
-beetle walks across the screen at 1 pixel per 2 frames. Lester's
-kick has an impact zone Lester X ± 14 (standing) or ± 26 (crouch).
-For the wing-flip to trigger, Lester must be standing (or
-crouching) such that:
+If gate 1 weren't present and the kick-detector did run, its bounds
+check would be **±4 pixels in X**. The beetle walks across the
+screen at 1 pixel per 2 frames. Lester's kick has an impact zone
+Lester X ± 14 (standing) or ± 26 (crouch). For the wing-flip to
+trigger, Lester would have to be standing (or crouching) such that:
 
 - His kick-impact X (`Lester.X ± 14` or `± 26`) is within ±4
   pixels of the beetle's current X
 - AND he must press the action button during the brief window
   (~2 frames) when `var 0x06` is set to 1 or 2
 
-In normal gameplay, the player is *running away* from the beast in
-this level — they have no incentive to stop and kick a beetle. So
-the wing-flip is a *secret reward* for an exploratory player who
-happens to walk back and try kicking the beetle.
+So even *without* gate 1, the wing-flip would have been a tight,
+precise interaction the player would essentially never trigger by
+accident. The presence of gate 1 makes that academic — but the
+combination (a tight precision requirement + a hard cancel) is
+informative about what the developers were thinking. Either:
+
+1. **Bug-then-mask**: the kick-detector was added late, then
+   discovered to be janky / unreliable / a balance issue, and
+   silenced by adding the cleanup watcher to the same channel.
+2. **Deliberate cut from the start**: the kick-the-beetle
+   interaction was prototyped, then cut for design reasons, and the
+   level-entry overwrite is how they cut it without removing the
+   underlying code (cheaper than a full removal).
+3. **Authorial accident**: someone wrote the cleanup watcher
+   alongside the kick-detector without realising they collided on
+   the same channel slot.
+
+Hypothesis 3 is mildly disfavoured by the *identical* pattern
+appearing on channel 0x09 (the DOS beetle suppression) — that one
+is unambiguously deliberate, since DOS doesn't ship the beetle at
+all. If the developers used the override pattern intentionally
+once, they probably knew what they were doing the other time too.
 
 Whether the wing-flip is **art that was implemented and shipped but
-never put in the player's normal path**, or **art that the
-designers intentionally hid as a discoverable easter egg**, is a
-judgment call I can't make from the bytecode alone. The DOS
-port's explicit suppression argues mildly for the former — if it
-were a designed easter egg, you'd expect the porters to keep it
-intact.
+deliberately disabled before release**, or **a bug** (the cleanup
+watcher accidentally ate the kick-detector's channel slot), is a
+judgment call I can't make from the bytecode alone. Both the
+channel-0x2E and channel-0x09 patterns being identical
+(setup-then-overwrite-on-same-channel) leans deliberate; but the
+cleanup watcher could equally have been put on a different channel
+without conflict, which leans accidental for the kick-detector cut.
+Open question, tracked in issue #0048.
 
 ### Does the beetle fly?
 
@@ -317,47 +402,66 @@ X)** anywhere in level 2. The wing-flip routines (`LABEL_358B`,
 0x09` (the inner flap-loop counter) — no setup of a kill channel,
 no Lester-state writes, no damage triggers of any kind.
 
-So the beetle is **strictly an aesthetic prop**: it walks, it can
-be kicked (which plays its wing-opening + flipping-upside-down
-death animation), and that's the entirety of its interaction with
+So the beetle is **strictly an aesthetic prop**: it walks across
+the screen as ambient fauna, with no interaction with anything in
 the rest of the level. A player ignoring it pays no penalty;
-there's nothing to dodge.
+there's nothing to dodge. The kick-the-beetle interaction that
+appears to exist in the bytecode was disabled before release on
+both ports (gate 1 above), so even pressing fire near it has no
+effect.
 
 ## Open follow-up questions
 
 These are tracked as separate issues:
 
 - **#0044** — Render the wing-flip cinematic frames as PNGs and
-  visually confirm they look like a beetle opening wings + flipping
+  visually confirm they look like a beetle opening wings + flying
   upside-down (not, say, the slug-flip animations the labels are
   adjacent to).
 - **#0045** — Test in an Amiga emulator: does kicking the beetle in
   the lake stage actually trigger the wing-flip animation visibly?
+  (**RESOLVED 2026-04-30**: tested in MAME, kicks fire but no
+  wing-flip — confirms gate 1.)
 - **#0046** — Suggest a label addition to AWVM_Tools' Amiga and DOS
-  data tables: the wing-flip polygons (`CINEMATIC_645..672` Amiga,
-  `CINEMATIC_597..612` DOS) are currently unlabeled. Suggest names
-  like `BEETLE_WINGS_OPENING_0..N`, `BEETLE_FALLING_0..N`,
-  `BEETLE_LYING_UPSIDE_DOWN_0..1`. (Per strict policy:
-  AWVM_Tools changes need owner review before implementation.)
+  data tables for the wing-flip polygons.
 - **#0047** — Cross-check Genesis-EU level 2 (the Heineman 1993
-  port): does it suppress the beetle the same way DOS does, or
-  preserve it like Amiga? Strong genealogy signal either way.
+  port): does it have the same gate-1 channel-0x2E overwrite, the
+  same gate-2 channel-0x09 overwrite, both, or neither? Strong
+  genealogy signal regardless of the answer.
+- **#0048** — Investigate whether the gate-1 kick-detector
+  overwrite is intentional or accidental. The cleanup watcher
+  could trivially have been put on a different channel without
+  conflict; whether the conflict was a deliberate cut or an
+  authorial oversight is currently undecidable from the bytecode.
 
 ## Genealogy implications
 
 The byte-stable polygon data + structurally identical kick-dispatch
 across DOS and Amiga is consistent with the existing
 [research finding 01](#/research/01-gun-ammo)'s observation that
-mechanic constants are byte-stable across release ports. It adds a
-new piece of the puzzle: **the DOS port did not just preserve the
-existing bytecode verbatim — it actively edited it to suppress
-content**, by adding a single setup-channel-kill instruction. That
-is a deliberate per-port decision, not a porting accident.
+mechanic constants are byte-stable across release ports. It adds
+two new pieces:
+
+1. **The original Amiga build *itself* contains a content-gate**
+   — the channel-0x2E kick-detector overwrite (gate 1 above) — that
+   the DOS port inherits intact. So gating off the wing-flip is not
+   a per-port editorial decision; it's already in the upstream that
+   both ports descend from. **This is the first finding of
+   pre-shipping content cuts visible in the bytecode itself.**
+
+2. **The DOS port adds a *second*, additional gate** (gate 2 — the
+   channel-0x09 beetle-suppression). So the DOS port made a
+   *further* editorial decision, on top of the one it inherited,
+   to remove the beetle from view entirely. Why? The wing-flip was
+   already unreachable via gate 1, so adding gate 2 only changes
+   whether the beetle is visible while walking.
 
 The natural cross-validation is whether the SEGA Genesis port
 (also from the Interplay 1993 port lineage, also by Rebecca
-Heineman) preserves the beetle's enable bit or the suppression bit
-— see issue #0047.
+Heineman) inherits gate 1 only (matches Amiga's published
+behaviour, beetle visible) or gate 1 + gate 2 (matches DOS, beetle
+hidden) or neither (preserves an even earlier upstream that didn't
+have either gate, with the wing-flip live!) — see issue #0047.
 
 ## Files referenced
 
@@ -400,3 +504,23 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   frames are a *stunned* state from which the beetle recovers
   and escapes — not a death animation. The take-off code is
   byte-identical between Amiga and DOS.
+- **2026-04-30** (same day, **major correction** in response to
+  owner's MAME testing) — the wing-flip is **unreachable in normal
+  play on both ports**, not just DOS. Empirical: kicks visibly
+  fire on Amiga but the beetle walks past unaffected. Cause: the
+  level-entry script registers the kick-detector on channel 0x2E
+  and *immediately overwrites it* with the cleanup-watcher on the
+  same channel (lines 1147–1148 Amiga, 1224–1225 DOS) — same
+  override pattern as the DOS-only beetle suppression on channel
+  0x09. So the kick-detector never gets a thread to run on. The
+  finding's earlier framing — "kickable on Amiga" — was wrong; the
+  wing-flip is shipped content that is gated off at runtime even
+  on Amiga. Restructured the "suppression mechanisms" section to
+  describe gate 1 (channel 0x2E, both ports) and gate 2 (channel
+  0x09, DOS-only) as two distinct editorial cuts. Reachability
+  table updated to show **No** for all wing-flip animations on
+  both ports. Genealogy implications expanded — the gate-1 cut is
+  *upstream of both ports*, meaning the original Amiga build
+  itself already shipped this content gated off; the DOS port adds
+  gate 2 on top. New issue #0048 opened to investigate whether
+  gate 1 is intentional or accidental.
