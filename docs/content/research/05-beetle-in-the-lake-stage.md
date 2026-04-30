@@ -267,15 +267,34 @@ in the lake stage (kick animation plays correctly), but the beetle
 walks past unaffected. Direct match for "the kick-detector is dead
 even on Amiga". Recorded against issue #0045.
 
-### Reachability summary
+### Reachability summary (across all three currently-disassembled ports)
 
-| Animation | Amiga reachable? | DOS reachable? |
-|---|---|---|
-| Beetle walking left/right | **Yes** — fires automatically on level entry | No — channel 0x09 killed at entry (gate 2) |
-| Wing-flip (right side) | **No** — kick-detector is dead (gate 1) | No — gates 1 + 2 both active |
-| Wing-flip (left side, mirror) | **No** — gate 1 | No — gates 1 + 2 |
-| Falling onto back | **No** — only reachable via wing-flip | No |
-| Flying upside-down + take-off | **No** — only reachable via wing-flip | No |
+| Animation | Amiga (1991) | DOS (1992) | Genesis-EU (1993) |
+|---|---|---|---|
+| Beetle walking left/right | **Yes** | No (gate 2) | No (gate 2) |
+| Wing-flip (right side) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
+| Wing-flip (left side, mirror) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
+| Falling onto back | No | No | No |
+| Flying upside-down + take-off | No | No | No |
+
+The wing-flip is **dead in all three ports**. Only Amiga shows the
+beetle visually at all.
+
+### Three-port comparison: which gates each port carries
+
+| Port | Beetle spawn | 2nd `setup ch=0x09` (gate 2) | Kick-detector | 2nd `setup ch=0x2E` (gate 1) |
+|---|---|---|---|---|
+| **Amiga** (1991)      | `LABEL_3510` (0x3510) | (none) | `LABEL_34AA` (0x34AA) | `LABEL_3497` cleanup |
+| **DOS** (1992)        | `LABEL_365A` (0x365A) | `KILL_CHANNEL_ROUTINE` | `LABEL_35F4` (0x35F4) | `LABEL_35E1` cleanup |
+| **Genesis-EU** (1993) | `LABEL_36FD` (0x36FD) | `KILL_CHANNEL_ROUTINE` | `LABEL_3697` (0x3697) | `LABEL_3684` cleanup |
+
+Same kick-detector code is intact on all three ports (just unrunnable
+because of gate 1) — confirmed by reading `LABEL_3697` body in
+Genesis-EU level 0: byte-identical structure to Amiga `LABEL_34AA`
+and DOS `LABEL_35F4` (same `je [0x06], 0x00`/`jg [0x06], 0x02`
+guards, same `[0x04] ± 4` bounds checks, same `setup channel=0x09,
+address=LABEL_3778/_3820` wing-flip dispatch — these are the
+Genesis-EU equivalents of Amiga's `LABEL_358B/_3633`).
 
 ### What about the bounds check that the kick-detector implements?
 
@@ -425,9 +444,10 @@ These are tracked as separate issues:
 - **#0046** — Suggest a label addition to AWVM_Tools' Amiga and DOS
   data tables for the wing-flip polygons.
 - **#0047** — Cross-check Genesis-EU level 2 (the Heineman 1993
-  port): does it have the same gate-1 channel-0x2E overwrite, the
-  same gate-2 channel-0x09 overwrite, both, or neither? Strong
-  genealogy signal regardless of the answer.
+  port). **RESOLVED 2026-04-30**: Genesis-EU has *both* gates
+  (matches DOS, not Amiga); cinematic offsets are identical to DOS
+  and different from Amiga. The Heineman lineage clearly
+  preserves both gates. See "Genealogy implications" below.
 - **#0048** — Investigate whether the gate-1 kick-detector
   overwrite is intentional or accidental. The cleanup watcher
   could trivially have been put on a different channel without
@@ -437,31 +457,58 @@ These are tracked as separate issues:
 ## Genealogy implications
 
 The byte-stable polygon data + structurally identical kick-dispatch
-across DOS and Amiga is consistent with the existing
+across all three ports is consistent with the existing
 [research finding 01](#/research/01-gun-ammo)'s observation that
-mechanic constants are byte-stable across release ports. It adds
-two new pieces:
+mechanic constants are byte-stable across release ports. The
+beetle finding adds three new pieces:
 
 1. **The original Amiga build *itself* contains a content-gate**
    — the channel-0x2E kick-detector overwrite (gate 1 above) — that
-   the DOS port inherits intact. So gating off the wing-flip is not
-   a per-port editorial decision; it's already in the upstream that
-   both ports descend from. **This is the first finding of
-   pre-shipping content cuts visible in the bytecode itself.**
+   both subsequent ports inherit intact. So gating off the wing-flip
+   is not a per-port editorial decision; it's already in the
+   upstream that all ports descend from. **This is the first
+   finding of pre-shipping content cuts visible in the bytecode
+   itself.**
 
-2. **The DOS port adds a *second*, additional gate** (gate 2 — the
-   channel-0x09 beetle-suppression). So the DOS port made a
-   *further* editorial decision, on top of the one it inherited,
-   to remove the beetle from view entirely. Why? The wing-flip was
-   already unreachable via gate 1, so adding gate 2 only changes
-   whether the beetle is visible while walking.
+2. **The Heineman lineage (DOS 1992 + Genesis-EU 1993) shares a
+   second editorial cut** — gate 2 (channel-0x09 beetle suppression).
+   Verified 2026-04-30 against Genesis-EU level 0: it has the same
+   double-`setup channel=0x09` pattern as DOS, with the second
+   setup pointing at `KILL_CHANNEL_ROUTINE` (the same opcode).
 
-The natural cross-validation is whether the SEGA Genesis port
-(also from the Interplay 1993 port lineage, also by Rebecca
-Heineman) inherits gate 1 only (matches Amiga's published
-behaviour, beetle visible) or gate 1 + gate 2 (matches DOS, beetle
-hidden) or neither (preserves an even earlier upstream that didn't
-have either gate, with the wing-flip live!) — see issue #0047.
+3. **DOS and Genesis-EU share the cinematic resource layout**, but
+   Amiga doesn't. Confirmed by polygon offsets:
+
+   - Amiga: `BEETLE_WALKING_LEFT_0..6` at `0x616A..0x6266`,
+     `BEETLE_WALKING_RIGHT_0..6` at `0xB3CC..0xB4C8`.
+   - DOS: at `0x4D5A..0x4E56` and `0x9FBC..0xA0B8`.
+   - Genesis-EU: at `0x4D5A..0x4E56` and `0x9FBC..0xA0B8`
+     (**identical to DOS, not Amiga**).
+
+   So the cinematic resource is shared between DOS and Genesis-EU,
+   strongly suggesting Heineman built the Genesis-EU port from the
+   DOS port's resources rather than re-deriving from Amiga.
+
+Combined, this gives a clean lineage hypothesis:
+
+```
+Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
+        │
+        ▼
+1991 Amiga release (Chahi):  gate 1 added — beetle visible, wing-flip silenced
+        │
+        ▼
+1992 DOS port (Heineman):    inherits gate 1; adds gate 2 — beetle hidden too
+        │                    cinematic resource laid out at new offsets
+        ▼
+1993 Genesis-EU port         inherits gate 1 + gate 2 + DOS cinematic offsets
+(Heineman)                   (does NOT re-derive from Amiga)
+```
+
+The "Heineman built Genesis-EU from his DOS port, not from Amiga
+upstream" hypothesis is testable by spot-checking other resources
+(non-beetle cinematics, bytecode constants) for the same DOS-vs-
+Amiga offset signature. Worth a follow-up.
 
 ## Files referenced
 
@@ -524,3 +571,18 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   itself already shipped this content gated off; the DOS port adds
   gate 2 on top. New issue #0048 opened to investigate whether
   gate 1 is intentional or accidental.
+- **2026-04-30** (same day, follow-up — Genesis-EU cross-check) —
+  Genesis-EU level 0 (the Heineman 1993 port's lake stage)
+  inspected. **Both gates present**, matching DOS exactly:
+  `setup channel=0x09, address=LABEL_36FD` followed by
+  `setup channel=0x09, address=KILL_CHANNEL_ROUTINE` (gate 2),
+  then `setup channel=0x2E, address=LABEL_3697` followed by
+  `setup channel=0x2E, address=LABEL_3684` (gate 1). Cinematic
+  resource offsets are identical to DOS (`BEETLE_WALKING_LEFT_0`
+  at `0x4D5A`, `BEETLE_WALKING_RIGHT_0` at `0x9FBC`) and different
+  from Amiga (`0x616A` and `0xB3CC`), suggesting Heineman built
+  the Genesis-EU port from his DOS port's resources rather than
+  re-deriving from Amiga. Reachability table widened to three
+  columns. Genealogy implications expanded with a 4-step lineage
+  diagram (Pre-1991 → Amiga 1991 → DOS 1992 → Genesis-EU 1993)
+  showing each port's added gates. Issue #0047 closed.

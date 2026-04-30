@@ -115,18 +115,40 @@ in the bytecode itself**, distinct from per-port editorial cuts.
 The original Amiga build *as shipped in 1991* already contains the
 gate-1 cut; the DOS port inherits it, plus adds gate-2 of its own.
 
-The natural cross-validation is whether Genesis-EU (the 1993
-Heineman port) inherits gate 1 only (matches Amiga's published
-behaviour, beetle visible / not kickable), gate 1 + gate 2 (matches
-DOS, beetle not visible), or *neither* (preserves an even earlier
-upstream that didn't have either gate, with the wing-flip live!) —
-see [issue #0047](#/issues). A "neither" outcome would be a major
-finding: it would imply Heineman ported from a snapshot that
-predates the Amiga's 1991 release-candidate cuts.
+**Genesis-EU outcome (2026-04-30 cross-check)**: the 1993
+Heineman port inherits **both gates** (gate 1 + gate 2 — matches
+DOS, not Amiga). Same `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
+and `setup channel=0x2E, address=cleanup` patterns, structurally
+identical kick-detector code, and — crucially — **cinematic
+offsets identical to DOS** (`BEETLE_WALKING_LEFT_0` at `0x4D5A` in
+both DOS and Genesis, vs `0x616A` on Amiga). This decisively places
+the Heineman lineage's port progression as
+**Amiga (Chahi 1991) → DOS (Heineman 1992) → Genesis (Heineman
+1993)**, with each step preserving its predecessor's gates and the
+DOS port establishing the cinematic-resource layout that Genesis
+inherits.
+
+Lineage diagram:
+
+```
+Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
+        │
+        ▼
+1991 Amiga release (Chahi):  gate 1 added — beetle visible, wing-flip silenced
+        │
+        ▼
+1992 DOS port (Heineman):    inherits gate 1; adds gate 2 — beetle hidden too
+        │                    cinematic resource laid out at new offsets
+        ▼
+1993 Genesis-EU port         inherits gate 1 + gate 2 + DOS cinematic offsets
+(Heineman)                   — does NOT re-derive from Amiga
+```
 
 See [research finding 05](#/research/05-beetle-in-the-lake-stage)
 for the full bytecode trace, kick-detector dispatch logic, take-off
-sequence, and unlabeled wing-flip cinematic offsets.
+sequence, three-port comparison table, and unlabeled wing-flip
+cinematic offsets. Issue #0047 closed with this outcome; issue
+#0048 (whether gate 1 is intentional vs accidental) remains open.
 
 ## Working hypothesis
 
