@@ -18,16 +18,27 @@ Add a new format by:
 3. Adding the `format` field to the relevant entries in `metadata.json`.
 """
 
-from . import amiga_adf, atari_st_pasti, dos_bank, genesis_rom, snes_rom, three_do_opera, winxp_pak
+from . import (
+    amiga_adf,
+    atari_st_pasti,
+    cartridge_rom,
+    dos_bank,
+    three_do_opera,
+    winxp_pak,
+    zip_unpack,
+)
 
 EXTRACTORS = {
     "dos-bank": dos_bank.extract,
     "winxp-pak": winxp_pak.extract,
     "amiga-adf": amiga_adf.extract,
-    "snes-rom": snes_rom.extract,
-    "genesis-rom": genesis_rom.extract,
+    "snes-rom": cartridge_rom.extract,
+    "genesis-rom": cartridge_rom.extract,
+    "gba-rom": cartridge_rom.extract,
     "3do-cue-bin": three_do_opera.extract,
     "atari-st-pasti": atari_st_pasti.extract,
+    "nds-rom": zip_unpack.extract,
+    "apple-ii-demake": zip_unpack.extract,
 }
 
 
