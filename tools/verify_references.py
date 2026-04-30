@@ -38,7 +38,7 @@ MANIFEST_PATH = REFERENCES_DIR / "MANIFEST.sha256"
 
 # Files inside references/ that are part of the infrastructure rather than
 # frozen content — exempt from the "must appear in manifest" rule.
-INFRASTRUCTURE_FILES = {"MANIFEST.sha256", "README.md"}
+INFRASTRUCTURE_FILES = {"MANIFEST.sha256", "README.md", "sources.csv"}
 
 
 def sha256_of(path: Path) -> str:

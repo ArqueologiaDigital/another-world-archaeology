@@ -2,7 +2,10 @@
 
 Frozen primary-source material the project depends on: archived
 walkthroughs, captured documentation, screenshots used as evidence in
-research findings.
+research findings. Plus `sources.csv`: a growing index of every URL
+the project has cited as evidence (so they can be batch-submitted to
+the Wayback Machine via Internet Archive's *Save Page Now from Google
+Sheets* tool, <https://archive.org/services/wayback-gsheets/>).
 
 ## Standing policy
 
