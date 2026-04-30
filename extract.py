@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Top-level extraction entry point.
 
-Reads `metadata.json`, locates each release's cached source file in
-`original_files/<package_md5>/`, dispatches to the format-specific
-extractor under `extractors/`, and writes per-release output to
-`work/<package_md5>/`.
+Reads `metadata.json`, locates each release's source file in the
+local permanent archive at `original_files/<key>/`, dispatches to
+the format-specific extractor under `extractors/`, and writes
+per-release output to `work/<package_md5>/`. The archive is never
+deleted from — it's the project's safety net against upstream
+URL churn.
 
 Usage:
     python3 extract.py                # extract every release
@@ -20,7 +22,7 @@ import extractors
 
 REPO = Path(__file__).resolve().parent
 METADATA = REPO / "metadata.json"
-CACHE_ROOT = REPO / "original_files"
+ARCHIVE_ROOT = REPO / "original_files"  # local permanent archive (never deleted)
 WORK_ROOT = REPO / "work"
 
 
@@ -50,19 +52,19 @@ def main():
             print(f"[{slug}] skip: no md5sum recorded in metadata.json")
             continue
 
-        cache_dir = CACHE_ROOT / md5
+        archive_dir = ARCHIVE_ROOT / md5
         work_dir = WORK_ROOT / md5
 
-        if not cache_dir.is_dir():
+        if not archive_dir.is_dir():
             print(
-                f"[{slug}] skip: no cached source under {cache_dir.relative_to(REPO)} "
+                f"[{slug}] skip: no archived source under {archive_dir.relative_to(REPO)} "
                 f"(run `make fetch` once it is implemented)"
             )
             continue
 
-        print(f"[{slug}] extracting from {cache_dir.relative_to(REPO)}/ ...")
+        print(f"[{slug}] extracting from {archive_dir.relative_to(REPO)}/ ...")
         try:
-            manifest = extractors.extract(meta, cache_dir, work_dir)
+            manifest = extractors.extract(meta, archive_dir, work_dir)
         except NotImplementedError as e:
             print(f"[{slug}] not implemented: {e}")
             failures += 1

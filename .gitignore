@@ -1,5 +1,6 @@
-# Local cache of fetched original game assets — never committed.
-# Layout: original_files/<package_md5>/<original_filename>
+# Local PERMANENT ARCHIVE of fetched original game assets — never committed
+# and (per strict project policy) never deleted from disk either.
+# Layout: original_files/<key>/<original_filename>
 /original_files/
 
 # Per-release extraction output (named by package md5sum) — binaries,

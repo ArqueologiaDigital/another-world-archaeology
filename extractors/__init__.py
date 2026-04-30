@@ -6,7 +6,7 @@ Each extractor implements a function
 
 where:
 - `release_meta` is the per-release entry from `metadata.json`,
-- `cache_dir`   is `original_files/<package_md5>/` (read-only cache),
+- `archive_dir` is `original_files/<key>/` (read-only local archive — never deleted),
 - `work_dir`    is `work/<package_md5>/` (gitignored regenerable output),
 
 and the return value is the manifest dict (also written to

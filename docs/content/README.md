@@ -34,7 +34,7 @@ The site has three kinds of content:
 metadata.json  (catalog)
    │
    ▼
-fetch  ──→  original_files/<package_md5>/<file>      [local cache]
+fetch  ──→  original_files/<key>/<file>              [local archive]
    │
    ▼
 extract  ──→  per-format extractor produces resources, manifest
@@ -55,7 +55,9 @@ Only the DOS bank format has an extractor today. Other formats
 ## Standing policies
 
 - **Original game assets are never committed.** They live only in the
-  local `original_files/` cache.
+  local `original_files/` permanent archive — never a cache, never
+  deleted; once a file is fetched, it stays for the life of the
+  project.
 - **Every Claude Code session is recorded verbatim** as a
   version-controlled audit trail (see [Session log](#/sessions)).
 - **External tool dependencies are pinned**, not vendored. See

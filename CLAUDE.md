@@ -10,7 +10,8 @@ Methodology is modeled on MAME's approach to ROM preservation: original game fil
 
 ## Important repository conventions
 
-- **Never commit original game files.** The repo only stores metadata (filename, checksum, asset type, provenance URL/date) and the Python code that extracts assets from the various release formats. The `original_files/` directory and the per-release working directories named by md5sum are local-only — they are git-ignored by convention even though no `.gitignore` enforces it yet.
+- **Never commit original game files.** The repo only stores metadata (filename, checksum, asset type, provenance URL/date) and the code that extracts assets from the various release formats.
+- **`original_files/` is a permanent local archive — not a cache.** It is gitignored. Treat it as the project's irreplaceable archive of fetched original game files (URLs go offline, takedowns happen, etc.). **Deletion is absolutely forbidden** — once a file lands here, it stays. `make clean` and other workflow targets must never touch it.
 - **Provenance is part of the data.** Every entry in `metadata.json` should include the download URL, download date, and ideally a Wayback Machine archive URL for that source. If you add a release, preserve this discipline.
 - **Two-level checksumming.** md5 is used at both the package level (the release file as distributed, e.g. the zip) and the individual extracted resource level. The per-release working directory is named after the package md5.
 - **External tool dependency: AnotherWorld_VMTools** (https://github.com/felipesanches/AnotherWorld_VMTools). The owner's `ExecTrace` fork in that repo is the bytecode disassembler. It is *not* vendored here; cloning it is part of setup. **Do not propose changes to AWVM_Tools without surfacing the proposal first** — the owner wants to review modifications to that tool before implementation.
