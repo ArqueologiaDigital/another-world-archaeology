@@ -42,6 +42,26 @@ overrides the cleanup-watcher instead of the other way around —
 making the wing-flip animation reachable in real gameplay on the
 Amiga port for visual confirmation.
 
+**Running the hack revealed three additional phases past the
+take-off** that the static analysis had missed:
+
+- a **hostile return pass** at altitude 150, patrolling at
+  ~600 px/sec scanning for Lester's position;
+- a **collision check** against `Lester.X ± 10` that triggers a
+  death cutscene;
+- a **broken death cutscene** that reuses the beast's
+  fatal-attack background, has no actor frames drawn, and hangs
+  the VM after a brief red-flash placeholder.
+
+The owner recorded the full sequence on
+[YouTube](https://www.youtube.com/watch?v=axL7sMXXV8Q). This
+upgrades [open question 06](#/open-questions/06-gate-1-intent)
+(gate-1 intent) from "undecidable" to "strongly leaning
+intentional" — the kick-the-beetle interaction was almost-shipped
+content that the team silenced at the last minute, almost
+certainly because the death cutscene's actor art was never
+drawn.
+
 See [research/05-beetle-in-the-lake-stage](#/research/05-beetle-in-the-lake-stage)
 for the full bytecode trace, kick-detector dispatch logic,
 take-off sequence, six-port comparison table, and the verification

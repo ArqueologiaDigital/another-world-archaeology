@@ -1,7 +1,9 @@
 # 06 — Is gate 1 (the channel-0x2E kick-detector overwrite) intentional or an authorial accident?
 
-> 🔬 **Active.** Sub-question split out of
-> [open question 05](#/open-questions/05-beetle-in-the-lake-stage).
+> 🔬 **Active**, but **strongly leaning "intentional"** as of
+> 2026-04-30 after the verification hack revealed the broken
+> death cutscene (see "What changed" below). Sub-question split
+> out of [open question 05](#/open-questions/05-beetle-in-the-lake-stage).
 > Tracked as [issue #0048](#/issues).
 
 ## What we know
@@ -58,19 +60,72 @@ don't move the needle either way** — they just confirm that gate
 masters, so a single editorial decision (or a single accident)
 suffices to explain everything.
 
-## What would resolve it
+## What changed (2026-04-30)
+
+The owner ran the [verification hack](https://github.com/felipesanches/another-world-hacks)
+on the original Amiga ADF and recorded the full sequence on
+[YouTube](https://www.youtube.com/watch?v=axL7sMXXV8Q). The
+recording revealed **three additional phases past the take-off**
+that the static analysis had missed: a hostile return pass, a
+collision check against Lester, and a **broken death cutscene**
+that reuses the beast's fatal-attack background but **never
+draws the actor**, then hangs the VM (no transition back to the
+game-over / passcode screen).
+
+The death cutscene at `LABEL_384D` / `LABEL_38B6` has every
+*structural* component of a cutscene — palette fades, pacing
+loops, color flashes, channel cleanup — but **no `video` calls
+to draw the attacker frames**, and the final `killChannel` is
+never followed by a setup of the game-over channel. So even if
+gate 1 were lifted by accident, players would lock up the VM
+on the very first kick that connects.
+
+This is the smoking gun. **An "authorial accident" hypothesis
+cannot explain why the override conveniently masks broken-by-
+design content that crashes the game.** The most parsimonious
+reading is now:
+
+1. The kick-the-beetle interaction was prototyped end-to-end
+   (kick → wing-flip → take-off → return → collision → cutscene
+   → game-over).
+2. The death cutscene's actor frames were never drawn (art
+   pipeline didn't deliver in time, or scope was reduced).
+3. Faced with a broken endgame that crashes the VM, the team
+   suppressed the entire interaction at the cheapest possible
+   point: the kick-detector. Putting the cleanup-watcher on the
+   same channel slot was a one-line fix that masks everything
+   downstream — much cheaper than removing the unfinished
+   content path-by-path.
+
+Gate 1 is therefore best read as a **deliberate cover for
+shipped-but-incomplete content**, not as an authorial oversight.
+
+## Remaining residual uncertainty
+
+The "strongly leaning intentional" framing is now well-supported,
+but **definitive proof** would still require either:
 
 - **Original Eric Chahi source code** (would need to come from
   Chahi himself, or a leaked dev environment).
 - **Rebecca Heineman's notes** on her 1992-93 ports, since she
   would have seen the gate-1 pattern when porting.
-- **A "smoking gun" earlier dev master** without gate 1, which
-  would prove gate 1 was added late and is therefore deliberate.
+- **A "smoking gun" earlier dev master** with the kick-the-beetle
+  cutscene's actor frames *drawn* (proving the cut happened
+  during finalisation, not earlier).
+
+A weaker but still useful proof would be reverse-engineering the
+specific cinematic offsets the death cutscene was *expecting* to
+draw (e.g. by comparing palette and pacing patterns to other
+cutscenes that *do* have actor frames) — that would let us
+estimate which polygon resources were planned but never created.
 
 ## Why this matters
 
 It's a question about authorial intent in a 35-year-old
 codebase: was the wing-flip animation **shipped art that was
 deliberately silenced**, or **shipped art that *would have been*
-reachable but for a bug**? The answer reframes how we describe
-the beetle in the game's history.
+reachable but for a bug**? The 2026-04-30 finding settles it
+heavily towards the first reading. This in turn reframes how we
+describe the beetle in the game's history: **a real gameplay
+mechanic that was almost-shipped and silenced at the last
+minute due to incomplete art**.

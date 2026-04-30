@@ -193,6 +193,32 @@ outcomes; issues #0048 (whether gate 1 is intentional vs accidental),
 #0050 (SNES-US fetch), #0051 (DOS-vs-SNES bytecode divergence), and
 #0052 (Apple IIgs WOZ extraction) remain open.
 
+**Late update (2026-04-30, runtime testing of the verification
+hack)**: applying the 2-byte beetle-kick re-enable patch and
+playing the patched game in MAME revealed **three more phases**
+past the take-off that static analysis had missed:
+
+- a **hostile return pass** (`LABEL_37BD` / `LABEL_37CF`) at
+  altitude 150, patrolling at 12 px/frame scanning for
+  `Lester.X ± 10`;
+- a **collision check** that, when satisfied, triggers
+- a **broken death cutscene** at `LABEL_384D` / `LABEL_38B6`:
+  reuses the beast's fatal-attack background
+  (`CINEMATIC_BEAST_SURPRISE_SCENARIO_BACKGROUND`), brief red
+  flash (`fill page=0x00, color=0x0B`), three pacing loops with
+  **no `video` actor draws**, palette transitions, then
+  `killChannel` *without* setting up the game-over channel — the
+  VM hangs.
+
+This reframes the gate-1 cut: it isn't covering an "orphan
+animation" but **shipped-but-incomplete content that crashes the
+VM** when reached. Almost certainly a deliberate last-minute
+suppression of a feature whose death cutscene's actor frames
+were never drawn. [Open question 06](#/open-questions/06-gate-1-intent)
+(gate-1 intent) flips from "undecidable" to "strongly leaning
+intentional" with this evidence. Recording:
+[YouTube](https://www.youtube.com/watch?v=axL7sMXXV8Q).
+
 ## Working hypothesis
 
 Cross-release diffs of disassembled bytecode reveal **blocks of new

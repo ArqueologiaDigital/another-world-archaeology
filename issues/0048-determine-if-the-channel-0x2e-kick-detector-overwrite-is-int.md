@@ -71,3 +71,28 @@ copy-paste rather than a careful gate.
   showing kicks fire but no wing-flip — which led to the
   rediscovery of the channel-0x2E overwrite as gate 1, on top of
   the previously-known channel-0x09 DOS suppression as gate 2.
+- 2026-04-30 (later same day): **strongly leaning intentional**
+  after the verification hack (`another-world-hacks/01-amiga-beetle-kick-reenable`)
+  was run on the original Amiga ADF. Owner recorded the full
+  sequence on YouTube
+  (https://www.youtube.com/watch?v=axL7sMXXV8Q): kick → wing-flip
+  → take-off → **return pass + collision + broken death cutscene
+  + VM hang**. The death cutscene at `LABEL_384D` / `LABEL_38B6`
+  has every structural component (palette fades, pacing loops,
+  channel cleanup) but **no `video` calls to draw the attacker
+  frames** and the final `killChannel` doesn't set up the
+  game-over channel — so the VM hangs after a brief red-flash
+  placeholder.
+
+  This effectively rules out the "authorial accident" hypothesis:
+  an accident wouldn't conveniently mask a death cutscene's
+  broken transition. The gate is best read as a **deliberate
+  cover for shipped-but-incomplete content**, almost certainly a
+  late-stage suppression because the actor frames for the death
+  cutscene were never drawn.
+
+  Outstanding for definitive proof: original source / dev
+  materials. But the runtime evidence is strong enough that the
+  open question is now functionally resolved towards
+  "intentional"; further investigation would only nail down the
+  *exact* late-stage decision rather than re-litigate intent.

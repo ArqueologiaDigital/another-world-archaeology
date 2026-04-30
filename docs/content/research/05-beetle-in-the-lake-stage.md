@@ -82,6 +82,23 @@ and that the wing-flip was reachable via kicks on Amiga. Empirical
 testing in MAME (Amiga emulation) — kicks fire but no wing-flip —
 revealed gate 1, which is the deeper and earlier mechanism.
 
+**Update (later 2026-04-30, after running the verification hack):**
+applying a 2-byte ADF patch that swaps the gate-1 instruction
+operands (see [Verification hack](#verification-hack-re-enable-the-beetle-kick-on-amiga-2026-04-30)
+below) reveals that the wing-flip was **not** the only thing
+silenced. The full kick-the-beetle interaction continues for
+**three more phases** beyond the take-off: a hostile return pass,
+a Lester-collision check, and a death cutscene whose actor
+frames are **never drawn** and whose post-cutscene transition is
+**never wired** — the VM hangs after the broken cutscene plays.
+This decisively reframes the gate: it wasn't suppressing an
+"orphan animation"; it was suppressing **shipped-but-incomplete
+content that crashes the VM** when reached. See
+[The full kick-the-beetle interaction](#the-full-kick-the-beetle-interaction-revealed-by-the-verification-hack)
+for the bytecode trace and
+[YouTube video](https://www.youtube.com/watch?v=axL7sMXXV8Q) for
+the runtime recording.
+
 ---
 
 ## Detailed analysis
@@ -488,9 +505,24 @@ gameplay consequence whatsoever.
 
 ### Can the beetle hurt Lester?
 
-**No.** The bytecode contains no offensive code on the beetle's
-side. To put it in context, the beast in the same level *does*
-hurt Lester, and its hazard mechanism is straightforward:
+> ⚠️ **MAJOR CORRECTION 2026-04-30** (verified empirically with
+> the verification hack): the original answer below was *partly*
+> wrong. The beetle **cannot hurt Lester before being kicked** —
+> while it walks across the screen as ambient fauna, it really is
+> just a prop. **But after the kick connects**, the wing-flip /
+> fall / take-off sequence is followed by a hostile **return pass
+> + collision check + death cutscene** that I missed in the static
+> analysis. Owner ran the patched Amiga ADF in MAME, kicked the
+> beetle, and recorded the full sequence on YouTube
+> ([video](https://www.youtube.com/watch?v=axL7sMXXV8Q)) — see
+> the new ["The full kick-the-beetle interaction"](#the-full-kick-the-beetle-interaction-revealed-by-the-verification-hack)
+> section below for the bytecode tracing of the post-take-off
+> path. The pre-kick bytecode analysis below remains correct.
+
+**Pre-kick: no.** The bytecode contains no offensive code on the
+beetle's side *while it is walking*. To put it in context, the
+beast in the same level *does* hurt Lester, and its hazard
+mechanism is straightforward:
 
 ```
 CHECK_IF_THE_BEAST_HAS_ALREADY_REACHED_LESTER:
@@ -508,9 +540,9 @@ The beast has all three components of a hazard:
 3. A **kill trigger** that swaps in `THE_BEAST_KILLS_LESTER` on
    channel `0x28`
 
-The beetle has none of these. Across both Amiga and DOS level-2
-disassemblies, every single read of `var 0x0A` (beetle X) and
-`var 0x0B` (beetle Y) falls into exactly three categories:
+While the beetle is walking, none of those are active. Every
+single read of `var 0x0A` (beetle X) and `var 0x0B` (beetle Y) in
+the *walking* code paths falls into exactly three categories:
 
 | Read site | Purpose | Threatens Lester? |
 |---|---|---|
@@ -518,20 +550,171 @@ disassemblies, every single read of `var 0x0A` (beetle X) and
 | Cleanup watcher (`LABEL_3497`) | `jg [0x0A], 0x014A` — when the beetle walks off the right edge of the screen, kill its channel | No |
 | Kick-detector (`LABEL_34AA`) | `[0x0A]` vs `[0x04] ± 4` — checks if Lester's *kick* impact connects with the beetle | No (the opposite direction — Lester hurts the beetle) |
 
-There is **no comparison of `var 0x0A` against `var 0x01` (Lester
-X)** anywhere in level 2. The wing-flip routines (`LABEL_358B`,
-`LABEL_3633` and their DOS counterparts) likewise contain only
-`video` rendering calls and a few state-mode writes against `var
-0x09` (the inner flap-loop counter) — no setup of a kill channel,
-no Lester-state writes, no damage triggers of any kind.
+What I missed in the original write-up: **after the kick lands**,
+the take-off sequence at `LABEL_36DB` doesn't simply end — it
+chains into `LABEL_37BD`, which is a hostile return pass with its
+own collision check at `LABEL_37CF` that reads `var 0x01` (Lester
+X) and jumps to a death cutscene (`LABEL_384D`) on hit. So **the
+beetle is conditionally a hazard**: harmless while walking, lethal
+once kicked. The wing-flip is the unlock that turns it from prop
+to threat.
 
-So the beetle is **strictly an aesthetic prop**: it walks across
-the screen as ambient fauna, with no interaction with anything in
-the rest of the level. A player ignoring it pays no penalty;
-there's nothing to dodge. The kick-the-beetle interaction that
-appears to exist in the bytecode was disabled before release on
-both ports (gate 1 above), so even pressing fire near it has no
-effect.
+This re-frames the entire feature: the kick-the-beetle interaction
+is not "discovered animation that does nothing" but an **actual
+gameplay challenge** — with what looks like an unfinished death
+cutscene at the end, which is probably the reason the entire
+interaction was silenced before release.
+
+### The full kick-the-beetle interaction (revealed by the verification hack)
+
+Running the Amiga port with the [verification hack](#verification-hack-re-enable-the-beetle-kick-on-amiga-2026-04-30)
+applied turns the dead bytecode paths into observable runtime
+behaviour. The owner recorded the full sequence on
+[YouTube](https://www.youtube.com/watch?v=axL7sMXXV8Q), and
+combining the recording with bytecode tracing reveals **seven
+distinct phases**, four of which were either incorrectly
+described or entirely missed in the original write-up:
+
+| Phase | Bytecode label | Already known? | What happens |
+|---|---|---|---|
+| 1. Wing-flip | `LABEL_358B` | yes | Beetle hops back, opens wings, flaps in place. |
+| 2. Fall | (cinematic loop) | yes | Beetle falls onto its back. |
+| 3. Stunned | `LABEL_35E5..35ED` | yes | Brief stunned-on-back loop. |
+| 4. Take-off | `LABEL_36DB`, `LABEL_36F9` | yes | Beetle rises (Y −= 2 / X += 1, then X += 12 acceleration) and exits off-screen right. |
+| **5. Return pass** | `LABEL_37BD`, `LABEL_37CF` | **NEW (missed)** | Beetle re-enters at altitude `Y=150`, **patrols left/right across the screen at 12 pixels/frame**, switching wing-flap animation direction at scene edges. Hostile from this point on. |
+| **6. Collision** | `LABEL_37CF` (X check), `LABEL_3816` (X check) | **NEW (missed)** | Each frame, checks `beetle.X` against `Lester.X ± 10`. **If aligned, jumps to `LABEL_384D`** — the death cutscene. (A `[0x63] != 100` guard means the hit can be skipped in scenes where var `0x63` is set to 100, but in the lake stage it isn't.) |
+| **7. Broken death cutscene** | `LABEL_384D`, `LABEL_38B6` | **NEW (missed)** | Reuses `CINEMATIC_BEAST_SURPRISE_SCENARIO_BACKGROUND` (the same background as the beast's fatal-attack cutscene), brief red `fill page=0x00, color=0x0B`, then **three pacing loops where actor frames should have been drawn but no `video` calls are present**. Final palette transitions, then `killChannel` — **no transition back to the game-over / passcode screen**. The VM hangs. |
+
+The single most striking finding here is phase 7: the beetle's
+death cutscene **reuses the beast's background** (offset
+`0xBCDC` in the cinematic resource) but **never draws an actor
+on top**. The bytecode at `LABEL_384D` is:
+
+```
+LABEL_384D:
+  setup channel=0x2D, address=KILL_CHANNEL_ROUTINE
+  unfreezeChannels first=0x00, last=0x2C
+  unfreezeChannels first=0x2F, last=0x3B
+  unfreezeChannels first=0x3D, last=0x3F
+  selectVideoPage 0x00
+  fill page=0x00, color=0x0B                                ; ← red flash
+  video type=1, offset=BEAST_SURPRISE_SCENARIO_BACKGROUND,  ; ← same bg as beast cutscene
+        x=160, y=100
+  selectVideoPage 0xFF
+  mov [0x0A], 0x00A0     ; X = 160
+  mov [0x0B], 0x0000     ; Y = 0
+  mov [0x09], 0x0032     ; counter
+  mov [0x08], 0x0004     ; outer-loop counter
+  break
+  setPalette 0x07
+LABEL_387C:
+  break                  ; ← no `video` call inside this loop
+  add [0x09], 0x0001
+  add [0x0B], 0x0014
+  djnz [0x08], LABEL_387C   ; loop 4× — should have drawn beetle attacker frames
+  mov [0x08], 0x0003
+LABEL_388D:
+  break                  ; ← also no `video` call
+  add [0x09], 0x0001
+  add [0x0B], 0x0007
+  djnz [0x08], LABEL_388D   ; loop 3× — likewise should have drawn frames
+  ; ... more breaks with [0x09] increments — pacing the unfilled cutscene
+  setup channel=0x2D, address=LABEL_38B6
+  fill page=0x00, color=0x00
+  killChannel
+
+LABEL_38B6:
+  setPalette 0x0A
+  break
+  break
+  fill page=0xFF, color=0x0F   ; ← flash white
+  break
+  fill page=0xFF, color=0x03   ; ← then dark
+  break
+  fill page=0xFF, color=0x08   ; ← then teal
+  killChannel
+  mov [0x06], 0x012C           ; var 0x06 = 300 (gun energy reset?)
+  mov [0x07], 0x00B6           ; var 0x07 = 182
+  break
+  killChannel                  ; ← no setup of game-over channel; nothing transitions
+```
+
+Compare this to a complete cutscene like `THE_BEAST_KILLS_LESTER`,
+which would: load a background → draw a sequence of actor frames
+on top via `video` calls → do palette fades → set up the
+game-over channel that displays the passcode screen. Here we have
+**every frame of the actor-draw loop missing** — only the
+*structure* (loop counters, pacing breaks, palette fades) is in
+place. And the final `killChannel` doesn't queue up the
+game-over screen, so the VM stalls indefinitely. This is exactly
+the "VM seems to crash, or at least freeze, not going back to the
+usual screen with passcode" the owner observed.
+
+The cutscene at `LABEL_384D` was clearly **prototyped end-to-end
+in structure but never had its art drawn in**, and the
+post-cutscene transition was never wired. The only sensible
+reading: the team realised the kick-the-beetle interaction had
+broken-by-design ending, and silenced it by registering the
+cleanup-watcher on the same channel as the kick-detector
+(gate 1) so that no player would ever reach it. That makes
+**gate 1 strongly lean intentional** rather than accidental — it
+was a deliberate cover for shipped-but-incomplete content.
+
+This is now the strongest evidence to date for issue #0048
+(gate 1 intent). The verification hack made it observable; the
+broken cutscene structure (palette fades + pacing loops + missing
+actor draws + missing game-over transition) made it *legible*.
+
+#### Why the patrol pattern looks "low and fast"
+
+The owner described the return pass as the beetle "comes back
+flying low and fast zapping across the screen". The bytecode
+matches:
+
+- Altitude: `Y = 0x96` = **150 pixels** (well below Lester's head
+  height — exactly "low" relative to the player).
+- Horizontal speed: `X += 12` or `X -= 12` per frame, on a 50fps
+  display = **600 pixels/sec**, vs Lester's ~30 pixels/sec walk
+  speed = **20× Lester's speed**. "Fast" understates it.
+- Direction switching: `LABEL_3804` flips from the left-flap
+  animation (`LABEL_35FC`) to the right-flap animation
+  (`LABEL_36A4`) when the beetle reaches a scene-edge threshold
+  — explaining the "zapping back and forth" the owner saw.
+
+The animation polygons used here (`CINEMATIC_657..660` per the
+walking-cycle frames) are the *same* polygons used during the
+stunned-on-back state, just rendered at a different position with
+horizontal motion instead of upward drift. So the return-pass
+animation is essentially "the stunned-flap loop in motion" —
+no new polygon assets, just the existing ones repurposed. This is
+why the walking-cycle polygons look identical between Amiga and
+DOS even though the kick interaction was silenced everywhere:
+the polygons were *always* needed for the take-off + stunned +
+return-pass states; only the actor-draw frames inside the death
+cutscene were never created.
+
+#### What `[0x63] != 100` is doing
+
+The collision check at `LABEL_37CF` has a guard:
+
+```
+je [0x63], 0x64, LABEL_37F3   ; if [0x63] == 100, skip the hit
+```
+
+Var `0x63` is set to 100 in **eight separate places** in level 2
+(lines 6690, 6696, 6726, 6734, 7190, 7234, 7276, 7320 of the
+disasm), and to 0/1/2/5/6 in roughly twice as many places. The
+value 100 marks Lester as being in a "safe" state — likely during
+cutscenes, scene transitions, or specific scripted scenes where
+the beetle attack would be inappropriate.
+
+In the lake-stage opening scene where the owner tested, var
+`0x63` is in the 0/1/2 range — so the guard doesn't fire and the
+hit lands. This is **another hint that the interaction was meant
+to be selectively gated, not absent**: the developers wired up a
+scene-flag check, populated the safe-state assignments in eight
+places, and then never finished the connection by gating the
+overall enable.
 
 ## Open follow-up questions
 
@@ -678,6 +861,50 @@ unused channel slot (e.g. `0x3D`) instead of just swapping —
 that would preserve both the kick-detector AND the cleanup. Not
 done in v1 to keep the patch surgically minimal.
 
+### Runtime confirmation (2026-04-30)
+
+The owner ran the patched ADF in MAME (Amiga 500 system, original
+disks 1 + 2 with the patched Disk1) and recorded the full
+sequence on YouTube:
+[https://www.youtube.com/watch?v=axL7sMXXV8Q](https://www.youtube.com/watch?v=axL7sMXXV8Q).
+
+What the recording reveals — and what the static analysis had
+**missed** — is that the kick-the-beetle interaction continues
+*well past* the take-off:
+
+> "I was able to kick the beetle, see it flip upside-down, then
+> stand up again, start flapping its wings and finally flying
+> away. Then it comes back flying low and fast zapping across
+> the screen. And then finally comes back again and hits Lester.
+> The whole scene transitions to what I think is the same
+> background that is used for the beast's fatal attack cutscene,
+> but the beast does not show up. Nothing is rendered in there,
+> which makes me believe that there was possibly an intention of
+> drawing a custom cutscene for the beetle attack, but maybe it
+> was not ready in time for the game release so it had to be
+> disabled. The only thing we see at that placeholder for a
+> cutscene, is a brief flash of red (I guess a quick palette
+> trick to suggest a bloody death). After that the VM seems to
+> crash, or at least freeze, not going back to the usual screen
+> with passcode."
+> — Felipe Sanches, 2026-04-30
+
+The bytecode trace at
+[The full kick-the-beetle interaction](#the-full-kick-the-beetle-interaction-revealed-by-the-verification-hack)
+reconstructs every observable step of the recording. **Most
+significantly**: the broken death cutscene at `LABEL_384D` /
+`LABEL_38B6` reuses the beast's fatal-attack background but has
+no actor draws and no game-over transition — exactly the
+"placeholder for a cutscene" the owner described. The red flash
+is `fill page=0x00, color=0x0B`. The VM hang is the consequence
+of the final `killChannel` not setting up the game-over channel.
+
+This is the runtime evidence that **gate 1 was almost certainly
+deliberate** — not an accident, not just an unused animation cut,
+but a deliberate suppression of incomplete content that would
+crash the game. Issue #0048 (gate 1 intent) gets reframed
+accordingly.
+
 ## Files referenced
 
 - `/tmp/amiga-disasm/output/amiga/disasm/level_2/amiga_level-2.asm`
@@ -805,3 +1032,55 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   reproducible visual: kick the beetle, watch the wing-flip /
   fall / take-off animation that the unmodified game silences.
   Documented as a new "Verification hack" subsection above.
+- **2026-04-30** (same day, follow-up — **MAJOR CORRECTION** from
+  runtime testing of the verification hack) — owner ran the
+  patched ADF in MAME and recorded the full kick-the-beetle
+  sequence on
+  [YouTube](https://www.youtube.com/watch?v=axL7sMXXV8Q). The
+  recording reveals **three additional phases past the take-off
+  that the static analysis had missed entirely**:
+
+  1. **Hostile return pass** (`LABEL_37BD` / `LABEL_37CF`): the
+     beetle re-enters at `Y=150`, patrols left/right at 12 px /
+     frame (~600 px/sec, 20× Lester's speed), and runs a
+     collision check against `Lester.X ± 10` each frame. If the
+     scene-flag guard `[0x63] != 100` passes (which it does in
+     the lake-stage opening scene), the beetle **hits Lester**.
+  2. **Death cutscene** (`LABEL_384D` / `LABEL_38B6`): brief red
+     flash (`fill page=0x00, color=0x0B`), reuses
+     `CINEMATIC_BEAST_SURPRISE_SCENARIO_BACKGROUND` (the same
+     background as the beast's fatal-attack cutscene), three
+     pacing loops where actor frames should have been drawn but
+     **no `video` calls are present**, then palette transitions.
+     The actor draws were never created — the cutscene plays out
+     as bg + flash + empty pacing.
+  3. **VM hang** — `killChannel` is called without setting up the
+     game-over channel, so the VM never transitions to the
+     passcode screen. Player has to power-cycle the Amiga.
+
+  Three corrections to the prior write-up land in this edit:
+
+  - **"Can the beetle hurt Lester?" — partly wrong.** Pre-kick,
+    the beetle is harmless; post-kick, it actively hunts and
+    kills Lester. The harmless-prop framing only applies before
+    the kick lands. Section restructured with a major-correction
+    callout.
+  - **The wing-flip animation isn't an "orphan animation".** It's
+    the trigger for a longer interaction whose endgame is broken.
+    The whole interaction (return pass + collision + death
+    cutscene) was prototyped end-to-end but had its actor draws
+    + game-over transition never wired in.
+  - **Gate 1 strongly leans intentional now**, not accidental.
+    The override-by-overwrite pattern wasn't covering an unused
+    animation; it was covering broken-by-design content that
+    crashes the VM. Issue #0048 reframed accordingly. The
+    "authorial accident" hypothesis is essentially ruled out: an
+    accident wouldn't conveniently mask a death cutscene's
+    broken transition.
+
+  New subsection "The full kick-the-beetle interaction" added to
+  the body, with the bytecode trace of all 7 phases. Embedded
+  YouTube link in the Verification hack subsection. Open question
+  06 (gate-1 intent) flipped from "undecidable" to "strongly
+  leaning intentional" with the broken-cutscene as the smoking
+  gun.
