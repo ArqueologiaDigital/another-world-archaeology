@@ -58,6 +58,16 @@ finding is comparative) records which releases it applies to.
   of a port deliberately editing bytecode to gate off content
   rather than just preserving it.
 
+- [07 — Bytecode round-trip is byte-identical for 5 ports (29 levels)](#/research/07-bytecode-roundtrip-byte-matching):
+  the foundation for the source-reconstruction project. Every
+  level we have disassembly for round-trips through awvm-disasm
+  → awvm-asm byte-identically: amiga 9/9, msdos 9/9,
+  genesis_europe 7/7, snes_eu 2/2, gba_usa 2/2. Bonus: the
+  SNES-EU level-1 and Genesis-EU level-0 64-KB cartridge ROM
+  chunks are byte-identical, confirming research/05's SNES↔Genesis
+  byte-identity finding now at the cartridge-ROM level (not just
+  the bytecode resource).
+
 - [06 — Unused-polygon survey (level 2 first pass)](#/research/06-unused-polygons-survey):
   **64 polygons in Amiga level 2 + 57 in DOS level 2 are not
   referenced from any bytecode `video` call** and aren't children
