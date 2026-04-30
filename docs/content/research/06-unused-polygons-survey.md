@@ -193,6 +193,80 @@ python3 tools/render_unused_assets.py amiga 2 \
 # Open /tmp/gallery_amiga_l2/gallery.html in a browser
 ```
 
+## Update (2026-04-30) — palette-aware rendering + new top candidate
+
+Initial gallery used a synthetic HSV-spread palette (each color
+index → distinct hue) to make the SVGs visible without a matching
+PALETTE resource. Owner inspecting that gallery flagged
+`poly_007b0a_group.svg` (DOS) — counterpart of Amiga `0x008f1a` —
+as **strongly resembling a beetle** under that synthetic
+rendering. This bumps `0x008f1a` / `0x007b0a` from "alternative"
+to **top candidate**.
+
+The owner also pointed out that all SVGs in the gallery were
+using incorrect colors (the synthetic palette). Two follow-ups:
+
+### Palette resource format
+
+AW PALETTE resources are 2048 bytes = **two 1024-byte halves**.
+Each half holds **32 palettes × 32 bytes**. Each palette has 16
+colours × 2 bytes:
+
+```
+byte 1 (c1): low nibble = R   (high nibble unused)
+byte 2 (c2): high nibble = G
+             low nibble = B
+```
+
+Each 4-bit channel is bit-replicated to 6 bits then scaled to 8.
+First half = brighter (Amiga-class); second half = darker
+(DOS-class adjustment). Both halves share the same colour scheme;
+only the per-channel intensities differ by a few bits.
+
+`tools/polygon_render.py` now accepts `--palette-resource` and
+`--palette-index` arguments. `tools/render_unused_assets.py` uses
+**palette 7 by default** — that's the death-cutscene's primary
+palette (set by `setPalette 0x07` at the beginning of
+`LABEL_384D`).
+
+### Palette-sweep gallery for the top candidate
+
+`tools/render_at_all_palettes.py` renders one polygon at every
+palette (0..31) in a PALETTE resource and emits an HTML gallery.
+For the prime suspect:
+
+```
+python3 tools/render_at_all_palettes.py \
+    /tmp/output/msdos/resources/resource-0x1c.bin 0x007b0a \
+    --palette /tmp/output/msdos/resources/resource-0x1d.bin \
+    --output-dir /tmp/palette_sweep_dos_007b0a \
+    --label "Candidate beetle-attacker (DOS unused group)"
+# Open /tmp/palette_sweep_dos_007b0a/gallery.html
+```
+
+Visual inspection across 32 palettes lets us identify which
+palette the polygon was authored for — the one where the
+shape's 4 colour indices correspond to coherent body-part hues
+(legs / wings / body / antennae or similar).
+
+### Updated candidate shortlist
+
+| Rank | Offset | Size | Paths | Colors | Note |
+|---|---|---|---|---|---|
+| 1 | `0x008f1a` (Amiga) / `0x007b0a` (DOS) | 166 × 74 | 12 | 4 | **Strongest visual match** — owner identified as "looks a lot like what could be a larger representation of a beetle" |
+| 2 | `0x00fd10` + `0x00fd40` | 94 × 18 / 85 × 21 | 8 / 9 | 2 / 1 | Sequential pair; beetle-class width with low height (wings-spread attack pose) |
+| 3 | `0x005678` | 78 × 61 | 15 | 3 | Complex composite |
+| 4 | `0x00dd60` | 232 × 59.5 | 6 | 3 | Likely too wide for an actor (background?) |
+| 5 | `0x005bde` (Amiga only) | 50 × 27 | 3 | 3 | Small composite, multi-color |
+
+The top candidate's 4-colour rendering at the cutscene's primary
+palette (palette 7) is a strong fit for "actor-on-stage with
+distinct body parts": dark navy outline + blue-gray body fill +
+royal blue accent + a contrasting hue for highlights / antennae /
+limbs. Compare against the cutscene's actual reused background
+(`CINEMATIC_BEAST_SURPRISE_SCENARIO_BACKGROUND` at offset
+`0xBCDC`) under the same palette to verify.
+
 ## Changelog
 
 - **2026-04-30** — initial finding. First-cut scan covers Amiga +
@@ -201,3 +275,9 @@ python3 tools/render_unused_assets.py amiga 2 \
   shortlist for issue #0053 (missing beetle-attacker cutscene
   frames) prioritises `0x00fd10 + 0x00fd40` as the most likely
   pair, with `0x005678` as a complex-composite alternative.
+- **2026-04-30** (later) — added palette-aware rendering. Owner
+  identified `0x008f1a` (Amiga) / `0x007b0a` (DOS) as the
+  strongest visual beetle-attacker candidate — bumped to top of
+  shortlist. New tool `tools/render_at_all_palettes.py` enables
+  per-palette sweep for definitive identification of which game
+  palette the polygon was authored for.

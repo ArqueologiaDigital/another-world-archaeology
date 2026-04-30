@@ -120,3 +120,26 @@ Hints we already have:
 
   See [research/06](../docs/content/research/06-unused-polygons-survey.md)
   for the full survey.
+- 2026-04-30 (later same day): **owner identified the top
+  candidate by visual inspection**. `0x008f1a` (Amiga) /
+  `0x007b0a` (DOS) — 166×74, 12 paths, 4 colors — was flagged as
+  "looks a lot like what could be a larger representation of a
+  beetle" under the (synthetic-palette) gallery rendering. Rank
+  bumped to #1 ahead of the previously-suggested `0x00fd10` pair.
+
+  Two tooling improvements that landed in response:
+  - `tools/polygon_render.py` now reads PALETTE resources and
+    renders polygons in real game colors. Default palette for
+    galleries is now palette 7 (the death-cutscene's primary).
+  - `tools/render_at_all_palettes.py` renders one polygon at
+    every palette 0..31 for definitive identification of which
+    palette the polygon was authored for. Pre-rendered output
+    for `0x007b0a` lives at
+    `/tmp/palette_sweep_dos_007b0a/gallery.html`.
+
+  Outstanding work: the user should browse the palette-sweep
+  gallery + the per-palette rendering of `0x008f1a` to confirm
+  which palette gives a "right-looking" beetle. Cross-check
+  against the cutscene's reused background
+  (`CINEMATIC_BEAST_SURPRISE_SCENARIO_BACKGROUND` at offset
+  `0xBCDC`) under the same palette.

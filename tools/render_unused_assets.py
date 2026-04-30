@@ -48,9 +48,12 @@ def _get_known_labels(asm_path: Path) -> dict[int, str]:
     return out
 
 
-def render_polygon_to_svg(data: bytes, offset: int, output_path: Path) -> int:
+def render_polygon_to_svg(data: bytes, offset: int, output_path: Path,
+                          palette: list[tuple[int, int, int]] | None = None) -> int:
     """Render `offset` to `output_path`. Returns path count (rendered shapes)."""
-    renderer = polygon_render.Renderer(data, polygon_render.synthetic_palette())
+    if palette is None:
+        palette = polygon_render.synthetic_palette()
+    renderer = polygon_render.Renderer(data, palette)
     renderer.render(offset, color=0xFF, zoom=polygon_render.DEFAULT_ZOOM)
     svg = polygon_render.to_svg(renderer.paths)
     output_path.write_text(svg)
@@ -67,7 +70,23 @@ def main() -> None:
                    help="path to <output>/<port>/ — for resources/ and disasm/ subdirs")
     p.add_argument("--output-dir", type=Path, required=True,
                    help="dir to write SVGs and gallery.html into")
+    p.add_argument("--palette-resource", type=Path,
+                   help="PALETTE resource .bin to use; default = synthetic palette")
+    p.add_argument("--palette-index", type=int, default=7,
+                   help="palette index 0..31 within the PALETTE resource (default 7 — "
+                        "the death-cutscene's primary palette)")
+    p.add_argument("--palette-half", choices=["first", "second"], default="first")
     args = p.parse_args()
+
+    # Decode palette if requested.
+    palette = None
+    if args.palette_resource:
+        palette_bytes = args.palette_resource.read_bytes()
+        palette = polygon_render.load_palette(
+            palette_bytes, args.palette_index, half=args.palette_half
+        )
+        print(f"using palette {args.palette_index} from {args.palette_resource.name} "
+              f"({args.palette_half} half)")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -99,7 +118,7 @@ def main() -> None:
         poly = by_off[off]
         svg_name = f"poly_{off:06x}_{poly.kind}.svg"
         svg_path = args.output_dir / svg_name
-        path_count = render_polygon_to_svg(data, off, svg_path)
+        path_count = render_polygon_to_svg(data, off, svg_path, palette=palette)
         rendered.append({
             "offset": off,
             "kind": poly.kind,
@@ -121,7 +140,7 @@ def main() -> None:
         poly = by_off[off]
         svg_name = f"known_{off:06x}_{name}.svg"
         svg_path = args.output_dir / svg_name
-        path_count = render_polygon_to_svg(data, off, svg_path)
+        path_count = render_polygon_to_svg(data, off, svg_path, palette=palette)
         beetle_rendered.append({
             "offset": off,
             "name": name,

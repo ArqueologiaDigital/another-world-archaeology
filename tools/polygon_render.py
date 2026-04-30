@@ -46,6 +46,45 @@ def synthetic_palette(n: int = 16) -> list[tuple[int, int, int]]:
     return out
 
 
+def load_palette(palette_resource: bytes, palette_index: int,
+                 *, half: str = "first") -> list[tuple[int, int, int]]:
+    """Decode a 16-colour palette from an AW PALETTE resource.
+
+    AW PALETTE resources are 2048 bytes = 2 × 1024-byte halves. Each
+    half holds 32 palettes × 32 bytes. The first half tends to be
+    the brighter Amiga-class palette; the second half is a slightly
+    darker DOS-class adjustment. (Both halves share colour scheme;
+    intensities differ by a few bits per channel.)
+
+    Each palette: 16 colours × 2 bytes. Each colour is 12-bit RGB
+    packed in 16 bits as `0x0R 0xGB` (low nibble of byte 1 = R;
+    high nibble of byte 2 = G; low nibble of byte 2 = B). Each
+    4-bit channel is expanded to 6 bits then scaled to 8.
+    """
+    if not (0 <= palette_index < 32):
+        raise ValueError(f"palette_index {palette_index} out of range [0, 32)")
+    if half == "first":
+        base = 0
+    elif half == "second":
+        base = 1024
+    else:
+        raise ValueError(f"half must be 'first' or 'second', got {half!r}")
+    start = base + palette_index * 32
+    out = []
+    for c in range(16):
+        c1 = palette_resource[start + c * 2]
+        c2 = palette_resource[start + c * 2 + 1]
+        r6 = ((c1 & 0x0F) << 2) | ((c1 & 0x0F) >> 2)
+        g6 = ((c2 & 0xF0) >> 2) | ((c2 & 0xF0) >> 6)
+        b6 = ((c2 & 0x0F) >> 2) | ((c2 & 0x0F) << 2)
+        out.append((
+            int(r6 * 255 / 63),
+            int(g6 * 255 / 63),
+            int(b6 * 255 / 63),
+        ))
+    return out
+
+
 @dataclass
 class SvgPath:
     color: tuple[int, int, int]
@@ -141,10 +180,22 @@ def main() -> None:
     p.add_argument("-o", "--output", type=Path, help="output .svg path (default: stdout)")
     p.add_argument("--zoom", type=int, default=DEFAULT_ZOOM, help="zoom factor (default 64)")
     p.add_argument("--bg", default="#222", help="background colour (CSS, default #222)")
+    p.add_argument("--palette-resource", type=Path,
+                   help="path to a PALETTE resource .bin to use for colours instead of the synthetic palette")
+    p.add_argument("--palette-index", type=int, default=0,
+                   help="palette index within the PALETTE resource (default 0)")
+    p.add_argument("--palette-half", choices=["first", "second"], default="first",
+                   help="which half of the PALETTE resource to use (default 'first' = brighter)")
     args = p.parse_args()
 
     data = args.resource.read_bytes()
-    renderer = Renderer(data, synthetic_palette())
+    if args.palette_resource:
+        pal_bytes = args.palette_resource.read_bytes()
+        palette = load_palette(pal_bytes, args.palette_index, half=args.palette_half)
+    else:
+        palette = synthetic_palette()
+
+    renderer = Renderer(data, palette)
     renderer.render(args.offset, color=0xFF, zoom=args.zoom)
     svg = to_svg(renderer.paths, bg=args.bg)
     if args.output:

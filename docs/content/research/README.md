@@ -64,10 +64,13 @@ finding is comparative) records which releases it applies to.
   of any referenced group polygon — i.e. shipped-but-unused
   content. **46 of the unused solids are byte-identical across
   both ports**; **13 of the unused groups are shape-identical**.
-  Strongest cut-content signal yet. Shortlist of candidates for
-  the missing beetle-attacker frames (issue #0053): the sequential
-  pair `0x00fd10` + `0x00fd40` (94×18 + 85×21, 8 + 9 paths each)
-  and `0x005678` (78×61, 15 paths, 3 colours).
+  Strongest cut-content signal yet. **Top candidate for the
+  missing beetle-attacker frames (issue #0053): the unused group
+  at Amiga `0x008f1a` / DOS `0x007b0a`** (166×74, 12 paths,
+  4 colours) — owner-identified by visual inspection as
+  resembling a larger beetle. Palette-sweep tool
+  (`tools/render_at_all_palettes.py`) renders any polygon at all
+  32 palettes for definitive identification.
 
 ## Convention
 
