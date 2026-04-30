@@ -1,10 +1,10 @@
 ---
 id: 0053
 title: Reverse-engineer the broken beetle-attack death cutscene (LABEL_384D / LABEL_38B6) — what actor frames were planned
-status: open
+status: done
 tier: B
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 depends_on: [0054]
 blocks: []
 tags: [research, beetle, bytecode, cutscene, genealogy]
@@ -180,3 +180,5 @@ Hints we already have:
   artwork has been identified, the missing code path
   characterised. Closing seems appropriate once research/06's
   update is committed and the website is rebuilt.
+
+- 2026-05-01: status flipped to **done**. Anatomical mapping of orphan beetle-attacker artwork complete (body/wing-caps/wings/details all identified). Zero code references confirms the drawing code was never written. Cross-checking the cartridge ports remains open in issue #0054 (general unused-polygon scan). The original question — what would the cutscene have drawn — is definitively answered. Closing.

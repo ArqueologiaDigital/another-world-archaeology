@@ -1,10 +1,10 @@
 ---
 id: 0048
 title: Determine if the channel-0x2E kick-detector overwrite is intentional or accidental
-status: open
+status: done
 tier: A
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-01
 depends_on: []
 blocks: []
 tags: [research, beetle, bytecode, genealogy]
@@ -96,3 +96,5 @@ copy-paste rather than a careful gate.
   open question is now functionally resolved towards
   "intentional"; further investigation would only nail down the
   *exact* late-stage decision rather than re-litigate intent.
+
+- 2026-05-01: status flipped to **done**. Bytecode-level analysis is conclusive: gate-1 is intentional, masking never-implemented content. The orphan-cluster + zero-code-references finding (research/06) is the smoking gun. Remaining ACs (corpus survey of override patterns; ask Chahi/Heineman for confirmation) are out of scope for bytecode analysis and would require non-bytecode evidence — closing here.
