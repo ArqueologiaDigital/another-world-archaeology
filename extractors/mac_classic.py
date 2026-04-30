@@ -1,50 +1,78 @@
-"""Macintosh classic (StuffIt .sit) extractor — stub.
+"""Macintosh classic StuffIt + resource-fork extractor.
 
-The 1993 Macintosh release (`macintosh-1993`) is preserved as a
-StuffIt archive (`out_of_this_world.sit`, 3,739,614 bytes) sourced
-from Macintosh Garden. It bundles three game versions (1.0, 1.2,
-1.3) plus updaters as a single .sit blob.
+Delegates to AWVM_Tools' `mac-stuffit-extract` Rust binary, which
+parses StuffIt 5 archives via the `stuffit` crate and writes each
+entry's data fork + resource fork to the output directory as
+`<safe_name>.data` and `<safe_name>.rsrc`.
 
-Inside the .sit are MacBinary or AppleDouble files preserving the
-classic Mac resource fork — the AW VM resources and engine code
-live in the resource fork of the application binary, NOT in the
-data fork (this is the inverse of every other AW release format
-we've seen).
+For the 1993 Mac fixture (`out_of_this_world.sit`, 3.7 MiB), this
+yields **141 entries** including:
 
-Extraction blockers as of 2026-04-30:
+- **Three application builds** (v1.0, v1.0.2, v1.0.3) each with its
+  own ~525 KB resource fork. The AW VM bytecode and engine code
+  live in these resource forks — a 68k Mac sibling to the Anniversary
+  engine codebase.
+- **Two updater apps** (v1.0→1.0.3, "mv" v1.0→1.0.3) — patch deltas
+  worth diffing.
+- **AW data files** matching a `Data/FILE0020..FILE0146` pattern,
+  per-version. Likely holds the AW resource banks in a Mac-flavour
+  layout (potentially mappable to the canonical AW resource indices).
+- Codewheel JPEGs, solve text, MacPlay branding pictures.
 
-- **StuffIt format**: proprietary; partial open-source decoders
-  exist (libunarchiver / The Unarchiver / `unar` CLI) but neither
-  the system `unar` package nor a Python binding (`libarchive`,
-  `unar`) is installed in this environment. Adding either would
-  require root access we don't have.
+Output layout under `work_dir/`:
+  contents/   <- one .data file per entry, plus .rsrc when non-empty
+  manifest.json
 
-- **Resource-fork extraction**: once the .sit is unpacked, the
-  resulting MacBinary files need to be parsed to access the
-  resource fork. The `rforks` Python package handles this; not
-  installed.
-
-- **AW resource layout in 68k Mac binary**: unknown. The Mac port
-  is Motorola 68k like the Amiga and Atari ST releases, but the
-  resource format inside the resource fork has not been reverse-
-  engineered. A first-pass investigation would compare against the
-  Atari ST bank format (extractors/atari_st_pasti.py) — the engine
-  code is likely the same generation.
-
-Useful upstream references:
-- The Unarchiver source: https://github.com/MacPaw/XADMaster
-- StuffIt 5.x format (the .sit version we have is StuffIt 5,
-  per the `file(1)` output)
-- MacBinary III spec
+The resource forks need a separate **rsrc walker** to surface
+individual Mac resources (TYPE+ID-keyed: 'BANK', 'POLY', 'PICT',
+etc.). That's the next step; the `macbinary` crate is already in
+the workspace dependencies for it.
 """
 
 from __future__ import annotations
 
+import json
+import shutil
+import subprocess
+from pathlib import Path
 
-def extract(release_meta, archive_dir, work_dir):
-    raise NotImplementedError(
-        "mac-classic extractor not implemented — needs StuffIt .sit "
-        "decompressor + MacBinary parser + 68k Mac resource-fork reader. "
-        "out_of_this_world.sit is in the archive; see "
-        "extractors/mac_classic.py for the protocol breakdown."
+REPO = Path(__file__).resolve().parent.parent
+TOOL = REPO.parent / "AnotherWorld_VMTools" / "target" / "release" / "mac-stuffit-extract"
+
+
+def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
+    sits = list(archive_dir.glob("*.sit"))
+    if not sits:
+        raise FileNotFoundError(f"mac-classic: no .sit in {archive_dir}")
+    sit_path = sits[0]
+
+    if not TOOL.is_file():
+        raise RuntimeError(
+            f"mac-classic: AWVM_Tools mac-stuffit-extract binary not built at {TOOL} "
+            "(run `cargo build --release` in AnotherWorld_VMTools)"
+        )
+
+    work_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = work_dir / "contents"
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir()
+
+    subprocess.run(
+        [str(TOOL), str(sit_path), str(out_dir)],
+        check=True,
     )
+
+    files = sorted(p.relative_to(out_dir).as_posix()
+                   for p in out_dir.rglob("*") if p.is_file())
+    rsrc_count = sum(1 for f in files if f.endswith(".rsrc"))
+
+    manifest = {
+        "format": "mac-classic",
+        "source_sit": sit_path.name,
+        "resource_count": len(files),
+        "rsrc_fork_count": rsrc_count,
+        "files": files,
+    }
+    (work_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    return manifest
