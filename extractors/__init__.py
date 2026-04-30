@@ -20,9 +20,11 @@ Add a new format by:
 
 from . import (
     amiga_adf,
+    apple_iigs_woz,
     atari_st_pasti,
     cartridge_rom,
     dos_bank,
+    mac_classic,
     symbian_sis,
     three_do_opera,
     winxp_pak,
@@ -41,6 +43,8 @@ EXTRACTORS = {
     "nds-rom": zip_unpack.extract,
     "apple-ii-demake": zip_unpack.extract,
     "symbian-sis": symbian_sis.extract,
+    "apple-iigs-2mg": apple_iigs_woz.extract,
+    "mac-classic": mac_classic.extract,
 }
 
 
