@@ -110,14 +110,60 @@ but **definitive proof** would still require either:
 - **Rebecca Heineman's notes** on her 1992-93 ports, since she
   would have seen the gate-1 pattern when porting.
 - **A "smoking gun" earlier dev master** with the kick-the-beetle
-  cutscene's actor frames *drawn* (proving the cut happened
-  during finalisation, not earlier).
+  cutscene's actor frames *drawn AND wired* (proving the cut
+  happened during finalisation, not earlier).
 
 A weaker but still useful proof would be reverse-engineering the
 specific cinematic offsets the death cutscene was *expecting* to
 draw (e.g. by comparing palette and pacing patterns to other
 cutscenes that *do* have actor frames) — that would let us
 estimate which polygon resources were planned but never created.
+
+## Sharper conclusion (2026-05-01)
+
+The unused-polygon survey
+([research/06](#/research/06-unused-polygons-survey))
+identified the orphan beetle-attacker artwork:
+
+- **Body** (with legs + eyes): Amiga `0x008f1a` / DOS `0x007b0a`
+- **Wing-caps**: Amiga `0x00910e` / DOS `0x007cfe`
+- **Wings** (flapping): Amiga `0x005bde` (Amiga only — DOS
+  doesn't carry these)
+
+A comprehensive search across **all 18 disassembled bytecode
+files** found **zero code references** to these offsets, anywhere.
+Not in live code; not in unreachable code; not in any data
+literal. The drawing code that would have placed these assets
+on screen was **never written**.
+
+This sharpens the intent question to a definite answer:
+**gate 1 masks never-implemented content**, not broken
+implementation. The team's decision was that the cutscene
+ending wasn't going to ship; rather than wire up the assets and
+debug the wiring, they shut the entire interaction off at
+the kick-detector. **The gate is intentional** by the only
+plausible reading of "intent" available to bytecode-only
+analysis.
+
+The remaining uncertainty narrows to the question of *who* made
+that decision and *when* — Chahi during 1991 finalisation, or
+Heineman during the 1992 DOS port? The presence of gate 1 in
+both branches suggests it was inherited from Chahi's master
+(consistent with the Amiga + Atari ST byte-identity finding from
+research/05). The Amiga-only wings asset suggests Chahi continued
+adding artwork after the DOS branch had forked. So the most
+parsimonious story is:
+
+1. Chahi prototypes the kick-the-beetle interaction in early
+   development.
+2. The cutscene's actor drawing code is never written; only the
+   structural skeleton + the artwork.
+3. Faced with a feature that can't ship, Chahi adds gate 1 to
+   silence the kick-detector.
+4. DOS forks at this point and carries gate 1 verbatim.
+5. Chahi continues adding artwork after the fork — the wings
+   land in the Amiga master but never reach DOS.
+6. Both ports ship with the gates intact.
 
 ## Why this matters
 

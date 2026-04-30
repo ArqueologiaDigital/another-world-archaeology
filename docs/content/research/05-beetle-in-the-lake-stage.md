@@ -861,6 +861,36 @@ unused channel slot (e.g. `0x3D`) instead of just swapping —
 that would preserve both the kick-detector AND the cleanup. Not
 done in v1 to keep the patch surgically minimal.
 
+### The missing actor frames have been identified (2026-05-01)
+
+The orphaned polygon assets that the broken cutscene at
+`LABEL_384D` / `LABEL_38B6` *would have drawn* have been mapped
+to specific anatomically-coherent shapes in the level-2
+POLY_CINEMATIC resource. See
+[research/06 — Unused-polygon survey](#/research/06-unused-polygons-survey)
+"orphan cluster has anatomical coherence" section for the
+detail. The summary:
+
+- **Beetle body** with legs + eyes: Amiga `0x008f1a` / DOS
+  `0x007b0a` (166×74 group of 12 children).
+- **Wing-caps / elytra**: Amiga `0x00910e` / DOS `0x007cfe`
+  (61×117 tall single shape).
+- **Thin flapping wings** (Amiga only): Amiga `0x005bde`
+  group of 3 thin solids. Notably absent from DOS — strong
+  cross-port branch asymmetry.
+
+A comprehensive search across **all 18 disassembled bytecode
+files** (Amiga + DOS, levels 0-8) finds **zero references** to
+these offsets in any code path, reachable or not. The artwork
+exists but the drawing code was **never written, not even as
+dead code that the gates suppress**. This refines the gate-1
+intent question
+([open question 06](#/open-questions/06-gate-1-intent)) to a
+narrower characterisation: the kick-the-beetle interaction's
+ending was abandoned BEFORE the cutscene drawing code was
+written, not after. The gate-1 trick masks
+**never-implemented content**, not broken implementation.
+
 ### Runtime confirmation (2026-04-30)
 
 The owner ran the patched ADF in MAME (Amiga 500 system, original

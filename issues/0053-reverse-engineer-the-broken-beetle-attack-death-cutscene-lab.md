@@ -143,3 +143,40 @@ Hints we already have:
   against the cutscene's reused background
   (`CINEMATIC_BEAST_SURPRISE_SCENARIO_BACKGROUND` at offset
   `0xBCDC`) under the same palette.
+- 2026-05-01: **anatomical mapping confirmed; no code references
+  exist anywhere**. Owner identified specific orphan polygons as
+  beetle-anatomy parts:
+
+  - **Body** (with legs + eyes, no wings): Amiga `0x008f1a` /
+    DOS `0x007b0a` — 166×74 group of 12 children.
+  - **Wing-caps** (elytra): Amiga `0x00910e` (implied) / DOS
+    `0x007cfe` (with child solid `0x007d06`) — 61×117 tall.
+  - **Thin flapping wings**: Amiga `0x005bde` (group of 3 thin
+    solids `0x005bee`, `0x005c06`, `0x005c1a`). **Amiga-only**
+    — no DOS counterpart with the same rendered shape.
+
+  Comprehensive code-reference search across **all 18
+  disassembled bytecode files** (Amiga + DOS, levels 0-8):
+  **zero references** to any of these offsets. No `video`
+  opcode targets them; no literal value matches; no `db`
+  region contains the offset bytes. The hypothetical drawing
+  code that would have used these assets **was never written**,
+  not even as dead code.
+
+  Genealogy implication: the kick-the-beetle interaction's
+  ending was abandoned BEFORE the cutscene drawing code was
+  written, not after. The artwork was ~90% finished (body +
+  wing-caps + wings + small details all present); the code
+  never started. The gate-1 setup-then-overwrite trick is
+  therefore **masking never-implemented content**, not broken
+  implementation.
+
+  Cross-port asymmetry: the Amiga-only flight-wings further
+  suggest the DOS port forked from Chahi's master before the
+  wings were drawn (consistent with research/05's
+  Amiga-vs-DOS-bytecode branch finding).
+
+  This effectively answers issue #0053: the planned actor's
+  artwork has been identified, the missing code path
+  characterised. Closing seems appropriate once research/06's
+  update is committed and the website is rebuilt.

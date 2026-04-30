@@ -193,7 +193,119 @@ python3 tools/render_unused_assets.py amiga 2 \
 # Open /tmp/gallery_amiga_l2/gallery.html in a browser
 ```
 
-## Update (2026-04-30) — palette-aware rendering + new top candidate
+## Update (2026-05-01) — orphan cluster has anatomical coherence; no code references
+
+Owner inspected the palette-7 gallery and identified anatomically
+matching beetle parts across the orphan-cluster:
+
+| Owner identification | Amiga offset | DOS offset | Shape characteristics |
+|---|---|---|---|
+| **Beetle body** (with legs and eyes, no wings) | `0x008f1a` | `0x007b0a` | 166×74, group of 12 children |
+| **Wing-caps / elytra** | `0x00910e` (implied) | `0x007cfe` (+ child solid `0x007d06`) | 61×117 tall single shape |
+| **Thin flapping wings** | `0x005bde` group → solids `0x005bee`, `0x005c06`, `0x005c1a` | none with matching shape | 3 thin solids in a 50×27 group |
+
+The wings asset is **Amiga-only** — no DOS unused group has the
+same rendered shape (verified by point-coordinate hash signature
+comparison across all unused groups in both ports). This is the
+first clear cross-port asymmetry found in the orphan-cluster: the
+Amiga build carries the membranous flight-wings; the DOS build
+doesn't appear to.
+
+### Code references: **none**
+
+A comprehensive search across **all 18 disassembled bytecode
+files** (Amiga + DOS, levels 0-8) finds **zero references** to
+the candidate offsets. Specifically:
+
+- No `video type=N, offset=…` opcode targets any of these
+  offsets.
+- No literal value (`mov`, `add`, `and`, etc.) matches these
+  offsets in any operand position, on any byte of disasm.
+- No `db` data-byte sequence in the bytecode resource produces
+  the offset bytes.
+- No group polygon (in the polygon resource) references these
+  offsets except the unused groups we already identified
+  (`0x008f1a` references its 12 children; `0x005bde` references
+  its 3 children; `0x00910e` references its 1 child). Those
+  parent groups themselves are unused.
+
+This is a stronger statement than "unused" — these assets are
+not just *unreferenced from live code* but **completely absent
+from the bytecode**, including from any dead code path. The
+hypothetical code that *would have* drawn them was **never
+written**, only imagined.
+
+### Anatomical interpretation
+
+The orphan cluster maps to a complete beetle attacker:
+
+```
+0x008f1a  BEETLE_BODY (12 children — body + legs + eyes)
+   ├─ 0x008f12  wrapper sub-group (1 child)
+   ├─ 0x008f4e..0x008ff2  11 solid leaf shapes (body parts)
+
+0x005bde  BEETLE_WINGS (3 children — Amiga only)
+   ├─ 0x005bee  wing 1 (10pt solid, ~50×27 area)
+   ├─ 0x005c06  wing 2 (8pt solid)
+   └─ 0x005c1a  wing 3 (8pt solid)
+
+0x00910e (Amiga) / 0x007cfe (DOS)  WING-CAP / elytron
+   └─ single child solid
+
+0x00929a (Amiga) / 0x007e8a (DOS)  small detail (10×12)
+0x00946e (Amiga) / 0x00805e (DOS)  small detail (10×5 — antenna?)
+```
+
+This is consistent with a **complete beetle-attacker artwork
+package** — body + wing-covers + (Amiga only) deployable wings +
+small features — that was drawn but never assembled into a final
+composite. The *animation* would have required:
+
+1. A higher-level group polygon combining body + wing-caps
+   (closed) for the "diving" phase.
+2. A higher-level group combining body + open wings (Amiga) for
+   the "wings-deploying" phase.
+3. The cutscene bytecode at `LABEL_384D` / `LABEL_38B6` would
+   have had `video` calls referencing those composites at varying
+   Y coordinates.
+
+None of those higher-level composites exist; none of those
+`video` calls exist. **The artwork was 90% finished; the code
+never started.**
+
+This in turn refines the gate-1 intent question
+([open question 06](#/open-questions/06-gate-1-intent)): the
+team's decision to gate off the kick-the-beetle interaction
+wasn't masking a *broken* implementation — it was masking a
+**never-implemented** ending. The artwork existed; the gameplay
+existed up to the take-off; the ending was just art that hadn't
+been wired in. Probably indicating the kick-the-beetle interaction
+was on a "stretch goal" track that didn't ship.
+
+### Cross-port branch asymmetry
+
+The Amiga-only wings (`0x005bde`) raise a related question: did
+the DOS branch's polygon resource never include the flight-wings,
+or were they removed? Two hypotheses:
+
+1. **DOS forked early**: the wings were drawn AFTER Heineman's
+   DOS port forked from Chahi's master. The Amiga master kept
+   them; DOS doesn't have them.
+2. **DOS pruned**: the wings were in both originally, and DOS's
+   asset-packing pipeline stripped them as unreferenced.
+
+Hypothesis 1 fits with the broader genealogy
+([research/05](#/research/05-beetle-in-the-lake-stage))
+where Amiga + Atari ST share byte-identical bytecode but the DOS
+bytecode is its own branch.
+
+If hypothesis 2 were correct, we'd expect to find that DOS
+trimmed *all* unreferenced polygons during packing — but it
+clearly didn't (DOS still has 57 unused polygons). So DOS keeps
+unreferenced assets in general; it just doesn't have these
+particular wings. Hypothesis 1 is the better fit.
+
+
 
 Initial gallery used a synthetic HSV-spread palette (each color
 index → distinct hue) to make the SVGs visible without a matching
