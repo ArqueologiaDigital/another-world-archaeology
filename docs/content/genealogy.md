@@ -48,16 +48,36 @@ codewheel check.
 See [research finding 02](#/research/02-amiga-codewheel-protection)
 for the per-resource md5 walk and the disassembly diff.
 
-### First cross-port engine fingerprint candidate
+### First multi-version single-port patch chain (2026-04-30)
 
-The 1993 Mac port's StuffIt archive bundles **three close-versioned
-application builds** (v1.0 / v1.0.2 / v1.0.3) plus two updaters,
-each carrying a ~525 KB resource fork containing the engine code.
-Three close versions of the same port, plus two patch deltas, give
-a uniquely dense signal about what changed across patch
-boundaries — and the 68k-Mac engine code is a candidate parent for
-the 2011+ Anniversary edition codebase. (Per-resource walk pending —
-this is tier-A item #1 in the [forward plan](#/forward_plan).)
+The 1993 Mac port ships three close-versioned builds (v1.0 / v1.0.2
+/ v1.0.3) plus two updaters in the same StuffIt archive — a
+uniquely dense genealogy dataset. The two-stage Mac extraction
+pipeline (`mac-stuffit-extract` → `mac-rsrc-walk`) now exposes
+every individual `(TYPE, ID)` Mac resource per version.
+
+Per-segment md5 of the seven `CODE` segments across the three
+builds reveals two distinct patches:
+
+- **v1.0 → v1.0.2** was a **focused 3-segment fix** — CODE 1, 4, 6
+  are byte-identical between v1.0 and v1.0.2; only CODE 2, 3, 5
+  changed (and CODE 0, the segment-loader jump table,
+  regenerates).
+- **v1.0.2 → v1.0.3** was a **structural reorganisation** — every
+  CODE-segment hash changed, but the v1.0/v1.0.2 hash
+  `cdf752c16d3b...` reappears as v1.0.3's CODE 5 (renamed
+  `Histories _ Docs`), with a new v1.0.3 CODE 4 named
+  `MacTraps2_ANSI`. Almost certainly a Symantec C runtime upgrade
+  shifting all later segments by one.
+
+The `OOTW` custom 4cc resource (the application's "owner
+resource") even carries a human-readable copyright string that
+changes per version: v1.0 = `©1992 MacPlay.`, v1.0.2 =
+`©1992-3 MacPlay and Delphine Software.`, v1.0.3 reverts to
+`©1992 MacPlay.`.
+
+See [research finding 04](#/research/04-mac-port-patch-chain) for
+the full per-segment table.
 
 ## Working hypothesis
 

@@ -1,12 +1,12 @@
 {
   "name": "AnotherWorld_VMTools",
   "url": "https://github.com/felipesanches/AnotherWorld_VMTools.git",
-  "pinned_commit": "15119bbfd4442087c59c30caac64b2db98414363",
+  "pinned_commit": "808a3617f42eb76fc058b0f48d71579d76f288a0",
   "pinned_date": "2026-04-30",
-  "pinned_subject": "mac-stuffit-extract: extract data + resource forks from 1993 Mac .sit",
+  "pinned_subject": "mac-rsrc-walk: walk Mac resource forks; mac-stuffit-extract: decompress",
   "expected_sibling_path": "../AnotherWorld_VMTools",
   "change_review_required": true,
-  "purpose": "Bytecode disassembler and assembler for the Another World VM, used by the extract pipeline to produce diff-friendly source-like output from BYTECODE resources. Pure-Rust workspace (was Python; ported with byte-identical parity for msdos/amiga/genesis_europe; full round-trip preserved). Provides CLI binaries: awvm-disasm, awvm-asm, banks2resources, adf-extract, valve-pak-extract, opera-list, mac-stuffit-extract.",
+  "purpose": "Bytecode disassembler and assembler for the Another World VM, used by the extract pipeline to produce diff-friendly source-like output from BYTECODE resources. Pure-Rust workspace (was Python; ported with byte-identical parity for msdos/amiga/genesis_europe; full round-trip preserved). Provides CLI binaries: awvm-disasm, awvm-asm, banks2resources, adf-extract, valve-pak-extract, opera-list, mac-stuffit-extract, mac-rsrc-walk.",
   "depends_on": ["rust >= 1.93 (release toolchain)"],
   "build": "cargo build --release",
   "previous_pin": {
