@@ -90,3 +90,33 @@ Hints we already have:
 
 - 2026-04-30: opened. Surfaced from the verification-hack runtime
   testing of the kick-the-beetle interaction.
+- 2026-04-30 (later): **partial progress**. The unused-polygon
+  scanner pipeline (#0054) ran on Amiga + DOS level 2 and surfaced
+  a candidate shortlist:
+
+  - **Strongest single candidate**: the sequential pair
+    `0x00fd10` (94×18, 8 paths, 2 colors) + `0x00fd40` (85×21,
+    9 paths, 1 color) on Amiga, with byte-equivalent counterparts
+    on DOS at `0x00df48` + `0x00df78`. Beetle-class width and low
+    height are consistent with a "wings-spread" beetle attack pose;
+    the sequential placement suggests a 2-frame mid-attack
+    animation. Cross-port shape-identical.
+  - **Complex composite alternative**: `0x005678` on Amiga
+    (78×61, 15 paths, 3 colors) — DOS counterpart at `0x0042b8`.
+    Larger, multi-component; could be a boss-class actor.
+  - **Other candidates**: `0x005bde` (Amiga only),
+    `0x008f1a` (large, 166×74, multi-color).
+
+  Cross-port verification is strong: 13 of the 15 Amiga unused
+  groups have shape-equivalent DOS counterparts. If the beetle
+  attacker was meant to ship, its polygons are almost certainly
+  among these 13.
+
+  Visual inspection still pending — `tools/render_unused_assets.py`
+  emits a per-port HTML gallery at
+  `/tmp/gallery_<port>_l2/gallery.html` that shows all unused
+  polygons + the known beetle frames side-by-side for shape
+  comparison.
+
+  See [research/06](../docs/content/research/06-unused-polygons-survey.md)
+  for the full survey.

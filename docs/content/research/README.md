@@ -58,6 +58,17 @@ finding is comparative) records which releases it applies to.
   of a port deliberately editing bytecode to gate off content
   rather than just preserving it.
 
+- [06 — Unused-polygon survey (level 2 first pass)](#/research/06-unused-polygons-survey):
+  **64 polygons in Amiga level 2 + 57 in DOS level 2 are not
+  referenced from any bytecode `video` call** and aren't children
+  of any referenced group polygon — i.e. shipped-but-unused
+  content. **46 of the unused solids are byte-identical across
+  both ports**; **13 of the unused groups are shape-identical**.
+  Strongest cut-content signal yet. Shortlist of candidates for
+  the missing beetle-attacker frames (issue #0053): the sequential
+  pair `0x00fd10` + `0x00fd40` (94×18 + 85×21, 8 + 9 paths each)
+  and `0x005678` (78×61, 15 paths, 3 colours).
+
 ## Convention
 
 Each finding lives at `docs/content/research/<NN>-<slug>.md`. The
