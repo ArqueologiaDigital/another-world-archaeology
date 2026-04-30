@@ -5,7 +5,7 @@ status: open
 tier: B
 created: 2026-04-30
 updated: 2026-04-30
-depends_on: []
+depends_on: [0054]
 blocks: []
 tags: [research, beetle, bytecode, cutscene, genealogy]
 ---
