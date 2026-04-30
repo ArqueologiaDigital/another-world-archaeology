@@ -45,6 +45,19 @@ finding is comparative) records which releases it applies to.
   records the copyright string, which v1.0.2 changed to mention
   Delphine Software and v1.0.3 reverted.
 
+- [05 — Beetle in the lake stage: hidden on DOS, kickable on Amiga](#/research/05-beetle-in-the-lake-stage):
+  level 2 contains a beetle creature with walking, wing-opening,
+  and flipping-upside-down animations. **DOS suppresses the beetle
+  with a single extra `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
+  in the level-entry script** that overwrites the spawn handler;
+  Amiga doesn't have this line, so the beetle walks visibly. The
+  wing-flip animation triggers when Lester *kicks* the beetle —
+  reachable on Amiga, effectively unreachable on DOS. The
+  beetle's polygon data is byte-stable between the two ports;
+  what changes is one bytecode instruction. First documented case
+  of a port deliberately editing bytecode to gate off content
+  rather than just preserving it.
+
 ## Convention
 
 Each finding lives at `docs/content/research/<NN>-<slug>.md`. The

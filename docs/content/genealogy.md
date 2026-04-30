@@ -79,6 +79,28 @@ changes per version: v1.0 = `©1992 MacPlay.`, v1.0.2 =
 See [research finding 04](#/research/04-mac-port-patch-chain) for
 the full per-segment table.
 
+### First port-specific deliberate bytecode edit (2026-04-30)
+
+The DOS port of level 2 (the lake / beast-chase stage) suppresses
+the **walking beetle** that's visible on Amiga, by adding a single
+extra `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
+instruction immediately after the beetle's spawn line in the
+level-entry script. The beetle's bytecode routines, the
+kick-detector that turns it into a wing-flip death animation, and
+all the corresponding polygon data are **byte-identical between
+DOS and Amiga** — only that one extra suppression instruction
+distinguishes the two ports.
+
+This is the first known case of a port **deliberately editing the
+bytecode to gate off content**, not just preserving the upstream
+verbatim. The natural follow-up is whether Genesis-EU (the 1993
+Heineman port) inherits the suppression bit or the original Amiga
+behaviour — see [issue #0047](#/issues).
+
+See [research finding 05](#/research/05-beetle-in-the-lake-stage)
+for the full bytecode trace, kick-detector dispatch logic, and
+unlabeled wing-flip cinematic offsets.
+
 ## Working hypothesis
 
 Cross-release diffs of disassembled bytecode reveal **blocks of new
