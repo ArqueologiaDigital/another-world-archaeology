@@ -113,3 +113,32 @@ https://archive.org/details/SEGACD_CHD_PLUS,SEGACD CHD PLUS directory listing,20
 https://gamicus.fandom.com/wiki/Another_World,Codex Gamicus entry,2026-04-30,
 https://datomatic.no-intro.org/index.php?page=search&op=hash&q=Another+World,No-Intro DAT-O-MATIC search (banned client during fetch),2026-04-30,
 https://lclevy.free.fr/adflib/adf_info.html,ADF (Amiga Disk File) format reference used for the Rust ADF reader,2026-04-30,
+https://archive.org/details/wozaday_Out_of_this_World_IIgs,apple-iigs-1992 fixture: 4am woz-a-day item providing two .woz disks,2026-04-30,
+https://archive.org/download/wozaday_Out_of_this_World_IIgs/00playable.woz,apple-iigs-1992 fixture: disk 1 .woz direct download,2026-04-30,
+https://archive.org/download/wozaday_Out_of_this_World_IIgs/00playable2.woz,apple-iigs-1992 fixture: disk 2 .woz direct download,2026-04-30,
+https://macintoshgarden.org/games/another-world-aka-out-of-world,macintosh-1993 fixture provenance page (MacPlay 1993 .sit),2026-04-30,yes
+https://old.mac.gdn/games/out_of_this_world.sit,macintosh-1993 fixture: direct .sit download (Cloudflare-fronted Macintosh Garden mirror),2026-04-30,
+https://web.archive.org/web/20250121125040/http://macintoshgarden.org/games/another-world-aka-out-of-world,wayback snapshot of the macintosh-1993 source page,2026-04-30,yes
+https://gbatemp.net/download/anotherworld-ds.25675/,nintendo-ds-alekmaul-2011 fixture provenance page,2026-04-30,
+https://web.archive.org/web/20230515063109/https://filetrip.net/files/f/25675-anotherworldDSV10.zip,nintendo-ds-alekmaul-2011 fixture: Wayback-only direct download (filetrip.net is dead),2026-04-30,yes
+https://gbadev.org/demos.php?showinfo=1279,gba-foxy-2004 fixture provenance page (canonical homebrew listing),2026-04-30,yes
+https://raw.githubusercontent.com/OpenEmu/OpenEmu-Update/master/Homebrew/GBA/Another%20World/Another_world.gba,gba-foxy-2004 fixture: direct .gba download (OpenEmu mirror — author's own hosts are dead),2026-04-30,
+https://raw.githubusercontent.com/retrobrews/gba-games/master/anotherworld.gba,gba-foxy-2004 alternate mirror (same file size as OpenEmu mirror),2026-04-30,
+https://web.archive.org/web/20241223051845/https://www.gbadev.org/demos.php?showinfo=1279,wayback snapshot of the gba-foxy-2004 source page,2026-04-30,yes
+http://www.deater.net/weave/vmwprod/ootw/,apple-ii-demake-weaver-2019 author canonical project page,2026-04-30,yes
+http://www.deater.net/weave/vmwprod/ootw/ootw-v31.zip,apple-ii-demake-weaver-2019 fixture: full release zip v3.1,2026-04-30,
+https://github.com/deater/dos33fsprogs/tree/master/games/ootw/,apple-ii-demake-weaver-2019 source code repository,2026-04-30,
+https://archive.org/details/ootw_20210627,apple-ii-demake-weaver-2019 alternate Internet Archive mirror,2026-04-30,
+https://web.archive.org/web/20241009031638/http://deater.net/weave/vmwprod/ootw/,wayback snapshot of the apple-ii-demake source page,2026-04-30,yes
+https://www.mobiles24.co/downloads/s/197921-307-another_world,symbian-anotherworld-generic fixture provenance page,2026-04-30,yes
+https://www.mobiles24.co/downloads/d/NaDEhuG1gG,symbian-anotherworld-generic fixture: direct .sis download,2026-04-30,
+https://web.archive.org/web/20250407104455/https://www.mobiles24.co/downloads/s/197921-307-another_world,wayback snapshot of the symbian-anotherworld-generic source page,2026-04-30,yes
+https://www.mobiles24.co/downloads/s/110775-307-another_world,sibling Symbian SIS upload (752492 bytes — distinct user upload, not yet fetched),2026-04-30,
+https://archive.org/details/nokia-games-ultimate-sis-pack_202206,Telcogames v1.25 SyMPDA-cracked Symbian SIS bundled inside this 231 MB pack — alternate variant lead,2026-04-30,
+https://archive.org/details/club-60-part-1-1-300,club60.org collection containing v1.36 Symbian SIS variant — alternate variant lead,2026-04-30,
+https://archive.org/details/limowski,limowski.space mirror containing UIQ2 (Symbian P800/P900) port — distinct platform variant lead,2026-04-30,
+http://removers.free.fr/AnotherWorld/,atari-jaguar-removers-2014 author project page (port description; no public ROM),2026-04-30,yes
+http://mleguludec.free.fr/product/AnotherWorld_Jaguar/,atari-jaguar-removers-2014 commercial pre-order page (sole legitimate source),2026-04-30,
+https://web.archive.org/web/20250221073415/http://removers.free.fr/AnotherWorld/,wayback snapshot of the Removers Jaguar project page,2026-04-30,yes
+https://archive.org/details/snes100,snes-usa survey: bundled 687 MB snes+100.zip with no separable per-file checksums (rejected as fixture source),2026-04-30,
+https://archive.org/details/out-of-this-world-aka-another-world-fast-rom-sramv-1.0-snes,snes-usa survey: a Fast-ROM+SRAM hack of the USA cart — not a clean baseline (rejected as fixture source),2026-04-30,

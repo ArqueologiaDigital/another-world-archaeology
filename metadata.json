@@ -130,7 +130,7 @@
     "archive_dir": null,
     "rootdir": ".",
     "md5sum": null,
-    "note": "Not yet fetched. Canonical filename per AWVM_Tools releases/snes/snes.py: `Out of This World (USA).sfc`. The chunk offsets in the romset extractor (0x74A4C, 0x81CB0) target this USA ROM specifically. archive.org item lists only the manual scan zip; need a No-Intro torrent or alternative source."
+    "note": "Not yet fetched. Canonical filename per AWVM_Tools releases/snes/snes.py: `Out of This World (USA).sfc`. The chunk offsets in the romset extractor (0x74A4C, 0x81CB0) target this USA ROM specifically. Survey 2026-04-30 (agent A): no clean standalone item with a redistributable URL was located on archive.org — only a Fast-ROM+SRAM hack (out-of-this-world-aka-another-world-fast-rom-sramv-1.0-snes) and a 687-MB bundled snes100 zip with no separable per-file checksums. Recommend sourcing the No-Intro DAT-listed pristine cart from elsewhere and verifying by checksum before adding to the archive. Hidden Palace's Sep 1992 SNES prototype may be a separate variant worth a parallel slug."
   },
   {
     "slug": "genesis-eu",
@@ -199,14 +199,18 @@
     "developer": "Rebecca 'Burger' Heineman",
     "format": "apple-iigs-2mg",
     "website": "https://www.oldgames.sk/en/game/another-world/download/6503/",
-    "download": null,
-    "download_date": null,
+    "download": "https://archive.org/details/wozaday_Out_of_this_World_IIgs",
+    "download_date": "2026-04-30",
     "wayback_url": null,
     "wayback_date": null,
-    "archive_dir": null,
+    "archive_dir": "apple-iigs-1992",
     "rootdir": ".",
     "md5sum": null,
-    "note": "Direct port from the SNES build (same 65C816 microprocessor — only such cross-port). 2mg disk image. oldgames.sk landing page requires session/cookies for direct download; needs alternative source. Macintosh Repository (page 5313) also carries Apple IIgs alongside Mac builds."
+    "files": [
+      { "name": "00playable.woz", "url": "https://archive.org/download/wozaday_Out_of_this_World_IIgs/00playable.woz", "md5": "8e163327c522b6e94fc39a5d838d9d27", "sha1": "e995c4b38df1aea7993d75f97acec66eeaf579a5", "size": 1299080 },
+      { "name": "00playable2.woz", "url": "https://archive.org/download/wozaday_Out_of_this_World_IIgs/00playable2.woz", "md5": "d1b79e2fc356b0a7500d0a4b5faf3858", "sha1": "5821227cf3e7dc6b07d2255f63c77a66f355cc93", "size": 1296230 }
+    ],
+    "note": "Direct port from the SNES build (same 65C816 microprocessor — only such cross-port). WOZ flux-level disk images preserved by 4am (canonical Apple II preservation curator) in the woz-a-day collection on archive.org, uploaded 2021-06-01. Two disks (~1.27 MB each). archive.org metadata API confirms md5 + sha1 per file. A separate European IIgs item (e2gs_Out_of_this_World_Disk_1 / _Disk_2) exists on archive.org as smaller .po (ProDOS-order) images without per-file checksums — would warrant a parallel slug as the European variant."
   },
   {
     "slug": "macintosh-1993",
@@ -217,19 +221,19 @@
     "developer": "Delphine Software (port: Interplay)",
     "format": "mac-classic",
     "website": "https://www.macintoshrepository.org/5313-another-world-aka-out-of-this-world-",
-    "download": null,
-    "download_date": null,
-    "wayback_url": null,
-    "wayback_date": null,
-    "archive_dir": null,
+    "download": "https://macintoshgarden.org/games/another-world-aka-out-of-world",
+    "download_date": "2026-04-30",
+    "wayback_url": "https://web.archive.org/web/20250121125040/http://macintoshgarden.org/games/another-world-aka-out-of-world",
+    "wayback_date": "2025-01-21",
+    "archive_dir": "macintosh-1993",
     "rootdir": ".",
     "md5sum": null,
     "files": [
-      { "name": "out_of_this_world.sit", "size": 3744000, "sha1": "a4a15978d5257f1eeb88ac23c0a25b738005a292", "note": "v1.0 + 1.2 + 1.3 with updaters" },
+      { "name": "out_of_this_world.sit", "size": 3739614, "md5": "411cfe55f7c43c7d846fcb2f24adeddb", "sha1": "a4a15978d5257f1eeb88ac23c0a25b738005a292", "note": "v1.0 + 1.2 + 1.3 with updaters" },
       { "name": "Out_of_this_World_1.0.mar", "size": 1820000, "sha1": "f41cb05789155375c745cf3ffdbb2d07f1afb339", "note": "Disk Copy 4.2 image of v1.0" },
       { "name": "OutofthisWorldDemo.sit", "size": 787030, "sha1": "0c0fc143da4d97928cb33d135793270ca5b4f1c6", "note": "Demo version" }
     ],
-    "note": "Highest-quality canonical source found: SHA1s published per file. Architecture: Motorola 68k. Min specs: 2 MB RAM, System 6.0.7, 256 colors, hard disk. Direct download requires navigating MacRepo's redirect/ad flow."
+    "note": "Highest-quality canonical source: Macintosh Garden item. Per-file SHA-1 published; md5 of the .sit file confirmed at 411cfe55f7c43c7d846fcb2f24adeddb after fetch (3,739,614 bytes — the previous 3,744,000 figure was approximate). Architecture: Motorola 68k. Min specs: 2 MB RAM, System 6.0.7, 256 colors, hard disk. Same page also lists Out_of_this_World_1.0.mar (Disk Copy 4.2 v1.0 image, md5 6af682496d25ccee89e590f5843a6c78) and OutofthisWorldDemo.sit (md5 f080493b920a0a60da9f04ba424db7ae) — neither fetched yet, would warrant separate slugs as v1.0-only and demo variants. Two later community ports also live on the same page (Another_World_SDL_Intel.dmg PowerPC, anotherworldx_v0.2b.dmg) and are NOT the original 1993 release."
   },
   {
     "slug": "atari-jaguar-removers-2014",
@@ -247,7 +251,7 @@
     "archive_dir": null,
     "rootdir": ".",
     "md5sum": null,
-    "note": "Atari Jaguar never received a commercial Another World release; this is the authorised community port (engine rewritten for the Jaguar). Two graphical variants: original 16-color and 'Deluxe' 256-color 15th-anniversary. Sold as a physical cartridge with box & manual. Probably the same dump targeted by AWVM_Tools' jaguar release glue."
+    "note": "Atari Jaguar never received a commercial Another World release; this is the authorised community port (engine rewritten for the Jaguar). Two graphical variants: original 16-color and 'Deluxe' 256-color 15th-anniversary. Sold as a physical cartridge with box & manual. Survey 2026-04-30 (agent B): no public ROM dump exists. Sole legitimate source is The Removers' commercial pre-order page at http://mleguludec.free.fr/product/AnotherWorld_Jaguar/ (still live); Atarimania's catalog lists Dump status as MISSING. Year of primary release per Atarimania is 2013 (sources vary 2013–2015); slug retained as `-2014` for stability. Wayback of the project page: https://web.archive.org/web/20250221073415/http://removers.free.fr/AnotherWorld/ . Acquiring this fixture will require a donor cartridge dump."
   },
   {
     "slug": "gba-foxy-2004",
@@ -258,14 +262,14 @@
     "developer": "Cyril Cogordan, reverse-engineered from the Atari ST version",
     "format": "gba-rom",
     "website": "https://gbadev.org/demos.php?showinfo=1279",
-    "download": null,
-    "download_date": null,
-    "wayback_url": null,
-    "wayback_date": null,
-    "archive_dir": null,
+    "download": "https://raw.githubusercontent.com/OpenEmu/OpenEmu-Update/master/Homebrew/GBA/Another%20World/Another_world.gba",
+    "download_date": "2026-04-30",
+    "wayback_url": "https://web.archive.org/web/20241223051845/https://www.gbadev.org/demos.php?showinfo=1279",
+    "wayback_date": "2024-12-23",
+    "archive_dir": "gba-foxy-2004",
     "rootdir": ".",
-    "md5sum": null,
-    "note": "Filename in AWVM_Tools releases/gba_usa: 'Another World (Prototype) # GBA.GBA'. Despite the 'Prototype' label, this is NOT a leaked Nintendo prototype — it's the Cogordan fan port (released 2004, originally without authorisation; Eric Chahi authorised distribution in 2005). v2.1 is on gbadev.org. The slug 'gba_usa' in AWVM_Tools and the 'Prototype' filename are both misnomers and could be cleaned up post-port."
+    "md5sum": "9cef2ca9fba8a4532629f8c7e7c9ddf8",
+    "note": "Filename in AWVM_Tools releases/gba_usa: 'Another World (Prototype) # GBA.GBA'. Despite the 'Prototype' label, this is NOT a leaked Nintendo prototype — it's the Cyril 'Foxy' Cogordan fan port. Development started 2004; the public v2.1 release was 2005-04-28 (initially without authorisation; Eric Chahi authorised distribution in 2005, and is also credited with co-developing and remastering the music). Both author hosts (foxysofts.com, playerAdvance.org) are now defunct. Fetched from the OpenEmu-Update GitHub mirror; an identical-size copy exists at https://raw.githubusercontent.com/retrobrews/gba-games/master/anotherworld.gba . The slug 'gba_usa' in AWVM_Tools and the 'Prototype' filename are both misnomers and could be cleaned up post-port."
   },
   {
     "slug": "nintendo-ds-alekmaul-2011",
@@ -277,13 +281,13 @@
     "format": "nds-rom",
     "website": "https://gbatemp.net/threads/anotherworld-ds-v1-0.301577/",
     "download": "https://gbatemp.net/download/anotherworld-ds.25675/",
-    "download_date": null,
-    "wayback_url": null,
-    "wayback_date": null,
-    "archive_dir": null,
+    "download_date": "2026-04-30",
+    "wayback_url": "https://web.archive.org/web/20230515063109/https://filetrip.net/files/f/25675-anotherworldDSV10.zip",
+    "wayback_date": "2023-05-15",
+    "archive_dir": "nintendo-ds-alekmaul-2011",
     "rootdir": ".",
-    "md5sum": null,
-    "note": "Homebrew DS port — not Nintendo IP. Distributed openly on GBATemp."
+    "md5sum": "a819d702799090b198a887e458703517",
+    "note": "Homebrew DS port — not Nintendo IP. Distributed openly on GBATemp. The original mirror (filetrip.net/files/f/25675-anotherworldDSV10.zip) is dead in 2026; only the Wayback snapshot at 2023-05-15 still serves the zip (1,136,040 bytes; md5 a819d702799090b198a887e458703517). Zip contains anotherworldDSV10.nds + a `wheel/` directory of 25 codewheel JPEGs (posn01.jpg..posn25.jpg, datestamped 2004 — likely sourced from the Atari ST manual's protection wheel). Requires user-supplied DOS bank01..bankNN + memlist.bin (English version) at runtime."
   },
   {
     "slug": "symbian-locked-anotherworld",
@@ -314,14 +318,14 @@
     "developer": "(unknown port author)",
     "format": "symbian-sis",
     "website": "http://www.vatikag.com/downloads/18/symbian-mobile-games/4/symbian-s60v2-games/166/another-world.shtml",
-    "download": null,
-    "download_date": null,
-    "wayback_url": null,
-    "wayback_date": null,
-    "archive_dir": null,
+    "download": "https://www.mobiles24.co/downloads/d/NaDEhuG1gG",
+    "download_date": "2026-04-30",
+    "wayback_url": "https://web.archive.org/web/20250407104455/https://www.mobiles24.co/downloads/s/197921-307-another_world",
+    "wayback_date": "2025-04-07",
+    "archive_dir": "symbian-anotherworld-generic",
     "rootdir": ".",
-    "md5sum": null,
-    "note": "Compatible with Nokia 3230, 3250, 3600, 3620, 3650, 3660, 5500, 6260, 6600, 6620, 6630, 6670, 6680, 6681, 6682, 7610, 7650, N70, N71, N72. ~450 KB download. May or may not match the 'locked' variant the extractor targets — needs MD5 verification once fetched."
+    "md5sum": "a0012563536c4baaa6487031e00d7b0f",
+    "note": "Compatible with Nokia 3230, 3250, 3600, 3620, 3650, 3660, 5500, 6260, 6600, 6620, 6630, 6670, 6680, 6681, 6682, 7610, 7650, N70, N71, N72. Confirmed DISTINCT from the locked variant: this fixture's md5 (a0012563536c4baaa6487031e00d7b0f) ≠ the locked-variant md5 (fe4742b67415eb16ef340548573538b8). File is 753,982 bytes (~736 KB) — larger than the ~450 KB initially documented; possibly a different (later or repacked) build. Sibling listing at mobiles24 (https://www.mobiles24.co/downloads/s/110775-307-another_world, also live, 752,492 bytes) is yet another distinct user upload — a plausible separate variant. Other documented Symbian variants worth tracking: Telcogames v1.25 SyMPDA-cracked SIS bundled inside Nokia_Games_Ultimate_SIS_Pack.zip on archive.org, and v1.36 inside the club-60-part-1-1-300 RAR collections. UIQ2 (Sony Ericsson P800/P900) is a distinct port — would warrant a separate slug."
   },
   {
     "slug": "anniversary-ios-2011",
@@ -530,13 +534,13 @@
     "developer": "Vince Weaver",
     "format": "apple-ii-demake",
     "website": "https://archive.org/details/ootw_20210627",
-    "download": null,
-    "download_date": null,
-    "wayback_url": null,
-    "wayback_date": null,
-    "archive_dir": null,
+    "download": "http://www.deater.net/weave/vmwprod/ootw/ootw-v31.zip",
+    "download_date": "2026-04-30",
+    "wayback_url": "https://web.archive.org/web/20241009031638/http://deater.net/weave/vmwprod/ootw/",
+    "wayback_date": "2024-10-09",
+    "archive_dir": "apple-ii-demake-weaver-2019",
     "rootdir": ".",
-    "md5sum": null,
-    "note": "Fan-made demake adapting Another World to the Apple II's far more limited graphics. Distinct work from the Apple IIgs port. https://www.apl2bits.net/2019/02/04/another-world-demake-nintendo-switch/"
+    "md5sum": "e78aeb4a0401998eac9f34c0b01132a3",
+    "note": "Fan-made demake adapting Another World to the Apple II's far more limited graphics (40-column lo-res). Distinct work from the Apple IIgs port. v3.1 released 2021-05-01 — original 2019 release was earlier; per-version commits are in the upstream source repo (https://github.com/deater/dos33fsprogs/tree/master/games/ootw/). Zip ships ootw.dsk + ootw_side2.dsk (140K each, DOS 3.3). Internet Archive item: https://archive.org/details/ootw_20210627 . Slug retains `-weaver-2019` as the original-release-year tag; author is Vince Weaver (a.k.a. deater / vmw)."
   }
 ]
