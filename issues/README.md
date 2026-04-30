@@ -27,7 +27,7 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 - ○ [#0007](./0007-estr-resource-type-investigation.md) — Investigate the Mac port's 192-entry Estr resource type `research` `mac` `estr`
 - ○ [#0008](./0008-68k-disassembler-mac-code-segments.md) — Run a 68k disassembler against Mac CODE segments to surface patch deltas `research` `mac` `68k` `tooling`
 - ○ [#0009](./0009-mac-data-fork-aw-resources.md) — Identify AW VM resource format inside Mac data-fork FILE0020..FILE0146 files `extractor` `mac` `research`
-- ○ [#0043](./0043-verify-whether-regular-shots-double-hit-at-close-range-tap-r.md) — Verify whether regular shots double-hit at close range (tap + regular projectiles) `research` `gun-ammo` `dos` `follow-up`
+- ○ [#0043](./0043-verify-whether-regular-shots-double-hit-at-close-range-tap-r.md) — Verify whether regular shots double-hit at close range (tap pulse + regular pulse) `research` `gun-ammo` `dos` `follow-up`
 
 ### Tier B
 

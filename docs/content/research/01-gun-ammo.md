@@ -15,25 +15,25 @@
 - The gun energy is stored in **VM variable `0x06`**.
 - **Three weapon modes are dispatched by hold-time, with compound
   energy costs**: pressing the action button always fires a small
-  "tap" projectile *unconditionally* on the first frame, and if the
-  button is held longer a *separate* projectile (regular or
-  superblast) fires later from a parallel "firing thread". So the
+  "tap" shot *unconditionally* on the first frame, and if the
+  button is held longer a *separate* shot (regular or superblast)
+  fires later from a parallel "firing thread". So the
   total cost of each player action is:
   - **Quick tap** (release within 4 frames): **−1** (just the tap)
   - **Regular shot** (held + released): **−1 + −10 = −11** (tap + regular)
   - **Superblast** (held ≥ 20 frames): **−1 + −50 = −51** (tap + superblast,
     or **−101** in level 3 Prison Escape where the superblast costs
     −100)
-- The tap and the regular are **two different energy shots** —
-  not two states of the same shot. They use separate spawn
-  routines, separate projectile-tracking slot tables, separate
-  sounds, and the regular has a visible muzzle-flash polygon
-  (`CINEMATIC_037`) the tap doesn't. (The gun is a
-  laser/plasma-style energy weapon, not a kinetic firearm —
-  every "shot" in this document is an energy projectile, even
-  when the bytecode comments below use the term *bullet* in its
-  generic projectile-tracking sense.) See the "Visual / mechanical
-  semantics of each shot type" section below.
+- The tap and the regular are **two different laser pulses**, not
+  two states of the same shot. They use separate spawn routines,
+  separate shot-tracking slot tables, separate sounds, and the
+  regular has a visible muzzle-flash polygon (`CINEMATIC_037`) the
+  tap doesn't. (The gun is a laser/plasma-style energy weapon,
+  not a kinetic firearm — every "shot" in this document is a
+  discrete pulse of laser light, even when the bytecode comments
+  below use the term *bullet* in its generic shot-tracking sense.)
+  See the "Visual / mechanical semantics of each shot type"
+  section below.
 - **The shield is free** — the visual shield is the gun-drawn
   animation rendered while the action button is held; no decrement
   happens while it's up. (But entering the shield still costs the
@@ -275,37 +275,39 @@ SNES L0, suggesting var `0x06` conventions persist there too.
 ### Visual / mechanical semantics of each shot type
 
 The tap, the regular, and the superblast are **three distinct
-projectiles**, each spawned by its own routine, each tracked in its
-own slot table, each with its own sound and (for the regular and
-superblast) its own muzzle/blast cinematic.
+laser pulses**, each emitted by its own spawn routine, each tracked
+in its own slot table, each with its own sound and (for the regular
+and superblast) its own muzzle/blast cinematic.
 
 | Property | Tap | Regular | Superblast |
 |---|---|---|---|
 | Spawn site | `LABEL_6588` (right) / `LABEL_6600` (left) | `LABEL_75E9` → `LABEL_70DD` | `LABEL_7655` → `LABEL_76C6` |
 | Energy cost (per opcode) | −1 | −10 | −50 (−100 in level 3) |
 | Fires when | First frame of press, **unconditionally** | Released after 4–19 frames of hold | Held ≥ 20 frames |
-| Projectile flag (var `0x27` / `0x88` / `0x91`) | `OR 0x4000 \| 0x0C00` | (no 0x4000 — different metadata) | `OR 0x8000` (almost certainly the **shield-piercing flag** the walkthrough notes) |
-| Projectile slot table | `0x88` / `0x89` / `0x8A` (positions in `0x90..0x95`) — up to **3 simultaneous taps** | `0xA0` / `0xA3` / `0xA6` (positions in `0xA0..0xA8`) — up to **3 simultaneous regulars**, **tracked independently from taps** | Single dedicated slot (`0x88` reused for the superblast's HP / damage value = `0x64` = 100) |
+| Shot flag (var `0x27` / `0x88` / `0x91`) | `OR 0x4000 \| 0x0C00` | (no 0x4000 — different metadata) | `OR 0x8000` (almost certainly the **shield-piercing flag** the walkthrough notes) |
+| Shot-tracking slots | `0x88` / `0x89` / `0x8A` (positions in `0x90..0x95`) — up to **3 simultaneous taps** | `0xA0` / `0xA3` / `0xA6` (positions in `0xA0..0xA8`) — up to **3 simultaneous regulars**, **tracked independently from taps** | Single dedicated slot (`0x88` reused for the superblast's HP / damage value = `0x64` = 100) |
 | Sound played | `id=0x0052, freq=0x1C` (quick "pew") | `id=0x0058, freq=0x14` (louder "pow") | `id=0x0059` then `id=0x005B` (charge → boom) |
 | Muzzle / charge polygon | **None** at fire site | `CINEMATIC_037` rendered at the gun's tip | `CINEMATIC_068` (large blast cinematic) |
 | Pre-fire animation | `LABEL_9D73` (Lester raises gun) | `CINEMATIC_063..066` charge animation (4 frames) with `id=0x005B` charge-complete tone | Same charge animation, then continues past frame 20 |
 
 The visual experience the player sees (the gun is a
-laser/plasma-style energy weapon — the projectiles are bolts of
-light, not metal slugs):
+laser/plasma-style energy weapon — the shots are pulses of light,
+not metal slugs):
 
 - **Tap.** The instant the button goes down, Lester raises the gun
-  and a small energy bolt shoots out. You can have up to 3 of these
-  airborne. They're fast and weak. The tap fires *every time* you
-  press — there's no "draw without firing" mode.
+  and a small laser pulse fires from the muzzle. Up to 3 such
+  pulses can be in transit at once. They're fast and weak. The tap
+  fires *every time* you press — there's no "draw without firing"
+  mode.
 
 - **Regular.** Press, hold, watch Lester complete the gun-up
   animation, see the charge animation play (the gun's silhouette
   brightens / pulses across `CINEMATIC_063..066`), hear the
-  charge-complete tone, then release — at which point a *larger*
-  energy bolt fires from the gun with a visible muzzle-flash
-  polygon (`CINEMATIC_037`) and a louder report. The first tap that
-  fired on press is already in flight at this point.
+  charge-complete tone, then release — at which point a *brighter,
+  more powerful* laser pulse fires from the gun with a visible
+  muzzle-flash polygon (`CINEMATIC_037`) and a louder report. The
+  first tap that fired on press is most of the way to its target
+  at this point.
 
 - **Superblast.** Same charge sequence, but you keep holding past
   the charge-complete tone. The firing thread enters a second,
@@ -489,9 +491,9 @@ into the final stretch with whatever discipline they've trained.
   see `level_6.asm:18221` and the "Initial value per level" table
   above.)
 
-- **The "regular shot fires two energy bolts" insight has a side
-  effect**: if you fire a regular at close range, the tap bolt and
-  the regular bolt may both impact the target. Whether this
+- **The "regular shot fires two laser pulses" insight has a side
+  effect**: if you fire a regular at close range, the tap pulse and
+  the regular pulse may both reach the target. Whether this
   means double damage in practice depends on the target's hit
   semantics — open follow-up.
 
@@ -533,21 +535,28 @@ into the final stretch with whatever discipline they've trained.
   costs are compound: −1 (quick tap) / −11 (tap + regular) /
   −51 (tap + superblast) / −101 (tap + Prison superblast).
   Added a new section "Visual / mechanical semantics of each
-  shot type" documenting the three projectiles' separate spawn
+  shot type" documenting the three shot types' separate spawn
   routines, sounds, polygons, and slot tables. The
   appendix tables and `tools/simulate_gun_budget.py` updated
   with the corrected compound costs. Triggered by the project
   owner asking what the tap-vs-regular distinction *means* in
   the game.
-- **2026-04-30** (same day, follow-up edit) — owner-flagged
-  wording fix: dropped "bullet" / "bullets" in favour of "shot"
-  / "energy bolt" / "projectile". The gun is a laser/plasma-style
-  energy weapon, not a kinetic firearm. Also strengthened the
-  shield explanation in the cost-model section to map
-  walkthrough vocabulary onto the bytecode: shield = press &
-  release within 4 frames (only the unconditional tap fires);
-  superblast = press & hold ≥ 20 frames; the regular shot
-  (release at 4–19 frames) is *not* the shield action — it's an
-  aimed shot the walkthrough doesn't explicitly name. Added a
-  "walkthrough vocabulary" column to the player-action cost
-  table for clarity.
+- **2026-04-30** (same day, wording cleanup) — the gun is a
+  laser/plasma-style energy weapon, not a kinetic firearm. After
+  two passes (first dropping "bullet" / "bullets", then dropping
+  the still-too-physical "energy bolt" and "projectile" too), the
+  vocabulary settled on **"shot"** / **"laser pulse"** / **"in
+  transit"** / **"reach the target"** — laser-light terminology
+  throughout. The bytecode-comment column retains "bullet" with a
+  parenthetical disclaimer noting that's the AW VM's internal
+  nomenclature for the shot-tracking slot table, not what the
+  player sees.
+
+  Same edit pass strengthened the shield explanation in the
+  cost-model section to map walkthrough vocabulary onto the
+  bytecode: shield = press & release within 4 frames (only the
+  unconditional tap fires); superblast = press & hold ≥ 20
+  frames; the regular shot (release at 4–19 frames) is *not* the
+  shield action — it's an aimed shot the walkthrough doesn't
+  explicitly name. Added a "walkthrough vocabulary" column to the
+  player-action cost table for clarity.
