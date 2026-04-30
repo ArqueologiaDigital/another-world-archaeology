@@ -18,7 +18,7 @@ Add a new format by:
 3. Adding the `format` field to the relevant entries in `metadata.json`.
 """
 
-from . import amiga_adf, dos_bank, genesis_rom, snes_rom, winxp_pak
+from . import amiga_adf, dos_bank, genesis_rom, snes_rom, three_do_opera, winxp_pak
 
 EXTRACTORS = {
     "dos-bank": dos_bank.extract,
@@ -26,6 +26,7 @@ EXTRACTORS = {
     "amiga-adf": amiga_adf.extract,
     "snes-rom": snes_rom.extract,
     "genesis-rom": genesis_rom.extract,
+    "3do-cue-bin": three_do_opera.extract,
 }
 
 

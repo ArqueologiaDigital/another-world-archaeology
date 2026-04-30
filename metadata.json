@@ -188,7 +188,7 @@
       { "name": "Out of this World (USA).bin", "url": "https://archive.org/download/out-of-this-world-usa-3do/Out%20of%20this%20World%20%28USA%29.bin", "md5": "c824af681c74f42b5ad139be545d7bd5", "size": 386410080 },
       { "name": "Out of this World (USA).cue", "url": "https://archive.org/download/out-of-this-world-usa-3do/Out%20of%20this%20World%20%28USA%29.cue", "md5": "96b6d4995cca3ec55f680730cc32689e", "size": 112 }
     ],
-    "note": "Redump-sourced 3DO CD-ROM (.bin/.cue pair, ~386 MiB), uploaded to archive.org by `bikerspade` 2021-12-23. Also documented at https://tcrf.net/Out_of_This_World_(3DO). Extractor not implemented; 3DO ISO format would need its own reader."
+    "note": "Redump-sourced 3DO CD-ROM (.bin/.cue pair, ~386 MiB), uploaded to archive.org by user `bikerspade` 2021-12-23. Also documented at https://tcrf.net/Out_of_This_World_(3DO). Opera FS extractor implemented (extractors/three_do_opera.py via the AWVM_Tools `opera-list` Rust binary) — yields 423 on-disc files including GameData/FileN, EndShape1/2, song1..30, plus AIFF audio in StalData/. Mapping these on-disc files back to the canonical AW resource indices remains future work."
   },
   {
     "slug": "apple-iigs-1992",
