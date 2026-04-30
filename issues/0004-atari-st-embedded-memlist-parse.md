@@ -32,3 +32,34 @@ can't pass Atari ST bytecode through `awvm-disasm`.
 # Log
 
 - 2026-04-30: opened. Migrated from forward_plan.md tier A item 4.
+- 2026-04-30: **partial progress** — recovered the memlist offset
+  while doing the beetle gate cross-check (issue #0049). Atari ST
+  memlist lives at **offset `0x7ef2` in `START.PRG`**, length
+  `20 × 147 = 2940` bytes, same struct format as Amiga (which
+  AWVM_Tools already understands at offset `0x5ec2` in `another`).
+  Big-endian fields per the 68k convention:
+
+      offset  field
+      0       state (1)
+      1       type (1)
+      2-5     bufPtr (4)
+      6       rankNum (1)
+      7       bankId (1)
+      8-11    bankOffset (4)
+      12-13   unkC (2)
+      14-15   packedSize (2)
+      16-17   unkE (2)
+      18-19   size (2)
+
+  Verified by extracting resource #27 (level 2 bytecode) from
+  Atari ST `BANK02` at offset `0x008516`, size 19,458 bytes
+  uncompressed — byte-identical to Amiga's level-2 bytecode (md5
+  `860362f3718ca4fe4a8e65cdbe40f155`).
+
+  Remaining work to fully close this issue: extend
+  `extractors/atari_st_pasti.py` to write a synthesised
+  `memlist.bin` alongside the BANK files using the START.PRG
+  offset, then add an `atari_st` release entry in AWVM_Tools'
+  `releases/` so `awvm-disasm <atari-st-extracted-dir> all_levels
+  atari_st` works. (Per project policy, AWVM_Tools changes need
+  owner review first.)

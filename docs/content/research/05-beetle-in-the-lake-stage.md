@@ -267,34 +267,55 @@ in the lake stage (kick animation plays correctly), but the beetle
 walks past unaffected. Direct match for "the kick-detector is dead
 even on Amiga". Recorded against issue #0045.
 
-### Reachability summary (across all three currently-disassembled ports)
+### Reachability summary (across all four currently-disassembled ports)
 
-| Animation | Amiga (1991) | DOS (1992) | Genesis-EU (1993) |
-|---|---|---|---|
-| Beetle walking left/right | **Yes** | No (gate 2) | No (gate 2) |
-| Wing-flip (right side) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
-| Wing-flip (left side, mirror) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
-| Falling onto back | No | No | No |
-| Flying upside-down + take-off | No | No | No |
+| Animation | Amiga (1991) | Atari ST (1991) | DOS (1992) | Genesis-EU (1993) |
+|---|---|---|---|---|
+| Beetle walking left/right | **Yes** | **Yes** | No (gate 2) | No (gate 2) |
+| Wing-flip (right side) | No (gate 1) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
+| Wing-flip (left side, mirror) | No (gate 1) | No (gate 1) | No (gates 1 + 2) | No (gates 1 + 2) |
+| Falling onto back | No | No | No | No |
+| Flying upside-down + take-off | No | No | No | No |
 
-The wing-flip is **dead in all three ports**. Only Amiga shows the
-beetle visually at all.
+The wing-flip is **dead in all four ports**. Only the two 1991 ports
+(Amiga + Atari ST) show the beetle visually at all.
 
-### Three-port comparison: which gates each port carries
+### Four-port comparison: which gates each port carries
 
 | Port | Beetle spawn | 2nd `setup ch=0x09` (gate 2) | Kick-detector | 2nd `setup ch=0x2E` (gate 1) |
 |---|---|---|---|---|
-| **Amiga** (1991)      | `LABEL_3510` (0x3510) | (none) | `LABEL_34AA` (0x34AA) | `LABEL_3497` cleanup |
-| **DOS** (1992)        | `LABEL_365A` (0x365A) | `KILL_CHANNEL_ROUTINE` | `LABEL_35F4` (0x35F4) | `LABEL_35E1` cleanup |
-| **Genesis-EU** (1993) | `LABEL_36FD` (0x36FD) | `KILL_CHANNEL_ROUTINE` | `LABEL_3697` (0x3697) | `LABEL_3684` cleanup |
+| **Amiga** (1991)        | `LABEL_3510` (0x3510) | (none) | `LABEL_34AA` (0x34AA) | `LABEL_3497` cleanup |
+| **Atari ST** (1991)     | `LABEL_3510` (0x3510) | (none) | `LABEL_34AA` (0x34AA) | `LABEL_3497` cleanup |
+| **DOS** (1992)          | `LABEL_365A` (0x365A) | `KILL_CHANNEL_ROUTINE` | `LABEL_35F4` (0x35F4) | `LABEL_35E1` cleanup |
+| **Genesis-EU** (1993)   | `LABEL_36FD` (0x36FD) | `KILL_CHANNEL_ROUTINE` | `LABEL_3697` (0x3697) | `LABEL_3684` cleanup |
 
-Same kick-detector code is intact on all three ports (just unrunnable
-because of gate 1) — confirmed by reading `LABEL_3697` body in
-Genesis-EU level 0: byte-identical structure to Amiga `LABEL_34AA`
-and DOS `LABEL_35F4` (same `je [0x06], 0x00`/`jg [0x06], 0x02`
-guards, same `[0x04] ± 4` bounds checks, same `setup channel=0x09,
-address=LABEL_3778/_3820` wing-flip dispatch — these are the
-Genesis-EU equivalents of Amiga's `LABEL_358B/_3633`).
+Same kick-detector code is intact on all four ports (just unrunnable
+because of gate 1) — confirmed by reading the kick-detector body in
+each port: same `je [0x06], 0x00`/`jg [0x06], 0x02` guards, same
+`[0x04] ± 4` bounds checks, same `setup channel=0x09, address=…`
+wing-flip dispatch.
+
+### Atari ST and Amiga share byte-identical level-2 bytecode
+
+Verified empirically (2026-04-30): the Atari ST level-2 bytecode
+resource is **byte-identical to Amiga's**. Both 19,458 bytes,
+md5 `860362f3718ca4fe4a8e65cdbe40f155`. Both live at the same
+memlist index (#27), same bank (BANK02), same bank offset
+(`0x008516`), same `packed_size == size` (i.e., stored uncompressed
+in both ports).
+
+Atari ST stores its memlist embedded in `START.PRG` at offset
+`0x7ef2`, length `20 × 147 = 2940` bytes — same struct format as
+Amiga's memlist (which lives in `another` at offset `0x5ec2`,
+already known to AWVM_Tools). Memlist entry layout (big-endian on
+both 68k ports): `state(1) type(1) bufPtr(4) rankNum(1) bankId(1)
+bankOffset(4) unkC(2) packedSize(2) unkE(2) size(2)` = 20 bytes.
+
+So the 1991 dual release (Amiga + Atari ST) was built from a single
+master: **same bytecode resources, same bank file layout, same
+memlist contents.** The platform differences are in the engine
+binary (`another` on Amiga, `START.PRG` on Atari ST) and in the
+bank-file packaging — *not* in the VM bytecode.
 
 ### What about the bounds check that the kick-detector implements?
 
@@ -495,20 +516,30 @@ Combined, this gives a clean lineage hypothesis:
 Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
         │
         ▼
-1991 Amiga release (Chahi):  gate 1 added — beetle visible, wing-flip silenced
+1991 dual release (Chahi):   gate 1 added — beetle visible, wing-flip silenced
+   ├── Amiga                 ↘  byte-identical level-2 bytecode
+   └── Atari ST              ↗  (same memlist contents, same bank layout)
         │
         ▼
 1992 DOS port (Heineman):    inherits gate 1; adds gate 2 — beetle hidden too
         │                    cinematic resource laid out at new offsets
         ▼
-1993 Genesis-EU port         inherits gate 1 + gate 2 + DOS cinematic offsets
-(Heineman)                   (does NOT re-derive from Amiga)
+1993 Genesis-EU (Heineman):  inherits gate 1 + gate 2 + DOS cinematic offsets
+                             (does NOT re-derive from Amiga)
 ```
 
 The "Heineman built Genesis-EU from his DOS port, not from Amiga
 upstream" hypothesis is testable by spot-checking other resources
 (non-beetle cinematics, bytecode constants) for the same DOS-vs-
 Amiga offset signature. Worth a follow-up.
+
+The Atari ST byte-identity finding has its own implication for
+issue #0048 (whether gate 1 is intentional or accidental). Both
+1991 SKUs have gate 1, but they share the *same dev master* (proven
+by byte-identical bytecode), so a single editorial decision (or a
+single accident) propagates to both. The Atari ST data point
+doesn't move the needle on intent — it just proves the 1991 master
+is a single artifact.
 
 ## Files referenced
 
@@ -586,3 +617,20 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   columns. Genealogy implications expanded with a 4-step lineage
   diagram (Pre-1991 → Amiga 1991 → DOS 1992 → Genesis-EU 1993)
   showing each port's added gates. Issue #0047 closed.
+- **2026-04-30** (same day, follow-up — Atari ST cross-check) —
+  Atari ST 1991 (the Pasti `.stx` release) inspected. **Same as
+  Amiga**: gate 1 present (`setup ch=0x2E, addr=0x34AA` → `addr=0x3497`),
+  gate 2 NOT present, beetle visible. **Level-2 bytecode resource
+  is byte-identical to Amiga**: 19,458 bytes, md5
+  `860362f3718ca4fe4a8e65cdbe40f155` for both, same memlist index
+  (#27), same bank (BANK02), same offset (0x008516). The 1991 dual
+  release is a single dev master shipped on two 68k SKUs.
+
+  As a side benefit, recovered the Atari ST memlist location:
+  embedded in `START.PRG` at offset `0x7ef2`, length `20 × 147 =
+  2940` bytes, same struct format as Amiga (big-endian fields).
+  This unblocks issue #0004 (Atari ST embedded memlist parse).
+
+  Reachability table widened to four columns. Lineage diagram
+  updated to show the Amiga + Atari ST 1991 dual release as one
+  branch with byte-identical bytecode. Issue #0049 closed.

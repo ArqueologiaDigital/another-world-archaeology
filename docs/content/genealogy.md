@@ -115,18 +115,29 @@ in the bytecode itself**, distinct from per-port editorial cuts.
 The original Amiga build *as shipped in 1991* already contains the
 gate-1 cut; the DOS port inherits it, plus adds gate-2 of its own.
 
-**Genesis-EU outcome (2026-04-30 cross-check)**: the 1993
-Heineman port inherits **both gates** (gate 1 + gate 2 — matches
-DOS, not Amiga). Same `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
-and `setup channel=0x2E, address=cleanup` patterns, structurally
-identical kick-detector code, and — crucially — **cinematic
-offsets identical to DOS** (`BEETLE_WALKING_LEFT_0` at `0x4D5A` in
-both DOS and Genesis, vs `0x616A` on Amiga). This decisively places
-the Heineman lineage's port progression as
-**Amiga (Chahi 1991) → DOS (Heineman 1992) → Genesis (Heineman
-1993)**, with each step preserving its predecessor's gates and the
-DOS port establishing the cinematic-resource layout that Genesis
-inherits.
+**Cross-checks across four ports (2026-04-30)**: the gates have
+been verified across all four currently-disassembled bank-format
+ports.
+
+| Port | Year | Author | Gate 1 | Gate 2 |
+|---|---|---|---|---|
+| Amiga       | 1991 | Chahi    | yes | no |
+| Atari ST    | 1991 | Chahi    | yes | no |
+| DOS         | 1992 | Heineman | yes | yes |
+| Genesis-EU  | 1993 | Heineman | yes | yes |
+
+Two cleanly distinguishable branches emerge:
+
+- **1991 Chahi master** (Amiga + Atari ST): gate 1 only. The
+  Atari ST level-2 bytecode is **byte-identical to Amiga**
+  (19,458 bytes, md5 `860362f3718ca4fe4a8e65cdbe40f155`, same
+  bank/offset). The 1991 release is a single dev master shipped
+  on two SKUs.
+
+- **Heineman lineage** (DOS 1992 + Genesis-EU 1993): gates 1 + 2.
+  Cinematic offsets in DOS and Genesis-EU are byte-identical and
+  different from Amiga, indicating Heineman built Genesis-EU from
+  his DOS port rather than re-deriving from Amiga.
 
 Lineage diagram:
 
@@ -134,21 +145,26 @@ Lineage diagram:
 Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
         │
         ▼
-1991 Amiga release (Chahi):  gate 1 added — beetle visible, wing-flip silenced
+1991 dual release (Chahi):   gate 1 added — beetle visible, wing-flip silenced
+   ├── Amiga                 ↘  byte-identical level-2 bytecode
+   └── Atari ST              ↗  (same memlist contents, same bank layout)
         │
         ▼
 1992 DOS port (Heineman):    inherits gate 1; adds gate 2 — beetle hidden too
         │                    cinematic resource laid out at new offsets
         ▼
-1993 Genesis-EU port         inherits gate 1 + gate 2 + DOS cinematic offsets
-(Heineman)                   — does NOT re-derive from Amiga
+1993 Genesis-EU (Heineman):  inherits gate 1 + gate 2 + DOS cinematic offsets
+                             — does NOT re-derive from Amiga
 ```
 
 See [research finding 05](#/research/05-beetle-in-the-lake-stage)
 for the full bytecode trace, kick-detector dispatch logic, take-off
-sequence, three-port comparison table, and unlabeled wing-flip
-cinematic offsets. Issue #0047 closed with this outcome; issue
-#0048 (whether gate 1 is intentional vs accidental) remains open.
+sequence, four-port comparison table, and unlabeled wing-flip
+cinematic offsets. Issues #0047 and #0049 closed with these
+outcomes; issue #0048 (whether gate 1 is intentional vs accidental)
+remains open. The byte-identical Atari ST/Amiga finding doesn't
+decide #0048 — both SKUs share the same dev master, so a single
+editorial decision (or a single accident) propagates to both.
 
 ## Working hypothesis
 
