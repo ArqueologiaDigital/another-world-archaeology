@@ -47,18 +47,15 @@ def main():
     failures = 0
     for meta in targets:
         slug = meta.get("slug", "?")
-        md5 = meta.get("md5sum")
-        # Single-file packages key both archive_dir and work_dir off the
-        # package md5. Multi-file packages (e.g. 3DO .bin/.cue, Amiga
-        # multi-disk) instead spell out an `archive_dir` slug — we use
-        # that as the work_dir name too so multi-file releases can still
-        # extract.
-        if md5:
-            key = md5
-        elif meta.get("archive_dir"):
-            key = meta["archive_dir"]
-        else:
-            print(f"[{slug}] skip: no md5sum or archive_dir recorded in metadata.json")
+        # `archive_dir` is the authoritative directory name under
+        # `original_files/`. Older single-file entries set it to the
+        # package md5 (so the two coincide), but newer multi-file
+        # entries (e.g. 3DO `.bin/.cue`, Atari ST `.zip` of two `.stx`)
+        # use a human-readable slug instead — md5sum is then a
+        # checksum *of the package file*, not a directory pointer.
+        key = meta.get("archive_dir") or meta.get("md5sum")
+        if not key:
+            print(f"[{slug}] skip: no archive_dir or md5sum recorded in metadata.json")
             continue
 
         archive_dir = ARCHIVE_ROOT / key

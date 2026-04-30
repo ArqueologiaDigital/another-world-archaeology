@@ -94,7 +94,7 @@
       { "name": "another_world_disk_1.stx", "size": 1767510 },
       { "name": "another_world_disk_2.stx", "size": 1767734 }
     ],
-    "note": "Pasti .stx format preserves the codewheel copy-protection sectors. Original 1991 Atari ST release alongside the Amiga. Extractor not yet implemented — needs Pasti reader + Atari ST bank format."
+    "note": "Pasti .stx format preserves the codewheel copy-protection sectors. Original 1991 Atari ST release alongside the Amiga. Extractor implemented (extractors/atari_st_pasti.py): walks the Pasti track records, reconstructs a flat 720 KiB .st image per disk, then parses FAT12. Yields 16 files: BANK01..BANK0D (12 unique banks across the two disks, with BANK06 and BANK09 byte-identical between disks) plus START.PRG and AUTO/START.PRG. There is no memlist.bin on the floppies — the resource directory is embedded in START.PRG. Mapping these bank files back to the canonical AW resource indices is future work; the format matches the Amiga generation (Motorola 68000 engine)."
   },
   {
     "slug": "snes-eu",
