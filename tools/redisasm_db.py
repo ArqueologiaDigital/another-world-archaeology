@@ -569,40 +569,73 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
         items = decode_block_partial(bytes_)
         run_pos = pos_at_line[start]
 
-        # Reachability filter: walk decoded instructions in order; once
-        # we cross a terminating opcode whose follow-on offset is NOT a
-        # jump target, truncate further decoded instructions back to
-        # raw bytes. This avoids speculative decodes of data that
-        # happens to contain valid-looking opcode bytes (e.g., embedded
-        # polygon assets after a killChannel).
+        # Reachability filter (skip-and-resume): walk decoded
+        # instructions in order. Initially execution is "reachable"
+        # (block entry). After a TERMINATING_OPCODES instruction,
+        # subsequent bytes are unreachable UNTIL we hit an offset that
+        # is a known jump target — at that point execution resumes.
+        # Bytes / decoded-instructions in unreachable regions are
+        # collapsed into a `('raw', ...)` item.
+        #
+        # Without skip-and-resume, blocks like LABEL_1BEE (which has a
+        # backward `jmp` whose target is a few bytes after the entry's
+        # `killChannel`) lost the post-killChannel bytecode that
+        # IS reachable via the in-block jump.
         block_targets = targets_in_block.get(run_pos, set())
-        truncated: list[tuple] = []
-        unreachable_from: int | None = None  # byte offset from which we treat the rest as raw
-        for it in items:
-            if unreachable_from is not None:
-                break
-            truncated.append(it)
-            if it[0] != "instr":
-                continue
-            _, inst_off, inst_size, _ap, _mnem = it
-            op = bytes_[inst_off]
-            if op in TERMINATING_OPCODES:
-                next_offset = inst_off + inst_size
-                if next_offset not in block_targets:
-                    unreachable_from = next_offset
-        if unreachable_from is not None:
-            # Replace the post-truncation items with raw/fill segments
-            # spanning the unreachable region.
-            tail = bytes_[unreachable_from:]
-            tail_fill = detect_trailing_fill(tail)
-            tail_prefix = len(tail) - tail_fill
-            if tail_prefix > 0:
-                truncated.append(("raw", unreachable_from, tail_prefix,
-                                  list(tail[:tail_prefix])))
+        filtered: list[tuple] = []
+        reachable = True
+        unreach_buf_offset: int | None = None
+        unreach_buf_bytes: list[int] = []
+
+        def flush_unreach() -> None:
+            nonlocal unreach_buf_offset, unreach_buf_bytes
+            if unreach_buf_offset is None or not unreach_buf_bytes:
+                unreach_buf_offset = None
+                unreach_buf_bytes = []
+                return
+            tail_fill = detect_trailing_fill(unreach_buf_bytes)
+            prefix = len(unreach_buf_bytes) - tail_fill
+            if prefix > 0:
+                filtered.append((
+                    "raw", unreach_buf_offset, prefix,
+                    unreach_buf_bytes[:prefix],
+                ))
             if tail_fill > 0:
-                truncated.append(("fill", unreachable_from + tail_prefix,
-                                  tail_fill, tail[-1]))
-            items = truncated
+                filtered.append((
+                    "fill", unreach_buf_offset + prefix,
+                    tail_fill, unreach_buf_bytes[-1],
+                ))
+            unreach_buf_offset = None
+            unreach_buf_bytes = []
+
+        for it in items:
+            kind = it[0]
+            it_off = it[1]
+            # If we hit a known jump-target offset, execution resumes
+            # here regardless of prior reachability state.
+            if it_off in block_targets:
+                flush_unreach()
+                reachable = True
+            if reachable:
+                filtered.append(it)
+                if kind == "instr":
+                    op = bytes_[it_off]
+                    if op in TERMINATING_OPCODES:
+                        reachable = False
+            else:
+                # Buffer unreachable bytes; emit as raw when we resume
+                # (or at the end of the block).
+                if unreach_buf_offset is None:
+                    unreach_buf_offset = it_off
+                if kind == "instr":
+                    sz = it[2]
+                    unreach_buf_bytes.extend(bytes_[it_off:it_off + sz])
+                elif kind == "raw":
+                    unreach_buf_bytes.extend(it[3])
+                elif kind == "fill":
+                    unreach_buf_bytes.extend([it[3]] * it[2])
+        flush_unreach()
+        items = filtered
         # Skip blocks where ZERO bytes decoded as instructions AND
         # there's no FILL pattern: keep them as-is (raw db). This
         # avoids a no-op rewrite that just shuffles whitespace.
