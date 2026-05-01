@@ -47,10 +47,13 @@ compare  ──→  cross-release diffs feed into research findings &
               the genealogy view
 ```
 
-Only the DOS bank format has an extractor today. Other formats
-(Amiga ADF, Windows PAK, SNES/Genesis ROMs, Atari ST, Apple IIgs,
-3DO, Jaguar, GBA, mobile, etc.) are tracked on the
-[Format coverage](#/coverage) page.
+Most cataloged formats have extractors today: DOS bank, Amiga ADF,
+Atari ST Pasti, SNES / Genesis / GBA cartridge ROMs, 3DO Mode 1,
+Nintendo DS, Apple II demake, and WinXP PAK. Two formats remain as
+stubs awaiting decoder work (Apple IIgs WOZ, Mac classic StuffIt /
+resource-fork), one is best-effort (Symbian `.sis`), and one is
+blocked on a fixture (Jaguar — no public dump exists yet). The
+[Format coverage](#/coverage) page tracks the full status table.
 
 ## Standing policies
 
