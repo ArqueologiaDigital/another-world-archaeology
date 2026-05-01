@@ -879,6 +879,121 @@ def flatten_subset_nesting(lines: list[str]) -> tuple[list[str], int]:
     return out_lines, total_hoists
 
 
+def merge_equivalent_arms(lines: list[str]) -> tuple[list[str], int]:
+    """For multi-arm `;@if/elif/.../endif` blocks where two or more
+    arms have identical body content, merge those arms into a single
+    `;@if BRANCH in (...)` arm.
+
+    Common 3-way pattern: cart and amiga happen to agree on a value
+    where gba differs. The unifier's progressive AB → ABC fold
+    can't see the cart-amiga agreement (it diffs cart vs gba first,
+    creating a nested block that absorption flattens to 3 arms).
+    Walking the final 3-arm block and noticing two are byte-identical
+    is a cheap fix.
+
+    Each merge collapses one redundant arm: 3 arms → 2 arms (saves
+    one `;@elif` directive). Returns (lines, num_merges).
+    """
+    total_merges = 0
+    while True:
+        blocks = _parse_top_level_blocks(lines)
+        merged = False
+        for s, e, sections in blocks:
+            if len(sections) < 3:
+                continue
+            # Build per-section content (line lists), stripping the
+            # surrounding section header.
+            arm_bodies: list[list[str]] = []
+            for k in range(len(sections)):
+                body_start = sections[k][1]
+                body_end = (
+                    sections[k + 1][0] if k + 1 < len(sections) else e
+                )
+                arm_bodies.append(lines[body_start:body_end])
+            # Normalize bodies for comparison: strip leading/trailing
+            # blank lines (cosmetic; same bytecode either way).
+            def strip_blanks(body: list[str]) -> tuple[str, ...]:
+                a = 0
+                while a < len(body) and not body[a].strip():
+                    a += 1
+                b = len(body)
+                while b > a and not body[b - 1].strip():
+                    b -= 1
+                return tuple(body[a:b])
+            normalized = [strip_blanks(b) for b in arm_bodies]
+            # Group identical-content arms together.
+            from collections import OrderedDict
+            groups: OrderedDict[tuple[str, ...], list[int]] = OrderedDict()
+            for k, key in enumerate(normalized):
+                groups.setdefault(key, []).append(k)
+            # If every group has exactly one arm, no merging available.
+            if all(len(idxs) == 1 for idxs in groups.values()):
+                continue
+            # Build new sections list. For each group, collect all
+            # branches mentioned in its arms. Emit one section per
+            # group, using the first arm's body and a combined branch
+            # condition.
+            new_section_specs: list[tuple[set[str], list[str]]] = []
+            for key, idxs in groups.items():
+                combined_branches: set[str] = set()
+                for idx in idxs:
+                    bs = _parse_branch_set(sections[idx][2], None)
+                    if bs is None:
+                        # Can't parse one of the conditions — skip
+                        # this whole block.
+                        combined_branches = None
+                        break
+                    combined_branches |= bs
+                if combined_branches is None:
+                    new_section_specs = None
+                    break
+                # Use the first arm's body (with its existing blank
+                # padding — preserves layout).
+                new_section_specs.append((combined_branches, arm_bodies[idxs[0]]))
+            if not new_section_specs:
+                continue
+            # Build the replacement segment.
+            new_segment: list[str] = []
+            for k, (branches, body) in enumerate(new_section_specs):
+                if len(branches) == 1:
+                    cond = f'BRANCH == "{next(iter(branches))}"'
+                else:
+                    # Sort for deterministic output.
+                    cond = (
+                        'BRANCH in ('
+                        + ', '.join(f'"{b}"' for b in sorted(branches))
+                        + ')'
+                    )
+                directive = f';@if {cond}' if k == 0 else f';@elif {cond}'
+                new_segment.append(directive)
+                new_segment.extend(body)
+            new_segment.append(lines[e])  # ;@endif
+            lines = lines[:s] + new_segment + lines[e + 1:]
+            total_merges += 1
+            merged = True
+            break
+        if not merged:
+            break
+    # Recurse into bodies of remaining blocks.
+    out_lines: list[str] = []
+    blocks = _parse_top_level_blocks(lines)
+    pos = 0
+    for s, e, sections in blocks:
+        out_lines.extend(lines[pos:s])
+        out_lines.append(lines[s])
+        for idx in range(len(sections)):
+            if idx > 0:
+                out_lines.append(lines[sections[idx][0]])
+            body = _section_body(lines, s, e, sections, idx)
+            recursed, sub_merges = merge_equivalent_arms(body)
+            total_merges += sub_merges
+            out_lines.extend(recursed)
+        out_lines.append(lines[e])
+        pos = e + 1
+    out_lines.extend(lines[pos:])
+    return out_lines, total_merges
+
+
 def promote_safe_label_defs(lines: list[str]) -> tuple[list[str], int]:
     """Drop the `;@if/.../;@endif` wrapper around single-arm blocks
     whose only content is a `LABEL_xxxx:` definition, when that label
@@ -1180,6 +1295,10 @@ def main() -> None:
     # to other same-condition blocks at the top level.
     out_lines, n_merges_3 = merge_adjacent_blocks(out_lines)
     n_merges += n_merges_3
+    # After flattening, multi-arm blocks may have arms with identical
+    # content (e.g., cart and amiga both `mov [foo], 0x0004` while
+    # gba has 0x0007). Merge those into `BRANCH in (...)` arms.
+    out_lines, n_arm_merges = merge_equivalent_arms(out_lines)
     post_merge_block_count = sum(
         1 for l in out_lines if l.lstrip().startswith(";@if ")
     )
@@ -1194,6 +1313,7 @@ def main() -> None:
     print(f"  merged adjacent same-cond blocks: {n_merges}")
     print(f"  promoted safe LABEL_def blocks:   {n_label_promotions}")
     print(f"  flattened subset-nested blocks:   {n_flattens}")
+    print(f"  merged equivalent arms:           {n_arm_merges}")
     print(f"  ;@if count {pre_merge_block_count} → {post_merge_block_count}")
     print(f"\nwrote {args.output}: {len(out_lines)} lines")
     largest_input = max(len(s[1]) for s in sources)
