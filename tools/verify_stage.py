@@ -88,10 +88,21 @@ CHUNK_SIZE = 0x10000
 
 
 def assemble(asm_path: Path) -> bytes:
+    # Per-branch sources may use the `FILL(n, 0xXX)` macro for
+    # trailing padding (introduced by tools/redisasm_db.py to
+    # compactly represent long 0xFF runs at the end of cartridge
+    # chunks). awvm-asm doesn't recognise the FILL pseudo-op
+    # directly, so expand it via tools/awvm_preprocess.py before
+    # assembly. Per-branch files don't carry `;@if BRANCH ==`
+    # directives (those live in the unified `_unified/*.asm.in`
+    # files), so the preprocessor's flag handling is a no-op here.
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from awvm_preprocess import expand_fill_macros
+    text = expand_fill_macros(asm_path.read_text())
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
         local = td / asm_path.name
-        shutil.copyfile(asm_path, local)
+        local.write_text(text)
         subprocess.run([str(AWVM_ASM), local.name], cwd=td,
                        check=True, capture_output=True, text=True)
         return local.with_suffix(".bin").read_bytes()
