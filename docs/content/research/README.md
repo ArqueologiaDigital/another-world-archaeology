@@ -58,6 +58,20 @@ finding is comparative) records which releases it applies to.
   of a port deliberately editing bytecode to gate off content
   rather than just preserving it.
 
+- [10 — GBA `LABEL_26A6` mystery solved: 55 KB of trailing data is the level_0 cinematic.rom](#/research/10-gba-cinematic-data-found):
+  the unified-INTRO `;@if` block at `LABEL_26A6` showed cartridge's
+  trailing-padding (`FILL(55641, 0xFF)`) vs GBA's mysterious 55 KB
+  of bytes. A brute-force scan of the GBA ROM finds **a 100 %
+  match** (570/570 `CINEMATIC_xxx` addresses land on valid
+  polygon-entry bytes) at ROM offset `0x71128` — exactly one byte
+  after the GBA's `level_0` bytecode ends. The "trailing data" is
+  the **first 55 KB of GBA's level_0 cinematic-polygon slab**.
+  AWVM_Tools' `bytecode_chunks` spec for GBA over-extracts:
+  it captures bytecode + adjacent cinematic data as one 64-KB
+  region. Same recipe finds SNES-EU's level_0 cinematic at ROM
+  offset `0x486E0` (95.1 % match). Tracked as issue #0068; once
+  fixed upstream, the trailing `;@if` resolves automatically.
+
 - [09 — Phase 3b first cross-branch unification (cartridge ↔ GBA INTRO)](#/research/09-phase3b-first-unification):
   ONE unified source file (`src/levels/_unified/INTRO.asm.in` with
   626 `;@if`/`;@elif` blocks) produces byte-identical bytecode for
