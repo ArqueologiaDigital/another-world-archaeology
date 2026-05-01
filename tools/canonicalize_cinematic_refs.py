@@ -138,31 +138,51 @@ def find_synonyms_in_unified(
                 if unified_lines[t].strip()
             ]
             sections.append((unified_lines[sec_starts[k]], body))
-        # Block must have at least 2 sections, all with EXACTLY 1
-        # content line, all referencing exactly ONE CINEMATIC, and
-        # all lines must be identical when CINEMATIC is blanked.
-        if len(sections) >= 2 and all(len(s[1]) == 1 for s in sections):
-            normalized_set = {normalize_for_diff(s[1][0]) for s in sections}
-            cin_counts = [len(_ACTIVE_PATTERN.findall(s[1][0])) for s in sections]
-            if len(normalized_set) == 1 and all(c == 1 for c in cin_counts):
-                # All sections share normalized form — synonym set!
-                entry: dict[str, str] = {}
-                ok = True
-                for header, body in sections:
-                    branches = _parse_branch_cond(header)
-                    cin = _ACTIVE_PATTERN.findall(body[0])[0]
-                    if not branches:
-                        ok = False
-                        break
-                    for br in branches:
-                        if br in entry and entry[br] != cin:
+        # Block must have at least 2 sections. All arms must have the
+        # same number of content lines, AND each line position must
+        # be identical across arms when the active token is blanked.
+        # The blanked tokens at corresponding positions form ONE
+        # synonym set per (block, line_position).
+        if (len(sections) >= 2
+                and len(set(len(s[1]) for s in sections)) == 1
+                and len(sections[0][1]) >= 1):
+            n_lines = len(sections[0][1])
+            # All-arm normalized lines: list of tuples.
+            normalized_arms = [
+                tuple(normalize_for_diff(l) for l in body)
+                for _, body in sections
+            ]
+            # Every arm's normalized form must be identical.
+            if all(n == normalized_arms[0] for n in normalized_arms):
+                # For each line position, build a synonym set if the
+                # line has exactly ONE active-pattern token in every
+                # arm AND the tokens differ across arms.
+                for line_idx in range(n_lines):
+                    tokens_per_arm = [
+                        _ACTIVE_PATTERN.findall(body[line_idx])
+                        for _, body in sections
+                    ]
+                    if not all(len(toks) == 1 for toks in tokens_per_arm):
+                        continue
+                    arm_tokens = [toks[0] for toks in tokens_per_arm]
+                    # Build dict: branch → token
+                    entry: dict[str, str] = {}
+                    ok = True
+                    for (header, _), tok in zip(sections, arm_tokens):
+                        branches = _parse_branch_cond(header)
+                        if not branches:
                             ok = False
                             break
-                        entry[br] = cin
-                    if not ok:
-                        break
-                if ok and len(entry) >= 2 and len(set(entry.values())) > 1:
-                    syn_sets.append(entry)
+                        for br in branches:
+                            if br in entry and entry[br] != tok:
+                                ok = False
+                                break
+                            entry[br] = tok
+                        if not ok:
+                            break
+                    if (ok and len(entry) >= 2
+                            and len(set(entry.values())) > 1):
+                        syn_sets.append(entry)
         i = j + 1
     return syn_sets
 
