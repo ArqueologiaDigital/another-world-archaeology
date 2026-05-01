@@ -79,23 +79,58 @@ Headline numbers:
 - **Chahi ↔ Heineman DOS is 0.72-0.92 for many stages** — DOS
   preserves a lot of Amiga's structure.
 
-## CODE_WHEEL labelling caveat
+## CODE_WHEEL ↔ INTRO labelling fix (2026-05-01)
 
-Looking at the CODE_WHEEL row above: chahi_1991 and heineman_dos
-have 0.72 similarity (high — both have actual codewheel-protection
-checks), but the two cartridge branches have **<0.1 similarity to
-either** while having **0.988 similarity to each other**.
+The initial Phase 3a source tree mislabelled cartridge-port
+level_0 as `CODE_WHEEL.asm`, on the assumption (from
+AWVM_Tools' `STAGE_TITLES`) that level_0 universally meant the
+codewheel screen.
 
-This is because cartridge-format ports don't have codewheel copy-
-protection (cartridges aren't trivially copyable). Their level_0
-is *something else* — likely a title screen or initialisation
-sequence. The current source-tree mislabels these as
-`CODE_WHEEL.asm`. This needs renaming once we identify what
-cartridge level_0 actually is.
+The structural-similarity matrix immediately surfaced the issue:
+chahi_1991 vs heineman_cartridge for `CODE_WHEEL` was **0.083**
+similarity (effectively zero), while `cartridge ↔ GBA CODE_WHEEL`
+was **0.988** (essentially the same content). Reading the actual
+strings confirms: SNES-EU level_0 + GBA level_0 contain
+"IDENTIFICATION", "Good evening professor.", "I see you have
+driven here in your Ferrari.", "PARTICLE ACCELERATOR" — the
+opening-cinematic INTRO sequence (Lester at the lab), not a
+codewheel.
 
-The corollary finding: **Foxy GBA inherited from Heineman
-cartridge, not from DOS** for at least the level_0 sequence —
-99% structural similarity to cartridge vs ~2% to DOS.
+Cartridge-format ports don't have codewheel copy-protection
+(cartridges aren't trivially copyable). Their level_0 is the
+**INTRO** sequence; the secret-code-entry screen (PASSCODE) is
+at a higher level slot.
+
+After renaming `heineman_cartridge/CODE_WHEEL.asm` →
+`heineman_cartridge/INTRO.asm` and the same for
+`foxy_gba_2004/`, the structural-similarity matrix now shows
+the **most striking cross-branch consistency we've found** —
+INTRO is 80%+ similar across **all four** branches:
+
+| Pair | INTRO ratio | LAKE ratio (for context) |
+|---|---|---|
+| heineman_cartridge ↔ foxy_gba_2004 | **0.988** | 0.920 |
+| heineman_cartridge ↔ heineman_dos | **0.979** | 0.914 |
+| heineman_dos ↔ foxy_gba_2004 | **0.972** | 0.884 |
+| chahi_1991 ↔ foxy_gba_2004 | 0.838 | 0.587 |
+| chahi_1991 ↔ heineman_cartridge | 0.835 | 0.598 |
+| chahi_1991 ↔ heineman_dos | 0.835 | 0.600 |
+
+The INTRO is a fixed cinematic — same Ferrari/lab content on
+every port — so it's the same logical program with slightly
+different packaging at each step in the genealogy. Even between
+Chahi 1991 (Amiga) and Foxy 2004 (GBA), 13 years apart and across
+four CPU architectures, the bytecode structure is **84% shared**.
+
+Worth proposing as an `awvm-disasm` fix upstream (gated on
+project policy of surfacing AWVM_Tools changes before
+implementation): SNES-EU + GBA `STAGE_TITLES[0]` should be
+"Intro Sequence", not "Code-wheel screen".
+
+**Foxy GBA's lineage**: 99% structural similarity to
+heineman_cartridge for INTRO, 92% for LAKE. Foxy 2004 is best
+described as **a refactor of Heineman's cartridge bytecode**, not
+a from-scratch implementation.
 
 ## Refined genealogy diagram
 

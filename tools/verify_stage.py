@@ -34,7 +34,11 @@ PORTS = {
         "branch": "heineman_cartridge",
         "format": "cartridge",
         "root": Path("work/f65e3d6efe35900c0015bcb751ee567e"),
-        "stages": {"CODE_WHEEL": 0, "LAKE": 1},
+        # SNES-EU only has 2 disasm levels; level_0 is the INTRO sequence
+        # (lab scene with Ferrari + particle accelerator strings), NOT the
+        # CODE_WHEEL screen (cartridges don't have codewheel protection).
+        # level_1 is the LAKE stage (byte-identical to Genesis-EU level_0).
+        "stages": {"INTRO": 0, "LAKE": 1},
     },
     "genesis_europe": {
         "branch": "heineman_cartridge",
@@ -72,7 +76,11 @@ PORTS = {
         "branch": "foxy_gba_2004",
         "format": "cartridge",
         "root": Path("/tmp/output/gba_usa"),
-        "stages": {"CODE_WHEEL": 0, "LAKE": 1},
+        # Same as snes_eu: level_0 is INTRO (the lab scene; identical
+        # strings and 0.99 structural similarity to snes_eu level_0).
+        # AWVM_Tools' STAGE_TITLES labels this "Code-wheel screen" — that's
+        # incorrect for the GBA port (cartridge → no codewheel).
+        "stages": {"INTRO": 0, "LAKE": 1},
     },
 }
 
