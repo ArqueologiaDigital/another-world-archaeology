@@ -251,11 +251,25 @@ def main() -> None:
         lines = out_text.splitlines()
         existing_equs: list[tuple[str, int]] = []
         equ_indices_set: set[int] = set()
+        # De-dupe (name, offset) pairs: when two synonyms in the
+        # SAME branch (e.g., cart's `CINEMATIC_568` and
+        # `COMMON_VIDEO_074` both at offset 0x0020) collapse to the
+        # same canonical name via `apply_rename`, the source ends up
+        # with two identical EQU lines. Without dedup, the unifier
+        # later wraps the second one in a redundant
+        # `;@if BRANCH == "<branch>"` block (because branches with
+        # only one synonym lack the duplicate, so difflib treats it
+        # as a per-branch divergent line).
+        seen_pairs: set[tuple[str, int]] = set()
         for i, line in enumerate(lines):
             m = RE_EQU.match(line)
             if m:
-                existing_equs.append((m.group(1), int(m.group(2), 16)))
+                pair = (m.group(1), int(m.group(2), 16))
                 equ_indices_set.add(i)
+                if pair in seen_pairs:
+                    continue
+                seen_pairs.add(pair)
+                existing_equs.append(pair)
 
         # Non-EQU lines, in original order.
         non_equ_lines = [l for i, l in enumerate(lines) if i not in equ_indices_set]
