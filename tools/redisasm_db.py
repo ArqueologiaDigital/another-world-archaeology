@@ -129,6 +129,78 @@ def decode_one(bytes_: list[int], offset: int) -> tuple[int, list[tuple[int, int
     return (size, addr_positions, mnemonic)
 
 
+FILL_THRESHOLD = 16  # min repeat-count to emit FILL instead of db
+
+
+def detect_trailing_fill(bytes_: list[int]) -> int:
+    """Return the count of trailing identical bytes if >= FILL_THRESHOLD,
+    else 0. Used to extract trailing-padding regions and emit them as
+    `FILL(n, 0xXX)` instead of expanding into thousands of `db` lines."""
+    n = len(bytes_)
+    if n == 0:
+        return 0
+    last = bytes_[-1]
+    count = 0
+    for b in reversed(bytes_):
+        if b == last:
+            count += 1
+        else:
+            break
+    return count if count >= FILL_THRESHOLD else 0
+
+
+def decode_block_partial(bytes_: list[int]) -> list[tuple]:
+    """Greedy partial decoder. Returns a list of items covering the
+    entire block (no gaps), each item one of:
+      ('instr', offset, size, addr_positions, mnemonic)
+      ('fill',  offset, count, byte_value)        — trailing padding only
+      ('raw',   offset, count, bytes_list)        — undecodable remainder
+
+    Algorithm:
+      1. If the block ends with >= FILL_THRESHOLD identical bytes,
+         reserve those for a 'fill' item (so we don't try to decode
+         them as instructions).
+      2. Decode the prefix from offset 0 greedily. Stop at the first
+         decode_one() failure (or if the next instruction would
+         straddle the FILL boundary).
+      3. Emit any remaining undecoded prefix bytes as a single 'raw'
+         item.
+      4. Emit the trailing 'fill' item, if any.
+
+    Stopping at the first failure (rather than retrying at offset+1)
+    keeps the output deterministic and avoids spurious "decoded"
+    instructions from data bytes that happen to start with a known
+    opcode.
+    """
+    items: list[tuple] = []
+    n = len(bytes_)
+    if n == 0:
+        return items
+
+    fill_count = detect_trailing_fill(bytes_)
+    prefix_end = n - fill_count
+
+    offset = 0
+    while offset < prefix_end:
+        r = decode_one(bytes_, offset)
+        if r is None:
+            break
+        size, addr_positions, mnemonic = r
+        if offset + size > prefix_end:
+            break  # would straddle FILL boundary
+        items.append(("instr", offset, size, addr_positions, mnemonic))
+        offset += size
+
+    if offset < prefix_end:
+        raw = bytes_[offset:prefix_end]
+        items.append(("raw", offset, len(raw), raw))
+
+    if fill_count:
+        items.append(("fill", prefix_end, fill_count, bytes_[-1]))
+
+    return items
+
+
 def decode_block(bytes_: list[int]) -> list[tuple[int, int, list[tuple[int, int]], str]] | None:
     """Decode an entire byte sequence as a series of instructions.
 
@@ -450,34 +522,112 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
 
     synthetic_label_at: dict[int, str] = {}
 
-    decoded_blocks: dict[int, list] = {}  # start_line → decoded list
+    # Pre-compute jump targets that fall WITHIN each db block. We do
+    # one greedy partial-decode pass over every block to extract jump
+    # target addresses, then group them by which block they land in.
+    # This feeds the reachability heuristic in the second pass.
+    targets_in_block: dict[int, set[int]] = {}  # block_start_pos → {offsets within block}
     for start, end, bytes_ in runs:
-        decoded = decode_block(bytes_)
-        if decoded is None:
+        targets_in_block[pos_at_line[start]] = set()
+    for start, end, bytes_ in runs:
+        items_pre = decode_block_partial(bytes_)
+        for it in items_pre:
+            if it[0] != "instr":
+                continue
+            _, inst_off, inst_size, addr_positions, _mnem = it
+            for ao_in_inst, ao_size in addr_positions:
+                addr = (bytes_[inst_off + ao_in_inst] << 8) | bytes_[inst_off + ao_in_inst + 1]
+                target = addr_in_db(addr)
+                if target is None:
+                    continue
+                t_start, _, _ = target
+                targets_in_block[t_start].add(addr - t_start)
+    # Also mark targets from non-db code: walk the existing label
+    # table — labels at offsets > 0 inside a db block ARE jump targets
+    # (something else in the source must reference them).
+    for addr, _name in label_at_pos.items():
+        target = addr_in_db(addr)
+        if target is None:
             continue
-        decoded_blocks[start] = decoded
+        t_start, _, _ = target
+        off = addr - t_start
+        if off > 0:
+            targets_in_block[t_start].add(off)
+
+    # TERMINATING_OPCODES: opcodes after which control flow ends
+    # unconditionally (no fall-through). Bytes after one of these,
+    # within the same block, are reachable ONLY via an inbound jump
+    # target. If no such target exists for those offsets, the bytes
+    # are dead — treat them as data (kept as `db`/`FILL`), not code.
+    TERMINATING_OPCODES = {0x05, 0x07, 0x11}  # ret, jmp, killChannel
+
+    # Decode every block partially. `decoded_items[start_line]` is the
+    # list of items returned by `decode_block_partial`, with the
+    # reachability heuristic applied.
+    decoded_items: dict[int, list[tuple]] = {}
+    for start, end, bytes_ in runs:
+        items = decode_block_partial(bytes_)
         run_pos = pos_at_line[start]
-        for inst_off, inst_size, addr_positions, mnemonic in decoded:
+
+        # Reachability filter: walk decoded instructions in order; once
+        # we cross a terminating opcode whose follow-on offset is NOT a
+        # jump target, truncate further decoded instructions back to
+        # raw bytes. This avoids speculative decodes of data that
+        # happens to contain valid-looking opcode bytes (e.g., embedded
+        # polygon assets after a killChannel).
+        block_targets = targets_in_block.get(run_pos, set())
+        truncated: list[tuple] = []
+        unreachable_from: int | None = None  # byte offset from which we treat the rest as raw
+        for it in items:
+            if unreachable_from is not None:
+                break
+            truncated.append(it)
+            if it[0] != "instr":
+                continue
+            _, inst_off, inst_size, _ap, _mnem = it
+            op = bytes_[inst_off]
+            if op in TERMINATING_OPCODES:
+                next_offset = inst_off + inst_size
+                if next_offset not in block_targets:
+                    unreachable_from = next_offset
+        if unreachable_from is not None:
+            # Replace the post-truncation items with raw/fill segments
+            # spanning the unreachable region.
+            tail = bytes_[unreachable_from:]
+            tail_fill = detect_trailing_fill(tail)
+            tail_prefix = len(tail) - tail_fill
+            if tail_prefix > 0:
+                truncated.append(("raw", unreachable_from, tail_prefix,
+                                  list(tail[:tail_prefix])))
+            if tail_fill > 0:
+                truncated.append(("fill", unreachable_from + tail_prefix,
+                                  tail_fill, tail[-1]))
+            items = truncated
+        # Skip blocks where ZERO bytes decoded as instructions AND
+        # there's no FILL pattern: keep them as-is (raw db). This
+        # avoids a no-op rewrite that just shuffles whitespace.
+        has_instr = any(it[0] == "instr" for it in items)
+        has_fill = any(it[0] == "fill" for it in items)
+        if not has_instr and not has_fill:
+            continue
+        decoded_items[start] = items
+        for it in items:
+            if it[0] != "instr":
+                continue
+            _, inst_off, inst_size, addr_positions, mnemonic = it
             for ao_in_inst, ao_size in addr_positions:
                 addr = (bytes_[inst_off + ao_in_inst] << 8) | bytes_[inst_off + ao_in_inst + 1]
                 target_block = addr_in_db(addr)
                 if target_block is None:
                     continue
                 # Verify the target is on an instruction boundary in
-                # the target block. If not, we cannot safely emit a
-                # label there (the disasm would be inconsistent).
+                # the target block (only 'instr' items count — 'raw'
+                # and 'fill' bytes have no instruction boundaries).
                 t_start, _, t_bytes = target_block
                 target_offset_in_block = addr - t_start
-                # Decode the target block; check if any instruction
-                # starts at target_offset_in_block.
-                t_decoded = decode_block(t_bytes)
-                if t_decoded is None:
-                    continue
-                boundaries = {inst[0] for inst in t_decoded}
+                t_items = decode_block_partial(t_bytes)
+                boundaries = {it2[1] for it2 in t_items if it2[0] == "instr"}
                 if target_offset_in_block in boundaries:
-                    # Don't synthesize a label if one already exists at
-                    # this absolute offset (would emit a duplicate
-                    # label-def line). Re-use the existing label.
                     if addr not in label_at_pos:
                         synthetic_label_at.setdefault(addr, f"LABEL_{addr:04X}")
 
@@ -497,40 +647,63 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
     stats = {
         "db_runs_total": len(runs),
         "db_runs_rewritten": 0,
-        "db_runs_skipped_decode": 0,
+        "db_runs_skipped_unchanged": 0,
         "instructions_emitted": 0,
         "instructions_kept_as_db": 0,
+        "fill_macros_emitted": 0,
+        "raw_db_segments": 0,
         "synthetic_labels_emitted": 0,
     }
+
+    DB_BYTES_PER_LINE = 8
+
+    def emit_db_lines(byte_list: list[int]) -> list[str]:
+        """Format a list of bytes as one or more `\\tdb 0x..., ...` lines."""
+        lines_out: list[str] = []
+        for i in range(0, len(byte_list), DB_BYTES_PER_LINE):
+            chunk = byte_list[i:i + DB_BYTES_PER_LINE]
+            lines_out.append("\tdb " + ", ".join(f"0x{b:02X}" for b in chunk))
+        return lines_out
+
     for start, end, bytes_ in reversed(runs):
-        decoded = decoded_blocks.get(start)
-        if decoded is None:
-            stats["db_runs_skipped_decode"] += 1
+        items = decoded_items.get(start)
+        if items is None:
+            stats["db_runs_skipped_unchanged"] += 1
             continue
         run_pos = pos_at_line[start]
         new_block: list[str] = []
-        for inst_off, inst_size, addr_positions, mnemonic in decoded:
-            abs_offset = run_pos + inst_off
-            # Insert a synthetic label here if needed.
+        for it in items:
+            kind = it[0]
+            abs_offset = run_pos + it[1]
+            # Insert a synthetic label here if any address points at it.
             if abs_offset in synthetic_label_at:
                 new_block.append(f"{synthetic_label_at[abs_offset]}:")
                 stats["synthetic_labels_emitted"] += 1
-            instr_bytes = bytes_[inst_off:inst_off + inst_size]
-            # Resolve address operand if any.
-            addr_label: str | None = None
-            for ao_in_inst, ao_size in addr_positions:
-                addr = (instr_bytes[ao_in_inst] << 8) | instr_bytes[ao_in_inst + 1]
-                addr_label = label_for_addr(addr)
-                break  # first (and only) addr operand
-            formatted = format_instruction(instr_bytes, addr_label)
-            if formatted is None:
-                # Keep this instruction as a single `db` line.
-                raw = ", ".join(f"0x{b:02X}" for b in instr_bytes)
-                new_block.append(f"\tdb {raw}")
-                stats["instructions_kept_as_db"] += 1
+            if kind == "instr":
+                _, inst_off, inst_size, addr_positions, mnemonic = it
+                instr_bytes = bytes_[inst_off:inst_off + inst_size]
+                addr_label: str | None = None
+                for ao_in_inst, ao_size in addr_positions:
+                    addr = (instr_bytes[ao_in_inst] << 8) | instr_bytes[ao_in_inst + 1]
+                    addr_label = label_for_addr(addr)
+                    break
+                formatted = format_instruction(instr_bytes, addr_label)
+                if formatted is None:
+                    new_block.extend(emit_db_lines(list(instr_bytes)))
+                    stats["instructions_kept_as_db"] += 1
+                else:
+                    new_block.append(formatted)
+                    stats["instructions_emitted"] += 1
+            elif kind == "fill":
+                _, _off, count, byte_value = it
+                new_block.append(f"\tFILL({count}, 0x{byte_value:02X})")
+                stats["fill_macros_emitted"] += 1
+            elif kind == "raw":
+                _, _off, count, byte_list = it
+                new_block.extend(emit_db_lines(list(byte_list)))
+                stats["raw_db_segments"] += 1
             else:
-                new_block.append(formatted)
-                stats["instructions_emitted"] += 1
+                raise ValueError(f"unknown item kind: {kind!r}")
         # Splice
         out_lines[start:end] = new_block
         stats["db_runs_rewritten"] += 1

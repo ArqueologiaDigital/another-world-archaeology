@@ -43,6 +43,43 @@ from pathlib import Path
 
 RE_DIRECTIVE = re.compile(r"^\s*;@(if|elif|else|endif)\b\s*(.*?)\s*$")
 
+# `FILL(n, 0xXX)` macro — expands to `n` bytes of value `0xXX` at preprocess
+# time. Useful for compact representation of trailing-padding regions in
+# the unified source. Optional trailing inline comment is allowed.
+RE_FILL = re.compile(
+    r'^(?P<indent>\s*)FILL\(\s*(?P<count>\d+)\s*,\s*'
+    r'(?P<byte>0x[0-9A-Fa-f]+|\d+)\s*\)\s*(?P<comment>;.*)?\s*$'
+)
+FILL_BYTES_PER_LINE = 16
+
+
+def expand_fill_macros(text: str) -> str:
+    """Expand `FILL(n, 0xXX)` lines into runs of `db <byte>, ...` lines.
+
+    Output is byte-equivalent to the input under awvm-asm: each FILL
+    macro is replaced by exactly `n` bytes worth of `db` directives.
+    """
+    out: list[str] = []
+    for line in text.splitlines():
+        m = RE_FILL.match(line)
+        if not m:
+            out.append(line)
+            continue
+        indent = m.group('indent')
+        count = int(m.group('count'))
+        byte_val = int(m.group('byte'), 0)
+        if not (0 <= byte_val <= 0xFF):
+            raise ValueError(f"FILL byte value out of range: {byte_val:#x}")
+        full = count // FILL_BYTES_PER_LINE
+        rem = count % FILL_BYTES_PER_LINE
+        chunk = ", ".join(f"0x{byte_val:02X}" for _ in range(FILL_BYTES_PER_LINE))
+        for _ in range(full):
+            out.append(f"{indent}db {chunk}")
+        if rem:
+            tail = ", ".join(f"0x{byte_val:02X}" for _ in range(rem))
+            out.append(f"{indent}db {tail}")
+    return "\n".join(out)
+
 
 def parse_flags(flags_path: Path) -> dict[str, str]:
     """Parse a `KEY=VALUE` shell-style flags file."""
@@ -165,6 +202,7 @@ def main() -> None:
     flags = parse_flags(args.flags)
     src = args.input.read_text()
     out = preprocess(src, flags)
+    out = expand_fill_macros(out)
     args.output.write_text(out)
     in_lines = src.count("\n")
     out_lines = out.count("\n")

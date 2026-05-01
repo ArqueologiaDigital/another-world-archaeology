@@ -523,3 +523,107 @@ So out of 18,282 unified-file lines, **4 are conditional**. The
 INTRO source genealogy is essentially fully reconciled between
 the cartridge and GBA branches.
 
+## Update (2026-05-01) — `FILL(n, 0xXX)` macro + partial-decode + reachability heuristic
+
+The trailing `;@if` block at LABEL_26A6 was bloated: ~6,955 lines of
+`db 0xFF, ...` padding in cartridge and ~6,955 lines of mostly-data
+bytes in GBA (after a leading `killChannel`). Three improvements
+collapsed this region:
+
+1. **Shared leading `killChannel` extracted from the `;@if`**. The
+   first byte of the trailing block in both branches is `0x11`
+   (`killChannel`). The previous rewriter could only operate
+   all-or-nothing per `db` block — if it failed to decode the entire
+   block, the entire block stayed `db`. The new partial decoder
+   `tools/redisasm_db.py:decode_block_partial` greedily decodes the
+   prefix and stops at the first failure. Both branches' first byte
+   now becomes `\tkillChannel\t;@raw=0x11`, identical across branches,
+   which `unify_asm.py` lifts out of the `;@if` block.
+
+2. **`FILL(n, 0xXX)` macro for trailing padding**. After the leading
+   `killChannel`, cartridge has 55,641 consecutive `0xFF` bytes
+   (chunk-padding to 64 KB). `tools/awvm_preprocess.py` now expands
+   a `FILL(<count>, <byte>)` directive at preprocess time (after
+   `;@if` evaluation) into the equivalent run of `db <byte>, ...`
+   lines, so the unified source can express padding regions in one
+   line without inflating the source repo:
+
+   ```
+   ;@if BRANCH == "heineman_cartridge"
+       FILL(55641, 0xFF)
+   ;@elif BRANCH == "foxy_gba_2004"
+       db ...   ; ~55KB of GBA-specific data
+   ;@endif
+   ```
+
+3. **Reachability heuristic to suppress speculative decodes**.
+   `decode_block_partial` initially decoded GBA's post-`killChannel`
+   bytes as a sequence of "instructions" — but those decodes were
+   nonsense (text-IDs > valid range, channels >= 64, calls into
+   addresses > 64KB). The bytes are *data* that happens to start
+   with valid-looking opcode bytes. Probably embedded polygon
+   assets (the byte-distribution histogram has the shape of polygon
+   coords, not bytecode). To suppress this, the rewriter now applies
+   a reachability filter: after a terminating opcode (`ret`,
+   unconditional `jmp`, `killChannel`), bytes are reachable ONLY
+   via an inbound jump target. If no such target exists for the
+   following offsets within the same block, the rewriter stops
+   decoding and emits the rest as raw `db` (or `FILL` if padding).
+   Cross-block jump-target collection runs in a pre-pass over all
+   `db` regions plus the existing label table, so the heuristic
+   correctly preserves blocks like `LABEL_153F` where internal
+   jumps DO target post-`killChannel` bytes (those decode fully).
+
+**Pipeline now:**
+
+```
+per-branch .asm files
+        ↓ canonicalize_labels.py        (EQU synonyms by offset)
+        ↓ canonicalize_bankswitch.py    (bankSwitch N → load id=)
+        ↓ canonicalize_inline_labels.py (inline labels by alignment)
+        ↓ redisasm_db.py                (partial decode + FILL +
+                                         reachability filter)
+        ↓ canonicalize_inline_labels.py (catches synthetic-label
+                                         synonyms from the rewrite)
+fully-canonicalized .asm files          ← committed in src/levels/_canonicalized/
+        ↓ unify_asm.py
+unified .asm.in                          ← committed in src/levels/_unified/
+        ↓ awvm_preprocess.py            (eval ;@if + expand FILL)
+per-branch .asm
+        ↓ awvm-asm
+.bin == original bytecode chunk         ← byte-match verified
+```
+
+**Result on INTRO:**
+
+| Metric | Before | After | Δ |
+|---|---|---|---|
+| Unified file lines | 18,282 | **11,328** | **−38%** |
+| `_canonicalized` cartridge lines | 11,313 | 4,359 | −61% |
+| `_canonicalized` GBA lines | 11,313 | 11,314 | +1 (synthetic label) |
+| `;@if` block count | 4 | 4 | 0 |
+
+The `;@if` count is unchanged, but the **content** of the trailing
+block at LABEL_26A6 is now compact and self-explaining:
+
+```
+LABEL_26A6:
+    killChannel
+;@if BRANCH == "heineman_cartridge"
+    FILL(55641, 0xFF)
+;@elif BRANCH == "foxy_gba_2004"
+    db 0x0F, 0xC6, 0x12, ...     ; (gba-specific embedded data)
+    db ...
+;@endif
+```
+
+End-to-end byte-match (preprocess → assemble) verified for both
+cartridge and GBA.
+
+A natural follow-up: **what IS the GBA-only data after `LABEL_26A6`'s
+`killChannel`?** The byte distribution and the absence of inbound
+jumps suggest embedded polygon/cinematic assets — content the
+cartridge doesn't carry. Investigating could surface another
+GBA-port-only asset survey similar to the unused-polygons work in
+research/06.
+
