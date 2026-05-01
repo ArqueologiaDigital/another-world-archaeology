@@ -534,6 +534,351 @@ def merge_adjacent_blocks(lines: list[str]) -> tuple[list[str], int]:
     return out_lines, total_merges
 
 
+RE_BRANCH_LIT = re.compile(r'"([^"]+)"')
+
+
+def _parse_branch_set(
+    directive_line: str, universe: frozenset[str] | None = None
+) -> frozenset[str] | None:
+    """Parse a `;@if`/`;@elif` directive into the set of branches it
+    activates. Returns None for `;@else` (which depends on the
+    surrounding section state).
+
+    Supported syntax:
+      BRANCH == "x"               → {x}
+      BRANCH != "x"               → universe - {x}    (needs universe)
+      BRANCH in ("x", "y", ...)   → {x, y, ...}
+
+    Anything else returns None (treat as opaque).
+    """
+    s = directive_line.strip()
+    quoted = RE_BRANCH_LIT.findall(s)
+    if " in " in s and quoted:
+        return frozenset(quoted)
+    if " == " in s and len(quoted) == 1:
+        return frozenset(quoted)
+    if " != " in s and len(quoted) == 1:
+        if universe is None:
+            return None
+        return universe - frozenset(quoted)
+    return None
+
+
+def _collect_universe(lines: list[str]) -> frozenset[str]:
+    """Best-effort universe of branch names: every quoted string
+    appearing in any `;@if`/`;@elif` directive."""
+    branches: set[str] = set()
+    for l in lines:
+        s = l.lstrip()
+        if s.startswith(";@if ") or s.startswith(";@elif "):
+            branches.update(RE_BRANCH_LIT.findall(s))
+    return frozenset(branches)
+
+
+def _absorb_arm_into_outer(
+    lines: list[str],
+    outer_s: int,
+    outer_e: int,
+    outer_sections: list[tuple[int, int, str]],
+    arm_idx: int,
+    universe: frozenset[str],
+) -> list[str] | None:
+    """If `outer_sections[arm_idx]`'s body is exactly a single nested
+    `;@if/elif/.../;@endif` block (modulo blank lines) AND the inner
+    arms' branches form a partition of the outer arm's branches,
+    replace the outer arm with the inner arms inline (so the outer
+    block gains arms; the inner block is absorbed).
+
+    Returns the new lines list, or None if not applicable.
+
+    Saves 2 directives and reduces nesting depth by 1.
+    """
+    arm_header_idx, arm_body_start, arm_cond = outer_sections[arm_idx]
+    arm_body_end = (
+        outer_sections[arm_idx + 1][0] if arm_idx + 1 < len(outer_sections)
+        else outer_e
+    )
+    body = lines[arm_body_start:arm_body_end]
+    # Strip surrounding blank lines.
+    a = 0
+    while a < len(body) and not body[a].strip():
+        a += 1
+    b = len(body)
+    while b > a and not body[b - 1].strip():
+        b -= 1
+    inner = body[a:b]
+    if not inner or not inner[0].lstrip().startswith(";@if "):
+        return None
+    # Verify `inner` is a single complete `;@if/.../;@endif` block.
+    depth = 1
+    end_idx = -1
+    for k in range(1, len(inner)):
+        s = inner[k].lstrip()
+        if s.startswith(";@if "):
+            depth += 1
+        elif s.startswith(";@endif"):
+            depth -= 1
+            if depth == 0:
+                end_idx = k
+                break
+    if end_idx != len(inner) - 1:
+        return None
+    # Parse inner sections.
+    inner_blocks = _parse_top_level_blocks(inner)
+    if len(inner_blocks) != 1:
+        return None
+    inner_s, inner_e, inner_sections = inner_blocks[0]
+    # Branch partitioning: union of inner-section branches must equal
+    # the outer arm's branches.
+    outer_arm_branches = _parse_branch_set(arm_cond, universe)
+    if outer_arm_branches is None:
+        return None
+    inner_union: set[str] = set()
+    for sec in inner_sections:
+        bs = _parse_branch_set(sec[2], universe)
+        if bs is None:
+            return None
+        if inner_union & bs:
+            return None  # not disjoint — can't absorb without overlap
+        inner_union |= bs
+    if frozenset(inner_union) != outer_arm_branches:
+        return None
+    # Build the absorbed-arm replacement: each inner section's
+    # header (rewritten as `;@elif` if not the first arm in the
+    # outer block) followed by its body. Drop the inner `;@if` and
+    # `;@endif` directives.
+    absorbed: list[str] = []
+    inner_section_first_in_outer = (arm_idx == 0)
+    for k, (header_idx, body_start, _cond) in enumerate(inner_sections):
+        # Determine the inner section's body in `inner`.
+        inner_body_start = body_start
+        inner_body_end = (
+            inner_sections[k + 1][0] if k + 1 < len(inner_sections)
+            else inner_e
+        )
+        inner_body = inner[inner_body_start:inner_body_end]
+        # Header line rewriting:
+        # - First inner section: if outer arm_idx==0, becomes the
+        #   outer ;@if header. Otherwise becomes ;@elif.
+        # - Subsequent inner sections: always ;@elif.
+        original_header = inner[header_idx]
+        if k == 0 and inner_section_first_in_outer:
+            absorbed.append(original_header)  # `;@if BRANCH ...`
+        else:
+            # Convert to `;@elif` form.
+            new_header = re.sub(
+                r'^(\s*);@if\b', r'\1;@elif', original_header
+            )
+            new_header = re.sub(
+                r'^(\s*);@elif\b', r'\1;@elif', new_header
+            )
+            absorbed.append(new_header)
+        absorbed.extend(inner_body)
+    # Now splice: replace the outer arm's [header..body] range with
+    # the absorbed content. The outer arm's HEADER is at
+    # `arm_header_idx`; its content runs through `arm_body_end - 1`.
+    new_lines = (
+        lines[:arm_header_idx]
+        + absorbed
+        + lines[arm_body_end:]
+    )
+    return new_lines
+
+
+def flatten_subset_nesting(lines: list[str]) -> tuple[list[str], int]:
+    """When an outer single-arm `;@if Y / ... / ;@endif` block has a
+    nested `;@if X / ... / ;@endif` at the START or END of its body
+    with X ⊆ Y, hoist the inner block out so it sits adjacent to
+    (instead of inside) the outer block.
+
+    Same total directive count, but flatter — readers don't need to
+    track that the inner condition is implicitly tightened by the
+    outer scope.
+
+    Also handles the multi-arm absorption case: if one outer arm's
+    body is exactly a single nested `;@if X / ;@elif Y / ;@endif`
+    block whose branches partition the outer arm's branches, the
+    inner block's arms are absorbed into the outer block as new
+    arms (saves 2 directives, reduces depth by 1). Common pattern:
+    `;@if BRANCH in ("cart", "gba")` with body
+    `;@if BRANCH == "cart" / ... / ;@elif "gba" / ... / ;@endif`
+    → flattens to a single-level if/elif/elif over the three branches.
+
+    Recurses into the bodies of remaining blocks so nested cases
+    bubble up incrementally.
+
+    Returns (out_lines, num_hoists).
+    """
+    universe = _collect_universe(lines)
+    total_hoists = 0
+    while True:
+        blocks = _parse_top_level_blocks(lines)
+        hoisted = False
+        # First pass: try arm-absorption on multi-arm outer blocks.
+        for s, e, sections in blocks:
+            if len(sections) < 2:
+                continue
+            for arm_idx in range(len(sections)):
+                new_lines = _absorb_arm_into_outer(
+                    lines, s, e, sections, arm_idx, universe
+                )
+                if new_lines is not None:
+                    lines = new_lines
+                    total_hoists += 1
+                    hoisted = True
+                    break
+            if hoisted:
+                break
+        if hoisted:
+            continue  # re-parse with new layout
+        # Second pass: subset-hoist for single-arm outer blocks.
+        for s, e, sections in blocks:
+            if len(sections) != 1:
+                continue
+            outer_cond = sections[0][2]
+            outer_branches = _parse_branch_set(outer_cond, universe)
+            if outer_branches is None:
+                continue
+            body_start = sections[0][1]
+            body_end = e  # the `;@endif` line index
+
+            # Inner-block check at START: skip leading blanks, then
+            # the first non-blank line must be `;@if`.
+            i = body_start
+            while i < body_end and not lines[i].strip():
+                i += 1
+            inner_at_start = (
+                i < body_end and lines[i].lstrip().startswith(";@if ")
+            )
+
+            # Inner-block check at END: skip trailing blanks, then
+            # the last non-blank line must be `;@endif` whose
+            # matching `;@if` is the LAST top-level block in the
+            # outer body.
+            j = body_end - 1
+            while j >= body_start and not lines[j].strip():
+                j -= 1
+            inner_at_end = (
+                j >= body_start and lines[j].lstrip().startswith(";@endif")
+            )
+
+            # Re-parse outer body to find inner block boundaries.
+            body_blocks = _parse_top_level_blocks(lines[body_start:body_end])
+            if not body_blocks:
+                continue
+
+            def hoist(inner_block_idx: int, position: str) -> bool:
+                """position is 'before' or 'after'."""
+                nonlocal lines, total_hoists
+                inner_s, inner_e, inner_sections = body_blocks[inner_block_idx]
+                # Convert to absolute indices.
+                abs_inner_s = body_start + inner_s
+                abs_inner_e = body_start + inner_e
+                # Check inner sections' branches all ⊆ outer.
+                for sec in inner_sections:
+                    bs = _parse_branch_set(sec[2], universe)
+                    if bs is None or not bs.issubset(outer_branches):
+                        return False
+                # Inner block's lines.
+                inner_lines = lines[abs_inner_s:abs_inner_e + 1]
+                # Build new layout:
+                #   before-hoist:
+                #     before-outer (lines[:s])
+                #     outer-header (lines[s])
+                #     inner-block (already in body)
+                #     ...rest of body...
+                #     outer-endif (lines[e])
+                #   after-hoist (position='before'):
+                #     before-outer (lines[:s])
+                #     inner-block
+                #     outer-header
+                #     ...rest of outer body (excluding the inner-block range)...
+                #     outer-endif
+                outer_header = lines[s]
+                outer_endif = lines[e]
+                if position == "before":
+                    # Body before the inner: the lines BEFORE abs_inner_s
+                    # in the outer body. These are blank gap lines we'd
+                    # collected before the inner — drop them, they're
+                    # cosmetic.
+                    body_after_inner = lines[abs_inner_e + 1:body_end]
+                    # Strip leading blanks of body_after_inner — the
+                    # blank that originally separated outer-header
+                    # from inner is gone now.
+                    while body_after_inner and not body_after_inner[0].strip():
+                        body_after_inner = body_after_inner[1:]
+                    # If the remaining outer body is empty, the outer
+                    # block becomes a no-op — drop it entirely.
+                    if not body_after_inner:
+                        new_segment = inner_lines
+                    else:
+                        new_segment = (
+                            inner_lines
+                            + [outer_header]
+                            + body_after_inner
+                            + [outer_endif]
+                        )
+                else:  # 'after'
+                    body_before_inner = lines[body_start:abs_inner_s]
+                    # Strip trailing blanks (cosmetic).
+                    while body_before_inner and not body_before_inner[-1].strip():
+                        body_before_inner = body_before_inner[:-1]
+                    if not body_before_inner:
+                        new_segment = inner_lines
+                    else:
+                        new_segment = (
+                            [outer_header]
+                            + body_before_inner
+                            + [outer_endif]
+                            + inner_lines
+                        )
+                lines = lines[:s] + new_segment + lines[e + 1:]
+                total_hoists += 1
+                return True
+
+            # Try: inner at start (block_idx=0).
+            # Need: before block 0 in body, only blank lines.
+            if body_blocks:
+                first_s, first_e, _ = body_blocks[0]
+                # First block's start is at index first_s in body.
+                # Lines before: body[:first_s] (relative).
+                pre = lines[body_start:body_start + first_s]
+                if all(not l.strip() for l in pre):
+                    if hoist(0, "before"):
+                        hoisted = True
+                        break
+
+            # Try: inner at end (block_idx=last).
+            if body_blocks:
+                last_s, last_e, _ = body_blocks[-1]
+                post = lines[body_start + last_e + 1:body_end]
+                if all(not l.strip() for l in post):
+                    if hoist(len(body_blocks) - 1, "after"):
+                        hoisted = True
+                        break
+        if not hoisted:
+            break
+    # Recurse into remaining top-level blocks' bodies (in case there
+    # are deeply nested subset-flatten opportunities).
+    out_lines: list[str] = []
+    blocks = _parse_top_level_blocks(lines)
+    pos = 0
+    for s, e, sections in blocks:
+        out_lines.extend(lines[pos:s])
+        out_lines.append(lines[s])
+        for idx in range(len(sections)):
+            if idx > 0:
+                out_lines.append(lines[sections[idx][0]])
+            body = _section_body(lines, s, e, sections, idx)
+            recursed, sub_hoists = flatten_subset_nesting(body)
+            total_hoists += sub_hoists
+            out_lines.extend(recursed)
+        out_lines.append(lines[e])
+        pos = e + 1
+    out_lines.extend(lines[pos:])
+    return out_lines, total_hoists
+
+
 def promote_safe_label_defs(lines: list[str]) -> tuple[list[str], int]:
     """Drop the `;@if/.../;@endif` wrapper around single-arm blocks
     whose only content is a `LABEL_xxxx:` definition, when that label
@@ -830,6 +1175,11 @@ def main() -> None:
     # label-def block was sitting between them).
     out_lines, n_merges_2 = merge_adjacent_blocks(out_lines)
     n_merges += n_merges_2
+    out_lines, n_flattens = flatten_subset_nesting(out_lines)
+    # Re-merge after flattening: hoisted blocks might end up adjacent
+    # to other same-condition blocks at the top level.
+    out_lines, n_merges_3 = merge_adjacent_blocks(out_lines)
+    n_merges += n_merges_3
     post_merge_block_count = sum(
         1 for l in out_lines if l.lstrip().startswith(";@if ")
     )
@@ -843,6 +1193,7 @@ def main() -> None:
     print(f"\nstats: diff_blocks={stats['diff_blocks']}")
     print(f"  merged adjacent same-cond blocks: {n_merges}")
     print(f"  promoted safe LABEL_def blocks:   {n_label_promotions}")
+    print(f"  flattened subset-nested blocks:   {n_flattens}")
     print(f"  ;@if count {pre_merge_block_count} → {post_merge_block_count}")
     print(f"\nwrote {args.output}: {len(out_lines)} lines")
     largest_input = max(len(s[1]) for s in sources)
