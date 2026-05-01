@@ -305,7 +305,7 @@ on a WOZ flux-level reader (issue #0014).
 |---|---|---|---|---|---|---|
 | **Amiga**        | 1991 | Chahi    | `0x3510` | (none) | `0x34AA` | `0x3497` cleanup |
 | **Atari ST**     | 1991 | Chahi    | `0x3510` | (none) | `0x34AA` | `0x3497` cleanup |
-| **DOS**          | 1992 | Heineman | `0x365A` | `KILL_CHANNEL_ROUTINE` | `0x35F4` | `0x35E1` cleanup |
+| **DOS**          | 1992 | Morais   | `0x365A` | `KILL_CHANNEL_ROUTINE` | `0x35F4` | `0x35E1` cleanup |
 | **SNES-EU**      | 1992 | Heineman | `0x36FD` | `KILL_CHANNEL_ROUTINE` | `0x3697` | `0x3684` cleanup |
 | **Genesis-EU**   | 1993 | Heineman | `0x36FD` | `KILL_CHANNEL_ROUTINE` | `0x3697` | `0x3684` cleanup |
 | **GBA (Foxy)**   | 2004 | Foxy     | `0x3721` | `KILL_CHANNEL_ROUTINE` | `0x36BB` | `0x36A8` cleanup |

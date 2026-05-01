@@ -35,6 +35,16 @@ RE_DB = re.compile(
 RE_LABEL_DEF = re.compile(r'^([A-Z][A-Z_0-9]*):\s*$')
 
 
+# Type-2 video opcode (0x40-0x7F) size table. Empirically derived from
+# the cart INTRO disasm. Opcodes not in this table are size-unknown and
+# decode_one() returns None (caller falls back to db).
+VIDEO2_SIZE = {
+    0x48: 6, 0x54: 5, 0x55: 6, 0x58: 5,
+    0x60: 6, 0x64: 5, 0x69: 6, 0x6A: 6,
+    0x74: 5, 0x78: 5, 0x7A: 6,
+}
+
+
 # Opcode table: opcode → (size_bytes, [(addr_offset_within_instruction, addr_byte_count)])
 # `size_bytes` = total instruction byte count (None for variable-size)
 # `addr_offsets` lists positions of address operands (16-bit BE).
@@ -73,15 +83,18 @@ def decode_one(bytes_: list[int], offset: int) -> tuple[int, list[tuple[int, int
 
     if op == 0x0A:
         # cond_jump: opcode + cond + var + (operand bytes by cond) + 2-byte addr
+        # Empirically (cart INTRO has 30 instances): default cond byte (low
+        # bits only) is SHORT IMM (1 byte for second operand). Bit 0x80 is
+        # var-var (also 1 byte). Bit 0x40 is long imm (2 bytes).
         if offset + 1 >= len(bytes_):
             return None
         cond = bytes_[offset + 1]
         if cond & 0x80:
-            ops = 1  # second op is var
+            ops = 1  # var-var (1 byte for second var)
         elif cond & 0x40:
-            ops = 1  # short imm
-        else:
             ops = 2  # long imm
+        else:
+            ops = 1  # short imm (DEFAULT)
         size = 1 + 1 + 1 + ops + 2  # opcode + cond + var + imm-bytes + addr
         if offset + size > len(bytes_):
             return None
@@ -90,16 +103,24 @@ def decode_one(bytes_: list[int], offset: int) -> tuple[int, list[tuple[int, int
 
     info = OPCODE_TABLE.get(op)
     if info is None:
-        # video opcodes (high bit set)
+        # Video opcodes:
+        #   bit 7 set (0x80-0xFF): video type 1 — empirically always 4 bytes
+        #     in INTRO (verified across all 0x82-0xFE opcodes used).
+        #   bit 6 set, bit 7 clear (0x40-0x7F): video type 2 — 5 or 6 bytes.
+        #     Size depends on flag bits we don't fully decode. We use a
+        #     lookup table for the cases observed in INTRO.
         if op & 0x80:
-            # type 1 / 2 video, variable size. Conservatively assume 5 bytes
-            # (flag byte determines the actual size; this is a simplification).
-            size = 5
-            if op & 0x20:
-                size = 6  # has zoom byte
+            size = 4
             if offset + size > len(bytes_):
                 return None
-            return (size, [], f"video_{op:02x}")
+            return (size, [], f"video1_{op:02x}")
+        if op & 0x40:
+            size = VIDEO2_SIZE.get(op)
+            if size is None:
+                return None  # unknown type-2 size, can't decode
+            if offset + size > len(bytes_):
+                return None
+            return (size, [], f"video2_{op:02x}")
         return None
 
     size, addr_positions, mnemonic = info
@@ -294,16 +315,249 @@ def collect_labels(lines: list[str]) -> dict[int, str]:
     return label_at_pos
 
 
+# ---------------------------------------------------------------------
+# Rewrite mode: produce a new .asm with db blocks replaced by mnemonics.
+# ---------------------------------------------------------------------
+
+# Comparison-type → mnemonic for cond_jump (low 3 bits of cond byte).
+COND_MNEMONIC = {0: "je", 1: "jne", 2: "jg", 3: "jge", 4: "jl", 5: "jle"}
+
+
+def format_instruction(instr_bytes: list[int], addr_label: str | None) -> str | None:
+    """Format one decoded instruction back into an asm line.
+
+    Returns the formatted line (with `;@raw=` annotation), or None if
+    the opcode lacks a formatter (caller should fall back to `db`).
+
+    `addr_label`: symbolic name to use for the address operand, if any.
+    Caller resolves the target offset → label name before calling.
+    """
+    op = instr_bytes[0]
+    raw = ",".join(f"0x{b:02X}" for b in instr_bytes)
+
+    def line(body: str) -> str:
+        return f"\t{body}\t;@raw={raw}"
+
+    if op == 0x05:
+        return line("ret")
+    if op == 0x06:
+        return line("break")
+    if op == 0x11:
+        return line("killChannel")
+    if op == 0x07:  # jmp addr16
+        addr = (instr_bytes[1] << 8) | instr_bytes[2]
+        target = addr_label or f"0x{addr:04X}"
+        return line(f"jmp {target}")
+    if op == 0x04:  # call addr16
+        addr = (instr_bytes[1] << 8) | instr_bytes[2]
+        target = addr_label or f"0x{addr:04X}"
+        return line(f"call {target}")
+    if op == 0x08:  # setup channel=N, address=addr16
+        ch = instr_bytes[1]
+        addr = (instr_bytes[2] << 8) | instr_bytes[3]
+        target = addr_label or f"0x{addr:04X}"
+        return line(f"setup channel=0x{ch:02X}, address={target}")
+    if op == 0x09:  # djnz [var], addr16
+        var = instr_bytes[1]
+        addr = (instr_bytes[2] << 8) | instr_bytes[3]
+        target = addr_label or f"0x{addr:04X}"
+        return line(f"djnz [0x{var:02X}], {target}")
+    if op == 0x12:  # text id, x, y, color
+        text_id = (instr_bytes[1] << 8) | instr_bytes[2]
+        x, y, color = instr_bytes[3], instr_bytes[4], instr_bytes[5]
+        return line(f"text id=0x{text_id:04X}, x={x}, y={y}, color=0x{color:02X}")
+    if op == 0x0A:  # cond_jump
+        cond = instr_bytes[1]
+        var = instr_bytes[2]
+        if cond & 0x80:
+            second_op = f"[0x{instr_bytes[3]:02X}]"
+            addr_pos = 4
+        elif cond & 0x40:
+            second_op = f"0x{(instr_bytes[3] << 8) | instr_bytes[4]:04X}"
+            addr_pos = 5
+        else:
+            second_op = f"0x{instr_bytes[3]:02X}"
+            addr_pos = 4
+        addr = (instr_bytes[addr_pos] << 8) | instr_bytes[addr_pos + 1]
+        target = addr_label or f"0x{addr:04X}"
+        cmp_type = cond & 0x07
+        mnem = COND_MNEMONIC.get(cmp_type, f"jcond_{cmp_type:x}")
+        return line(f"{mnem} [0x{var:02X}], {second_op}, {target}")
+    return None  # no formatter — caller falls back to db
+
+
+def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
+    """Rewrite all decodable db blocks as proper mnemonics + labels.
+
+    For every db block in the source:
+      1. Decode the bytes linearly via decode_block().
+      2. Resolve any address operands: if the target offset falls within
+         a db block (this one or another), record (target_offset, name)
+         in `synthetic_labels`. The label name is `LABEL_<HEX>` matching
+         the existing disasm convention.
+      3. Emit a replacement sequence of asm lines:
+         - For each instruction boundary that is a known target, emit
+           `LABEL_<HEX>:` BEFORE the instruction.
+         - For each instruction, emit a formatted mnemonic line. If the
+           opcode lacks a formatter (e.g., video opcodes whose offset
+           encoding we don't reverse-engineer here), keep that single
+           instruction as `db <bytes>`.
+      4. Replace the db-block lines in the output with the new sequence.
+
+    Skips db blocks that fail to decode cleanly (those stay as db).
+
+    Returns: (new_lines, stats_dict)
+    """
+    label_at_pos = collect_labels(lines)
+
+    # First pass: walk byte positions to find db-block ranges + each
+    # block's start byte-offset (the absolute address where its first
+    # byte sits in the bytecode address space).
+    re_raw = re.compile(r';@raw=([0-9A-Fa-fx,]+)')
+    re_org = re.compile(r'^\s*org\s+(0x[0-9A-Fa-f]+)')
+
+    pos_at_line: dict[int, int] = {}
+    pos = 0
+    for i, line in enumerate(lines):
+        pos_at_line[i] = pos
+        m_org = re_org.match(line)
+        if m_org:
+            pos = int(m_org.group(1), 16)
+            continue
+        m_raw = re_raw.search(line)
+        if m_raw:
+            pos += len(m_raw.group(1).split(','))
+            continue
+        pos += estimate_line_bytes(line)
+
+    runs = find_db_runs(lines)
+
+    # First decode pass: collect all jump targets that fall within ANY
+    # db block (these need synthetic labels). We do this BEFORE emitting
+    # rewritten lines, because a jump target in block A may point into
+    # block B — we want to know all targets up front so we can insert
+    # labels at the right boundaries.
+    db_ranges: list[tuple[int, int, list[int]]] = []  # (start_pos, end_pos, bytes)
+    for start, end, bytes_ in runs:
+        run_pos = pos_at_line[start]
+        db_ranges.append((run_pos, run_pos + len(bytes_), bytes_))
+
+    def addr_in_db(addr: int) -> tuple[int, int, list[int]] | None:
+        for r in db_ranges:
+            if r[0] <= addr < r[1]:
+                return r
+        return None
+
+    synthetic_label_at: dict[int, str] = {}
+
+    decoded_blocks: dict[int, list] = {}  # start_line → decoded list
+    for start, end, bytes_ in runs:
+        decoded = decode_block(bytes_)
+        if decoded is None:
+            continue
+        decoded_blocks[start] = decoded
+        run_pos = pos_at_line[start]
+        for inst_off, inst_size, addr_positions, mnemonic in decoded:
+            for ao_in_inst, ao_size in addr_positions:
+                addr = (bytes_[inst_off + ao_in_inst] << 8) | bytes_[inst_off + ao_in_inst + 1]
+                target_block = addr_in_db(addr)
+                if target_block is None:
+                    continue
+                # Verify the target is on an instruction boundary in
+                # the target block. If not, we cannot safely emit a
+                # label there (the disasm would be inconsistent).
+                t_start, _, t_bytes = target_block
+                target_offset_in_block = addr - t_start
+                # Decode the target block; check if any instruction
+                # starts at target_offset_in_block.
+                t_decoded = decode_block(t_bytes)
+                if t_decoded is None:
+                    continue
+                boundaries = {inst[0] for inst in t_decoded}
+                if target_offset_in_block in boundaries:
+                    # Don't synthesize a label if one already exists at
+                    # this absolute offset (would emit a duplicate
+                    # label-def line). Re-use the existing label.
+                    if addr not in label_at_pos:
+                        synthetic_label_at.setdefault(addr, f"LABEL_{addr:04X}")
+
+    # Build a unified resolver: given an address, return its label name
+    # (existing or synthetic), or None.
+    def label_for_addr(addr: int) -> str | None:
+        if addr in label_at_pos:
+            return label_at_pos[addr]
+        if addr in synthetic_label_at:
+            return synthetic_label_at[addr]
+        return None
+
+    # Second pass: emit replacement lines for each rewritten db block.
+    # Replace the original db lines (start..end) with new sequence.
+    out_lines = list(lines)  # copy; we'll splice
+    # Process from last to first to keep indices stable.
+    stats = {
+        "db_runs_total": len(runs),
+        "db_runs_rewritten": 0,
+        "db_runs_skipped_decode": 0,
+        "instructions_emitted": 0,
+        "instructions_kept_as_db": 0,
+        "synthetic_labels_emitted": 0,
+    }
+    for start, end, bytes_ in reversed(runs):
+        decoded = decoded_blocks.get(start)
+        if decoded is None:
+            stats["db_runs_skipped_decode"] += 1
+            continue
+        run_pos = pos_at_line[start]
+        new_block: list[str] = []
+        for inst_off, inst_size, addr_positions, mnemonic in decoded:
+            abs_offset = run_pos + inst_off
+            # Insert a synthetic label here if needed.
+            if abs_offset in synthetic_label_at:
+                new_block.append(f"{synthetic_label_at[abs_offset]}:")
+                stats["synthetic_labels_emitted"] += 1
+            instr_bytes = bytes_[inst_off:inst_off + inst_size]
+            # Resolve address operand if any.
+            addr_label: str | None = None
+            for ao_in_inst, ao_size in addr_positions:
+                addr = (instr_bytes[ao_in_inst] << 8) | instr_bytes[ao_in_inst + 1]
+                addr_label = label_for_addr(addr)
+                break  # first (and only) addr operand
+            formatted = format_instruction(instr_bytes, addr_label)
+            if formatted is None:
+                # Keep this instruction as a single `db` line.
+                raw = ", ".join(f"0x{b:02X}" for b in instr_bytes)
+                new_block.append(f"\tdb {raw}")
+                stats["instructions_kept_as_db"] += 1
+            else:
+                new_block.append(formatted)
+                stats["instructions_emitted"] += 1
+        # Splice
+        out_lines[start:end] = new_block
+        stats["db_runs_rewritten"] += 1
+
+    return out_lines, stats
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("input", type=Path)
     p.add_argument("-o", "--output", type=Path,
-                   help="(future) rewrite mode — replace db blocks with decoded mnemonics")
+                   help="rewrite mode: write rewritten .asm with db blocks decoded")
     p.add_argument("--report", action="store_true",
                    help="report-only mode (default if -o not given)")
     args = p.parse_args()
 
     lines = args.input.read_text().splitlines()
+
+    if args.output and not args.report:
+        out_lines, stats = rewrite_source(lines)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text("\n".join(out_lines) + "\n")
+        print(f"=== rewrite: {args.input.name} → {args.output.name} ===")
+        for k, v in stats.items():
+            print(f"  {k}: {v}")
+        return
+
     label_at_pos = collect_labels(lines)
     print(f"=== {args.input.name}: {len(lines)} lines, {len(label_at_pos)} labels ===")
 

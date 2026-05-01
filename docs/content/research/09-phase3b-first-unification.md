@@ -424,3 +424,102 @@ tooling.
 For now, the 8 blocks are the **practical floor** for
 cartridge↔GBA INTRO unification under current tooling.
 
+## Update (2026-05-01) — `db`-block re-disassembly drops 8 → 4 blocks
+
+Of the 8 remaining `;@if` blocks after bankSwitch canonicalization,
+**4 were `db <bytes>` regions** that the upstream disassembler
+(`awvm-disasm`) had given up on — emitting raw bytes instead of
+recognising them as instructions. Surveying these blocks showed
+they actually decode cleanly as standard AW VM opcodes
+(`killChannel`, `text`, `break`, `jmp`, `video`); the disassembler
+just stopped early after the first `killChannel`.
+
+`tools/redisasm_db.py` walks each `db` region, decodes the bytes
+linearly via the standard opcode table, and rewrites the block as
+proper mnemonics. Where a decoded `jmp` or `call` targets a byte
+offset *inside* another `db` block, a synthetic `LABEL_<HEX>:`
+gets inserted at the target's instruction boundary. The
+inline-label canonicalizer (re-run after the rewrite) then pairs
+those synthetic labels across branches as new synonyms.
+
+Decoder details:
+- Most opcodes use a fixed-size table (1–6 bytes by opcode byte).
+- `cond_jump` (`0x0A`) is variable size: short-imm (6 bytes,
+  default), var-var (6 bytes, bit 0x80), long-imm (7 bytes, bit
+  0x40). Empirically determined from the cart INTRO disasm.
+- Video opcodes: high-bit-set (0x80–0xFF) are always 4 bytes in
+  this stage; bit-6-set (0x40–0x7F) are 5–6 bytes via lookup
+  table (sub-flag bits not fully reverse-engineered yet —
+  unrecognized type-2 opcodes are kept as `db`).
+- Output format matches the disasm convention exactly
+  (`\tmnemonic args\t;@raw=...`), so byte-match is preserved.
+
+Two bug-fixes shook out during integration:
+
+1. **Synthetic label vs existing label conflict** — when a `jmp`
+   target was the START of a `db` block (not the interior), the
+   block already had a `LABEL_<HEX>:` definition there. The
+   rewriter naively emitted a *second* synthetic label at the same
+   offset. Fix: only synthesize a label when the target offset
+   doesn't already have one.
+
+2. **Cascading-conflict fresh-name fallback was hurting** — the
+   inline-label canonicalizer's "no counterpart pair" branch used
+   to fabricate a hybrid name like `LABEL_00E4_LABEL_00EA` when
+   the canonical name was already taken in the target branch. This
+   created a NEW divergence (the hybrid only exists in one branch).
+   Skipping is strictly better — accept the original divergence,
+   which the unifier already handles cleanly. Fix: replace the
+   fresh-name path with a `continue`.
+
+Pipeline now:
+
+```
+per-branch .asm files
+        ↓ canonicalize_labels.py        (EQU synonyms by offset)
+        ↓ canonicalize_bankswitch.py    (bankSwitch N → load id=)
+        ↓ canonicalize_inline_labels.py (inline labels by alignment)
+        ↓ redisasm_db.py                (decode `db` regions)         ← NEW
+        ↓ canonicalize_inline_labels.py (catches synthetic-label
+                                         synonyms from the rewrite)
+fully-canonicalized .asm files          ← committed in src/levels/_canonicalized/
+        ↓ unify_asm.py
+unified .asm.in                          ← committed in src/levels/_unified/
+        ↓ awvm_preprocess.py
+per-branch .asm
+        ↓ awvm-asm
+.bin == original bytecode chunk         ← byte-match verified
+```
+
+**Final results — full pipeline on cartridge ↔ GBA INTRO:**
+
+| Stage | Diff blocks |
+|---|---|
+| Original | 626 |
+| + EQU canonicalization | 560 (-10.5%) |
+| + inline-label canonicalization (initial) | 311 (-50.3%) |
+| + selective strip-`;@raw=` | 39 (-93.8%) |
+| + label-normalized + cascading-aware canonicalization | 11 (-98.2%) |
+| + bankSwitch canonicalization + comment stripping | 8 (-98.7%) |
+| **+ `db`-block re-disassembly** | **4 (-99.4%)** |
+
+The 4 remaining blocks are all *true* semantic differences:
+
+- 2 × `song id=...` calls present in GBA but not cartridge
+  (different soundtrack handling between ports).
+- 1 × `mov [0x01], 0x0012` (cart) vs `mov [0x01], 0x0024` (GBA)
+  — genuinely different immediate value.
+- 1 × trailing-padding `db` block (~6,955 lines of `0xFF`
+  filler that exists in both branches at slightly different
+  lengths to hit the 64-KB chunk boundary).
+
+End-to-end byte-match still verified: preprocessing the unified
+source with `BRANCH=heineman_cartridge` produces md5
+`93959756…` (matches the SNES-EU `level_0` chunk); with
+`BRANCH=foxy_gba_2004` it produces md5 `c978f22c…` (matches the
+GBA `level_0` chunk).
+
+So out of 18,282 unified-file lines, **4 are conditional**. The
+INTRO source genealogy is essentially fully reconciled between
+the cartridge and GBA branches.
+

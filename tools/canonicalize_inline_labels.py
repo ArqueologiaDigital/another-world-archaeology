@@ -235,21 +235,27 @@ def main() -> None:
         # (If it IS being renamed away by another pair, no conflict — the
         # cumulative regex pass resolves it.)
         if new in all_labels and new not in renaming_away:
-            # Real conflict: invent a fresh name from both originals.
-            # We rename in BOTH branches so both branches use the fresh name.
-            # Find both labels of this synonym pair.
+            # The canonical name `new` is taken in this branch by an
+            # unrelated label. We can rescue this case ONLY if there's
+            # a *counterpart* synonym pair that renames that conflicting
+            # label away in the OTHER branch (i.e., another pair has
+            # canonical=`new` from the other side, telling us where the
+            # third party should land).
             other_branch = a_branch if branch == b_branch else b_branch
             other = next((s for b2, _, n, s in proposed
                           if b2 == other_branch and n == new), None)
             if other is None:
-                # No counterpart — single-branch rename with a real conflict.
-                # Generate a fresh name for the destination only.
-                fresh = f"{new}_{old}"
-                if fresh in (a_all | b_all):
-                    fresh = f"LBL_{new[6:]}_{old[6:]}"  # strip 'LABEL_' prefix
-                rename_map[old] = fresh
-                targets_used.add(fresh)
-                fresh_names += 1
+                # No counterpart pair exists — this is likely a *false*
+                # synonym surfaced by difflib's structural alignment
+                # (e.g., a jmp instruction was paired across branches
+                # whose target labels are at DIFFERENT byte offsets,
+                # but happen to look identical after `<L>` normalization).
+                # Skipping is strictly better than fabricating a fresh
+                # hybrid name: a fresh name introduces a NEW divergence
+                # in the unified output (one branch has the hybrid, the
+                # other doesn't), whereas skipping leaves the original
+                # divergence which the unifier can already handle.
+                skipped_dup_target += 1
                 continue
             # Otherwise: rename BOTH branches to a fresh combined name.
             fresh = f"LBL_{min(other, old)[6:]}_{max(other, old)[6:]}"
