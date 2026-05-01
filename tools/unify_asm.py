@@ -534,6 +534,121 @@ def merge_adjacent_blocks(lines: list[str]) -> tuple[list[str], int]:
     return out_lines, total_merges
 
 
+def promote_safe_label_defs(lines: list[str]) -> tuple[list[str], int]:
+    """Drop the `;@if/.../;@endif` wrapper around single-arm blocks
+    whose only content is a `LABEL_xxxx:` definition, when that label
+    is exclusively referenced inside `;@if` blocks that share the
+    same branch set.
+
+    Such a label, when promoted to unconditional, becomes an unused
+    label in the OTHER branches (the ones outside the original
+    `;@if` clause's branch set). Unused labels emit no bytecode so
+    byte-match is preserved. Net win: -1 `;@if` and -1 `;@endif`
+    per promotion.
+
+    Safety conditions:
+    - The block must be a single-arm `;@if BRANCH ... / LABEL_xxx: / ;@endif`
+      (no `;@elif`, no other content).
+    - The LABEL_xxx token must NOT appear anywhere outside the same
+      single-arm `;@if` clause's branch set in the rest of the file.
+      This ensures we're not creating a duplicate definition or a
+      stray reference for a branch that already has the label
+      somewhere else.
+
+    Returns (out_lines, num_promotions).
+    """
+    RE_LABEL_TOKEN = re.compile(r'\bLABEL_[A-Fa-f0-9]+\b')
+    blocks = _parse_top_level_blocks(lines)
+    # Index every LABEL token's positions: list of (line_idx, in_block,
+    # block_branches). For each token occurrence, record what branch set
+    # the wrapping `;@if` (if any) restricts it to. If no wrapper,
+    # `block_branches` is None (unconditional).
+    # Build a map line_idx → (block_idx, branch_set or None).
+    line_block_map: dict[int, tuple[int, frozenset[str] | None]] = {}
+    for k, (s, e, sections) in enumerate(blocks):
+        for sec_idx in range(len(sections)):
+            body_start = sections[sec_idx][1]
+            body_end = (
+                sections[sec_idx + 1][0] if sec_idx + 1 < len(sections)
+                else e
+            )
+            cond = sections[sec_idx][2]
+            # Extract branch names from the directive.
+            branches = frozenset(re.findall(r'"([^"]+)"', cond))
+            if not branches:
+                branches = None  # ;@else; treat as "all-but-listed" — too
+                                 # complex to reason about; skip.
+            for li in range(body_start, body_end):
+                line_block_map[li] = (k, branches)
+
+    label_positions: dict[str, list[tuple[int, frozenset[str] | None]]] = {}
+    for li, line in enumerate(lines):
+        for token in RE_LABEL_TOKEN.findall(line):
+            entry = line_block_map.get(li)
+            label_positions.setdefault(token, []).append(
+                (li, entry[1] if entry else None)
+            )
+
+    # Find candidate single-arm LABEL_def blocks.
+    promote: list[tuple[int, int]] = []  # (block_start, block_end) to drop
+    promoted = 0
+    for s, e, sections in blocks:
+        if len(sections) != 1:
+            continue
+        body_start = sections[0][1]
+        body_lines = [
+            lines[t] for t in range(body_start, e) if lines[t].strip()
+        ]
+        if len(body_lines) != 1:
+            continue
+        m = re.match(r'^([A-Z][A-Z_0-9]*):\s*$', body_lines[0].strip())
+        if not m:
+            continue
+        label = m.group(1)
+        if not label.startswith("LABEL_"):
+            continue
+        # Get the block's branch set.
+        cond = sections[0][2]
+        branches = frozenset(re.findall(r'"([^"]+)"', cond))
+        if not branches:
+            continue
+        # Check every other occurrence of `label` in the file: it must
+        # be inside an `;@if` whose branch set is a SUBSET of `branches`
+        # (so the label is exclusive to those branches everywhere).
+        positions = label_positions.get(label, [])
+        ok = True
+        for li, occ_branches in positions:
+            # Skip the definition itself.
+            if body_start <= li < e:
+                continue
+            if occ_branches is None:
+                # Unconditional reference — present in ALL branches.
+                # Promotion would create a label collision IF some
+                # branch has its own definition for `label`. We don't
+                # track that; conservative skip.
+                ok = False
+                break
+            if not occ_branches.issubset(branches):
+                ok = False
+                break
+        if not ok:
+            continue
+        promote.append((s, e))
+        promoted += 1
+    # Apply promotions from end backwards so indices stay valid.
+    for s, e in reversed(promote):
+        body_start = s + 1
+        # Find the LABEL line inside; emit only that line, drop the
+        # `;@if` and `;@endif` directives.
+        body_lines = [
+            lines[t] for t in range(body_start, e) if lines[t].strip()
+        ]
+        # Also keep ONE blank line after for readability.
+        new_segment = body_lines  # just the label line(s)
+        lines = lines[:s] + new_segment + lines[e + 1:]
+    return lines, promoted
+
+
 def unify_n(sources: list[tuple[str, list[str]]]) -> tuple[list[str], dict]:
     """N-way unification by progressive 2-way merging.
 
@@ -709,6 +824,12 @@ def main() -> None:
         1 for l in out_lines if l.lstrip().startswith(";@if ")
     )
     out_lines, n_merges = merge_adjacent_blocks(out_lines)
+    out_lines, n_label_promotions = promote_safe_label_defs(out_lines)
+    # A second merge pass: promoting safe labels can leave NEW
+    # adjacent same-cond blocks that didn't exist before (the promoted
+    # label-def block was sitting between them).
+    out_lines, n_merges_2 = merge_adjacent_blocks(out_lines)
+    n_merges += n_merges_2
     post_merge_block_count = sum(
         1 for l in out_lines if l.lstrip().startswith(";@if ")
     )
@@ -720,8 +841,9 @@ def main() -> None:
     for br, lines in sources:
         print(f"  {br}: {len(lines)} lines")
     print(f"\nstats: diff_blocks={stats['diff_blocks']}")
-    print(f"  merged adjacent same-cond blocks: {n_merges} "
-          f"(;@if count {pre_merge_block_count} → {post_merge_block_count})")
+    print(f"  merged adjacent same-cond blocks: {n_merges}")
+    print(f"  promoted safe LABEL_def blocks:   {n_label_promotions}")
+    print(f"  ;@if count {pre_merge_block_count} → {post_merge_block_count}")
     print(f"\nwrote {args.output}: {len(out_lines)} lines")
     largest_input = max(len(s[1]) for s in sources)
     overhead = len(out_lines) - largest_input

@@ -56,17 +56,25 @@ import sys
 from pathlib import Path
 
 RE_CINEMATIC = re.compile(r'\bCINEMATIC_[A-Z_0-9]+\b')
+RE_LABEL = re.compile(r'\bLABEL_[A-Fa-f0-9]+\b')
 RE_RAW = re.compile(r';@raw=[0-9A-Fa-fx,]+\s*$')
+
+# The pattern of names this tool canonicalizes is configurable. Default
+# is CINEMATIC_*, but the same mechanism works for LABEL_* (inline
+# code labels at logically-equivalent positions whose port-disasm
+# addresses differ).
+_PATTERNS = {
+    "cinematic": RE_CINEMATIC,
+    "label": RE_LABEL,
+}
+_ACTIVE_PATTERN: re.Pattern = RE_CINEMATIC
 
 
 def normalize_for_diff(line: str) -> str:
-    """Blank every CINEMATIC_xxx token AND the `;@raw=` annotation so
-    difflib aligns lines that differ only in the cinematic reference
-    (the `;@raw=` bytes encode the cinematic offset, so they
-    inherently differ when the offset differs — but they're encoder-
-    derived, not semantic, and we want the alignment to depend on
-    the named operand only)."""
-    line = RE_CINEMATIC.sub("<C>", line)
+    """Blank every match of the active token pattern AND the
+    `;@raw=` annotation so difflib aligns lines that differ only in
+    the named reference."""
+    line = _ACTIVE_PATTERN.sub("<X>", line)
     line = RE_RAW.sub("", line).rstrip()
     return line
 
@@ -135,14 +143,14 @@ def find_synonyms_in_unified(
         # all lines must be identical when CINEMATIC is blanked.
         if len(sections) >= 2 and all(len(s[1]) == 1 for s in sections):
             normalized_set = {normalize_for_diff(s[1][0]) for s in sections}
-            cin_counts = [len(RE_CINEMATIC.findall(s[1][0])) for s in sections]
+            cin_counts = [len(_ACTIVE_PATTERN.findall(s[1][0])) for s in sections]
             if len(normalized_set) == 1 and all(c == 1 for c in cin_counts):
                 # All sections share normalized form — synonym set!
                 entry: dict[str, str] = {}
                 ok = True
                 for header, body in sections:
                     branches = _parse_branch_cond(header)
-                    cin = RE_CINEMATIC.findall(body[0])[0]
+                    cin = _ACTIVE_PATTERN.findall(body[0])[0]
                     if not branches:
                         ok = False
                         break
@@ -181,6 +189,7 @@ def apply_renames(text: str, rename_map: dict[str, str]) -> str:
 
 
 def main() -> None:
+    global _ACTIVE_PATTERN
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--unified-in", required=True, type=Path,
                    help="path to unified .asm.in file (output of unify_asm.py)")
@@ -190,7 +199,17 @@ def main() -> None:
     p.add_argument("--src-out", action="append", default=[],
                    metavar="BRANCH=PATH",
                    help="per-branch output path")
+    p.add_argument("--token", default="cinematic",
+                   choices=sorted(_PATTERNS.keys()),
+                   help="which kind of name to canonicalize: "
+                        "'cinematic' (CINEMATIC_*) or 'label' (LABEL_*).")
+    p.add_argument("--fresh-name-prefix", default=None,
+                   help="when canonical-name conflicts prevent renaming, "
+                        "generate fresh names like <PREFIX>_001, _002, ... "
+                        "(e.g. --fresh-name-prefix=CINEMATIC_LAKE). Without "
+                        "this, conflicted sets are left as ;@if blocks.")
     args = p.parse_args()
+    _ACTIVE_PATTERN = _PATTERNS[args.token]
 
     sources: dict[str, Path] = {}
     for spec in args.src:
@@ -207,46 +226,144 @@ def main() -> None:
 
     unified_lines = args.unified_in.read_text().splitlines()
     syn_sets = find_synonyms_in_unified(unified_lines)
-    print(f"  found {len(syn_sets)} CINEMATIC synonym set(s)")
+    print(f"  found {len(syn_sets)} {args.token.upper()} synonym set(s)")
 
-    # For each synonym set, pick canonical name, build per-branch
-    # rename map.
-    rename_per_branch: dict[str, dict[str, str]] = {br: {} for br in sources}
-    skipped_conflicts = 0
+    # Each synonym set declares: (branch_X, name_X) and (branch_Y, name_Y)
+    # refer to the same logical polygon. Build equivalence classes via
+    # union-find over `(branch, name)` keys, then assign one canonical
+    # name per class. This handles the case where amiga's `CINEMATIC_015`
+    # appears in MULTIPLE synonym sets (each pointing to a different
+    # cart/gba name) — all those names land in one equivalence class,
+    # not three competing rename targets that fight each other.
+    parent: dict[tuple[str, str], tuple[str, str]] = {}
+
+    def find(k: tuple[str, str]) -> tuple[str, str]:
+        while parent[k] != k:
+            parent[k] = parent[parent[k]]
+            k = parent[k]
+        return k
+
+    def union(a: tuple[str, str], b: tuple[str, str]) -> None:
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[rb] = ra
+
     for entry in syn_sets:
-        names = list(set(entry.values()))
-        if len(names) <= 1:
-            continue
-        canonical = names[0]
-        for n in names[1:]:
+        keys = [(br, name) for br, name in entry.items()]
+        for k in keys:
+            parent.setdefault(k, k)
+        for k in keys[1:]:
+            union(keys[0], k)
+
+    # Group `(branch, name)` keys by their root.
+    classes: dict[tuple[str, str], list[tuple[str, str]]] = {}
+    for k in parent:
+        classes.setdefault(find(k), []).append(k)
+
+    # Drop trivial classes (only one (branch, name) key — no
+    # rename needed).
+    classes = {root: members for root, members in classes.items()
+               if len({k[1] for k in members}) > 1}
+    print(f"  equivalence classes: {len(classes)}")
+
+    # Collect each branch's existing CINEMATIC names (so we can
+    # detect canonical-name conflicts).
+    branch_existing: dict[str, set[str]] = {}
+    for br, path in sources.items():
+        branch_existing[br] = set(_ACTIVE_PATTERN.findall(path.read_text()))
+
+    # For each class, pick a canonical name. If the canonical
+    # collides with an existing OUT-OF-CLASS name in any branch
+    # involved, fall back to a fresh name (when --fresh-name-prefix
+    # is given) or skip.
+    rename_per_branch: dict[str, dict[str, str]] = {br: {} for br in sources}
+    skipped_classes = 0
+    canonical_assigned = 0
+    fresh_assigned = 0
+    fresh_idx = 1
+    # Track which (branch, name) have been "used" by previous classes.
+    # A class can collide with a previous one if it tries to use a name
+    # that another class already claimed in the same branch.
+    branch_in_use: dict[str, set[str]] = {br: set() for br in sources}
+
+    for root, members in classes.items():
+        names_in_class = list({k[1] for k in members})
+        # Pick the most descriptive name in the class.
+        canonical = names_in_class[0]
+        for n in names_in_class[1:]:
             canonical = pick_canonical(canonical, n)
-        for br, name in entry.items():
-            if name == canonical:
+
+        # Conflict check: for each branch in this class, would
+        # renaming its names to `canonical` collide with a name
+        # OUTSIDE this class (i.e., a name that exists in this branch
+        # but isn't part of the equivalence)?
+        branches_in_class = {k[0] for k in members}
+        names_in_class_set = set(names_in_class)
+
+        def conflicts_with(target: str) -> bool:
+            for br in branches_in_class:
+                if br not in branch_existing:
+                    continue
+                # Names in this branch that are part of this class.
+                in_class_for_br = {
+                    k[1] for k in members if k[0] == br
+                }
+                # If `target` exists in branch but isn't part of this
+                # class, it's a conflict.
+                if (target in branch_existing[br]
+                        and target not in in_class_for_br):
+                    return True
+                # Also check: has another class already claimed `target`
+                # in this branch (potentially mapping it to another
+                # canonical)?
+                if target in branch_in_use[br] and target != canonical:
+                    return True
+            return False
+
+        chosen = canonical
+        if conflicts_with(canonical):
+            if args.fresh_name_prefix:
+                while True:
+                    candidate = f"{args.fresh_name_prefix}_{fresh_idx:03d}"
+                    fresh_idx += 1
+                    # Fresh name must not collide with anything in any
+                    # involved branch's existing names OR previously
+                    # assigned canonicals.
+                    bad = False
+                    for br in branches_in_class:
+                        if (candidate in branch_existing[br]
+                                or candidate in branch_in_use[br]):
+                            bad = True
+                            break
+                    if not bad:
+                        break
+                chosen = candidate
+                fresh_assigned += 1
+            else:
+                skipped_classes += 1
                 continue
+        else:
+            canonical_assigned += 1
+
+        # Apply class rename: every (branch, name) in the class →
+        # `chosen`. Skip identity renames.
+        for br, name in members:
             if br not in rename_per_branch:
                 continue
-            existing = rename_per_branch[br].get(name)
-            if existing is not None and existing != canonical:
-                skipped_conflicts += 1
-                continue
-            rename_per_branch[br][name] = canonical
-    if skipped_conflicts:
-        print(f"  skipped {skipped_conflicts} rename(s) due to conflicting "
-              f"canonical targets within a branch")
+            if name != chosen:
+                rename_per_branch[br][name] = chosen
+            branch_in_use[br].add(chosen)
 
-    # Apply renames per branch. Conflict guard: skip a rename if the
-    # canonical name is ALREADY USED in this branch's source for a
-    # different existing entity (we'd create a name collision).
+    print(f"  canonical-name renames: {canonical_assigned}")
+    print(f"  fresh-name renames: {fresh_assigned}")
+    if skipped_classes:
+        print(f"  skipped {skipped_classes} class(es) due to conflicts "
+              f"(--fresh-name-prefix would unstick these)")
+
+    # Apply renames per branch.
     for br, src_path in sources.items():
         text = src_path.read_text()
         rmap = rename_per_branch[br]
-        existing = set(RE_CINEMATIC.findall(text))
-        # Drop renames whose target already exists in this branch
-        # (and isn't the source name itself).
-        rmap = {
-            k: v for k, v in rmap.items()
-            if v == k or v not in existing
-        }
         out_text = apply_renames(text, rmap)
         if not out_text.endswith("\n"):
             out_text += "\n"
