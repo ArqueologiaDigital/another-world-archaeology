@@ -125,16 +125,69 @@ original ADF/ROM/zip with an external tool of your choice.
 
 Now that bytecode + raw assets are byte-matched per-port, the
 remaining research goal is to merge the per-port `.asm` files
-into a unified source tree with conditional compilation flags
-(see [docs/glossary.md](https://github.com/felipesanches/another-world-source-reconstruction/blob/main/docs/glossary.md)).
-Initially this'll touch only bytecode (raw assets stay
-passthrough), with 4 distinct branches to merge:
-1. Chahi 1991 (Amiga + Atari ST)
-2. Heineman DOS 1992
-3. Heineman cartridge 1992-93 (SNES-EU + Genesis-EU)
-4. Foxy GBA 2004
+into a unified source tree with conditional compilation flags.
 
-Tracked as issue #0061.
+Initial bytecode-equivalence map (md5 of `;@raw=` byte stream
+per port × stage):
+
+| Stage | Chahi 1991 | Heineman DOS | Heineman cartridge | Foxy GBA |
+|---|---|---|---|---|
+| CODE_WHEEL | `7b3b8d33…` | `5067870d…` | `d1490888…` (snes_eu only) | `94538fe7…` |
+| INTRO       | `61f84573…` | `916bbdb9…` | (not present)             | (not present) |
+| **LAKE**    | `e3bcc765…` | `8cf974ae…` | **`4a03b136…`** (snes + genesis BOTH) | `1649d466…` |
+| PRISON      | `3e2583d1…` | `cc7922a4…` | `231d7999…` | (not present) |
+| CAVES       | `73cbf0c2…` | `e6bd3630…` | `fae3b3ba…` | (not present) |
+| TANK        | `dcfb2ff0…` | `4a16938f…` | `1cbb16da…` | (not present) |
+| CAPSULE     | `9a9e8ae9…` | `41387ef9…` | `3c7d7e52…` | (not present) |
+| ENDING      | `8d03b818…` | `520ae52f…` | `056606c6…` | (not present) |
+| PASSCODE    | `db6ef401…` | `163e61de…` | `77071e34…` | (not present) |
+
+**Only one byte-equality across the four branches**: SNES-EU LAKE
++ Genesis-EU LAKE share md5 `4a03b136…`. All other (branch, stage)
+combinations have distinct bytecode.
+
+### Phase 3a — Branch-organized canonical sources (✅ achieved 2026-05-01)
+
+The source-reconstruction project's
+[`src/levels/<branch>/<stage>.asm`](https://github.com/felipesanches/another-world-source-reconstruction/tree/main/src/levels)
+tree organizes the .asm files **by genealogical branch and stage
+name**, not by port slot.
+
+`make verify-stages` reports
+**29/29 (port, stage) byte-matches across 28 canonical .asm
+files**:
+
+| Branch | Source files | Targets |
+|---|---|---|
+| `chahi_1991` | 9 stages | amiga (atari_st when extractor lands) |
+| `heineman_dos` | 9 stages | msdos |
+| `heineman_cartridge` | **8 stages** | snes_eu + genesis_europe (LAKE shared) |
+| `foxy_gba_2004` | 2 stages | gba_usa |
+| **Total** | **28 .asm** | **29 targets** |
+
+The single inter-port unification surfaces concretely:
+`heineman_cartridge/LAKE.asm` produces byte-identical output for
+both SNES-EU level_1 and Genesis-EU level_0 — confirming
+[research/05](#/research/05-beetle-in-the-lake-stage)'s
+SNES↔Genesis byte-identity finding all the way through to a
+shared source file in the build pipeline.
+
+### ~~Phase 3b — Cross-branch conditional-compilation~~ (deferred)
+
+The original Phase 3 plan was to merge *divergent* branches via
+`#ifdef BYTECODE_BRANCH` in unified .asm files. After diffing the
+per-port .asm files we find:
+
+- Different number of labels (Amiga: 208 in level 0; DOS: 254)
+- Different instruction counts and sequences
+- Different polygon-resource layouts → different EQU offsets
+
+A unified .asm would be 60-80% `#ifdef`'d code blocks — *harder*
+to read than the branch-organized tree. **Phase 3b is deferred**
+unless a concrete research need surfaces. Per-branch sources are
+the honest representation of the genealogy.
+
+Tracked as issue #0061 (closed as done with this scope).
 
 ## What's not covered yet
 
