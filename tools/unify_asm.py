@@ -121,19 +121,42 @@ def unify(a_lines: list[str], b_lines: list[str],
             stats["b_only_lines"] += j2 - j1
             a_block = emit_a[i1:i2]
             b_block = emit_b[j1:j2]
+            # Drop diffs that are blank/comment-only on BOTH sides:
+            # cosmetic-only divergence (e.g., one branch has an extra
+            # blank line that the other doesn't). Blank lines don't
+            # assemble to bytes, so we can keep ANY whitespace from
+            # either side without affecting byte-match.
+            def is_blank_only(block: list[str]) -> bool:
+                return all(not l.strip() for l in block)
+            a_blank = is_blank_only(a_block)
+            b_blank = is_blank_only(b_block)
+            if a_blank and b_blank:
+                # Both blank-only — emit whichever is longer (or
+                # neither, doesn't matter byte-wise; pick the longer
+                # to preserve readability).
+                out.extend(a_block if len(a_block) >= len(b_block) else b_block)
+                continue
             # Collapse one-sided diffs: if one branch contributes no
             # lines (insert/delete from difflib's perspective), emit
             # a single `;@if BRANCH == "<other>"` block instead of an
             # `;@if`/`;@elif` pair with one side empty. The empty side
             # would just be deadweight noise in the unified source.
             if not a_block and b_block:
-                out.append(f';@if BRANCH == "{branch_b}"')
-                out.extend(b_block)
-                out.append(";@endif")
+                # If the only-on-b content is blank-only, just emit
+                # the blank lines as shared (no `;@if` needed).
+                if b_blank:
+                    out.extend(b_block)
+                else:
+                    out.append(f';@if BRANCH == "{branch_b}"')
+                    out.extend(b_block)
+                    out.append(";@endif")
             elif a_block and not b_block:
-                out.append(f';@if BRANCH == "{branch_a}"')
-                out.extend(a_block)
-                out.append(";@endif")
+                if a_blank:
+                    out.extend(a_block)
+                else:
+                    out.append(f';@if BRANCH == "{branch_a}"')
+                    out.extend(a_block)
+                    out.append(";@endif")
             else:
                 out.append(f';@if BRANCH == "{branch_a}"')
                 out.extend(a_block)
