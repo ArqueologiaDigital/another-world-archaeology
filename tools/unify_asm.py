@@ -46,6 +46,7 @@ KNOWN_MNEMONICS = frozenset({
 })
 
 RE_LABEL_DEF = re.compile(r'^[A-Z][A-Z_0-9]*:\s*$')
+RE_EQU_LINE = re.compile(r'^[A-Z][A-Z_0-9]*\s+EQU\s+0x[0-9A-Fa-f]+\s*$')
 
 
 def is_real_code_line(line: str) -> bool:
@@ -54,8 +55,9 @@ def is_real_code_line(line: str) -> bool:
     line emitted by the disasm for a multi-line `text` comment)?
 
     Returns True if the line starts with a recognised mnemonic /
-    directive, OR is a label definition. Returns False otherwise
-    (blank, `;` comment, string continuation, etc.).
+    directive, OR is a label definition, OR is an EQU constant
+    definition. Returns False otherwise (blank, `;` comment, string
+    continuation, etc.).
     """
     s = line.strip()
     if not s:
@@ -63,6 +65,14 @@ def is_real_code_line(line: str) -> bool:
     if s.startswith(";"):  # comment
         return False
     if RE_LABEL_DEF.match(line):
+        return True
+    # `NAME EQU 0x...` lines define assembler constants. They start
+    # with the constant name (NOT a mnemonic) so the leading-token
+    # check below misclassifies them as decorative; recognise them
+    # explicitly here. Without this, blocks containing only divergent
+    # EQU lines get classified as `is_cosmetic_continuation` and
+    # silently dropped instead of being wrapped in `;@if`/`;@elif`.
+    if RE_EQU_LINE.match(s):
         return True
     m = RE_LINE_MNEMONIC.match(line)
     if not m:
@@ -328,6 +338,63 @@ def unify(a_lines: list[str], b_lines: list[str],
     return out, stats
 
 
+def _collapse_directive_blocks(
+    lines: list[str],
+) -> tuple[list[str], list[list[str]]]:
+    """Collapse each `;@if/.../;@endif` block into a single
+    `__AB_BLOCK_<n>__` placeholder line.
+
+    Returns (collapsed_lines, blocks) where `blocks[n]` is the
+    original list of lines for placeholder n (including the
+    surrounding `;@if` and `;@endif`).
+
+    Used to make difflib's pairwise diff treat each preprocessor
+    block as an atomic token — necessary when folding a previously-
+    unified A+B output into an A+B+C merge. Without this, difflib
+    can split an `;@if/.../;@endif` block across `equal` and
+    `replace` opcodes, producing malformed nested output.
+
+    Nested `;@if`s are tracked: a placeholder spans from the
+    OUTER `;@if` to its matching outer `;@endif`.
+    """
+    out: list[str] = []
+    blocks: list[list[str]] = []
+    i = 0
+    n = len(lines)
+    while i < n:
+        line = lines[i]
+        stripped = line.lstrip()
+        if stripped.startswith(";@if "):
+            # Find matching `;@endif` (track nesting depth).
+            depth = 1
+            j = i + 1
+            while j < n:
+                s = lines[j].lstrip()
+                if s.startswith(";@if "):
+                    depth += 1
+                elif s.startswith(";@endif"):
+                    depth -= 1
+                    if depth == 0:
+                        break
+                j += 1
+            if j >= n:
+                # Unterminated block — emit as-is, let preprocessor
+                # complain. (Should never happen for well-formed
+                # input from `unify()`.)
+                out.append(line)
+                i += 1
+                continue
+            block_lines = lines[i:j + 1]
+            placeholder = f"__AB_BLOCK_{len(blocks)}__"
+            blocks.append(block_lines)
+            out.append(placeholder)
+            i = j + 1
+            continue
+        out.append(line)
+        i += 1
+    return out, blocks
+
+
 def unify_n(sources: list[tuple[str, list[str]]]) -> tuple[list[str], dict]:
     """N-way unification by progressive 2-way merging.
 
@@ -431,16 +498,66 @@ def main() -> None:
             sources[0][0], sources[1][0],
             strip_raw_comments=args.strip_raw_comments,
         )
+    elif len(sources) == 3:
+        # 3-way unification via progressive folding (A+B → AB, then
+        # AB+C → ABC). Naive folding has a fatal nesting bug: the
+        # AB step emits `;@if/.../;@endif` blocks for cart↔gba
+        # divergence, then difflib in step 2 treats those directives
+        # as ordinary lines and freely splits an `;@if/.../;@endif`
+        # block across "equal" and "replace" opcodes. The result is
+        # unbalanced nesting (e.g., outer `;@if` opened in one diff
+        # block, closed in a later one).
+        #
+        # Fix: collapse each `;@if/.../;@endif` block in AB into a
+        # single placeholder line BEFORE the second diff. Difflib
+        # then sees one atomic token per AB-divergent region. After
+        # difflib produces opcodes, expand the placeholders back to
+        # the original block contents in the output. This guarantees
+        # that an AB block is either kept whole (in an `equal`
+        # opcode) or wrapped whole (in a `replace` opcode) — never
+        # split across opcodes.
+        a, b, c = sources
+        ab_lines, ab_stats = unify(
+            a[1], b[1], a[0], b[0],
+            strip_raw_comments=args.strip_raw_comments,
+        )
+        ab_collapsed, ab_blocks = _collapse_directive_blocks(ab_lines)
+        c_lines = c[1]
+        if args.strip_raw_comments:
+            c_lines = [normalize_for_diff(l, strip_raw=True) for l in c_lines]
+        ab_sentinel = "<ab>"
+        merged, c_stats = unify(
+            ab_collapsed, c_lines, ab_sentinel, c[0],
+            strip_raw_comments=False,  # already normalised
+        )
+        in_clause = f'BRANCH in ("{a[0]}", "{b[0]}")'
+        rewritten: list[str] = []
+        for line in merged:
+            # Expand any AB block placeholders back to their original
+            # multi-line contents.
+            if line.startswith("__AB_BLOCK_") and line.endswith("__"):
+                idx = int(line[len("__AB_BLOCK_"):-len("__")])
+                rewritten.extend(ab_blocks[idx])
+                continue
+            # Rewrite the `<ab>` sentinel emitted by the second merge.
+            line = line.replace(
+                f';@if BRANCH == "{ab_sentinel}"',
+                f';@if {in_clause}',
+            )
+            line = line.replace(
+                f';@elif BRANCH == "{ab_sentinel}"',
+                f';@elif {in_clause}',
+            )
+            rewritten.append(line)
+        out_lines = rewritten
+        stats = {
+            "diff_blocks": ab_stats["diff_blocks"] + c_stats["diff_blocks"],
+            "ab_diff_blocks": ab_stats["diff_blocks"],
+            "abc_diff_blocks": c_stats["diff_blocks"],
+        }
     else:
-        # 3-way+ unification by progressive folding has subtle issues:
-        # the directives emitted by the first merge become "lines" that
-        # the second merge tries to align, producing wrong wrapping.
-        # A correct N-way unifier needs a synchronised matcher across
-        # all N inputs simultaneously (or post-processing of the
-        # progressive output to clean up directive nesting). Deferred
-        # for future work.
-        sys.exit(f"only 2-way unification supported (got {len(sources)} "
-                 "sources). N-way needs a synchronised matcher.")
+        sys.exit(f"only 2- or 3-way unification supported (got {len(sources)} "
+                 "sources). N>3 needs a synchronised matcher.")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text("\n".join(out_lines) + "\n")

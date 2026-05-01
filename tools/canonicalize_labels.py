@@ -80,27 +80,42 @@ def build_rename_map(equs_per_branch: dict[str, dict[str, int]]) -> dict[str, di
     2. For each offset, pick the most-descriptive name.
     3. For each branch's EQU table: if this branch uses a non-canonical
        name for that offset, rename to canonical.
+
+    Conflict guard: if applying a rename would create a DUPLICATE
+    name in the target branch (i.e., the canonical name is already
+    used by another EQU at a DIFFERENT offset in that branch), skip
+    the rename. This happens when cross-port semantic-label mappings
+    don't agree — e.g., amiga's `SNEAKY_TENTACLE_2` is at offset
+    0xC5FA but cart's `SNEAKY_TENTACLE_2` is at 0xB1EA, while cart
+    ALSO has a different (numeric-named) EQU at 0xC5FA. Renaming
+    cart's `CINEMATIC_248` (at 0xC5FA) → `SNEAKY_TENTACLE_2` would
+    duplicate cart's existing `SNEAKY_TENTACLE_2` (at 0xB1EA),
+    breaking the assembler.
     """
-    # All names per offset, across all branches.
     offset_to_names: dict[int, set[str]] = {}
     for branch, equs in equs_per_branch.items():
         for name, off in equs.items():
             offset_to_names.setdefault(off, set()).add(name)
 
-    # Canonical name per offset.
     offset_to_canonical: dict[int, str] = {
         off: pick_canonical(list(names))
         for off, names in offset_to_names.items()
     }
 
-    # Per-branch rename map.
     rename: dict[str, dict[str, str]] = {}
     for branch, equs in equs_per_branch.items():
         m = {}
+        # name → offset, for conflict detection.
+        existing_name_to_off = dict(equs)
         for name, off in equs.items():
             canonical = offset_to_canonical[off]
-            if name != canonical:
-                m[name] = canonical
+            if name == canonical:
+                continue
+            # Skip if the canonical name is already used in this
+            # branch for a DIFFERENT offset.
+            if canonical in existing_name_to_off and existing_name_to_off[canonical] != off:
+                continue
+            m[name] = canonical
         rename[branch] = m
     return rename
 
@@ -159,19 +174,40 @@ def main() -> None:
     # Build the union of EQU tables (post-rename). After renames, each
     # branch uses canonical names; collect every (canonical_name, offset)
     # pair seen in any branch.
+    #
+    # If the same canonical name maps to DIFFERENT offsets in different
+    # branches — e.g., `CINEMATIC_317` defined in two ports' disasms but
+    # referring to unrelated polygons (the disasm assigns the
+    # `CINEMATIC_NNN` index by encounter order, which differs per port
+    # for ports whose bytecode walks differ) — we can't union that name
+    # across branches. We still let each branch KEEP its own local
+    # definition; only the non-conflicting names propagate via the
+    # union.
     union_equs: dict[str, int] = {}
+    conflict_names: set[str] = set()
     for br, equs in equs_per_branch.items():
         rmap = rename[br]
         for name, off in equs.items():
             canon = rmap.get(name, name)
-            # Sanity: if the same canonical name maps to different
-            # offsets in different branches, something's wrong.
             if canon in union_equs and union_equs[canon] != off:
-                sys.exit(
-                    f"EQU union conflict: {canon} = "
-                    f"0x{union_equs[canon]:04X} vs 0x{off:04X}"
-                )
+                conflict_names.add(canon)
+                continue
             union_equs[canon] = off
+    # Drop conflicting names from the union (each branch keeps its
+    # own definition for those).
+    for name in conflict_names:
+        union_equs.pop(name, None)
+    if conflict_names:
+        print(f"  skipped {len(conflict_names)} EQU name(s) due to "
+              f"per-branch offset disagreement (each branch keeps its own "
+              f"definition):")
+        for name in sorted(conflict_names)[:10]:
+            offsets = [(br, equs.get(name)) for br, equs in equs_per_branch.items()
+                       if equs.get(name) is not None]
+            offsets_str = ', '.join(f"{br}=0x{off:04X}" for br, off in offsets)
+            print(f"    {name}: {offsets_str}")
+        if len(conflict_names) > 10:
+            print(f"    ... +{len(conflict_names) - 10} more")
 
     # Apply renames + augment EQU tables with the union (per-branch
     # additions). Augmentation matters because some `CINEMATIC_xxx`
@@ -197,50 +233,68 @@ def main() -> None:
         # Sort the EQU section deterministically across branches so
         # that augmented and original EQUs interleave in the SAME
         # order in every branch. Without this, augmenting at the end
-        # of gba's EQU section puts CINEMATIC_660-669 in a different
-        # logical position than cart (where they appear MID-section
-        # because they were registered earlier in cart's disassembly
-        # walk). The position mismatch causes difflib to emit TWO
-        # `;@if` blocks for the same set of EQUs.
+        # of one branch's EQU section puts the new entries in a
+        # different logical position than the other branch's, and
+        # the unifier emits TWO `;@if` blocks for the same set of
+        # EQUs.
         #
-        # Strategy: collect every EQU line (whether original or
-        # augmented), sort by NAME, and re-emit them as a contiguous
-        # block at the position of the FIRST EQU in the original
-        # file. The non-EQU lines between EQUs (e.g., blank-line
-        # separators inserted by the disasm) are preserved by being
-        # left in place; only the EQU lines themselves get
-        # repositioned + sorted.
+        # Strategy: collect every EQU line, split into a "shared"
+        # set (names without per-branch offset disagreements) and a
+        # "conflicting" set (same name maps to different offsets in
+        # different branches — these must remain per-branch and end
+        # up in `;@if` blocks). Sort the SHARED set alphabetically
+        # and re-emit them in a contiguous block. Append conflicting
+        # EQUs AFTER the shared block, in their original relative
+        # order — the unifier then wraps each conflict-EQU pair in
+        # `;@if`/`;@elif` automatically because the surrounding
+        # context (the shared block) is identical across branches.
         lines = out_text.splitlines()
-        all_equs: list[tuple[str, int]] = []
-        equ_indices: list[int] = []
+        existing_equs: list[tuple[str, int]] = []
+        equ_indices_set: set[int] = set()
         for i, line in enumerate(lines):
             m = RE_EQU.match(line)
             if m:
-                all_equs.append((m.group(1), int(m.group(2), 16)))
-                equ_indices.append(i)
+                existing_equs.append((m.group(1), int(m.group(2), 16)))
+                equ_indices_set.add(i)
+
+        # Non-EQU lines, in original order.
+        non_equ_lines = [l for i, l in enumerate(lines) if i not in equ_indices_set]
+
+        # Partition into shared (non-conflicting, sortable) and
+        # conflicting (must stay per-branch).
+        shared_equs = []
+        conflicting_equs = []
+        for name, off in existing_equs:
+            if name in conflict_names:
+                conflicting_equs.append((name, off))
+            else:
+                shared_equs.append((name, off))
+        # Augmented EQUs from the union are by construction non-
+        # conflicting (we filtered conflicts earlier).
         for name, off in missing:
-            all_equs.append((name, off))
-        if equ_indices:
-            # Drop existing EQU lines + augmentation insertion point
-            # (we'll re-emit a sorted block).
-            non_equ_lines = [
-                l for i, l in enumerate(lines) if i not in set(equ_indices)
+            shared_equs.append((name, off))
+
+        if existing_equs:
+            shared_equs.sort(key=lambda kv: (kv[0], kv[1]))
+            sorted_lines = [
+                f"{name}\t\tEQU 0x{off:04X}" for name, off in shared_equs
             ]
-            # Sort by name (alpha), tie-break by offset.
-            all_equs.sort(key=lambda kv: (kv[0], kv[1]))
-            sorted_equ_lines = [
-                f"{name}\t\tEQU 0x{off:04X}"
-                for name, off in all_equs
+            # Conflicting EQUs in original-encounter order. These
+            # match between branches by NAME but differ by VALUE.
+            conflict_lines = [
+                f"{name}\t\tEQU 0x{off:04X}" for name, off in conflicting_equs
             ]
-            # Splice back in: insert sorted block at original
-            # first-EQU position (relative to non_equ_lines).
-            first_equ_pos = equ_indices[0]
-            # Position in non_equ_lines: equal to the number of non-EQU
-            # lines that came before the first EQU (in the original).
-            insert_at = sum(1 for i in range(first_equ_pos) if i not in set(equ_indices))
+            # Splice: insert sorted block + conflict block at the
+            # position of the first EQU in the original file.
+            first_equ_idx = next(iter(equ_indices_set))
+            for i in equ_indices_set:
+                if i < first_equ_idx:
+                    first_equ_idx = i
+            insert_at = sum(1 for i in range(first_equ_idx) if i not in equ_indices_set)
             lines = (
                 non_equ_lines[:insert_at]
-                + sorted_equ_lines
+                + sorted_lines
+                + conflict_lines
                 + non_equ_lines[insert_at:]
             )
             out_text = "\n".join(lines)
