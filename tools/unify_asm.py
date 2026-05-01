@@ -29,6 +29,12 @@ from pathlib import Path
 RE_RAW_COMMENT = re.compile(r'\s*;@raw=[0-9A-Fa-fx,]+\s*$')
 RE_INLINE_COMMENT = re.compile(r';(?!@raw=)[^\t\n]*')
 RE_LINE_MNEMONIC = re.compile(r'^\s*([a-zA-Z][a-zA-Z]*)\b')
+# A "pure-comment" line is whitespace + `;` followed by anything (and
+# crucially NOT `;@<directive>` like ;@if/;@elif/;@else/;@endif which
+# the preprocessor handles separately, NOR `;@raw=...` annotations).
+# These lines are author-written prose explaining the surrounding code
+# and must survive the diff/strip pass intact.
+RE_PURE_COMMENT_LINE = re.compile(r'^\s*;(?!@)')
 
 # Mnemonics whose lines mis-encode without a `;@raw=` annotation.
 # Discovered empirically (per-mnemonic survey): see #0066.
@@ -56,6 +62,14 @@ def normalize_for_diff(line: str, strip_raw: bool = True) -> str:
     when these comments are absent (verified empirically per #0066).
     """
     if not strip_raw:
+        return line
+    # Pure-comment lines (whitespace + `;` + prose) are author-written
+    # documentation and must pass through unchanged. They participate
+    # in the diff like any other line — when both branches have the
+    # same comment at the same position, it appears in the unified
+    # output. This is how cross-branch annotations get committed to
+    # the unified source.
+    if RE_PURE_COMMENT_LINE.match(line):
         return line
     # First strip inline ;<comment> (not ;@raw=). The negative-
     # lookahead in RE_INLINE_COMMENT ensures we don't strip ;@raw=.
@@ -105,11 +119,27 @@ def unify(a_lines: list[str], b_lines: list[str],
             stats["diff_blocks"] += 1
             stats["a_only_lines"] += i2 - i1
             stats["b_only_lines"] += j2 - j1
-            out.append(f';@if BRANCH == "{branch_a}"')
-            out.extend(emit_a[i1:i2])
-            out.append(f';@elif BRANCH == "{branch_b}"')
-            out.extend(emit_b[j1:j2])
-            out.append(";@endif")
+            a_block = emit_a[i1:i2]
+            b_block = emit_b[j1:j2]
+            # Collapse one-sided diffs: if one branch contributes no
+            # lines (insert/delete from difflib's perspective), emit
+            # a single `;@if BRANCH == "<other>"` block instead of an
+            # `;@if`/`;@elif` pair with one side empty. The empty side
+            # would just be deadweight noise in the unified source.
+            if not a_block and b_block:
+                out.append(f';@if BRANCH == "{branch_b}"')
+                out.extend(b_block)
+                out.append(";@endif")
+            elif a_block and not b_block:
+                out.append(f';@if BRANCH == "{branch_a}"')
+                out.extend(a_block)
+                out.append(";@endif")
+            else:
+                out.append(f';@if BRANCH == "{branch_a}"')
+                out.extend(a_block)
+                out.append(f';@elif BRANCH == "{branch_b}"')
+                out.extend(b_block)
+                out.append(";@endif")
     return out, stats
 
 
