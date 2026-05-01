@@ -262,3 +262,77 @@ The 39 remaining blocks are real semantic divergences:
   legitimately differ between branches (we keep `;@raw=` for
   these, so they show up as diffs)
 
+
+## Update (later 2026-05-01) — label-normalized synonym detection
+
+The previous canonicalizer left some pairs unmerged because difflib
+was misaligning them. Concretely:
+
+```
+;@if BRANCH == "heineman_cartridge"
+LABEL_04CF:
+;@elif BRANCH == "foxy_gba_2004"
+LABEL_04D5:
+;@endif
+    break
+;@if BRANCH == "heineman_cartridge"
+    djnz [0x05], LABEL_04CF
+;@elif BRANCH == "foxy_gba_2004"
+    djnz [0x05], LABEL_04D5
+;@endif
+```
+
+The two branches use different label names for the same routine
+(LABEL_04CF in cartridge, LABEL_04D5 in GBA), but the canonicalizer
+hadn't merged them.
+
+**Root cause**: difflib's alignment matched lines like `LABEL_1219:`
+in cart against lines like `LABEL_1219:` in GBA — but at *different
+logical positions* (the labels happen to have the same name in both
+ports, despite labelling different bytecode regions). This forced
+the structurally-different surrounding code into `delete`/`insert`
+diff blocks that the synonym-pair detector couldn't process.
+
+**Fix**: normalize all `LABEL_<HEX>` tokens to a placeholder `<L>`
+during the diff-alignment pass. Now the two label-bearing lines
+look identical to difflib (`<L>:` vs `<L>:`), so it aligns by
+structural context. After alignment, we recover the original label
+names at corresponding positions and pair them.
+
+Plus: cascading-aware conflict resolution. When canonical name X
+already exists in the target branch, but X is itself being renamed
+away by another pair, the rename is allowed (regex alternation in
+`apply_rename` substitutes all tokens in one pass; each occurrence
+is matched against the ORIGINAL token, not a freshly-renamed one).
+
+After this fix:
+
+| Stage | Diff blocks |
+|---|---|
+| Original | 626 |
+| + EQU canonicalization | 560 (-10.5%) |
+| + inline-label canonicalization (initial) | 311 (-50.3%) |
+| + selective strip-`;@raw=` | 39 (-93.8%) |
+| **+ label-normalized + cascading-aware canonicalization** | **11 (-98.2% from original)** |
+
+**11 remaining ;@if blocks** are all real semantic divergences:
+- 1 cosmetic-only `bankSwitch 1; Prison` vs `bankSwitch 1; Arrival
+  at the Lake & Beast Chase` — different inline comments around
+  the same `;@raw=` bytes.
+- 1 `load id=0x3E82` vs `bankSwitch 2; Prison ;@raw=0x19,0x3E,0x82`
+  — same bytes encoded with different mnemonic syntax. Hard to
+  canonicalize without recognising the equivalence.
+- 4 `db` (raw-byte) lines that differ in specific addresses inside
+  data tables.
+- 1 `mov [0x01], 0x0012` vs `mov [0x01], 0x0024` — genuinely
+  different immediate values.
+- 2 large blocks (53 + 328 lines) of code present in cartridge
+  but not GBA, and vice versa.
+- 1 huge trailing padding block (~6,955 lines of unused 64-KB-chunk
+  tail bytes — could be excluded from unification entirely).
+
+The unified file is now **~38.3% larger than a single per-port
+source** (down from 46.5%) and contains overwhelmingly shared
+content — the `;@if` directives appear only at genuine cross-port
+divergences.
+
