@@ -58,6 +58,15 @@ finding is comparative) records which releases it applies to.
   of a port deliberately editing bytecode to gate off content
   rather than just preserving it.
 
+- [09 — Phase 3b first cross-branch unification (cartridge ↔ GBA INTRO)](#/research/09-phase3b-first-unification):
+  ONE unified source file (`src/levels/_unified/INTRO.asm.in` with
+  626 `;@if`/`;@elif` blocks) produces byte-identical bytecode for
+  BOTH heineman_cartridge (SNES-EU level_0) and foxy_gba_2004
+  (GBA level_0) targets. End-to-end verified: preprocessor →
+  awvm-asm → byte-match. Overhead is +46.5% vs single source. The
+  Phase 3b conditional-compilation pipeline is now demonstrated
+  on a real cross-branch pair, not just a stub.
+
 - [08 — Cross-branch bytecode structural similarity](#/research/08-cross-branch-structural-similarity):
   byte-level diff said the four bytecode branches share no
   byte-identical stages outside SNES↔Genesis. Structural diff
