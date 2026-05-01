@@ -88,3 +88,71 @@ are present in the source. Workaround: keep `;@raw=` annotations.
   AWVM_Tools fix should target these three mnemonics' encoding
   paths. The `;@raw=` override behaviour is helpful for round-trip
   but obviously not a substitute for correct encoding.
+
+- 2026-05-01 (even later): root cause analysis of each affected mnemonic.
+
+  ### `bankSwitch N` (mostly resolved)
+
+  Workaround in place: `tools/canonicalize_bankswitch.py` rewrites
+  `bankSwitch N` → `load id=0x07D0+N`. The latter encodes correctly.
+  Removes the need for `;@raw=` on these lines.
+
+  ### `setPalette N` (only the non-canonical-waste-byte case mis-encodes)
+
+  Encoding: 3 bytes — `0x0B, palette_id, waste_byte`. The
+  disassembler discards `waste_byte`; the assembler always emits
+  `0xFF` for it. So `setPalette N ;@raw=0x0B, N, 0xFF` round-trips
+  cleanly. Only setPalette opcodes whose original waste byte is
+  NOT 0xFF need `;@raw=` to preserve the exact bytes.
+
+  Empirically, INTRO has 52 setPalette opcodes — 51 with waste byte
+  0xFF, 1 with waste byte 0x00. LAKE has 41 — all with 0xFF.
+  `tools/unify_asm.py:line_requires_raw` now inspects the existing
+  `;@raw=` bytes and only keeps the annotation for the
+  non-canonical case. Drop rate: 92/93 setPalette annotations
+  removed across INTRO + LAKE.
+
+  Long-term fix: extend the disasm output and asm parser with an
+  optional waste-byte argument (e.g., `setPalette N waste=0x00`)
+  so the encoder can produce the exact bytes without `;@raw=`.
+
+  ### `video` (alt-form encoder is bit-lossy)
+
+  Two video forms:
+
+  - **Compact form** (opcode 0x80-0xFF, bit 7 set, 4 bytes — no
+    `zoom=` keyword in the disasm output). Encoder is fully
+    bijective: `;@raw=` is unnecessary. Empirically 803/816 INTRO
+    + 1303/1445 LAKE compact-form video lines now strip cleanly.
+
+  - **Alt form** (opcode 0x40-0x7F, bit 6 set, 5-7 bytes — has
+    `zoom=` keyword). Three sets of 2 bits each in the opcode
+    encode 4-state operand modes:
+
+      bits 5-4 (x):     00=16-bit, 01=8-bit-var, 10=8-bit, 11=8-bit+0x100
+      bits 3-2 (y):     00=16-bit, 01=8-bit-var, 10=8-bit, 11=8-bit
+      bits 1-0 (zoom):  00=0x40,    01=8-bit-var, 10=8-bit-var, 11=0x40
+
+    The asm encoder uses 4 states for x (bijective), but only 3
+    states for y and 2 states for zoom. The disasm output collapses
+    the redundant patterns to the same text:
+      y bit 3=1: always renders as `y=N` regardless of bit 2.
+      zoom bits {00,11}: always renders `zoom=0x40`.
+      zoom bits {01,10}: always renders `zoom=[var]`.
+
+    So opcodes with bit 3 AND bit 2 both set (`y` redundant), or
+    bit 1 set (`zoom` redundant), need `;@raw=` to preserve.
+    `tools/unify_asm.py:line_requires_raw` inspects the opcode byte
+    and only keeps `;@raw=` for those cases. Drop rate: 142/1445
+    LAKE + 13/816 INTRO video lines retain `;@raw=` after the fix
+    (vs 100% before).
+
+    Long-term fix: extend the disasm output and asm parser to
+    encode the redundant bits explicitly, e.g.:
+      y= form-1: `y=N` (bit 3=1, bit 2=0)
+      y= form-2: `y=N:alt` (bit 3=1, bit 2=1)
+    or a new keyword like `vmode=` that captures the opcode's
+    encoding flags directly. The exact syntax should be the
+    AWVM_Tools owner's call. Once the asm encoder can emit any of
+    the 4 bit patterns deterministically, `;@raw=` becomes
+    unnecessary for video too.

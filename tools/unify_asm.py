@@ -79,9 +79,80 @@ RE_PURE_COMMENT_LINE = re.compile(r'^\s*;(?!@)')
 # Discovered empirically (per-mnemonic survey): see #0066.
 # Note: `bankSwitch` is also buggy, but we run a pre-canonicalization
 # step that converts `bankSwitch N` → `load id=...` (which encodes
-# correctly without any override). So we don't need it here anymore;
-# `setPalette` and `video` remain.
+# correctly without any override). So we don't need it here anymore.
+#
+# `setPalette` always needs `;@raw=` (the encoder mis-handles a
+# "waste byte" — see issue #0066).
+#
+# `video` is more nuanced: only the **alt-form** (bit-6-set opcodes
+# 0x40-0x7F, parsed when the source line includes `zoom=…`) needs
+# `;@raw=`. The disasm output for those is lossy: bits 3-2 (y
+# encoding mode) and bits 1-0 (zoom encoding mode) each have two
+# distinct opcode-byte patterns that decode to identical text, but
+# the asm encoder only ever emits ONE of the two. The
+# **compact-form** video opcodes (bit-7-set 0x80-0xFF, no `zoom=`
+# keyword in the disasm output) round-trip cleanly through the
+# encoder. So we only require `;@raw=` for alt-form video.
 RAW_REQUIRED_MNEMONICS = frozenset({"setPalette", "video"})
+
+
+RE_RAW_FIRST_BYTE = re.compile(r';@raw=0x([0-9A-Fa-f]{1,2})')
+RE_RAW_BYTES = re.compile(r';@raw=((?:0x[0-9A-Fa-f]+,?)+)')
+
+
+def line_requires_raw(line: str, mnemonic: str) -> bool:
+    """Decide whether `line` needs to keep its `;@raw=…` annotation
+    for byte-level round-trip through awvm-asm.
+
+    For most "raw-required" mnemonics, the encoder mis-handles
+    SOME inputs but is correct for the canonical case. We inspect
+    the existing `;@raw=` bytes and only keep the annotation when
+    the encoder would actually produce different output. This
+    minimises the visual noise of `;@raw=` in the unified source
+    while preserving byte-level round-trip.
+
+    Per-mnemonic rules:
+
+    - `setPalette N` encodes as `0x0B, N, 0xFF` (the 3rd byte is a
+      "waste byte" that the disasm discards). The encoder always
+      emits `0xFF` for that byte. If the original raw bytes have a
+      non-0xFF waste byte, the line needs `;@raw=`; otherwise the
+      encoder reproduces them correctly.
+
+    - `video` has two forms:
+      * Compact (opcode 0x80-0xFF, bit 7 set, no `zoom=` in the
+        disasm output) — encoder is fully bijective; strip safely.
+      * Alt-form (opcode 0x40-0x7F, bit 6 set, with `zoom=`):
+        bits 5-4 (x), 3-2 (y), 1-0 (zoom) each encode 4 states. The
+        encoder uses 3 of the 4 states for y and 2 of the 4 for
+        zoom. Disasm decoding is many-to-one for those, so non-
+        canonical opcode bits need `;@raw=`.
+
+    Anything else in `RAW_REQUIRED_MNEMONICS` that we haven't
+    inspected returns True conservatively.
+    """
+    if mnemonic not in RAW_REQUIRED_MNEMONICS:
+        return False
+    if mnemonic == "setPalette":
+        m = RE_RAW_BYTES.search(line)
+        if not m:
+            return False
+        bs = [int(b, 0) for b in m.group(1).split(',') if b.strip()]
+        # 3 bytes: 0x0B, palette, waste. Encoder produces waste=0xFF.
+        if len(bs) == 3 and bs[2] == 0xFF:
+            return False
+        return True
+    if mnemonic == "video":
+        if " zoom=" not in line:
+            return False
+        m = RE_RAW_FIRST_BYTE.search(line)
+        if not m:
+            return False
+        op = int(m.group(1), 16)
+        non_canonical_y = (op & 0x08) and (op & 0x04)
+        non_canonical_zoom = bool(op & 0x02)
+        return bool(non_canonical_y or non_canonical_zoom)
+    return True
 
 
 def normalize_for_diff(line: str, strip_raw: bool = True) -> str:
@@ -115,7 +186,7 @@ def normalize_for_diff(line: str, strip_raw: bool = True) -> str:
     line = RE_INLINE_COMMENT.sub('', line).rstrip()
     # Now decide if we keep ;@raw=.
     m = RE_LINE_MNEMONIC.match(line)
-    if m and m.group(1) in RAW_REQUIRED_MNEMONICS:
+    if m and line_requires_raw(line, m.group(1)):
         return line
     return RE_RAW_COMMENT.sub('', line)
 
