@@ -7,8 +7,8 @@ for every port that uses that stage from that branch.
 
 Usage:
     python3 tools/verify_stage.py \\
-        --asm /path/to/src/levels/heineman_cartridge/LAKE.asm \\
-        --branch heineman_cartridge \\
+        --asm /path/to/src/levels/cartridge_1992/LAKE.asm \\
+        --branch cartridge_1992 \\
         --stage LAKE
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ AWVM_ASM = Path(
 PORTS = {
     # Heineman cartridge branch
     "snes_eu": {
-        "branch": "heineman_cartridge",
+        "branch": "cartridge_1992",
         "format": "cartridge",
         "root": Path("work/f65e3d6efe35900c0015bcb751ee567e"),
         # SNES-EU only has 2 disasm levels; level_0 is the INTRO sequence
@@ -41,7 +41,7 @@ PORTS = {
         "stages": {"INTRO": 0, "LAKE": 1},
     },
     "genesis_europe": {
-        "branch": "heineman_cartridge",
+        "branch": "cartridge_1992",
         "format": "cartridge",
         "root": Path("work/f15f23e1e0fa8d827c4b045d7ce3cf90"),
         "stages": {
@@ -62,7 +62,7 @@ PORTS = {
     },
     # Chahi 1991 branch
     "amiga": {
-        "branch": "chahi_1991",
+        "branch": "chahi_amiga_1991",
         "format": "resource-bin",
         "root": Path("/tmp/output/amiga"),
         "stages": {
@@ -73,7 +73,7 @@ PORTS = {
     },
     # Foxy GBA 2004 branch
     "gba_usa": {
-        "branch": "foxy_gba_2004",
+        "branch": "gba_2004",
         "format": "cartridge",
         "root": Path("/tmp/output/gba_usa"),
         # Same as snes_eu: level_0 is INTRO (the lab scene; identical
@@ -158,7 +158,7 @@ def main() -> None:
     p.add_argument("--asm", type=Path,
                    help="canonical .asm file to assemble")
     p.add_argument("--branch",
-                   help="bytecode branch (e.g. heineman_cartridge)")
+                   help="bytecode branch (e.g. cartridge_1992)")
     p.add_argument("--stage",
                    help="stage name (e.g. LAKE)")
     p.add_argument("--src-tree", type=Path,
