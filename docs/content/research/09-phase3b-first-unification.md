@@ -128,6 +128,64 @@ Both branches still byte-match their expected cartridge chunks
 after the full pipeline:
 canonicalize → unify → preprocess → assemble.
 
+## Update (later 2026-05-01) — inline-label canonicalization halves ;@if blocks
+
+After EQU-synonym canonicalization, most remaining diff blocks
+were **inline label** divergences: `LABEL_NNNN:` definitions
+that name the same logical routine across branches but use
+different addresses (because the bytecode is laid out at slightly
+different offsets per port).
+
+Example diff block (single-line replace):
+
+```
+< LABEL_0090:
+> LABEL_0096:
+```
+
+`LABEL_0090` (cartridge) and `LABEL_0096` (GBA) define the same
+logical routine — only the address differs.
+
+`tools/canonicalize_inline_labels.py` finds these via difflib
+structural alignment: for each `replace` diff block, if both sides
+contain matching N `LABEL_<HEX>:` definition lines at
+corresponding positions, they're synonym pairs. The tool picks
+the alphabetically smaller name as canonical and renames in the
+target branch (with conflict detection: skip the rename if the
+canonical name already exists in the target branch for a different
+offset).
+
+Final results after both canonicalization passes (EQU + inline)
+on cartridge ↔ GBA INTRO:
+
+| Stage | Diff blocks | Equal lines | Unified size | Overhead |
+|---|---|---|---|---|
+| Original | 626 | 3,361 | 21,093 | +46.5% |
+| + EQU canonicalization | 560 (-10.5%) | 3,491 | 20,765 | +45.6% |
+| **+ inline-label canonicalization** | **311 (-50.3% from original)** | 5,124 | **19,694** | **+42.7%** |
+
+**324 inline labels** were renamed (all on the GBA side — its
+auto-generated label names happened to be alphabetically larger,
+so the cartridge names won as canonical). 10 pairs were skipped
+due to conflicts.
+
+End-to-end byte-match verification still passes for both targets.
+The pipeline is now:
+
+```
+per-branch .asm files
+        ↓ canonicalize_labels.py        (EQU synonyms by offset)
+EQU-canonicalized .asm files
+        ↓ canonicalize_inline_labels.py (inline labels by structural alignment)
+fully-canonicalized .asm files          ← committed in src/levels/_canonicalized/
+        ↓ unify_asm.py                  (difflib + ;@if/;@elif/;@endif)
+unified .asm.in                          ← committed in src/levels/_unified/
+        ↓ awvm_preprocess.py            (per-branch flag evaluation)
+per-branch .asm
+        ↓ awvm-asm
+.bin == original bytecode chunk         ← byte-match verified
+```
+
 ## Caveat: `awvm-asm` `bankSwitch` encoding bug
 
 While developing this pipeline, an attempted optimization
