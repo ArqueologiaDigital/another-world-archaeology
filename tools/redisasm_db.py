@@ -810,32 +810,71 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
         unreach_buf_bytes: list[int] = []
         unreach_buf_items: list[tuple] = []  # original decoded items in this span
 
-        # Threshold below which an unreachable span keeps its decoded
-        # mnemonics rather than being collapsed to raw. Polygon data
-        # mis-classified as unreachable bytecode tends to come in
-        # large chunks (research/10's LABEL_26A6 was 55 KB); a stray
-        # killChannel/break/ret left behind as a dead instruction
-        # after a jmp is at most a handful of bytes. 16 bytes
-        # cleanly separates them.
+        # Threshold for deciding whether an unreachable span should
+        # keep its decoded mnemonics or get collapsed to raw bytes.
+        # Polygon data mis-classified as unreachable bytecode tends
+        # to come in large chunks (research/10's LABEL_26A6 was 55 KB).
+        # Real dead-code spans are bounded by the bytecode region
+        # itself — a few hundred bytes at most for a typical
+        # initialise-vars block.
         SHORT_UNREACH_BYTES = 16
+        TERMINATING_LAST_INSTR_OPCODES = {0x05, 0x07, 0x11}  # ret, jmp, killChannel
 
-        def flush_unreach() -> None:
+        def buffer_decoded_cleanly_as_code() -> bool:
+            """True if the unreachable buffer's items are all real
+            instructions ending with ret/jmp/killChannel — strong
+            signal that the bytes are dead bytecode (matches what the
+            other branch's reachable-from-here disasm decoded), not
+            polygon data masquerading as code.
+
+            This covers the common case where one port's bytecode has
+            a routine that the other port's bytecode doesn't reach
+            from any entry point: same bytes physically present, but
+            our disasm walker only follows reachable code, so the
+            unreached side ends up with a `db` block that the other
+            side decoded fully."""
+            if not unreach_buf_items:
+                return False
+            # All items must be 'instr' (no raw/fill mixed in).
+            if not all(it[0] == "instr" for it in unreach_buf_items):
+                return False
+            # Must end with a terminating opcode — real bytecode
+            # routines end with one. Polygon data wouldn't reliably
+            # end on these byte values.
+            last = unreach_buf_items[-1]
+            last_op = bytes_[last[1]]
+            return last_op in TERMINATING_LAST_INSTR_OPCODES
+
+        def flush_unreach(target_resumption: bool = False) -> None:
+            """Flush the unreachable buffer.
+
+            If `target_resumption` is True, the flush was triggered
+            by hitting a known jump-target offset (mid-block code
+            resumption). In that case we ALWAYS keep the decoded
+            mnemonics — the bytes between the previous terminating
+            instruction and the resumption point are `db`-but-real
+            dead code, not data.
+
+            Otherwise (end-of-block / fill flush), we apply the size
+            threshold + clean-decode check to decide.
+            """
             nonlocal unreach_buf_offset, unreach_buf_bytes, unreach_buf_items
             if unreach_buf_offset is None or not unreach_buf_bytes:
                 unreach_buf_offset = None
                 unreach_buf_bytes = []
                 unreach_buf_items = []
                 return
-            if len(unreach_buf_bytes) <= SHORT_UNREACH_BYTES:
-                # Short span — keep the original decoded items so a
-                # stray `db 0x11` after a `jmp` stays as the more
-                # informative `killChannel` mnemonic. `;@raw=` keeps
-                # the byte annotation either way, so byte-match holds.
+            keep_decoded = (
+                target_resumption
+                or len(unreach_buf_bytes) <= SHORT_UNREACH_BYTES
+                or buffer_decoded_cleanly_as_code()
+            )
+            if keep_decoded:
                 filtered.extend(unreach_buf_items)
             else:
-                # Long span — likely real data (e.g., polygon data
-                # mis-extracted into a bytecode chunk). Collapse to
-                # raw / fill so we don't pretend it's code.
+                # Long span that doesn't end cleanly — likely real
+                # data (e.g., polygon data mis-extracted into a
+                # bytecode chunk). Collapse to raw / fill.
                 tail_fill = detect_trailing_fill(unreach_buf_bytes)
                 prefix = len(unreach_buf_bytes) - tail_fill
                 if prefix > 0:
@@ -858,7 +897,7 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
             # If we hit a known jump-target offset, execution resumes
             # here regardless of prior reachability state.
             if it_off in block_targets:
-                flush_unreach()
+                flush_unreach(target_resumption=True)
                 reachable = True
             if reachable:
                 filtered.append(it)
