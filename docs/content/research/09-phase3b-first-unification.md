@@ -88,3 +88,63 @@ between the cartridge and GBA branches).
 - **2026-05-01** — initial finding. Cartridge ↔ GBA INTRO is the
   first real cross-branch bytecode unification: one source,
   two byte-matching targets.
+
+## Update (2026-05-01) — label canonicalization reduces ;@if blocks 10.5%
+
+Adding a canonicalization pre-pass before unification reduces the
+diff-block count by surfacing **synonym labels**: pairs of EQU
+labels with **different names but the same offset** in the two
+branches' EQU tables.
+
+`tools/canonicalize_labels.py` finds these synonym pairs and
+picks the **more descriptive** name (more underscore-separated
+alphabetic components; tie-break: longer total length). Then it
+find-and-replaces the less-descriptive name throughout each
+source.
+
+Example:
+
+```
+cartridge:  CINEMATIC_054                 EQU 0x0F72
+gba:        CINEMATIC_WALKING_FEET_ARRIVING_0  EQU 0x0F72
+```
+
+Both names refer to the same polygon at offset `0x0F72`. The GBA
+name is more descriptive (4 alpha components vs 1). After
+canonicalization, both files use `CINEMATIC_WALKING_FEET_ARRIVING_0`.
+The synonym becomes invisible to the unifier.
+
+Results for cartridge ↔ GBA INTRO:
+
+| | Before canonicalization | After canonicalization |
+|---|---|---|
+| EQU synonym pairs | 64 | 0 (resolved) |
+| Diff blocks | 626 | **560** (-10.5%) |
+| Equal lines | 3361 | **3491** (+130) |
+| Unified file size | 21,093 | 20,765 |
+| Overhead vs single source | +46.5% | +45.6% |
+
+Both branches still byte-match their expected cartridge chunks
+after the full pipeline:
+canonicalize → unify → preprocess → assemble.
+
+## Caveat: `awvm-asm` `bankSwitch` encoding bug
+
+While developing this pipeline, an attempted optimization
+(`--strip-raw-comments` flag in `unify_asm.py` to drop
+`;@raw=...` annotations during diff) revealed a bug in
+`awvm-asm`: the `bankSwitch N` mnemonic encodes incorrectly
+when no `;@raw=` annotation is present.
+
+```
+bankSwitch 1                       → 0x19, 0x3E, 0x81  (WRONG)
+bankSwitch 1   ;@raw=0x19,0x07,0xD1 → 0x19, 0x07, 0xD1  (correct, via override)
+load id=0x07D1                     → 0x19, 0x07, 0xD1  (correct, no override needed)
+```
+
+The `;@raw=` annotation appears to function as an override that
+masks the bug. So unified sources MUST keep `;@raw=` annotations
+for now (the `--strip-raw-comments` flag is not safe to use
+until the bug is fixed). Tracked as
+[issue #0066](#/issues).
+

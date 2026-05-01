@@ -21,14 +21,53 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import re
 import sys
 from pathlib import Path
 
 
+RE_RAW_COMMENT = re.compile(r'\s*;@raw=[0-9A-Fa-fx,]+\s*$')
+
+
+def normalize_for_diff(line: str) -> str:
+    """Strip non-semantic content for diff purposes.
+
+    The `;@raw=...` annotation tells the disassembler what bytes the
+    instruction encoded; the assembler IGNORES it (it computes the
+    bytes from the instruction itself). Two lines that differ only in
+    `;@raw=` will assemble to the same bytes for the same target. So
+    we treat them as equal during unification.
+
+    We don't strip other comment styles (e.g., `; "string"` annotations
+    inside text opcodes) because those frequently differ between
+    branches' string tables and we want to preserve them per-branch.
+    """
+    return RE_RAW_COMMENT.sub('', line)
+
+
 def unify(a_lines: list[str], b_lines: list[str],
-          branch_a: str, branch_b: str) -> tuple[list[str], dict]:
-    """Return (output_lines, stats)."""
-    sm = difflib.SequenceMatcher(None, a_lines, b_lines, autojunk=False)
+          branch_a: str, branch_b: str,
+          strip_raw_comments: bool = False) -> tuple[list[str], dict]:
+    """Return (output_lines, stats).
+
+    If `strip_raw_comments` is True, normalize each line by stripping
+    `;@raw=...` annotations before diffing. Output uses the canonical
+    (post-normalization) form, so the unified file has no `;@raw=`
+    annotations — those are pure disassembler-output documentation
+    that wouldn't be byte-correct for both branches anyway.
+    """
+    if strip_raw_comments:
+        a_for_diff = [normalize_for_diff(l) for l in a_lines]
+        b_for_diff = [normalize_for_diff(l) for l in b_lines]
+        emit_a = a_for_diff
+        emit_b = b_for_diff
+    else:
+        a_for_diff = a_lines
+        b_for_diff = b_lines
+        emit_a = a_lines
+        emit_b = b_lines
+
+    sm = difflib.SequenceMatcher(None, a_for_diff, b_for_diff, autojunk=False)
     out = []
     stats = {
         "equal_lines": 0,
@@ -38,16 +77,16 @@ def unify(a_lines: list[str], b_lines: list[str],
     }
     for tag, i1, i2, j1, j2 in sm.get_opcodes():
         if tag == "equal":
-            out.extend(a_lines[i1:i2])
+            out.extend(emit_a[i1:i2])
             stats["equal_lines"] += i2 - i1
         else:
             stats["diff_blocks"] += 1
             stats["a_only_lines"] += i2 - i1
             stats["b_only_lines"] += j2 - j1
             out.append(f';@if BRANCH == "{branch_a}"')
-            out.extend(a_lines[i1:i2])
+            out.extend(emit_a[i1:i2])
             out.append(f';@elif BRANCH == "{branch_b}"')
-            out.extend(b_lines[j1:j2])
+            out.extend(emit_b[j1:j2])
             out.append(";@endif")
     return out, stats
 
@@ -130,6 +169,10 @@ def main() -> None:
     p.add_argument("--branch-b", help="branch name for second .asm")
     p.add_argument("-o", "--output", type=Path, required=True,
                    help="output .asm.in path")
+    p.add_argument("--strip-raw-comments", action="store_true",
+                   help="strip ;@raw= annotations during diff. The unified "
+                        "output is cleaner (no per-branch byte annotations) "
+                        "and produces fewer ;@if blocks.")
     args = p.parse_args()
 
     sources: list[tuple[str, list[str]]] = []
@@ -146,8 +189,11 @@ def main() -> None:
         sys.exit("specify --source BRANCH=path repeated, OR --a + --b + --branch-a + --branch-b")
 
     if len(sources) == 2:
-        out_lines, stats = unify(sources[0][1], sources[1][1],
-                                 sources[0][0], sources[1][0])
+        out_lines, stats = unify(
+            sources[0][1], sources[1][1],
+            sources[0][0], sources[1][0],
+            strip_raw_comments=args.strip_raw_comments,
+        )
     else:
         # 3-way+ unification by progressive folding has subtle issues:
         # the directives emitted by the first merge become "lines" that
