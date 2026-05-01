@@ -731,129 +731,107 @@ def flatten_subset_nesting(lines: list[str]) -> tuple[list[str], int]:
                 break
         if hoisted:
             continue  # re-parse with new layout
-        # Second pass: subset-hoist for single-arm outer blocks.
+        # Second pass: subset-hoist. Try hoisting from the FIRST arm's
+        # start (place hoisted block BEFORE the outer) and from the
+        # LAST arm's end (place AFTER). Works for both single-arm
+        # outers and multi-arm outers — the subset check uses the
+        # specific arm's branches, so the hoist only applies when the
+        # inner condition is fully covered by that arm.
         for s, e, sections in blocks:
-            if len(sections) != 1:
+            outer_cond_first = sections[0][2]
+            outer_branches_first = _parse_branch_set(outer_cond_first, universe)
+            outer_cond_last = sections[-1][2]
+            outer_branches_last = _parse_branch_set(outer_cond_last, universe)
+            if outer_branches_first is None and outer_branches_last is None:
                 continue
-            outer_cond = sections[0][2]
-            outer_branches = _parse_branch_set(outer_cond, universe)
-            if outer_branches is None:
-                continue
-            body_start = sections[0][1]
-            body_end = e  # the `;@endif` line index
 
-            # Inner-block check at START: skip leading blanks, then
-            # the first non-blank line must be `;@if`.
-            i = body_start
-            while i < body_end and not lines[i].strip():
-                i += 1
-            inner_at_start = (
-                i < body_end and lines[i].lstrip().startswith(";@if ")
+            # Try hoisting from FIRST arm's start.
+            first_arm_start = sections[0][1]
+            first_arm_end = (
+                sections[1][0] if len(sections) > 1 else e
             )
-
-            # Inner-block check at END: skip trailing blanks, then
-            # the last non-blank line must be `;@endif` whose
-            # matching `;@if` is the LAST top-level block in the
-            # outer body.
-            j = body_end - 1
-            while j >= body_start and not lines[j].strip():
-                j -= 1
-            inner_at_end = (
-                j >= body_start and lines[j].lstrip().startswith(";@endif")
+            first_arm_blocks = _parse_top_level_blocks(
+                lines[first_arm_start:first_arm_end]
             )
-
-            # Re-parse outer body to find inner block boundaries.
-            body_blocks = _parse_top_level_blocks(lines[body_start:body_end])
-            if not body_blocks:
-                continue
-
-            def hoist(inner_block_idx: int, position: str) -> bool:
-                """position is 'before' or 'after'."""
-                nonlocal lines, total_hoists
-                inner_s, inner_e, inner_sections = body_blocks[inner_block_idx]
-                # Convert to absolute indices.
-                abs_inner_s = body_start + inner_s
-                abs_inner_e = body_start + inner_e
-                # Check inner sections' branches all ⊆ outer.
-                for sec in inner_sections:
-                    bs = _parse_branch_set(sec[2], universe)
-                    if bs is None or not bs.issubset(outer_branches):
-                        return False
-                # Inner block's lines.
-                inner_lines = lines[abs_inner_s:abs_inner_e + 1]
-                # Build new layout:
-                #   before-hoist:
-                #     before-outer (lines[:s])
-                #     outer-header (lines[s])
-                #     inner-block (already in body)
-                #     ...rest of body...
-                #     outer-endif (lines[e])
-                #   after-hoist (position='before'):
-                #     before-outer (lines[:s])
-                #     inner-block
-                #     outer-header
-                #     ...rest of outer body (excluding the inner-block range)...
-                #     outer-endif
-                outer_header = lines[s]
-                outer_endif = lines[e]
-                if position == "before":
-                    # Body before the inner: the lines BEFORE abs_inner_s
-                    # in the outer body. These are blank gap lines we'd
-                    # collected before the inner — drop them, they're
-                    # cosmetic.
-                    body_after_inner = lines[abs_inner_e + 1:body_end]
-                    # Strip leading blanks of body_after_inner — the
-                    # blank that originally separated outer-header
-                    # from inner is gone now.
-                    while body_after_inner and not body_after_inner[0].strip():
-                        body_after_inner = body_after_inner[1:]
-                    # If the remaining outer body is empty, the outer
-                    # block becomes a no-op — drop it entirely.
-                    if not body_after_inner:
-                        new_segment = inner_lines
-                    else:
-                        new_segment = (
-                            inner_lines
-                            + [outer_header]
-                            + body_after_inner
-                            + [outer_endif]
-                        )
-                else:  # 'after'
-                    body_before_inner = lines[body_start:abs_inner_s]
-                    # Strip trailing blanks (cosmetic).
-                    while body_before_inner and not body_before_inner[-1].strip():
-                        body_before_inner = body_before_inner[:-1]
-                    if not body_before_inner:
-                        new_segment = inner_lines
-                    else:
-                        new_segment = (
-                            [outer_header]
-                            + body_before_inner
-                            + [outer_endif]
-                            + inner_lines
-                        )
-                lines = lines[:s] + new_segment + lines[e + 1:]
-                total_hoists += 1
-                return True
-
-            # Try: inner at start (block_idx=0).
-            # Need: before block 0 in body, only blank lines.
-            if body_blocks:
-                first_s, first_e, _ = body_blocks[0]
-                # First block's start is at index first_s in body.
-                # Lines before: body[:first_s] (relative).
-                pre = lines[body_start:body_start + first_s]
+            if outer_branches_first is not None and first_arm_blocks:
+                inner_s, inner_e, inner_sections = first_arm_blocks[0]
+                pre = lines[first_arm_start:first_arm_start + inner_s]
                 if all(not l.strip() for l in pre):
-                    if hoist(0, "before"):
+                    # Check: every inner section's branches ⊆ first
+                    # arm's branches.
+                    ok = True
+                    for sec in inner_sections:
+                        bs = _parse_branch_set(sec[2], universe)
+                        if bs is None or not bs.issubset(outer_branches_first):
+                            ok = False
+                            break
+                    if ok:
+                        abs_inner_s = first_arm_start + inner_s
+                        abs_inner_e = first_arm_start + inner_e
+                        inner_lines = lines[abs_inner_s:abs_inner_e + 1]
+                        # Strip leading blanks from the rest of first
+                        # arm body (the blank that separated outer
+                        # header from inner is now gone).
+                        rest_of_arm = lines[abs_inner_e + 1:first_arm_end]
+                        while rest_of_arm and not rest_of_arm[0].strip():
+                            rest_of_arm = rest_of_arm[1:]
+                        # Reconstruct the outer arm: drop inner from
+                        # first arm's body, keep all other arms intact.
+                        if not rest_of_arm and len(sections) == 1:
+                            # Outer becomes a no-op (single arm with
+                            # empty body) — drop entirely.
+                            new_segment = inner_lines
+                        else:
+                            # Keep outer, splice inner before it.
+                            outer_header = lines[s]
+                            outer_tail = lines[first_arm_end:e + 1]
+                            new_segment = (
+                                inner_lines
+                                + [outer_header]
+                                + rest_of_arm
+                                + outer_tail
+                            )
+                        lines = lines[:s] + new_segment + lines[e + 1:]
+                        total_hoists += 1
                         hoisted = True
                         break
 
-            # Try: inner at end (block_idx=last).
-            if body_blocks:
-                last_s, last_e, _ = body_blocks[-1]
-                post = lines[body_start + last_e + 1:body_end]
+            # Try hoisting from LAST arm's end.
+            last_arm_start = sections[-1][1]
+            last_arm_end = e
+            last_arm_blocks = _parse_top_level_blocks(
+                lines[last_arm_start:last_arm_end]
+            )
+            if outer_branches_last is not None and last_arm_blocks:
+                inner_s, inner_e, inner_sections = last_arm_blocks[-1]
+                post = lines[last_arm_start + inner_e + 1:last_arm_end]
                 if all(not l.strip() for l in post):
-                    if hoist(len(body_blocks) - 1, "after"):
+                    ok = True
+                    for sec in inner_sections:
+                        bs = _parse_branch_set(sec[2], universe)
+                        if bs is None or not bs.issubset(outer_branches_last):
+                            ok = False
+                            break
+                    if ok:
+                        abs_inner_s = last_arm_start + inner_s
+                        abs_inner_e = last_arm_start + inner_e
+                        inner_lines = lines[abs_inner_s:abs_inner_e + 1]
+                        rest_of_arm = lines[last_arm_start:abs_inner_s]
+                        while rest_of_arm and not rest_of_arm[-1].strip():
+                            rest_of_arm = rest_of_arm[:-1]
+                        if not rest_of_arm and len(sections) == 1:
+                            new_segment = inner_lines
+                        else:
+                            outer_head = lines[s:last_arm_start]
+                            outer_endif = lines[e]
+                            new_segment = (
+                                outer_head
+                                + rest_of_arm
+                                + [outer_endif]
+                                + inner_lines
+                            )
+                        lines = lines[:s] + new_segment + lines[e + 1:]
+                        total_hoists += 1
                         hoisted = True
                         break
         if not hoisted:
@@ -877,6 +855,84 @@ def flatten_subset_nesting(lines: list[str]) -> tuple[list[str], int]:
         pos = e + 1
     out_lines.extend(lines[pos:])
     return out_lines, total_hoists
+
+
+def drop_empty_arms(lines: list[str]) -> tuple[list[str], int]:
+    """Drop arms whose body is empty (only blank lines / comments).
+
+    A multi-arm `;@if/elif/.../endif` block where one arm has no
+    real content is equivalent to the same block with that arm
+    removed:
+        ;@if BRANCH in (a, b, c)
+        ;@elif BRANCH == "d"
+            actual content
+        ;@endif
+        →
+        ;@if BRANCH == "d"
+            actual content
+        ;@endif
+
+    For branches in the dropped arm, no code was emitted before; no
+    code is emitted after — same bytecode, fewer directives.
+
+    If ALL arms are empty, drop the whole block.
+
+    Returns (lines, num_drops).
+    """
+    total_drops = 0
+    while True:
+        blocks = _parse_top_level_blocks(lines)
+        modified = False
+        for s, e, sections in blocks:
+            if len(sections) < 2:
+                continue
+            arm_bodies: list[list[str]] = []
+            for k in range(len(sections)):
+                body_start = sections[k][1]
+                body_end = (
+                    sections[k + 1][0] if k + 1 < len(sections) else e
+                )
+                arm_bodies.append(lines[body_start:body_end])
+            # An arm is "empty" if it has no `;@raw=`, no real-code
+            # line, and no comments that look like content. Blank
+            # lines and pure-whitespace are OK.
+            def is_empty_arm(body: list[str]) -> bool:
+                for l in body:
+                    if not l.strip():
+                        continue
+                    return False
+                return True
+            keep_indices = [
+                k for k in range(len(sections)) if not is_empty_arm(arm_bodies[k])
+            ]
+            if len(keep_indices) == len(sections):
+                continue  # nothing empty
+            if not keep_indices:
+                # All arms empty — drop the whole block.
+                lines = lines[:s] + lines[e + 1:]
+                total_drops += 1
+                modified = True
+                break
+            # Build new sections list with only kept arms.
+            new_segment: list[str] = []
+            for new_idx, orig_idx in enumerate(keep_indices):
+                header = lines[sections[orig_idx][0]]
+                if new_idx == 0:
+                    # First arm becomes `;@if`.
+                    header = re.sub(r'^(\s*);@elif\b', r'\1;@if', header)
+                else:
+                    # Subsequent arms become `;@elif`.
+                    header = re.sub(r'^(\s*);@if\b', r'\1;@elif', header)
+                new_segment.append(header)
+                new_segment.extend(arm_bodies[orig_idx])
+            new_segment.append(lines[e])  # ;@endif
+            lines = lines[:s] + new_segment + lines[e + 1:]
+            total_drops += 1
+            modified = True
+            break
+        if not modified:
+            break
+    return lines, total_drops
 
 
 def merge_equivalent_arms(lines: list[str]) -> tuple[list[str], int]:
@@ -1298,6 +1354,9 @@ def main() -> None:
     # content (e.g., cart and amiga both `mov [foo], 0x0004` while
     # gba has 0x0007). Merge those into `BRANCH in (...)` arms.
     out_lines, n_arm_merges = merge_equivalent_arms(out_lines)
+    # And one more pass: drop empty arms (first-arm cart_or_gba with
+    # no body, second-arm dos with content → just `;@if dos`).
+    out_lines, n_empty_arm_drops = drop_empty_arms(out_lines)
     post_merge_block_count = sum(
         1 for l in out_lines if l.lstrip().startswith(";@if ")
     )
@@ -1313,6 +1372,7 @@ def main() -> None:
     print(f"  promoted safe LABEL_def blocks:   {n_label_promotions}")
     print(f"  flattened subset-nested blocks:   {n_flattens}")
     print(f"  merged equivalent arms:           {n_arm_merges}")
+    print(f"  dropped empty arms:               {n_empty_arm_drops}")
     print(f"  ;@if count {pre_merge_block_count} → {post_merge_block_count}")
     print(f"\nwrote {args.output}: {len(out_lines)} lines")
     largest_input = max(len(s[1]) for s in sources)
