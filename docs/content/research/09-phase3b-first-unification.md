@@ -393,3 +393,34 @@ The first three categories require deeper semantic understanding
 fourth could be handled by truncating to the actual bytecode end
 and emitting per-branch tail bytes from the build pipeline.
 
+
+## Final state (2026-05-01) — 8 ;@if blocks, all genuine divergences
+
+After all canonicalization passes, the remaining 8 blocks are
+classified as follows. None can be eliminated with current
+tooling.
+
+| Block | Type | Why it can't be canonicalized |
+|---|---|---|
+| 1, 3 | GBA-only `song id=...` calls | Real semantic difference — GBA has audio that cartridge doesn't |
+| 2, 4, 5, 6 | `db` blocks with single-byte address differences | The disassembler couldn't decode these as instructions; they're data tables / jump tables. The bytes that differ are 16-bit addresses that would resolve to per-branch labels — but awvm-asm has no `dw LABEL` directive to emit a label's 2-byte address. Tracked as [#0067](#/issues). |
+| 7 | `mov [0x01], 0x12` vs `mov [0x01], 0x24` | Different immediate values — genuinely different runtime behaviour |
+| 8 | Trailing-padding block (~6,955 lines) | Cartridge pads with `0xFF`; GBA has different fill content (possibly more code the disassembler couldn't decode, or unrelated cartridge-ROM data) |
+
+**Path forward** (each is a separate research thread):
+
+- **Issue #0067** (add `dw LABEL` to awvm-asm): would unify blocks
+  2, 4, 5, 6 once the inline-label canonicalizer can see that the
+  divergent address bytes correspond to renamed-equivalent labels.
+- **Re-disassemble `db` regions** as instructions: would help if
+  the bytes really are mis-decoded `cond_jump`s with non-standard
+  cond bytes (0x78). Requires deeper AW VM opcode-decoder work.
+- **Trailing-padding extraction**: split the unified source into
+  a "real bytecode" main part + per-branch "tail bytes" file.
+  Doesn't reduce the `;@if` block count but makes the unified
+  source dramatically smaller (the tail block is most of the
+  18,274 lines).
+
+For now, the 8 blocks are the **practical floor** for
+cartridge↔GBA INTRO unification under current tooling.
+
