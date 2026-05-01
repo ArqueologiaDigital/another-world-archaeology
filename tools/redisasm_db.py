@@ -867,9 +867,20 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
                     if op in TERMINATING_OPCODES:
                         reachable = False
             else:
+                # 'fill' items are trailing-padding from decode_block_partial
+                # — they're pre-classified as data and have known byte
+                # value, so they get emitted directly. They also
+                # shouldn't count toward the unreachable-buffer span
+                # (otherwise a tiny dead instruction followed by 50 KB
+                # of FILL would get the instruction collapsed into raw
+                # bytes alongside the fill).
+                if kind == "fill":
+                    flush_unreach()
+                    filtered.append(it)
+                    continue
                 # Buffer unreachable items + their bytes. `flush_unreach`
                 # decides whether to keep the decoded items (short
-                # span) or collapse to raw/fill (long span).
+                # span) or collapse to raw (long span — likely data).
                 if unreach_buf_offset is None:
                     unreach_buf_offset = it_off
                 unreach_buf_items.append(it)
@@ -878,8 +889,6 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
                     unreach_buf_bytes.extend(bytes_[it_off:it_off + sz])
                 elif kind == "raw":
                     unreach_buf_bytes.extend(it[3])
-                elif kind == "fill":
-                    unreach_buf_bytes.extend([it[3]] * it[2])
         flush_unreach()
         items = filtered
         # Skip blocks where ZERO bytes decoded as instructions AND

@@ -161,6 +161,47 @@ def main() -> None:
 
     print(f"diffing {a_branch} ({len(a_lines)} lines) vs {b_branch} ({len(b_lines)} lines)")
 
+    # Strip unreferenced label definitions before doing anything else.
+    # An unreferenced `LABEL_<HEX>:` is a definition with NO matching
+    # `LABEL_<HEX>` token elsewhere in the file. Disasm tools sometimes
+    # produce these (e.g., when a fall-through analysis tags an
+    # address as "interesting" but no actual `jmp`/`call`/`setup` ever
+    # targets it). Such labels add noise to the unified output and,
+    # worse, BLOCK the rename canonicalization: when one branch has
+    # `LABEL_X` (referenced) and the other has `LABEL_X` (unreferenced)
+    # at a different offset, the synonym pair `(other_branch.LABEL_Y,
+    # this_branch.LABEL_X)` would conflict — but only because of the
+    # dead `LABEL_X` definition. Removing dead definitions first lets
+    # the rename succeed cleanly.
+    def strip_unreferenced_labels(text: str) -> tuple[str, int]:
+        lines = text.splitlines()
+        # Count occurrences of each LABEL_<HEX> token across the whole
+        # file (including the definition line). Unreferenced = exactly 1.
+        token_counts: dict[str, int] = {}
+        for line in lines:
+            for m in RE_INLINE_LABEL.finditer(line):
+                token_counts[m.group(0)] = token_counts.get(m.group(0), 0) + 1
+        unref = {name for name, n in token_counts.items() if n == 1}
+        if not unref:
+            return text, 0
+        # Drop label-def lines that are unreferenced.
+        out_lines = []
+        dropped = 0
+        for line in lines:
+            m = RE_LABEL_DEF.match(line)
+            if m and m.group(1) in unref:
+                dropped += 1
+                continue
+            out_lines.append(line)
+        return "\n".join(out_lines) + ("\n" if text.endswith("\n") else ""), dropped
+
+    a_text, a_dropped = strip_unreferenced_labels(a_text)
+    b_text, b_dropped = strip_unreferenced_labels(b_text)
+    a_lines = a_text.splitlines()
+    b_lines = b_text.splitlines()
+    if a_dropped or b_dropped:
+        print(f"  stripped unreferenced labels: {a_branch}: {a_dropped}, {b_branch}: {b_dropped}")
+
     # Find synonym pairs.
     synonyms = find_label_synonyms(a_lines, b_lines)
     print(f"found {len(synonyms)} candidate synonym pairs")
