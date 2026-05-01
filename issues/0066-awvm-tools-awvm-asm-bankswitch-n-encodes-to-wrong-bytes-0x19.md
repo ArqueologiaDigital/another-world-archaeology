@@ -65,3 +65,26 @@ are present in the source. Workaround: keep `;@raw=` annotations.
 - 2026-05-01: opened. Found while building Phase 3b unification
   (research/09). Working around by keeping `;@raw=` annotations
   in unified source files.
+
+- 2026-05-01 (later): the encoding bug affects **three mnemonics**,
+  not just `bankSwitch`. Per-mnemonic survey of cartridge INTRO source
+  (strip ;@raw= from one mnemonic at a time, check byte-match):
+
+  - `bankSwitch`: encodes wrong without ;@raw= (1 line affected)
+  - `setPalette`: encodes wrong without ;@raw= (52 lines)
+  - `video`:      encodes wrong without ;@raw= (815 lines)
+
+  All other 22 mnemonics in the source (add, blitFramebuffer, break,
+  call, copyVideoPage, deleteChannels, djnz, fill, je, jg, jmp, jne,
+  killChannel, load, mov, play, ret, selectVideoPage, setup, song,
+  sub, text) are SAFE to strip ;@raw= from — the assembler computes
+  correct bytes from the mnemonic and operands.
+
+  Stripping ;@raw= from the 22 safe mnemonics (2177 lines stripped
+  in cartridge INTRO) preserves byte-match exactly. Phase 3b
+  unification benefits dramatically: the unified cartridge ↔ GBA
+  INTRO drops from 626 to 39 ;@if blocks (-94%).
+
+  AWVM_Tools fix should target these three mnemonics' encoding
+  paths. The `;@raw=` override behaviour is helpful for round-trip
+  but obviously not a substitute for correct encoding.

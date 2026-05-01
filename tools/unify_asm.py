@@ -27,21 +27,36 @@ from pathlib import Path
 
 
 RE_RAW_COMMENT = re.compile(r'\s*;@raw=[0-9A-Fa-fx,]+\s*$')
+RE_LINE_MNEMONIC = re.compile(r'^\s*([a-zA-Z][a-zA-Z]*)\b')
+
+# Mnemonics whose lines mis-encode without a `;@raw=` annotation.
+# Discovered empirically (per-mnemonic survey): see #0066.
+# These three opcodes have encoding bugs in awvm-asm — the assembler
+# uses `;@raw=` as an override that masks the bug. So we MUST keep
+# `;@raw=` on lines starting with these mnemonics; safe to strip
+# elsewhere.
+RAW_REQUIRED_MNEMONICS = frozenset({"bankSwitch", "setPalette", "video"})
 
 
-def normalize_for_diff(line: str) -> str:
+def normalize_for_diff(line: str, strip_raw: bool = True) -> str:
     """Strip non-semantic content for diff purposes.
 
-    The `;@raw=...` annotation tells the disassembler what bytes the
-    instruction encoded; the assembler IGNORES it (it computes the
-    bytes from the instruction itself). Two lines that differ only in
-    `;@raw=` will assemble to the same bytes for the same target. So
-    we treat them as equal during unification.
+    If `strip_raw` is True, removes `;@raw=...` annotations EXCEPT on
+    lines whose mnemonic is in `RAW_REQUIRED_MNEMONICS` — those need
+    the override to assemble correctly (per #0066).
 
-    We don't strip other comment styles (e.g., `; "string"` annotations
-    inside text opcodes) because those frequently differ between
-    branches' string tables and we want to preserve them per-branch.
+    The `;@raw=...` annotation otherwise tells the disassembler what
+    bytes the instruction encoded; for opcodes outside the bug-list,
+    awvm-asm computes the bytes from the instruction itself and
+    ignores `;@raw=`. Two lines that differ only in `;@raw=` will
+    assemble to the same bytes for the same target — so treat them
+    as equal during unification.
     """
+    if not strip_raw:
+        return line
+    m = RE_LINE_MNEMONIC.match(line)
+    if m and m.group(1) in RAW_REQUIRED_MNEMONICS:
+        return line
     return RE_RAW_COMMENT.sub('', line)
 
 
@@ -57,8 +72,8 @@ def unify(a_lines: list[str], b_lines: list[str],
     that wouldn't be byte-correct for both branches anyway.
     """
     if strip_raw_comments:
-        a_for_diff = [normalize_for_diff(l) for l in a_lines]
-        b_for_diff = [normalize_for_diff(l) for l in b_lines]
+        a_for_diff = [normalize_for_diff(l, strip_raw=True) for l in a_lines]
+        b_for_diff = [normalize_for_diff(l, strip_raw=True) for l in b_lines]
         emit_a = a_for_diff
         emit_b = b_for_diff
     else:

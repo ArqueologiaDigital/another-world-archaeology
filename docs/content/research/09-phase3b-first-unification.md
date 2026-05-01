@@ -206,3 +206,59 @@ for now (the `--strip-raw-comments` flag is not safe to use
 until the bug is fixed). Tracked as
 [issue #0066](#/issues).
 
+
+## Update (later 2026-05-01) — selective `;@raw=` strip drops blocks 94%
+
+The `;@raw=` annotation is an assembler override: when present,
+`awvm-asm` uses the bytes from the comment instead of computing
+them from the mnemonic. For most mnemonics, `awvm-asm` computes
+the bytes correctly anyway, so `;@raw=` is redundant. But for
+**three specific mnemonics**, the assembler mis-encodes without
+the override:
+
+- `bankSwitch` (encoding bug)
+- `setPalette` (encoding bug)
+- `video` (encoding bug)
+
+Discovery: per-mnemonic survey on the cartridge INTRO source —
+strip `;@raw=` from one mnemonic's lines at a time and assemble.
+22 of 25 mnemonics are safe to strip; only those 3 mis-encode.
+Tracked as [issue #0066](#/issues).
+
+So we can strip `;@raw=` from ~95% of source lines (everything
+except `bankSwitch` / `setPalette` / `video`) without changing
+the assembled bytes.
+
+Most diff blocks remaining after EQU + inline-label canonicalization
+were lines that **only differed in `;@raw=`** — i.e. the same
+opcode + operand was assembled to slightly different bytes per
+port (e.g., a `setup channel=0x09, address=…` referencing a
+routine at a different bytecode offset on each port). Stripping
+those `;@raw=` annotations makes those lines compare equal during
+unification.
+
+`unify_asm.py` now defaults to selective strip when
+`--strip-raw-comments` is given: keeps `;@raw=` on `bankSwitch`,
+`setPalette`, `video` lines; strips elsewhere.
+
+**Final results — full pipeline on cartridge ↔ GBA INTRO:**
+
+| Stage | Diff blocks | Equal lines | Unified size | Overhead |
+|---|---|---|---|---|
+| Original | 626 | 3,361 | 21,093 | +46.5% |
+| + EQU canonicalization | 560 (-10.5%) | 3,491 | 20,765 | +45.6% |
+| + inline-label canonicalization | 311 (-50.3%) | 5,124 | 19,694 | +42.7% |
+| **+ selective strip-`;@raw=`** | **39 (-93.8% from original)** | 11,070 | **18,402** | **+38.7%** |
+
+**Both branches still byte-match.** From 626 conditional blocks
+down to **39** — the unified file is now overwhelmingly shared
+content with rare per-branch overrides.
+
+The 39 remaining blocks are real semantic divergences:
+- Different routine bodies between cartridge and GBA
+- Inline string-table comments inside `text` opcodes (which we
+  intentionally don't strip; per-branch strings differ)
+- `bankSwitch`, `setPalette`, and `video` lines whose addresses
+  legitimately differ between branches (we keep `;@raw=` for
+  these, so they show up as diffs)
+
