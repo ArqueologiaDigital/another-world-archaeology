@@ -336,3 +336,60 @@ source** (down from 46.5%) and contains overwhelmingly shared
 content — the `;@if` directives appear only at genuine cross-port
 divergences.
 
+
+## Update (2026-05-01) — bankSwitch canonicalization + inline-comment stripping → 8 blocks
+
+Two more canonicalization passes added:
+
+### 1. `tools/canonicalize_bankswitch.py`
+
+Converts `bankSwitch N` mnemonic to its equivalent `load id=0xXXXX`
+form (using the `;@raw=` annotation to determine the exact ID).
+Two benefits:
+
+- **Eliminates the encoding bug** (bankSwitch is buggy in awvm-asm
+  per #0066; `load id=...` encodes correctly without an override).
+- **Unifies syntax differences** — cart used `load id=0x3E82` while
+  GBA used `bankSwitch 2; Prison ;@raw=0x19,0x3E,0x82` for the
+  same bytes. After canonicalization both use `load id=0x3E82`.
+
+`bankSwitch` is now removed from `unify_asm.py`'s
+`RAW_REQUIRED_MNEMONICS` list (only `setPalette` and `video` remain).
+
+### 2. Inline-comment stripping in `unify_asm.py`'s normalizer
+
+Strips `;<text>` inline comments BEFORE `;@raw=` (e.g.,
+`bankSwitch 1; Prison ;@raw=...` → `bankSwitch 1 ;@raw=...`).
+These are typically port-specific stage names or string-table
+content embedded in the disasm output; the assembler ignores
+them. Used during diff-alignment so cosmetically-different lines
+compare equal.
+
+After both passes:
+
+| Stage | Diff blocks |
+|---|---|
+| Original | 626 |
+| + EQU canonicalization | 560 |
+| + inline-label canonicalization (initial) | 311 |
+| + selective strip-`;@raw=` | 39 |
+| + label-normalized + cascading-aware canonicalization | 11 |
+| **+ bankSwitch canonicalization + inline-comment strip** | **8 (-98.7% from original)** |
+
+The 8 remaining blocks are all **genuine semantic divergences**:
+- 2 × GBA-only `song id=...` calls (instruments not present in cartridge)
+- 4 × `db`-encoded raw bytes that differ in single bytes — these
+  are inside data tables / jump tables the disassembler couldn't
+  decode. Each differing byte corresponds to a port-specific
+  address.
+- 1 × different immediate value (`mov [0x01], 0x0012` vs `0x0024`)
+- 1 × trailing-padding block (~6,955 lines): cart pads with
+  `0xFF`, GBA has different fill content. This is the unused tail
+  of the 64-KB cartridge chunk after the actual bytecode ends.
+
+These divergences cannot be eliminated by syntactic canonicalization.
+The first three categories require deeper semantic understanding
+(re-disassembling raw `db` blocks back into instructions); the
+fourth could be handled by truncating to the actual bytecode end
+and emitting per-branch tail bytes from the build pipeline.
+

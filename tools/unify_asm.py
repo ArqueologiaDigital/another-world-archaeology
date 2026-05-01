@@ -27,33 +27,40 @@ from pathlib import Path
 
 
 RE_RAW_COMMENT = re.compile(r'\s*;@raw=[0-9A-Fa-fx,]+\s*$')
+RE_INLINE_COMMENT = re.compile(r';(?!@raw=)[^\t\n]*')
 RE_LINE_MNEMONIC = re.compile(r'^\s*([a-zA-Z][a-zA-Z]*)\b')
 
 # Mnemonics whose lines mis-encode without a `;@raw=` annotation.
 # Discovered empirically (per-mnemonic survey): see #0066.
-# These three opcodes have encoding bugs in awvm-asm — the assembler
-# uses `;@raw=` as an override that masks the bug. So we MUST keep
-# `;@raw=` on lines starting with these mnemonics; safe to strip
-# elsewhere.
-RAW_REQUIRED_MNEMONICS = frozenset({"bankSwitch", "setPalette", "video"})
+# Note: `bankSwitch` is also buggy, but we run a pre-canonicalization
+# step that converts `bankSwitch N` → `load id=...` (which encodes
+# correctly without any override). So we don't need it here anymore;
+# `setPalette` and `video` remain.
+RAW_REQUIRED_MNEMONICS = frozenset({"setPalette", "video"})
 
 
 def normalize_for_diff(line: str, strip_raw: bool = True) -> str:
     """Strip non-semantic content for diff purposes.
 
-    If `strip_raw` is True, removes `;@raw=...` annotations EXCEPT on
-    lines whose mnemonic is in `RAW_REQUIRED_MNEMONICS` — those need
-    the override to assemble correctly (per #0066).
+    Strips two kinds of comments:
+    - **Inline `;<text>`** comments BEFORE `;@raw=` (e.g.,
+      `bankSwitch 1; Prison ;@raw=...` → strip `; Prison`). These are
+      port-specific stage names / string-table contents that differ
+      cosmetically between branches without affecting assembled bytes.
+    - **`;@raw=...`** annotations on lines OUTSIDE
+      `RAW_REQUIRED_MNEMONICS` — the assembler computes correct
+      bytes for those mnemonics from the instruction alone, so the
+      `;@raw=` is redundant.
 
-    The `;@raw=...` annotation otherwise tells the disassembler what
-    bytes the instruction encoded; for opcodes outside the bug-list,
-    awvm-asm computes the bytes from the instruction itself and
-    ignores `;@raw=`. Two lines that differ only in `;@raw=` will
-    assemble to the same bytes for the same target — so treat them
-    as equal during unification.
+    Both kinds of stripping are safe: the assembled bytes don't change
+    when these comments are absent (verified empirically per #0066).
     """
     if not strip_raw:
         return line
+    # First strip inline ;<comment> (not ;@raw=). The negative-
+    # lookahead in RE_INLINE_COMMENT ensures we don't strip ;@raw=.
+    line = RE_INLINE_COMMENT.sub('', line).rstrip()
+    # Now decide if we keep ;@raw=.
     m = RE_LINE_MNEMONIC.match(line)
     if m and m.group(1) in RAW_REQUIRED_MNEMONICS:
         return line
