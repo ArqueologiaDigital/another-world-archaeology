@@ -1,0 +1,48 @@
+name: Deploy docs
+
+on:
+  push:
+    branches: [main]
+    # Skip when only the archive symlink target or session-archival
+    # commits are involved — those don't change docs/ output.
+    # (gen_docs_data.py reads sessions/, so we let session bumps
+    # trigger a redeploy too.)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history isn't needed for the docs build; shallow is fine.
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate docs/data/all.js
+        run: make docs
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          # Per-deploy commit message visible in the gh-pages branch
+          # history so the audit trail there mirrors source-branch
+          # commits.
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'docs: deploy ${{ github.sha }}'
