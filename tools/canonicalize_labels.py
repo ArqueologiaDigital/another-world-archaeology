@@ -156,14 +156,100 @@ def main() -> None:
     for br, m in rename.items():
         print(f"  {br}: {len(m)} synonym renames")
 
-    # Apply renames + write outputs
+    # Build the union of EQU tables (post-rename). After renames, each
+    # branch uses canonical names; collect every (canonical_name, offset)
+    # pair seen in any branch.
+    union_equs: dict[str, int] = {}
+    for br, equs in equs_per_branch.items():
+        rmap = rename[br]
+        for name, off in equs.items():
+            canon = rmap.get(name, name)
+            # Sanity: if the same canonical name maps to different
+            # offsets in different branches, something's wrong.
+            if canon in union_equs and union_equs[canon] != off:
+                sys.exit(
+                    f"EQU union conflict: {canon} = "
+                    f"0x{union_equs[canon]:04X} vs 0x{off:04X}"
+                )
+            union_equs[canon] = off
+
+    # Apply renames + augment EQU tables with the union (per-branch
+    # additions). Augmentation matters because some `CINEMATIC_xxx`
+    # labels exist in only one branch's disasm — usually because the
+    # OTHER branch's disasm couldn't reach the bytecode region that
+    # references them, even though the bytes ARE there. Adding the
+    # missing EQUs lets `tools/redisasm_db.py` emit symbolic
+    # `video offset=CINEMATIC_xxx` lines that match across branches.
     for br, in_path in inputs.items():
         text = in_path.read_text()
         out_text = apply_rename(text, rename[br])
+        # Find this branch's existing EQU names (post-rename).
+        existing_names = set()
+        for line in out_text.splitlines():
+            m = RE_EQU.match(line)
+            if m:
+                existing_names.add(m.group(1))
+        # Compute which union EQUs this branch is missing.
+        missing = sorted(
+            (name, off) for name, off in union_equs.items()
+            if name not in existing_names
+        )
+        # Sort the EQU section deterministically across branches so
+        # that augmented and original EQUs interleave in the SAME
+        # order in every branch. Without this, augmenting at the end
+        # of gba's EQU section puts CINEMATIC_660-669 in a different
+        # logical position than cart (where they appear MID-section
+        # because they were registered earlier in cart's disassembly
+        # walk). The position mismatch causes difflib to emit TWO
+        # `;@if` blocks for the same set of EQUs.
+        #
+        # Strategy: collect every EQU line (whether original or
+        # augmented), sort by NAME, and re-emit them as a contiguous
+        # block at the position of the FIRST EQU in the original
+        # file. The non-EQU lines between EQUs (e.g., blank-line
+        # separators inserted by the disasm) are preserved by being
+        # left in place; only the EQU lines themselves get
+        # repositioned + sorted.
+        lines = out_text.splitlines()
+        all_equs: list[tuple[str, int]] = []
+        equ_indices: list[int] = []
+        for i, line in enumerate(lines):
+            m = RE_EQU.match(line)
+            if m:
+                all_equs.append((m.group(1), int(m.group(2), 16)))
+                equ_indices.append(i)
+        for name, off in missing:
+            all_equs.append((name, off))
+        if equ_indices:
+            # Drop existing EQU lines + augmentation insertion point
+            # (we'll re-emit a sorted block).
+            non_equ_lines = [
+                l for i, l in enumerate(lines) if i not in set(equ_indices)
+            ]
+            # Sort by name (alpha), tie-break by offset.
+            all_equs.sort(key=lambda kv: (kv[0], kv[1]))
+            sorted_equ_lines = [
+                f"{name}\t\tEQU 0x{off:04X}"
+                for name, off in all_equs
+            ]
+            # Splice back in: insert sorted block at original
+            # first-EQU position (relative to non_equ_lines).
+            first_equ_pos = equ_indices[0]
+            # Position in non_equ_lines: equal to the number of non-EQU
+            # lines that came before the first EQU (in the original).
+            insert_at = sum(1 for i in range(first_equ_pos) if i not in set(equ_indices))
+            lines = (
+                non_equ_lines[:insert_at]
+                + sorted_equ_lines
+                + non_equ_lines[insert_at:]
+            )
+            out_text = "\n".join(lines)
+            if not out_text.endswith("\n"):
+                out_text += "\n"
         out_path = outputs[br]
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(out_text)
-        print(f"  wrote {out_path}")
+        print(f"  wrote {out_path}  ({len(missing)} EQUs added from union)")
 
 
 if __name__ == "__main__":

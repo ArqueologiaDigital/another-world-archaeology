@@ -70,8 +70,12 @@ OPCODE_TABLE = {
     0x12: (6, [], "text"),            # text id, x, y, color
     0x13: (3, [], "sub_var_var"),
     0x14: (4, [], "and_var_imm"),
+    0x15: (4, [], "or_var_imm"),
+    0x16: (4, [], "shl_var_imm"),
+    0x17: (4, [], "shr_var_imm"),
     0x18: (6, [], "play"),
     0x19: (3, [], "load"),
+    0x1A: (6, [], "song"),            # song id, delay, pos
 }
 
 
@@ -104,20 +108,27 @@ def decode_one(bytes_: list[int], offset: int) -> tuple[int, list[tuple[int, int
     info = OPCODE_TABLE.get(op)
     if info is None:
         # Video opcodes:
-        #   bit 7 set (0x80-0xFF): video type 1 — empirically always 4 bytes
-        #     in INTRO (verified across all 0x82-0xFE opcodes used).
-        #   bit 6 set, bit 7 clear (0x40-0x7F): video type 2 — 5 or 6 bytes.
-        #     Size depends on flag bits we don't fully decode. We use a
-        #     lookup table for the cases observed in INTRO.
+        #   bit 7 set (0x80-0xFF): video type 1 — always 4 bytes
+        #     (opcode + lo-of-offset + x + y).
+        #   bit 6 set, bit 7 clear (0x40-0x7F): video type 2 — variable
+        #     size determined by flag bits in the opcode (see
+        #     awvm-disasm's "VIDEO (alt encoding)" branch).
         if op & 0x80:
             size = 4
             if offset + size > len(bytes_):
                 return None
             return (size, [], f"video1_{op:02x}")
         if op & 0x40:
-            size = VIDEO2_SIZE.get(op)
-            if size is None:
-                return None  # unknown type-2 size, can't decode
+            # Type-2 size = 3 (opcode + off1 + off2) + x_size + y_size + zoom_size
+            # x: bit 5=0 + bit 4=0 → 2 bytes (16-bit x), else 1 byte
+            # y: bit 3=0 + bit 2=0 → 2 bytes (16-bit y), else 1 byte
+            # zoom: bits 1-0 in {00, 11} → 0 bytes (zoom=0x40),
+            #       in {01, 10} → 1 byte (zoom_var)
+            x_size = 1 if (op & 0x20) else (1 if (op & 0x10) else 2)
+            y_size = 1 if (op & 0x08) else (1 if (op & 0x04) else 2)
+            zoom_low2 = op & 0x03
+            zoom_size = 0 if zoom_low2 in (0, 3) else 1
+            size = 3 + x_size + y_size + zoom_size
             if offset + size > len(bytes_):
                 return None
             return (size, [], f"video2_{op:02x}")
@@ -394,15 +405,50 @@ def collect_labels(lines: list[str]) -> dict[int, str]:
 # Comparison-type → mnemonic for cond_jump (low 3 bits of cond byte).
 COND_MNEMONIC = {0: "je", 1: "jne", 2: "jg", 3: "jge", 4: "jl", 5: "jle"}
 
+# Special-purpose variable names — must match awvm-disasm's
+# `SPECIAL_PURPOSE_VARS` table exactly (see disasm.rs). Used by the
+# `variable_name` helper to render `[var]` references.
+SPECIAL_VARS = {
+    0x3c: "RANDOM_SEED",
+    0x54: "HACK_VAR_54",
+    0x67: "HACK_VAR_67",
+    0xda: "LAST_KEYCHAR",
+    0xdc: "HACK_VAR_DC",
+    0xe5: "HERO_POS_UP_DOWN",
+    0xf4: "MUS_MARK",
+    0xf7: "HACK_VAR_F7",
+    0xf9: "SCROLL_Y",
+    0xfa: "HERO_ACTION",
+    0xfb: "HERO_POS_JUMP_DOWN",
+    0xfc: "HERO_POS_LEFT_RIGHT",
+    0xfd: "HERO_POS_MASK",
+    0xfe: "HERO_ACTION_POS_MASK",
+    0xff: "PAUSE_SLICES",
+}
 
-def format_instruction(instr_bytes: list[int], addr_label: str | None) -> str | None:
+
+def variable_name(v: int) -> str:
+    """Render a variable byte as the special name (when it has one)
+    or as the raw `0xVV` index. Mirrors awvm-disasm's variable_name."""
+    return SPECIAL_VARS.get(v, f"0x{v:02X}")
+
+
+def format_instruction(
+    instr_bytes: list[int],
+    addr_label: str | None,
+    cinematic_label_for: dict[int, str] | None = None,
+) -> str | None:
     """Format one decoded instruction back into an asm line.
 
     Returns the formatted line (with `;@raw=` annotation), or None if
     the opcode lacks a formatter (caller should fall back to `db`).
 
-    `addr_label`: symbolic name to use for the address operand, if any.
-    Caller resolves the target offset → label name before calling.
+    `addr_label`: symbolic name to use for the address operand, if any
+        (e.g., for `jmp`, `call`, `setup`, `djnz`, `cond_jump`).
+    `cinematic_label_for`: dict mapping cinematic-rom byte-offset →
+        `CINEMATIC_xxx` label name (or `VIDEO2_xxx`). Used by the
+        video opcodes. If a target offset isn't in this dict, the
+        formatter falls back to a hex literal.
     """
     op = instr_bytes[0]
     raw = ",".join(f"0x{b:02X}" for b in instr_bytes)
@@ -410,39 +456,124 @@ def format_instruction(instr_bytes: list[int], addr_label: str | None) -> str | 
     def line(body: str) -> str:
         return f"\t{body}\t;@raw={raw}"
 
-    if op == 0x05:
-        return line("ret")
-    if op == 0x06:
-        return line("break")
-    if op == 0x11:
-        return line("killChannel")
-    if op == 0x07:  # jmp addr16
-        addr = (instr_bytes[1] << 8) | instr_bytes[2]
-        target = addr_label or f"0x{addr:04X}"
-        return line(f"jmp {target}")
+    cin_for = cinematic_label_for or {}
+
+    # ---- Type-1 video (high bit set, 4 bytes) ------------------------
+    if op & 0x80:
+        # opcode | lo | x | y → offset = ((opcode & 0x7F) << 8 | lo) * 2
+        lo = instr_bytes[1]
+        offset = (((op & 0x7F) << 8) | lo) * 2
+        x = instr_bytes[2]
+        y = instr_bytes[3]
+        label = cin_for.get(offset, f"0x{offset:04X}")
+        return line(f"video type=1, offset={label}, x={x}, y={y}")
+
+    # ---- Type-2 video (bit 6 set, variable size) ---------------------
+    if op & 0x40:
+        # See awvm-disasm's "VIDEO (alt encoding)" branch. We fully
+        # mirror its parsing of x/y/zoom flags so the rendered text
+        # matches byte-for-byte where it was already produced upstream.
+        off1 = instr_bytes[1]
+        off2 = instr_bytes[2]
+        offset = (((off1 & 0x7F) << 8) | off2) * 2
+        i = 3
+        # x
+        x_byte = instr_bytes[i]
+        i += 1
+        if op & 0x20 == 0:
+            if op & 0x10 == 0:
+                # 16-bit x
+                x_extra = instr_bytes[i]
+                i += 1
+                x_str = f"{(x_byte << 8) | x_extra}"
+            else:
+                x_str = f"[0x{x_byte:02x}]"
+        else:
+            x_val = x_byte + (0x100 if (op & 0x10) else 0)
+            x_str = f"{x_val}"
+        # y
+        if op & 0x08 == 0:
+            if op & 0x04 == 0:
+                # 16-bit y
+                y_hi = instr_bytes[i]; i += 1
+                y_lo = instr_bytes[i]; i += 1
+                y_str = f"{(y_hi << 8) | y_lo}"
+            else:
+                v = instr_bytes[i]; i += 1
+                y_str = f"[0x{v:02x}]"
+        else:
+            v = instr_bytes[i]; i += 1
+            y_str = f"{v}"
+        # zoom
+        if op & 0x02 == 0:
+            if op & 0x01 == 0:
+                zoom_str = "0x40"
+            else:
+                v = instr_bytes[i]; i += 1
+                zoom_str = f"[0x{v:02x}]"
+        else:
+            if op & 0x01:
+                zoom_str = "0x40"
+            else:
+                v = instr_bytes[i]; i += 1
+                zoom_str = f"[0x{v:02x}]"
+        # video2 vs cinematic — the (op & 3) == 3 case is the shared
+        # video2 polygon bank; everything else is per-level cinematic.
+        if (op & 0x03) == 0x03:
+            label = cin_for.get(("video2", offset), f"0x{offset:04X}")
+            return line(f"video type=0, offset={label}, x={x_str}, y={y_str}, zoom={zoom_str}")
+        else:
+            label = cin_for.get(offset, f"0x{offset:04X}")
+            return line(f"video type=1, offset={label}, x={x_str}, y={y_str}, zoom={zoom_str}")
+
+    if op == 0x00:  # mov [var], imm16
+        dst = variable_name(instr_bytes[1])
+        imm = (instr_bytes[2] << 8) | instr_bytes[3]
+        return line(f"mov [{dst}], 0x{imm:04X}")
+    if op == 0x01:  # mov [var], [var]
+        dst = variable_name(instr_bytes[1])
+        src = variable_name(instr_bytes[2])
+        return line(f"mov [{dst}], [{src}]")
+    if op == 0x02:  # add [var], [var]
+        dst = variable_name(instr_bytes[1])
+        src = variable_name(instr_bytes[2])
+        return line(f"add [{dst}], [{src}]")
+    if op == 0x03:  # add [var], imm16  (or sub when imm is two's-complement-negative)
+        dst = variable_name(instr_bytes[1])
+        imm = (instr_bytes[2] << 8) | instr_bytes[3]
+        # Match awvm-disasm: render `add [var], 0x{N}` where N >= 0x8000
+        # as `sub [var], 0x{0x10000 - N}`. Same opcode + same bytes;
+        # `sub` is the human-readable form for negative immediates.
+        if imm >= 0x8000:
+            return line(f"sub [{dst}], 0x{0x10000 - imm:04X}")
+        return line(f"add [{dst}], 0x{imm:04X}")
     if op == 0x04:  # call addr16
         addr = (instr_bytes[1] << 8) | instr_bytes[2]
         target = addr_label or f"0x{addr:04X}"
         return line(f"call {target}")
+    if op == 0x05:
+        return line("ret")
+    if op == 0x06:
+        return line("break")
+    if op == 0x07:  # jmp addr16
+        addr = (instr_bytes[1] << 8) | instr_bytes[2]
+        target = addr_label or f"0x{addr:04X}"
+        return line(f"jmp {target}")
     if op == 0x08:  # setup channel=N, address=addr16
         ch = instr_bytes[1]
         addr = (instr_bytes[2] << 8) | instr_bytes[3]
         target = addr_label or f"0x{addr:04X}"
         return line(f"setup channel=0x{ch:02X}, address={target}")
     if op == 0x09:  # djnz [var], addr16
-        var = instr_bytes[1]
+        var = variable_name(instr_bytes[1])
         addr = (instr_bytes[2] << 8) | instr_bytes[3]
         target = addr_label or f"0x{addr:04X}"
-        return line(f"djnz [0x{var:02X}], {target}")
-    if op == 0x12:  # text id, x, y, color
-        text_id = (instr_bytes[1] << 8) | instr_bytes[2]
-        x, y, color = instr_bytes[3], instr_bytes[4], instr_bytes[5]
-        return line(f"text id=0x{text_id:04X}, x={x}, y={y}, color=0x{color:02X}")
+        return line(f"djnz [{var}], {target}")
     if op == 0x0A:  # cond_jump
         cond = instr_bytes[1]
-        var = instr_bytes[2]
+        var = variable_name(instr_bytes[2])
         if cond & 0x80:
-            second_op = f"[0x{instr_bytes[3]:02X}]"
+            second_op = f"[{variable_name(instr_bytes[3])}]"
             addr_pos = 4
         elif cond & 0x40:
             second_op = f"0x{(instr_bytes[3] << 8) | instr_bytes[4]:04X}"
@@ -454,7 +585,77 @@ def format_instruction(instr_bytes: list[int], addr_label: str | None) -> str | 
         target = addr_label or f"0x{addr:04X}"
         cmp_type = cond & 0x07
         mnem = COND_MNEMONIC.get(cmp_type, f"jcond_{cmp_type:x}")
-        return line(f"{mnem} [0x{var:02X}], {second_op}, {target}")
+        return line(f"{mnem} [{var}], {second_op}, {target}")
+    if op == 0x0B:  # setPalette N (3 bytes — 1 palette id + 1 waste byte)
+        pid = instr_bytes[1]
+        return line(f"setPalette 0x{pid:02X}")
+    if op == 0x0C:  # freezeChannels / unfreezeChannels / deleteChannels
+        first = instr_bytes[1]
+        last = instr_bytes[2]
+        typ = instr_bytes[3]
+        names = ["freezeChannels", "unfreezeChannels", "deleteChannels"]
+        if typ > 2:
+            return None  # invalid; fall back to db
+        return line(f"{names[typ]} 0x{first:02X}, 0x{last:02X}")
+    if op == 0x0D:  # selectVideoPage 0xPP
+        pid = instr_bytes[1]
+        return line(f"selectVideoPage 0x{pid:02X}")
+    if op == 0x0E:  # fill page=, color=
+        page = instr_bytes[1]
+        color = instr_bytes[2]
+        return line(f"fill page=0x{page:02X}, color=0x{color:02X}")
+    if op == 0x0F:  # copyVideoPage src=, dst=
+        src = instr_bytes[1]
+        dst = instr_bytes[2]
+        return line(f"copyVideoPage src=0x{src:02X}, dst=0x{dst:02X}")
+    if op == 0x10:  # blitFramebuffer 0xPP
+        page = instr_bytes[1]
+        return line(f"blitFramebuffer 0x{page:02X}")
+    if op == 0x11:
+        return line("killChannel")
+    if op == 0x12:  # text id, x, y, color
+        text_id = (instr_bytes[1] << 8) | instr_bytes[2]
+        x, y, color = instr_bytes[3], instr_bytes[4], instr_bytes[5]
+        return line(f"text id=0x{text_id:04X}, x={x}, y={y}, color=0x{color:02X}")
+    if op == 0x13:  # sub [var], [var]
+        v1 = variable_name(instr_bytes[1])
+        v2 = variable_name(instr_bytes[2])
+        return line(f"sub [{v1}], [{v2}]")
+    if op == 0x14:  # and [var], imm16
+        dst = variable_name(instr_bytes[1])
+        imm = (instr_bytes[2] << 8) | instr_bytes[3]
+        return line(f"and [{dst}], 0x{imm:04X}")
+    if op == 0x15:  # or [var], imm16
+        dst = variable_name(instr_bytes[1])
+        imm = (instr_bytes[2] << 8) | instr_bytes[3]
+        return line(f"or [{dst}], 0x{imm:04X}")
+    if op == 0x16:  # shl [var], imm16
+        var = variable_name(instr_bytes[1])
+        imm = (instr_bytes[2] << 8) | instr_bytes[3]
+        return line(f"shl [{var}], 0x{imm:04X}")
+    if op == 0x17:  # shr [var], imm16
+        var = variable_name(instr_bytes[1])
+        imm = (instr_bytes[2] << 8) | instr_bytes[3]
+        return line(f"shr [{var}], 0x{imm:04X}")
+    if op == 0x18:  # play id, freq, vol, channel (6 bytes)
+        res = (instr_bytes[1] << 8) | instr_bytes[2]
+        freq = instr_bytes[3]
+        vol = instr_bytes[4]
+        chan = instr_bytes[5]
+        return line(
+            f"play id=0x{res:04X}, freq=0x{freq:02X}, "
+            f"vol=0x{vol:02X}, channel=0x{chan:02X}"
+        )
+    if op == 0x19:  # load id=0xXXXX (3 bytes)
+        imm = (instr_bytes[1] << 8) | instr_bytes[2]
+        return line(f"load id=0x{imm:04X}")
+    if op == 0x1A:  # song id, delay, pos (6 bytes)
+        res = (instr_bytes[1] << 8) | instr_bytes[2]
+        delay = (instr_bytes[3] << 8) | instr_bytes[4]
+        pos = instr_bytes[5]
+        return line(
+            f"song id=0x{res:04X}, delay=0x{delay:04X}, pos=0x{pos:02X}"
+        )
     return None  # no formatter — caller falls back to db
 
 
@@ -481,6 +682,26 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
     Returns: (new_lines, stats_dict)
     """
     label_at_pos = collect_labels(lines)
+
+    # Build the cinematic-label table by scanning EQU lines. Names
+    # starting with `CINEMATIC_` map to per-level cinematic-rom byte
+    # offsets; names starting with `VIDEO2_` map to the shared
+    # video2-rom space. Used by the video formatters to emit
+    # symbolic offsets when possible.
+    cinematic_labels: dict = {}
+    re_equ = re.compile(r'^([A-Z][A-Z_0-9]*)\s+EQU\s+(0x[0-9A-Fa-f]+)\s*$')
+    for line in lines:
+        m = re_equ.match(line)
+        if not m:
+            continue
+        name = m.group(1)
+        addr = int(m.group(2), 16)
+        if name.startswith("CINEMATIC_"):
+            # Earlier entries win on collision (preserves disasm's
+            # "first encountered keeps the name" behaviour).
+            cinematic_labels.setdefault(addr, name)
+        elif name.startswith("VIDEO2_"):
+            cinematic_labels.setdefault(("video2", addr), name)
 
     # First pass: walk byte positions to find db-block ranges + each
     # block's start byte-offset (the absolute address where its first
@@ -720,7 +941,9 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
                     addr = (instr_bytes[ao_in_inst] << 8) | instr_bytes[ao_in_inst + 1]
                     addr_label = label_for_addr(addr)
                     break
-                formatted = format_instruction(instr_bytes, addr_label)
+                formatted = format_instruction(
+                    instr_bytes, addr_label, cinematic_labels
+                )
                 if formatted is None:
                     new_block.extend(emit_db_lines(list(instr_bytes)))
                     stats["instructions_kept_as_db"] += 1
