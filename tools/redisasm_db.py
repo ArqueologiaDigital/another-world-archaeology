@@ -596,7 +596,8 @@ def format_instruction(
         names = ["freezeChannels", "unfreezeChannels", "deleteChannels"]
         if typ > 2:
             return None  # invalid; fall back to db
-        return line(f"{names[typ]} 0x{first:02X}, 0x{last:02X}")
+        # Match awvm-disasm's keyword-arg form: `first=0x..., last=0x...`
+        return line(f"{names[typ]} first=0x{first:02X}, last=0x{last:02X}")
     if op == 0x0D:  # selectVideoPage 0xPP
         pid = instr_bytes[1]
         return line(f"selectVideoPage 0x{pid:02X}")
@@ -807,27 +808,49 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
         reachable = True
         unreach_buf_offset: int | None = None
         unreach_buf_bytes: list[int] = []
+        unreach_buf_items: list[tuple] = []  # original decoded items in this span
+
+        # Threshold below which an unreachable span keeps its decoded
+        # mnemonics rather than being collapsed to raw. Polygon data
+        # mis-classified as unreachable bytecode tends to come in
+        # large chunks (research/10's LABEL_26A6 was 55 KB); a stray
+        # killChannel/break/ret left behind as a dead instruction
+        # after a jmp is at most a handful of bytes. 16 bytes
+        # cleanly separates them.
+        SHORT_UNREACH_BYTES = 16
 
         def flush_unreach() -> None:
-            nonlocal unreach_buf_offset, unreach_buf_bytes
+            nonlocal unreach_buf_offset, unreach_buf_bytes, unreach_buf_items
             if unreach_buf_offset is None or not unreach_buf_bytes:
                 unreach_buf_offset = None
                 unreach_buf_bytes = []
+                unreach_buf_items = []
                 return
-            tail_fill = detect_trailing_fill(unreach_buf_bytes)
-            prefix = len(unreach_buf_bytes) - tail_fill
-            if prefix > 0:
-                filtered.append((
-                    "raw", unreach_buf_offset, prefix,
-                    unreach_buf_bytes[:prefix],
-                ))
-            if tail_fill > 0:
-                filtered.append((
-                    "fill", unreach_buf_offset + prefix,
-                    tail_fill, unreach_buf_bytes[-1],
-                ))
+            if len(unreach_buf_bytes) <= SHORT_UNREACH_BYTES:
+                # Short span — keep the original decoded items so a
+                # stray `db 0x11` after a `jmp` stays as the more
+                # informative `killChannel` mnemonic. `;@raw=` keeps
+                # the byte annotation either way, so byte-match holds.
+                filtered.extend(unreach_buf_items)
+            else:
+                # Long span — likely real data (e.g., polygon data
+                # mis-extracted into a bytecode chunk). Collapse to
+                # raw / fill so we don't pretend it's code.
+                tail_fill = detect_trailing_fill(unreach_buf_bytes)
+                prefix = len(unreach_buf_bytes) - tail_fill
+                if prefix > 0:
+                    filtered.append((
+                        "raw", unreach_buf_offset, prefix,
+                        unreach_buf_bytes[:prefix],
+                    ))
+                if tail_fill > 0:
+                    filtered.append((
+                        "fill", unreach_buf_offset + prefix,
+                        tail_fill, unreach_buf_bytes[-1],
+                    ))
             unreach_buf_offset = None
             unreach_buf_bytes = []
+            unreach_buf_items = []
 
         for it in items:
             kind = it[0]
@@ -844,10 +867,12 @@ def rewrite_source(lines: list[str]) -> tuple[list[str], dict]:
                     if op in TERMINATING_OPCODES:
                         reachable = False
             else:
-                # Buffer unreachable bytes; emit as raw when we resume
-                # (or at the end of the block).
+                # Buffer unreachable items + their bytes. `flush_unreach`
+                # decides whether to keep the decoded items (short
+                # span) or collapse to raw/fill (long span).
                 if unreach_buf_offset is None:
                     unreach_buf_offset = it_off
+                unreach_buf_items.append(it)
                 if kind == "instr":
                     sz = it[2]
                     unreach_buf_bytes.extend(bytes_[it_off:it_off + sz])

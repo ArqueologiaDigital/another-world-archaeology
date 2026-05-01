@@ -29,6 +29,45 @@ from pathlib import Path
 RE_RAW_COMMENT = re.compile(r'\s*;@raw=[0-9A-Fa-fx,]+\s*$')
 RE_INLINE_COMMENT = re.compile(r';(?!@raw=)[^\t\n]*')
 RE_LINE_MNEMONIC = re.compile(r'^\s*([a-zA-Z][a-zA-Z]*)\b')
+
+# Recognised AW VM assembly instructions/directives. Used to
+# distinguish real-code lines from incidental string-continuation
+# lines (which the disasm produces for multi-line `text id=... ; "…"`
+# annotations whose string content contains a `\n`).
+KNOWN_MNEMONICS = frozenset({
+    "mov", "add", "sub", "and", "or", "shl", "shr",
+    "call", "ret", "break", "jmp", "setup", "djnz",
+    "je", "jne", "jl", "jle", "jg", "jge",
+    "setPalette", "freezeChannels", "unfreezeChannels", "deleteChannels",
+    "selectVideoPage", "fill", "copyVideoPage", "blitFramebuffer",
+    "killChannel", "text", "play", "load", "song", "video",
+    "bankSwitch",
+    "db", "dw", "FILL", "EQU", "org",
+})
+
+RE_LABEL_DEF = re.compile(r'^[A-Z][A-Z_0-9]*:\s*$')
+
+
+def is_real_code_line(line: str) -> bool:
+    """Heuristic: does `line` look like real assembly code, vs.
+    decorative content (blank, pure comment, or a string-continuation
+    line emitted by the disasm for a multi-line `text` comment)?
+
+    Returns True if the line starts with a recognised mnemonic /
+    directive, OR is a label definition. Returns False otherwise
+    (blank, `;` comment, string continuation, etc.).
+    """
+    s = line.strip()
+    if not s:
+        return False
+    if s.startswith(";"):  # comment
+        return False
+    if RE_LABEL_DEF.match(line):
+        return True
+    m = RE_LINE_MNEMONIC.match(line)
+    if not m:
+        return False
+    return m.group(1) in KNOWN_MNEMONICS
 # A "pure-comment" line is whitespace + `;` followed by anything (and
 # crucially NOT `;@<directive>` like ;@if/;@elif/;@else/;@endif which
 # the preprocessor handles separately, NOR `;@raw=...` annotations).
@@ -128,12 +167,58 @@ def unify(a_lines: list[str], b_lines: list[str],
             # either side without affecting byte-match.
             def is_blank_only(block: list[str]) -> bool:
                 return all(not l.strip() for l in block)
+            # Cosmetic continuation: lines that are JUST string
+            # content for a multi-line `text id=... ; "long
+            # multi-line string"` annotation. The disasm splits such
+            # strings across multiple physical lines; the
+            # continuation lines have no `;@raw=` (the raw bytes are
+            # on the line above), no mnemonic, and end with a closing
+            # quote. They're commentary, not code, so they're safe to
+            # emit unconditionally — both branches' bytecode is
+            # identical for the same `text id=...`, only the rendered
+            # comment differs (different translations / port-specific
+            # string-table content).
+            def is_cosmetic_continuation(block: list[str]) -> bool:
+                """True if `block` contains only decorative lines
+                (blank, `;` comment, or string-continuation lines like
+                `   PRESS START FOR CODE ENTRY"` that come from a
+                multi-line `text id=... ; "..."` whose string body has
+                an embedded `\\n`).
+
+                A "decorative" line has no `;@raw=` byte annotation
+                AND isn't recognised as real code (no mnemonic, no
+                directive, no label definition). The disasm emits
+                such lines as continuation of the previous line's
+                inline comment; awvm-asm tolerates them as no-ops, so
+                they're safe to share across branches even when the
+                rendered string differs port-to-port.
+                """
+                if not block:
+                    return False
+                saw_continuation = False
+                for l in block:
+                    if not l.strip():
+                        continue
+                    if l.lstrip().startswith(";"):
+                        continue
+                    # Real code → not cosmetic.
+                    if is_real_code_line(l):
+                        return False
+                    # Has a `;@raw=` annotation → carries instruction
+                    # bytes → not cosmetic.
+                    if ";@raw=" in l:
+                        return False
+                    saw_continuation = True
+                return saw_continuation
             a_blank = is_blank_only(a_block)
             b_blank = is_blank_only(b_block)
-            if a_blank and b_blank:
-                # Both blank-only — emit whichever is longer (or
-                # neither, doesn't matter byte-wise; pick the longer
-                # to preserve readability).
+            a_cosmetic = a_blank or is_cosmetic_continuation(a_block)
+            b_cosmetic = b_blank or is_cosmetic_continuation(b_block)
+            if a_cosmetic and b_cosmetic:
+                # Both sides are decorative (blank lines, comments, or
+                # multi-line text-comment continuations). Emit the
+                # longer side as shared content, no `;@if`. Doesn't
+                # affect byte-match either way.
                 out.extend(a_block if len(a_block) >= len(b_block) else b_block)
                 continue
             # Collapse one-sided diffs: if one branch contributes no
@@ -142,22 +227,28 @@ def unify(a_lines: list[str], b_lines: list[str],
             # `;@if`/`;@elif` pair with one side empty. The empty side
             # would just be deadweight noise in the unified source.
             if not a_block and b_block:
-                # If the only-on-b content is blank-only, just emit
-                # the blank lines as shared (no `;@if` needed).
-                if b_blank:
+                # If the b-only content is purely decorative, just
+                # emit the lines as shared (no `;@if` needed).
+                if b_cosmetic:
                     out.extend(b_block)
                 else:
                     out.append(f';@if BRANCH == "{branch_b}"')
                     out.extend(b_block)
                     out.append(";@endif")
             elif a_block and not b_block:
-                if a_blank:
+                if a_cosmetic:
                     out.extend(a_block)
                 else:
                     out.append(f';@if BRANCH == "{branch_a}"')
                     out.extend(a_block)
                     out.append(";@endif")
             else:
+                # Both sides have content. If one side is purely
+                # decorative continuation (e.g., cart has a multi-line
+                # string-comment that gba doesn't), the bytes are the
+                # same — emit the longer-decorative side as shared
+                # before/after the meaningful content. For now, just
+                # emit both as a `;@if`/`;@elif` block.
                 out.append(f';@if BRANCH == "{branch_a}"')
                 out.extend(a_block)
                 out.append(f';@elif BRANCH == "{branch_b}"')
