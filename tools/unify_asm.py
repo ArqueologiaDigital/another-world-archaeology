@@ -1212,66 +1212,65 @@ def main() -> None:
             sources[0][0], sources[1][0],
             strip_raw_comments=args.strip_raw_comments,
         )
-    elif len(sources) == 3:
-        # 3-way unification via progressive folding (A+B → AB, then
-        # AB+C → ABC). Naive folding has a fatal nesting bug: the
-        # AB step emits `;@if/.../;@endif` blocks for cart↔gba
-        # divergence, then difflib in step 2 treats those directives
-        # as ordinary lines and freely splits an `;@if/.../;@endif`
-        # block across "equal" and "replace" opcodes. The result is
-        # unbalanced nesting (e.g., outer `;@if` opened in one diff
-        # block, closed in a later one).
+    else:
+        # N-way unification via progressive folding (N >= 3). At each
+        # fold step, collapse the running unified output's
+        # `;@if/.../;@endif` blocks into single-line placeholders so
+        # difflib treats each as an atomic token, merge with the next
+        # branch's lines using a sentinel branch name for the merged
+        # side, expand placeholders, and rewrite the sentinel into
+        # `BRANCH in (<all branches merged so far>)`. Repeat for each
+        # remaining branch.
         #
-        # Fix: collapse each `;@if/.../;@endif` block in AB into a
-        # single placeholder line BEFORE the second diff. Difflib
-        # then sees one atomic token per AB-divergent region. After
-        # difflib produces opcodes, expand the placeholders back to
-        # the original block contents in the output. This guarantees
-        # that an AB block is either kept whole (in an `equal`
-        # opcode) or wrapped whole (in a `replace` opcode) — never
-        # split across opcodes.
-        a, b, c = sources
-        ab_lines, ab_stats = unify(
-            a[1], b[1], a[0], b[0],
+        # The block-collapse step prevents difflib from splitting a
+        # multi-line directive block across `equal` and `replace`
+        # opcodes (which would produce malformed nested output).
+        first, second, *rest = sources
+        running_branches = [first[0], second[0]]
+        running, first_stats = unify(
+            first[1], second[1], first[0], second[0],
             strip_raw_comments=args.strip_raw_comments,
         )
-        ab_collapsed, ab_blocks = _collapse_directive_blocks(ab_lines)
-        c_lines = c[1]
-        if args.strip_raw_comments:
-            c_lines = [normalize_for_diff(l, strip_raw=True) for l in c_lines]
-        ab_sentinel = "<ab>"
-        merged, c_stats = unify(
-            ab_collapsed, c_lines, ab_sentinel, c[0],
-            strip_raw_comments=False,  # already normalised
-        )
-        in_clause = f'BRANCH in ("{a[0]}", "{b[0]}")'
-        rewritten: list[str] = []
-        for line in merged:
-            # Expand any AB block placeholders back to their original
-            # multi-line contents.
-            if line.startswith("__AB_BLOCK_") and line.endswith("__"):
-                idx = int(line[len("__AB_BLOCK_"):-len("__")])
-                rewritten.extend(ab_blocks[idx])
-                continue
-            # Rewrite the `<ab>` sentinel emitted by the second merge.
-            line = line.replace(
-                f';@if BRANCH == "{ab_sentinel}"',
-                f';@if {in_clause}',
+        per_step_diff_blocks = [first_stats["diff_blocks"]]
+        for step_i, (br_name, br_lines) in enumerate(rest):
+            collapsed, blocks = _collapse_directive_blocks(running)
+            next_lines = br_lines
+            if args.strip_raw_comments:
+                next_lines = [
+                    normalize_for_diff(l, strip_raw=True) for l in next_lines
+                ]
+            sentinel = f"<merged_{step_i}>"
+            merged, step_stats = unify(
+                collapsed, next_lines, sentinel, br_name,
+                strip_raw_comments=False,  # already normalised
             )
-            line = line.replace(
-                f';@elif BRANCH == "{ab_sentinel}"',
-                f';@elif {in_clause}',
+            per_step_diff_blocks.append(step_stats["diff_blocks"])
+            in_clause = (
+                'BRANCH in ('
+                + ', '.join(f'"{b}"' for b in running_branches)
+                + ')'
             )
-            rewritten.append(line)
-        out_lines = rewritten
+            rewritten: list[str] = []
+            placeholder_prefix = "__AB_BLOCK_"
+            for line in merged:
+                if line.startswith(placeholder_prefix) and line.endswith("__"):
+                    idx = int(line[len(placeholder_prefix):-len("__")])
+                    rewritten.extend(blocks[idx])
+                    continue
+                line = line.replace(
+                    f';@if BRANCH == "{sentinel}"', f';@if {in_clause}'
+                )
+                line = line.replace(
+                    f';@elif BRANCH == "{sentinel}"', f';@elif {in_clause}'
+                )
+                rewritten.append(line)
+            running = rewritten
+            running_branches.append(br_name)
+        out_lines = running
         stats = {
-            "diff_blocks": ab_stats["diff_blocks"] + c_stats["diff_blocks"],
-            "ab_diff_blocks": ab_stats["diff_blocks"],
-            "abc_diff_blocks": c_stats["diff_blocks"],
+            "diff_blocks": sum(per_step_diff_blocks),
+            "per_step_diff_blocks": per_step_diff_blocks,
         }
-    else:
-        sys.exit(f"only 2- or 3-way unification supported (got {len(sources)} "
-                 "sources). N>3 needs a synchronised matcher.")
 
     # Post-process: merge adjacent same-condition blocks. The diff
     # algorithm emits a fresh `;@if/.../;@endif` block at every diff
