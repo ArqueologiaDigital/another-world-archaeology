@@ -49,9 +49,9 @@ PORTS = {
             "CAPSULE": 4, "ENDING": 5, "PASSCODE": 6,
         },
     },
-    # Heineman DOS branch
+    # DOS 1992 branch
     "msdos": {
-        "branch": "heineman_dos",
+        "branch": "dos_1992",
         "format": "resource-bin",
         "root": Path("/tmp/output/msdos"),
         "stages": {

@@ -42,9 +42,9 @@ source-reconstruction repo invokes it via `make verify-all`.
 | Port | Levels | Format | Notes |
 |---|---|---|---|
 | **amiga**          | 9/9 | resource-bin | 1991 Chahi master |
-| **msdos**          | 9/9 | resource-bin | 1992 Heineman |
+| **msdos**          | 9/9 | resource-bin | 1992 Delphine/Morais |
 | **genesis_europe** | 7/7 | cartridge (7×64KB chunks) | 1993 Heineman / Interplay |
-| **snes_eu**        | 2/2 | cartridge (2 levels disasm only) | 1992 Heineman |
+| **snes_eu**        | 2/2 | cartridge (2 levels disasm only) | 1992 Delphine/Morais |
 | **gba_usa**        | 2/2 | cartridge (2 levels disasm only) | 2004 Foxy fan port |
 
 Per-level md5 of the 18 resource-bin levels (Amiga + DOS) and the
@@ -130,7 +130,7 @@ into a unified source tree with conditional compilation flags.
 Initial bytecode-equivalence map (md5 of `;@raw=` byte stream
 per port × stage):
 
-| Stage | Chahi 1991 | Heineman DOS | Heineman cartridge | Foxy GBA |
+| Stage | Chahi 1991 | Delphine DOS | Heineman cartridge | Foxy GBA |
 |---|---|---|---|---|
 | CODE_WHEEL | `7b3b8d33…` | `5067870d…` | `d1490888…` (snes_eu only) | `94538fe7…` |
 | INTRO       | `61f84573…` | `916bbdb9…` | (not present)             | (not present) |
@@ -160,7 +160,7 @@ files**:
 | Branch | Source files | Targets |
 |---|---|---|
 | `chahi_1991` | 9 stages | amiga (atari_st when extractor lands) |
-| `heineman_dos` | 9 stages | msdos |
+| `dos_1992` | 9 stages | msdos |
 | `heineman_cartridge` | **8 stages** | snes_eu + genesis_europe (LAKE shared) |
 | `foxy_gba_2004` | 2 stages | gba_usa |
 | **Total** | **28 .asm** | **29 targets** |

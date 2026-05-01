@@ -5,7 +5,7 @@
 ## Question
 
 Phase 3a (research/07) showed that the four bytecode branches
-(Chahi 1991 / Heineman DOS / Heineman cartridge / Foxy GBA) share
+(Chahi 1991 / Delphine DOS / Heineman cartridge / Foxy GBA) share
 **no byte-identical stages** outside the SNES↔Genesis lake-stage
 pair. So per-branch sources are the right organization at byte
 level.
@@ -45,10 +45,10 @@ addresses.
 
 | Pair | Ratio | Matched tokens | Longest block |
 |---|---|---|---|
-| heineman_cartridge vs heineman_dos | **0.914** | 6384 / 7032 | **512 tokens** |
+| heineman_cartridge vs dos_1992 | **0.914** | 6384 / 7032 | **512 tokens** |
 | foxy_gba_2004 vs heineman_cartridge | **0.920** | 6330 / 7032 | 393 tokens |
-| foxy_gba_2004 vs heineman_dos | 0.884 | 6039 / 6933 | 375 tokens |
-| chahi_1991 vs heineman_dos | 0.600 | 4058 / 6933 | 151 tokens |
+| foxy_gba_2004 vs dos_1992 | 0.884 | 6039 / 6933 | 375 tokens |
+| chahi_1991 vs dos_1992 | 0.600 | 4058 / 6933 | 151 tokens |
 | chahi_1991 vs heineman_cartridge | 0.598 | 4077 / 7032 | 129 tokens |
 | chahi_1991 vs foxy_gba_2004 | 0.587 | 3911 / 6729 | 129 tokens |
 
@@ -76,7 +76,7 @@ Headline numbers:
 - **GBA ↔ cartridge similarity is 0.988 for CODE_WHEEL and 0.920
   for LAKE** — Foxy 2004 essentially refactored the cartridge
   bytecode rather than re-implementing from scratch.
-- **Chahi ↔ Heineman DOS is 0.72-0.92 for many stages** — DOS
+- **Chahi ↔ Delphine DOS is 0.72-0.92 for many stages** — DOS
   preserves a lot of Amiga's structure.
 
 ## CODE_WHEEL ↔ INTRO labelling fix (2026-05-01)
@@ -110,11 +110,11 @@ INTRO is 80%+ similar across **all four** branches:
 | Pair | INTRO ratio | LAKE ratio (for context) |
 |---|---|---|
 | heineman_cartridge ↔ foxy_gba_2004 | **0.988** | 0.920 |
-| heineman_cartridge ↔ heineman_dos | **0.979** | 0.914 |
-| heineman_dos ↔ foxy_gba_2004 | **0.972** | 0.884 |
+| heineman_cartridge ↔ dos_1992 | **0.979** | 0.914 |
+| dos_1992 ↔ foxy_gba_2004 | **0.972** | 0.884 |
 | chahi_1991 ↔ foxy_gba_2004 | 0.838 | 0.587 |
 | chahi_1991 ↔ heineman_cartridge | 0.835 | 0.598 |
-| chahi_1991 ↔ heineman_dos | 0.835 | 0.600 |
+| chahi_1991 ↔ dos_1992 | 0.835 | 0.600 |
 
 The INTRO is a fixed cinematic — same Ferrari/lab content on
 every port — so it's the same logical program with slightly
@@ -141,7 +141,7 @@ than byte-equality alone:
 Chahi 1991 master (Amiga + Atari ST)
    │  60-92% structural similarity (Amiga → DOS preserved most code)
    ▼
-Heineman DOS 1992
+Delphine DOS 1992
    │  68-91% structural similarity (DOS → cartridge re-encoded
    │  but kept structure)
    ▼
@@ -168,19 +168,19 @@ within the Heineman lineage (DOS / cartridge / GBA), structural
 overlap is 70-99% — large enough that a unified source is
 genuinely useful. Specifically:
 
-- LAKE: heineman_dos + heineman_cartridge share 91% structure +
+- LAKE: dos_1992 + heineman_cartridge share 91% structure +
   a 512-token longest matching block. A unified
   `heineman_lineage/LAKE.asm` with `#ifdef CARTRIDGE` blocks for
   the ~9% divergent regions is feasible.
-- ENDING / TANK / INTRO: chahi_1991 ↔ heineman_dos at 0.83-0.92
+- ENDING / TANK / INTRO: chahi_1991 ↔ dos_1992 at 0.83-0.92
   — also good candidates for two-branch unification.
 
 What remains genuinely divergent (unification is *not* attractive):
 - chahi_1991 ↔ Heineman cartridge for most stages: ~55-65%
   similarity. Crossing the codewheel-vs-cartridge format
   boundary loses a lot.
-- chahi_1991 ↔ heineman_dos for PASSCODE, CAPSULE: ~47-53%.
-- heineman_cartridge ↔ heineman_dos for PASSCODE: 0.50.
+- chahi_1991 ↔ dos_1992 for PASSCODE, CAPSULE: ~47-53%.
+- heineman_cartridge ↔ dos_1992 for PASSCODE: 0.50.
 
 So the revised Phase 3b plan:
 

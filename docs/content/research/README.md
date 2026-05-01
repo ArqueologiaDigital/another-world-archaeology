@@ -63,7 +63,7 @@ finding is comparative) records which releases it applies to.
   byte-identical stages outside SNES↔Genesis. Structural diff
   (tokenize opcodes, ignore addresses) reveals a much richer
   genealogy: the Heineman lineage (DOS → cartridge → GBA) shares
-  70-99% structure stage-by-stage; even Chahi → Heineman DOS
+  70-99% structure stage-by-stage; even Chahi → Delphine DOS
   preserves 60-92% of structure. Foxy GBA's level_0 has 0.988
   similarity to cartridge level_0 — Foxy refactored Heineman's
   cartridge bytecode rather than re-implementing. Revises Phase

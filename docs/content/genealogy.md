@@ -1,5 +1,15 @@
 # Genealogy
 
+> **Attribution correction (2026-05-01)**: earlier research findings
+> on this page (and in research/05, /06) attribute the DOS 1992 port
+> to "Heineman" by extension from the SNES port's documented author.
+> Per the project owner: **the DOS port was actually made by Daniel
+> Morais (Delphine Software)**, not Rebecca Heineman. The bytecode
+> analyses themselves are unaffected; only the porter-name
+> attribution changes. Source-reconstruction branch renamed
+> `heineman_dos` → `dos_1992` accordingly. SNES + Genesis-EU
+> attributions to Heineman / Interplay are unchanged.
+
 The goal: reconstruct a "family tree" of Another World ports — which
 release inherited what from which predecessor, where new code was
 introduced, and where forks diverged.
@@ -123,7 +133,7 @@ been verified across all six currently-disassembled ports
 |---|---|---|---|---|---|
 | Amiga       | 1991 | Chahi    | yes | no  | `6f5ab0e0…` (19,332b) |
 | Atari ST    | 1991 | Chahi    | yes | no  | (resource = `860362f3…`, byte-identical to Amiga) |
-| DOS         | 1992 | Heineman | yes | yes | `3e95437f…` (20,684b) |
+| DOS         | 1992 | Morais   | yes | yes | `3e95437f…` (20,684b) |
 | SNES-EU     | 1992 | Heineman | yes | yes | `68b4c327…` (20,863b) |
 | Genesis-EU  | 1993 | Heineman | yes | yes | `68b4c327…` (20,863b — **identical to SNES-EU**) |
 | GBA (Foxy)  | 2004 | Foxy     | yes | yes | `37487368…` (19,717b) |
@@ -149,7 +159,7 @@ Three cleanly distinguishable branches emerge:
   pattern is structurally identical to DOS but at slightly shifted
   addresses.
 
-- **Heineman DOS branch** (DOS 1992): its own bytecode hash
+- **Delphine DOS branch** (DOS 1992): its own bytecode hash
   (`3e95437f…`), distinct from both Amiga and SNES-EU. Gates +
   cinematic structure are *editorially* identical to the
   cartridge branch but the bytes differ. The DOS-vs-cartridge

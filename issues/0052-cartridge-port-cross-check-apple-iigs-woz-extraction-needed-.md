@@ -22,7 +22,7 @@ this project's pipeline.
 The four-level genealogy bifurcation established by research/05:
 
 - **Chahi master 1991** (Amiga + Atari ST): gate 1 only.
-- **Heineman DOS 1992**: gates 1 + 2; own bytecode hash.
+- **Delphine DOS 1992**: gates 1 + 2; own bytecode hash.
 - **Heineman cartridge 1992-93** (SNES-EU + Genesis-EU): gates 1 + 2;
   byte-identical bytecode shared between SNES-EU and Genesis-EU.
 - **Foxy GBA 2004**: gates 1 + 2; own modified bytecode.
