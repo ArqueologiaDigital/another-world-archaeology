@@ -13,8 +13,8 @@ byte-matching bytecode.
 
 Usage:
     python3 tools/unify_asm.py \\
-        --a src/levels/heineman_cartridge/INTRO.asm --branch-a heineman_cartridge \\
-        --b src/levels/foxy_gba_2004/INTRO.asm --branch-b foxy_gba_2004 \\
+        --a src/levels/cartridge_1992/INTRO.asm --branch-a cartridge_1992 \\
+        --b src/levels/gba_2004/INTRO.asm --branch-b gba_2004 \\
         -o src/levels/_unified/INTRO.asm.in
 """
 from __future__ import annotations

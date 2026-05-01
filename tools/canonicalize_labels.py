@@ -20,10 +20,10 @@ Example:
 
 Per-branch usage:
     python3 tools/canonicalize_labels.py \\
-        --in heineman_cartridge=path/to/cartridge.asm \\
-        --in foxy_gba_2004=path/to/gba.asm \\
-        --out heineman_cartridge=path/to/cartridge.canonical.asm \\
-        --out foxy_gba_2004=path/to/gba.canonical.asm
+        --in cartridge_1992=path/to/cartridge.asm \\
+        --in gba_2004=path/to/gba.asm \\
+        --out cartridge_1992=path/to/cartridge.canonical.asm \\
+        --out gba_2004=path/to/gba.canonical.asm
 """
 from __future__ import annotations
 

@@ -159,14 +159,14 @@ files**:
 
 | Branch | Source files | Targets |
 |---|---|---|
-| `chahi_1991` | 9 stages | amiga (atari_st when extractor lands) |
+| `chahi_amiga_1991` | 9 stages | amiga (atari_st when extractor lands) |
 | `dos_1992` | 9 stages | msdos |
-| `heineman_cartridge` | **8 stages** | snes_eu + genesis_europe (LAKE shared) |
-| `foxy_gba_2004` | 2 stages | gba_usa |
+| `cartridge_1992` | **8 stages** | snes_eu + genesis_europe (LAKE shared) |
+| `gba_2004` | 2 stages | gba_usa |
 | **Total** | **28 .asm** | **29 targets** |
 
 The single inter-port unification surfaces concretely:
-`heineman_cartridge/LAKE.asm` produces byte-identical output for
+`cartridge_1992/LAKE.asm` produces byte-identical output for
 both SNES-EU level_1 and Genesis-EU level_0 — confirming
 [research/05](#/research/05-beetle-in-the-lake-stage)'s
 SNES↔Genesis byte-identity finding all the way through to a

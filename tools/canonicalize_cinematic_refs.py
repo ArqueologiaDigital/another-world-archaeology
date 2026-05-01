@@ -40,12 +40,12 @@ Algorithm:
 Usage:
     python3 tools/canonicalize_cinematic_refs.py \\
         --unified-in path/to/3way.asm.in \\
-        --src heineman_cartridge=path/to/cart.asm \\
-        --src foxy_gba_2004=path/to/gba.asm \\
-        --src chahi_1991=path/to/amiga.asm \\
-        --src-out heineman_cartridge=path/to/cart.out.asm \\
-        --src-out foxy_gba_2004=path/to/gba.out.asm \\
-        --src-out chahi_1991=path/to/amiga.out.asm
+        --src cartridge_1992=path/to/cart.asm \\
+        --src gba_2004=path/to/gba.asm \\
+        --src chahi_amiga_1991=path/to/amiga.asm \\
+        --src-out cartridge_1992=path/to/cart.out.asm \\
+        --src-out gba_2004=path/to/gba.out.asm \\
+        --src-out chahi_amiga_1991=path/to/amiga.out.asm
 """
 from __future__ import annotations
 

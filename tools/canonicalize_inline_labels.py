@@ -28,8 +28,8 @@ Outputs new .asm files alongside the inputs; preserves byte-match.
 
 Usage:
     python3 tools/canonicalize_inline_labels.py \\
-        --in heineman_cartridge=cart.asm --in foxy_gba_2004=gba.asm \\
-        --out heineman_cartridge=cart.canon.asm --out foxy_gba_2004=gba.canon.asm
+        --in cartridge_1992=cart.asm --in gba_2004=gba.asm \\
+        --out cartridge_1992=cart.canon.asm --out gba_2004=gba.canon.asm
 """
 from __future__ import annotations
 

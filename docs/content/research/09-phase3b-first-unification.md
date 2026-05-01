@@ -27,8 +27,8 @@ reconstruction repo) produces:
 
 | Target | Expected md5 | Got md5 | Match |
 |---|---|---|---|
-| `heineman_cartridge` (SNES-EU level_0 chunk) | `93959756ff10…` | `93959756ff10…` | ✅ |
-| `foxy_gba_2004` (GBA level_0 chunk) | `c978f22c86b7…` | `c978f22c86b7…` | ✅ |
+| `cartridge_1992` (SNES-EU level_0 chunk) | `93959756ff10…` | `93959756ff10…` | ✅ |
+| `gba_2004` (GBA level_0 chunk) | `c978f22c86b7…` | `c978f22c86b7…` | ✅ |
 
 Source statistics:
 
@@ -61,8 +61,8 @@ between the cartridge and GBA branches).
 
 ## What's still pending
 
-- **N-way unification** (e.g., `dos_1992 + heineman_cartridge +
-  foxy_gba_2004` together): the naive 2-way folded approach fails
+- **N-way unification** (e.g., `dos_1992 + cartridge_1992 +
+  gba_2004` together): the naive 2-way folded approach fails
   because the directives emitted by the first merge become "lines"
   that the second merge tries to align, producing wrong wrapping.
   A correct N-way unifier needs a synchronised matcher across all
@@ -71,9 +71,9 @@ between the cartridge and GBA branches).
   (0.68), CAVES (0.72), TANK (0.67), etc. should be unifiable
   pairwise the same way.
 - **Atari ST**: when its memlist parser lands (issue #0004),
-  Atari ST should share Amiga's chahi_1991 sources verbatim — no
+  Atari ST should share Amiga's chahi_amiga_1991 sources verbatim — no
   unification work required, just point the new port at the
-  existing chahi_1991/<stage>.asm files.
+  existing chahi_amiga_1991/<stage>.asm files.
 
 ## Tools
 
@@ -269,15 +269,15 @@ The previous canonicalizer left some pairs unmerged because difflib
 was misaligning them. Concretely:
 
 ```
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
 LABEL_04CF:
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
 LABEL_04D5:
 ;@endif
     break
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
     djnz [0x05], LABEL_04CF
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
     djnz [0x05], LABEL_04D5
 ;@endif
 ```
@@ -514,9 +514,9 @@ The 4 remaining blocks are all *true* semantic differences:
   lengths to hit the 64-KB chunk boundary).
 
 End-to-end byte-match still verified: preprocessing the unified
-source with `BRANCH=heineman_cartridge` produces md5
+source with `BRANCH=cartridge_1992` produces md5
 `93959756…` (matches the SNES-EU `level_0` chunk); with
-`BRANCH=foxy_gba_2004` it produces md5 `c978f22c…` (matches the
+`BRANCH=gba_2004` it produces md5 `c978f22c…` (matches the
 GBA `level_0` chunk).
 
 So out of 18,282 unified-file lines, **4 are conditional**. The
@@ -549,9 +549,9 @@ collapsed this region:
    line without inflating the source repo:
 
    ```
-   ;@if BRANCH == "heineman_cartridge"
+   ;@if BRANCH == "cartridge_1992"
        FILL(55641, 0xFF)
-   ;@elif BRANCH == "foxy_gba_2004"
+   ;@elif BRANCH == "gba_2004"
        db ...   ; ~55KB of GBA-specific data
    ;@endif
    ```
@@ -609,9 +609,9 @@ block at LABEL_26A6 is now compact and self-explaining:
 ```
 LABEL_26A6:
     killChannel
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
     FILL(55641, 0xFF)
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
     db 0x0F, 0xC6, 0x12, ...     ; (gba-specific embedded data)
     db ...
 ;@endif
