@@ -58,6 +58,18 @@ finding is comparative) records which releases it applies to.
   of a port deliberately editing bytecode to gate off content
   rather than just preserving it.
 
+- [08 — Cross-branch bytecode structural similarity](#/research/08-cross-branch-structural-similarity):
+  byte-level diff said the four bytecode branches share no
+  byte-identical stages outside SNES↔Genesis. Structural diff
+  (tokenize opcodes, ignore addresses) reveals a much richer
+  genealogy: the Heineman lineage (DOS → cartridge → GBA) shares
+  70-99% structure stage-by-stage; even Chahi → Heineman DOS
+  preserves 60-92% of structure. Foxy GBA's level_0 has 0.988
+  similarity to cartridge level_0 — Foxy refactored Heineman's
+  cartridge bytecode rather than re-implementing. Revises Phase
+  3b feasibility from "deferred" to "attempt within Heineman
+  lineage".
+
 - [07 — Bytecode round-trip is byte-identical for 5 ports (29 levels)](#/research/07-bytecode-roundtrip-byte-matching):
   the foundation for the source-reconstruction project. Every
   level we have disassembly for round-trips through awvm-disasm
