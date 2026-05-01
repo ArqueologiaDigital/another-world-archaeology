@@ -395,6 +395,145 @@ def _collapse_directive_blocks(
     return out, blocks
 
 
+def _parse_top_level_blocks(
+    lines: list[str],
+) -> list[tuple[int, int, list[tuple[int, int, str]]]]:
+    """Parse top-level `;@if/.../;@endif` blocks.
+
+    Returns a list of (start, end, sections) where:
+    - start, end: indices of the `;@if` and matching `;@endif` lines.
+    - sections: list of (header_idx, body_start_idx, condition_str).
+      The first section is the `;@if`, subsequent are `;@elif` /
+      `;@else`. `body_start_idx` is the line right after the header;
+      a section's body runs until the next section's `header_idx`
+      or the block's `end`.
+    """
+    out = []
+    i = 0
+    n = len(lines)
+    while i < n:
+        s = lines[i].lstrip()
+        if s.startswith(";@if "):
+            depth = 1
+            sections = [(i, i + 1, lines[i].strip())]
+            j = i + 1
+            while j < n:
+                ss = lines[j].lstrip()
+                if ss.startswith(";@if "):
+                    depth += 1
+                elif ss.startswith(";@endif"):
+                    depth -= 1
+                    if depth == 0:
+                        break
+                elif depth == 1 and (
+                    ss.startswith(";@elif ") or ss.startswith(";@else")
+                ):
+                    sections.append((j, j + 1, lines[j].strip()))
+                j += 1
+            if j < n:
+                out.append((i, j, sections))
+            i = j + 1
+        else:
+            i += 1
+    return out
+
+
+def _section_body(
+    lines: list[str],
+    block_start: int,
+    block_end: int,
+    sections: list[tuple[int, int, str]],
+    section_idx: int,
+) -> list[str]:
+    """Return body lines for one section of a parsed block."""
+    _, body_start, _ = sections[section_idx]
+    if section_idx + 1 < len(sections):
+        body_end = sections[section_idx + 1][0]
+    else:
+        body_end = block_end
+    return lines[body_start:body_end]
+
+
+def merge_adjacent_blocks(lines: list[str]) -> tuple[list[str], int]:
+    """Merge adjacent `;@if/.../;@endif` blocks with identical
+    section-header signatures, separated only by blank lines.
+
+    Two blocks merge by concatenating per-arm contents. Operates
+    recursively: after merging at the top level, recurse into each
+    section's body so inner same-cond blocks also collapse.
+
+    Returns (merged_lines, num_merges).
+
+    Implementation: merges one pair per iteration and re-parses.
+    Slower than batch-merging but avoids index-staleness bugs when
+    chains of 3+ same-cond blocks need to merge (the i-th merge
+    invalidates indices of subsequent merge targets in the original
+    parse).
+    """
+    total_merges = 0
+    while True:
+        blocks = _parse_top_level_blocks(lines)
+        if len(blocks) < 2:
+            break
+        merged_this_round = False
+        # Find FIRST adjacent same-cond pair and merge it. Re-parse
+        # in the next loop iteration to pick up the next eligible
+        # pair (which may now span a freshly-merged block).
+        for k in range(len(blocks) - 1):
+            s_prev, e_prev, sec_prev = blocks[k]
+            s_cur, e_cur, sec_cur = blocks[k + 1]
+            gap = lines[e_prev + 1:s_cur]
+            if any(l.strip() for l in gap):
+                continue
+            sig_prev = tuple(s[2] for s in sec_prev)
+            sig_cur = tuple(s[2] for s in sec_cur)
+            if sig_prev != sig_cur:
+                continue
+            # Build merged body per section: concatenate prev's body
+            # and cur's body for each matching section.
+            merged_segments: list[str] = [lines[s_prev]]  # outer ;@if
+            for idx in range(len(sec_prev)):
+                if idx > 0:
+                    merged_segments.append(lines[sec_prev[idx][0]])
+                # Prev body for this section.
+                body_end_prev = (
+                    sec_prev[idx + 1][0] if idx + 1 < len(sec_prev) else e_prev
+                )
+                merged_segments.extend(lines[sec_prev[idx][1]:body_end_prev])
+                # Cur body for the corresponding section.
+                body_end_cur = (
+                    sec_cur[idx + 1][0] if idx + 1 < len(sec_cur) else e_cur
+                )
+                merged_segments.extend(lines[sec_cur[idx][1]:body_end_cur])
+            merged_segments.append(lines[e_cur])  # ;@endif
+            lines = lines[:s_prev] + merged_segments + lines[e_cur + 1:]
+            total_merges += 1
+            merged_this_round = True
+            break
+        if not merged_this_round:
+            break
+    # Now recurse into each top-level block's section bodies. Inner
+    # `;@if` blocks may also have adjacent same-cond pairs that
+    # merging at the top level didn't reach (because they're nested).
+    out_lines: list[str] = []
+    blocks = _parse_top_level_blocks(lines)
+    pos = 0
+    for s, e, sections in blocks:
+        out_lines.extend(lines[pos:s])
+        out_lines.append(lines[s])  # ;@if header
+        for idx in range(len(sections)):
+            if idx > 0:
+                out_lines.append(lines[sections[idx][0]])  # ;@elif/else
+            body = _section_body(lines, s, e, sections, idx)
+            recursed, sub_merges = merge_adjacent_blocks(body)
+            total_merges += sub_merges
+            out_lines.extend(recursed)
+        out_lines.append(lines[e])  # ;@endif
+        pos = e + 1
+    out_lines.extend(lines[pos:])
+    return out_lines, total_merges
+
+
 def unify_n(sources: list[tuple[str, list[str]]]) -> tuple[list[str], dict]:
     """N-way unification by progressive 2-way merging.
 
@@ -559,6 +698,21 @@ def main() -> None:
         sys.exit(f"only 2- or 3-way unification supported (got {len(sources)} "
                  "sources). N>3 needs a synchronised matcher.")
 
+    # Post-process: merge adjacent same-condition blocks. The diff
+    # algorithm emits a fresh `;@if/.../;@endif` block at every diff
+    # opcode, so two opcodes separated only by a blank line (which
+    # difflib classifies as `equal`) become two adjacent blocks with
+    # the same condition signature. Collapsing them into one keeps
+    # byte-match identical while reducing directive noise. Recurses
+    # into nested blocks.
+    pre_merge_block_count = sum(
+        1 for l in out_lines if l.lstrip().startswith(";@if ")
+    )
+    out_lines, n_merges = merge_adjacent_blocks(out_lines)
+    post_merge_block_count = sum(
+        1 for l in out_lines if l.lstrip().startswith(";@if ")
+    )
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text("\n".join(out_lines) + "\n")
 
@@ -566,6 +720,8 @@ def main() -> None:
     for br, lines in sources:
         print(f"  {br}: {len(lines)} lines")
     print(f"\nstats: diff_blocks={stats['diff_blocks']}")
+    print(f"  merged adjacent same-cond blocks: {n_merges} "
+          f"(;@if count {pre_merge_block_count} → {post_merge_block_count})")
     print(f"\nwrote {args.output}: {len(out_lines)} lines")
     largest_input = max(len(s[1]) for s in sources)
     overhead = len(out_lines) - largest_input
