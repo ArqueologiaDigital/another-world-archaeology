@@ -45,18 +45,27 @@ finding is comparative) records which releases it applies to.
   records the copyright string, which v1.0.2 changed to mention
   Delphine Software and v1.0.3 reverted.
 
-- [05 — Beetle in the lake stage: hidden on DOS, kickable on Amiga](#/research/05-beetle-in-the-lake-stage):
+- [05 — Beetle in the lake stage: dead-coded on every port, hidden on DOS-lineage](#/research/05-beetle-in-the-lake-stage):
   level 2 contains a beetle creature with walking, wing-opening,
-  and flipping-upside-down animations. **DOS suppresses the beetle
-  with a single extra `setup channel=0x09, address=KILL_CHANNEL_ROUTINE`
-  in the level-entry script** that overwrites the spawn handler;
-  Amiga doesn't have this line, so the beetle walks visibly. The
-  wing-flip animation triggers when Lester *kicks* the beetle —
-  reachable on Amiga, effectively unreachable on DOS. The
-  beetle's polygon data is byte-stable between the two ports;
-  what changes is one bytecode instruction. First documented case
-  of a port deliberately editing bytecode to gate off content
-  rather than just preserving it.
+  and flipping-upside-down animations plus a kick-detector
+  channel — but **two stacked gates make the full interaction
+  unreachable in the official releases of every port**.
+  **Gate 1** (channel `0x2E`, present on **all** ports) registers
+  the kick-detector and then immediately overwrites it with a
+  cleanup watcher, so Lester's kicks never connect to the beetle.
+  **Gate 2** (channel `0x09`, DOS / SNES-EU / Genesis-EU / GBA
+  only) additionally kills the rendering thread, so the beetle
+  isn't even visible on those ports. Amiga (and Atari ST) lack
+  gate 2, so the beetle *walks visibly* across the scene — but
+  kicks still don't connect (gate 1 applies there too). A 2-byte
+  verification hack in the
+  [`another-world-hacks`](https://github.com/ArqueologiaDigital/another-world-hacks)
+  repo patches gate 1 on Amiga, revealing what the kick interaction
+  *was supposed to do*: hostile return pass, collision, and a
+  death cutscene that hangs the VM (the actor draws were never
+  wired in). Strongest signal yet that gate 1 is **intentional**
+  cover for broken-by-design content, not an authorial accident.
+  The beetle's polygon data is byte-stable across ports.
 
 - [10 — GBA `LABEL_26A6` mystery solved: 55 KB of trailing data is the level_0 cinematic.rom](#/research/10-gba-cinematic-data-found):
   the unified-INTRO `;@if` block at `LABEL_26A6` showed cartridge's
