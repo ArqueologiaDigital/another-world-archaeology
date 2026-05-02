@@ -9,7 +9,7 @@ their disassembled `.asm` form, byte-for-byte, for every cataloged
 release we have disasm for?
 
 A "yes" answer is the foundation for the
-[source reconstruction project](https://github.com/felipesanches/another-world-source-reconstruction)
+[source reconstruction project](https://github.com/ArqueologiaDigital/another-world-source-reconstruction)
 — it proves that the disassembler/assembler round-trip is
 information-preserving, which means a unified `.asm` source tree
 can produce byte-matching output for every port.
@@ -149,7 +149,7 @@ combinations have distinct bytecode.
 ### Phase 3a — Branch-organized canonical sources (✅ achieved 2026-05-01)
 
 The source-reconstruction project's
-[`src/levels/<branch>/<stage>.asm`](https://github.com/felipesanches/another-world-source-reconstruction/tree/main/src/levels)
+[`src/levels/<branch>/<stage>.asm`](https://github.com/ArqueologiaDigital/another-world-source-reconstruction/tree/main/src/levels)
 tree organizes the .asm files **by genealogical branch and stage
 name**, not by port slot.
 
@@ -172,22 +172,33 @@ both SNES-EU level_1 and Genesis-EU level_0 — confirming
 SNES↔Genesis byte-identity finding all the way through to a
 shared source file in the build pipeline.
 
-### ~~Phase 3b — Cross-branch conditional-compilation~~ (deferred)
+### Phase 3b — Cross-branch conditional-compilation ✅
 
-The original Phase 3 plan was to merge *divergent* branches via
-`#ifdef BYTECODE_BRANCH` in unified .asm files. After diffing the
-per-port .asm files we find:
+The original assessment was that a unified .asm with
+`#ifdef BYTECODE_BRANCH` would be 60-80% conditional and harder
+to read than the per-branch tree. **That turned out to be wrong**
+once two improvements landed:
 
-- Different number of labels (Amiga: 208 in level 0; DOS: 254)
-- Different instruction counts and sequences
-- Different polygon-resource layouts → different EQU offsets
+1. **Closer-than-expected lineage similarity.** Research finding
+   [#08](#/research/08-cross-branch-structural-similarity) measured
+   structural similarity within the Heineman lineage (cart ↔ gba ↔
+   dos ↔ amiga) at 60–99 % depending on the pair, not the worst-
+   case "different instruction sequences" we'd assumed.
+2. **A multi-stage canonicalization pipeline** that absorbs
+   structural divergence into per-branch EQU values, so the
+   conditional-compilation directives only fire on actual semantic
+   differences. See research finding
+   [#09](#/research/09-phase3b-first-unification) for the full
+   journey.
 
-A unified .asm would be 60-80% `#ifdef`'d code blocks — *harder*
-to read than the branch-organized tree. **Phase 3b is deferred**
-unless a concrete research need surfaces. Per-branch sources are
-the honest representation of the genealogy.
+End state: LAKE is now 4-way unified in one source file
+(`src/levels/_unified/LAKE.asm.in` in the source-reconstruction
+repo) with 362 `;@if` directives — overwhelmingly real
+divergences, not noise. INTRO is 2-way (cart + gba) so far; dos
+and amiga still need to be folded in.
 
-Tracked as issue #0061 (closed as done with this scope).
+Tracked as issue #0061 (now closed with the cross-branch
+unification work delivered).
 
 ## What's not covered yet
 

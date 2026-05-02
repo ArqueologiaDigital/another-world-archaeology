@@ -64,5 +64,9 @@ sections, run `tools/issues.py index` to refresh
 ## Changelog
 
 - **2026-04-30** — page rewritten as a redirect. The tier-ranked
-  content moved into the issue tracker as 42 individual issues
-  (40 open, 2 closed). See `issues/README.md` for the new home.
+  content moved into the issue tracker as 42 individual issues.
+  See `issues/README.md` for the auto-generated current status.
+- **2026-05-02** — tracker now holds 72 issues (60 open, 12 closed)
+  as Phase 3b unification work and AWVM_Tools encoder bugs accreted
+  new entries. The auto-generated index in `issues/README.md`
+  is the live source of truth for counts.

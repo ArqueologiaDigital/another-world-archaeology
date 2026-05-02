@@ -62,7 +62,7 @@ suffices to explain everything.
 
 ## What changed (2026-04-30)
 
-The owner ran the [verification hack](https://github.com/felipesanches/another-world-hacks)
+The owner ran the [verification hack](https://github.com/ArqueologiaDigital/another-world-hacks)
 on the original Amiga ADF and recorded the full sequence on
 [YouTube](https://www.youtube.com/watch?v=axL7sMXXV8Q). The
 recording revealed **three additional phases past the take-off**

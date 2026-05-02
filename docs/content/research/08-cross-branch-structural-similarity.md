@@ -182,15 +182,25 @@ What remains genuinely divergent (unification is *not* attractive):
 - chahi_amiga_1991 ↔ dos_1992 for PASSCODE, CAPSULE: ~47-53%.
 - cartridge_1992 ↔ dos_1992 for PASSCODE: 0.50.
 
-So the revised Phase 3b plan:
+So the revised Phase 3b plan was:
 
 1. Within the **Heineman lineage**, attempt a 3-target unified
    source: DOS + cartridge + GBA all build from one .asm with
    `#ifdef`s for differences.
-2. Keep **chahi_amiga_1991** as its own source tree (~60% similarity to
-   Heineman lineage isn't worth merging — too many `#ifdef`s).
+2. Keep **chahi_amiga_1991** as its own source tree (~60% similarity
+   to Heineman lineage isn't worth merging — too many `#ifdef`s).
 3. Cherry-pick high-similarity Chahi/Heineman_DOS pairs (ENDING,
    INTRO) as candidates for two-branch unification.
+
+**Outcome (as of 2026-05-02): plan was too conservative on point
+2.** Research finding [#09](#/research/09-phase3b-first-unification)
+shows that `chahi_amiga_1991` folds cleanly into the unified
+LAKE source (4-way: cart + gba + amiga + dos) once a multi-stage
+canonicalization pipeline absorbs structural divergence into
+per-branch EQU values. The 60% structural similarity manifests
+mostly as different polygon-offset numerics, not as different
+control flow, so it canonicalizes well. LAKE 4-way unified file
+has 362 `;@if` directives, all byte-matching.
 
 ## Tools
 
