@@ -279,6 +279,8 @@ Secondary signals to check as the data fills in:
   like a structured resource set — the mapping needs reverse
   engineering before 3DO bytecode can be passed through `awvm-disasm`.
 - **Mac v1.0 / 1.0.2 / 1.0.3 patch-delta analysis.** Awaiting the
-  resource-fork walker (forward plan tier A, item 1).
+  resource-fork walker (tracked in the issue tracker — see the
+  Mac-classic stub status on [Format coverage](#/coverage)).
 
-See the [forward plan](#/forward_plan) for the full ranked list.
+See the [issue tracker](#/issues) for the full ranked list of
+forward work.

@@ -3,19 +3,26 @@
 ## Status
 
 The catalog in `metadata.json` documents 29 release variants of
-*Another World*. As of 2026-04-30, the local archive
+*Another World*. As of 2026-05-02, the local archive
 (`another-world-archive/` — sibling repo, accessed via the
-`original_files/` symlink) holds fixtures for **8** of those:
+`original_files/` symlink) holds fixtures for **14** of those:
 
 ```
 dos · winxp-1.1c · amiga-retro-presskit · amiga-archive-org ·
-atari-st-1991 · snes-eu · genesis-eu · 3do-1993
+atari-st-1991 · snes-eu · genesis-eu · 3do-1993 ·
+apple-iigs-1992 · macintosh-1993 · gba-foxy-2004 ·
+nintendo-ds-alekmaul-2011 · symbian-anotherworld-generic ·
+apple-ii-demake-weaver-2019
 ```
 
-The remaining **21** releases are documented but unfetched. This
-plan groups them into three tiers by acquisition difficulty, so
-work can proceed in parallel and the easy wins are not blocked
-by the hard ones.
+The remaining **15** releases are documented but unfetched. The
+Tier 1 sweep (research finding [#03](#/research/03-tier1-acquisition-sweep))
+landed 6 fixtures (NDS, GBA, Apple II, Apple IIgs, Mac, Symbian) —
+all bytes archived; some still need extractor / parser work, tracked
+on the [Format coverage](#/coverage) page.
+
+This plan groups the remaining 15 releases into three tiers by
+acquisition difficulty.
 
 ---
 
@@ -23,21 +30,16 @@ by the hard ones.
 
 These are publicly redistributable: classic-platform romdumps that
 have been online for decades, plus fan/homebrew ports whose authors
-intentionally distribute them. Goal for tier 1: locate a stable URL
-(prefer the original author / canonical archive), record it in
+intentionally distribute them. Goal: locate a stable URL (prefer
+the original author / canonical archive), record it in
 `metadata.json` with a Wayback snapshot, fetch the file into
 `another-world-archive/<slug>/`, record per-file md5.
 
 | slug                          | platform                | strategy                                                                |
 |-------------------------------|-------------------------|-------------------------------------------------------------------------|
 | `snes-usa`                    | SNES (USA)              | No-Intro / wowroms cartridge dump (parallel of the EU rom we already have) |
-| `apple-iigs-1992`             | Apple IIgs              | archive.org Apple IIgs software collections (`.2mg` / `.po` disk image) |
-| `macintosh-1993`              | Macintosh System 6.0.7+ | archive.org Macintosh game archives (likely `.sit` or `.dsk`)           |
-| `nintendo-ds-alekmaul-2011`   | Nintendo DS (homebrew)  | `gbatemp.net` URL already in metadata — just fetch                       |
-| `gba-foxy-2004`               | Game Boy Advance (homebrew) | search GBATemp / romhacking.net for "Foxy Another World GBA"        |
 | `atari-jaguar-removers-2014`  | Atari Jaguar (homebrew) | `removers.fr` / AtariAge — homebrew port by the Removers team           |
-| `apple-ii-demake-weaver-2019` | Apple II demake         | Roger Weaver's itch.io / 4amphi-2 self-publication                       |
-| `symbian-anotherworld-generic`| Symbian S60 (generic)   | older abandonware Symbian SIS archive (parallel to the *locked* SIS we already record) |
+| `symbian-locked-anotherworld` | Symbian S60 (locked)    | older abandonware Symbian SIS archive (the *locked* variant; the unlocked generic SIS is already archived) |
 
 ## Tier 2 — Commercial digital, you-own-it-then-extract (medium effort, needs purchases / accounts)
 

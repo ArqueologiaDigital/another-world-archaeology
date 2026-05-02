@@ -36,7 +36,7 @@ why.
 
 A **2-byte runtime verification hack** was committed to the
 `another-world-hacks` sibling repo
-([01-amiga-beetle-kick-reenable](https://github.com/felipesanches/another-world-hacks))
+([01-amiga-beetle-kick-reenable](https://github.com/ArqueologiaDigital/another-world-hacks))
 that swaps the gate-1 instruction operands so the kick-detector
 overrides the cleanup-watcher instead of the other way around —
 making the wing-flip animation reachable in real gameplay on the

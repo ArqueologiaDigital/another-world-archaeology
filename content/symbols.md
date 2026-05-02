@@ -24,9 +24,10 @@ Each release file `inherits` `_base` and adds:
   *value* of a given variable at a given moment may differ by
   release.
 
-The symbols are consumed by the disassembler (via AWVM_Tools) and
-the docs site so addresses appear with their semantic name wherever
-they are referenced.
+The symbols are consumed by the disassembler (via AWVM_Tools'
+per-release `KNOWN_LABELS` tables in `awvm/src/releases/<port>.rs`)
+and the docs site, so addresses appear with their semantic name
+wherever they are referenced.
 
 ## Image-driven labelling
 
@@ -39,6 +40,33 @@ bytecode that loads or draws that polygon.
 
 ## Status
 
-*No symbols recorded yet. Bootstrapping starts as soon as the DOS
-disassembly lands and we identify the first concrete addresses
-(see open question [01: gun ammo](#/open-questions/01-gun-ammo)).*
+Active. The symbol map has bootstrapped well past the gun-ammo
+investigation and now seeds AWVM_Tools' Rust `KNOWN_LABELS` tables
+per release. Symbol families currently in use across the
+disassembled bytecode include:
+
+- **VM variables**: `HERO_ACTION`, `HERO_ACTION_POS_MASK`,
+  `HERO_POS_JUMP_DOWN`, `RANDOM_SEED`, `SCROLL_Y`, `MUS_MARK`,
+  `PAUSE_SLICES`, etc.
+- **Cinematic polygons**: per-stage semantic names like
+  `CINEMATIC_LEFT_CROUCHING_*`, `CINEMATIC_JUMPING_TOWARDS_VINE_*`,
+  `CINEMATIC_HANGING_ON_THE_VINE_*`,
+  `CINEMATIC_INSIDE_ALIEN_POOL_*`,
+  `CINEMATIC_CONSOLE_UNDERWATER_EXPLOSION_*`,
+  `CINEMATIC_SLUG_ATTACKING_LEG_*`,
+  `CINEMATIC_SNEAKY_TENTACLE_*`, `CINEMATIC_RIGHT_CROUCH_KICK_*`.
+- **Routines**: `CHECK_IF_BEAST_IS_NEAR_LESTER`,
+  `IF_BEAST_NEAR_THEN_REACT_ELSE_KILL_THREAD`,
+  `WEIRD_VIDEO_BUFFER_MANIPULATION`,
+  `ANOTHER_UNCLEAR_VIDEO_BUFFER_MANIPULATION`,
+  `LIKELY_A_COPY_PROTECTION_MECHANISM`, `KILL_CHANNEL_ROUTINE`,
+  `LESTER_GRABS_A_VINE_AND_SWINGS`,
+  `A_CALM_ALIEN_POOL_BEFORE_LESTERS_ARRIVAL`, `INIT_VIDEO_BUFFERS`,
+  etc.
+- **Stage labels**: `OUTSIDE_POOL_SCREEN`, `SWIMMING_UP`, etc.
+
+These names also drive the cross-port unified bytecode source in
+the sibling
+[`another-world-source-reconstruction`](https://github.com/ArqueologiaDigital/another-world-source-reconstruction)
+repo (see research finding
+[#09: Phase 3b unification](#/research/09-phase3b-first-unification)).

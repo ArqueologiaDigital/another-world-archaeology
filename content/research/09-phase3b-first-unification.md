@@ -27,8 +27,8 @@ reconstruction repo) produces:
 
 | Target | Expected md5 | Got md5 | Match |
 |---|---|---|---|
-| `heineman_cartridge` (SNES-EU level_0 chunk) | `93959756ff10…` | `93959756ff10…` | ✅ |
-| `foxy_gba_2004` (GBA level_0 chunk) | `c978f22c86b7…` | `c978f22c86b7…` | ✅ |
+| `cartridge_1992` (SNES-EU level_0 chunk) | `93959756ff10…` | `93959756ff10…` | ✅ |
+| `gba_2004` (GBA level_0 chunk) | `c978f22c86b7…` | `c978f22c86b7…` | ✅ |
 
 Source statistics:
 
@@ -61,19 +61,19 @@ between the cartridge and GBA branches).
 
 ## What's still pending
 
-- **N-way unification** (e.g., `dos_1992 + heineman_cartridge +
-  foxy_gba_2004` together): the naive 2-way folded approach fails
-  because the directives emitted by the first merge become "lines"
-  that the second merge tries to align, producing wrong wrapping.
-  A correct N-way unifier needs a synchronised matcher across all
-  inputs simultaneously. Deferred.
-- **Other Heineman-lineage stages**: LAKE (0.92 sim), PRISON
-  (0.68), CAVES (0.72), TANK (0.67), etc. should be unifiable
-  pairwise the same way.
+- **N-way unification**: ✅ landed 2026-05-01 / 2026-05-02 — see
+  the LAKE 4-way update at the bottom of this page. The trick was
+  a block-aware fold: collapse each prior step's `;@if/.../;@endif`
+  blocks into single placeholder tokens before the next step's
+  difflib pass, then expand them back, rewriting the merged-side
+  sentinel into a `BRANCH in (...)` clause.
+- **Other Heineman-lineage stages**: LAKE is now ✅ unified (4-way
+  with cart + gba + amiga + dos). PRISON, CAVES, TANK, etc. should
+  be unifiable the same way.
 - **Atari ST**: when its memlist parser lands (issue #0004),
-  Atari ST should share Amiga's chahi_1991 sources verbatim — no
+  Atari ST should share Amiga's chahi_amiga_1991 sources verbatim — no
   unification work required, just point the new port at the
-  existing chahi_1991/<stage>.asm files.
+  existing chahi_amiga_1991/<stage>.asm files.
 
 ## Tools
 
@@ -269,15 +269,15 @@ The previous canonicalizer left some pairs unmerged because difflib
 was misaligning them. Concretely:
 
 ```
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
 LABEL_04CF:
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
 LABEL_04D5:
 ;@endif
     break
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
     djnz [0x05], LABEL_04CF
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
     djnz [0x05], LABEL_04D5
 ;@endif
 ```
@@ -514,9 +514,9 @@ The 4 remaining blocks are all *true* semantic differences:
   lengths to hit the 64-KB chunk boundary).
 
 End-to-end byte-match still verified: preprocessing the unified
-source with `BRANCH=heineman_cartridge` produces md5
+source with `BRANCH=cartridge_1992` produces md5
 `93959756…` (matches the SNES-EU `level_0` chunk); with
-`BRANCH=foxy_gba_2004` it produces md5 `c978f22c…` (matches the
+`BRANCH=gba_2004` it produces md5 `c978f22c…` (matches the
 GBA `level_0` chunk).
 
 So out of 18,282 unified-file lines, **4 are conditional**. The
@@ -549,9 +549,9 @@ collapsed this region:
    line without inflating the source repo:
 
    ```
-   ;@if BRANCH == "heineman_cartridge"
+   ;@if BRANCH == "cartridge_1992"
        FILL(55641, 0xFF)
-   ;@elif BRANCH == "foxy_gba_2004"
+   ;@elif BRANCH == "gba_2004"
        db ...   ; ~55KB of GBA-specific data
    ;@endif
    ```
@@ -609,9 +609,9 @@ block at LABEL_26A6 is now compact and self-explaining:
 ```
 LABEL_26A6:
     killChannel
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
     FILL(55641, 0xFF)
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
     db 0x0F, 0xC6, 0x12, ...     ; (gba-specific embedded data)
     db ...
 ;@endif
@@ -625,5 +625,71 @@ A natural follow-up: **what IS the GBA-only data after `LABEL_26A6`'s
 jumps suggest embedded polygon/cinematic assets — content the
 cartridge doesn't carry. Investigating could surface another
 GBA-port-only asset survey similar to the unused-polygons work in
-research/06.
+research/06. ✅ Pursued — see [research finding #10](#/research/10-gba-cinematic-data-found).
 
+## Update (2026-05-01 → 2026-05-02) — LAKE 4-way unification
+
+The cart↔gba INTRO finding above was the proof-of-concept (2-way).
+Subsequent work generalised the pipeline and added the dos_1992
+and chahi_amiga_1991 branches:
+
+**LAKE 4-way** (cartridge_1992 + gba_2004 + chahi_amiga_1991 +
+dos_1992) is now byte-matching for all four ports. End state:
+
+| Metric | LAKE 4-way |
+|---|---|
+| `;@if` directives | 362 |
+| Unified file lines | 10,939 |
+| Top-level blocks with nested `;@if` | 6 (of 346) |
+| Max nesting depth | 2 |
+
+Reduction journey from baseline (EQU canon only) to final:
+
+| Stage | `;@if` count |
+|---|---|
+| Baseline (EQU canon only) | 2,895 |
+| + `merge_adjacent_blocks` | 2,668 |
+| + `canonicalize_inline_labels` | 2,254 |
+| + `canonicalize_bankswitch` + `--strip-raw-comments` | 757 |
+| + `canonicalize_cinematic_refs` (greedy, 8 iter) | 473 |
+| + union-find equivalence classes + fresh-name fallback | 317 |
+| + alternating cinematic / label canon (3 iter) | 307 |
+| + `promote_safe_label_defs` | 292 |
+| + multi-line `canonicalize_cinematic_refs` | 282 |
+| + `flatten_subset_nesting` (single-arm + multi-arm absorb) + `merge_equivalent_arms` + `drop_empty_arms` | 362 (re-verified at 4-way scale; LAKE 3-way was 258) |
+
+(The last row's count is higher than 282 because the metric
+applies to the 4-way file, which adds dos_1992 — itself the
+4th-largest source of divergence. LAKE 3-way without dos_1992
+sat at 258.)
+
+**Tools added since the original 2-way finding:**
+
+- `unify_asm.py` — N-way fold (block-aware), `merge_adjacent_blocks`,
+  `promote_safe_label_defs`, `flatten_subset_nesting` (handles
+  single-arm hoisting, last-arm hoisting, and multi-arm absorption
+  where one outer arm's body is exactly an inner if/elif block
+  whose branches partition the outer arm's branches),
+  `merge_equivalent_arms`, `drop_empty_arms`.
+- `canonicalize_cinematic_refs.py` — handles both `--token=cinematic`
+  and `--token=label`; uses union-find equivalence classes; offers
+  a `--fresh-name-prefix` fallback when canonical-name conflicts
+  prevent renames.
+- `redisasm_db.py` — extended; the LAKE per-branch sources now
+  redisasm cleanly to `load id=...` form throughout.
+
+**Open issues filed during this work:**
+
+- [#0066](#/issues) — awvm-asm encoding bugs (bankSwitch, setPalette,
+  video alt-form). Worked around via canonicalization passes;
+  proper fix is in AWVM_Tools.
+- [#0069](#/issues) — collapse 2-of-3 agreement to reduce ;@if
+  count. Implemented via `merge_equivalent_arms`.
+- [#0070](#/issues) — `--strip-raw-comments` regresses GBA in
+  3-way mode (worked around with `canonicalize_bankswitch`).
+- [#0071](#/issues) — extend block-aware folding to N>3-way.
+  ✅ resolved by N-way fold.
+- [#0072](#/issues) — `canonicalize_inline_labels` can produce
+  duplicate label definitions on cascading-skip. Worked around
+  for LAKE 4-way by skipping the amiga-dos pairing round; proper
+  fix pending.

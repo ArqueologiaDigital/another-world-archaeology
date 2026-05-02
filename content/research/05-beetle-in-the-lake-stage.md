@@ -812,7 +812,7 @@ is a single artifact.
 A surgical 2-byte patch that makes the wing-flip animation
 reachable in real gameplay (rather than only by reading the
 bytecode) lives in the sibling
-[`another-world-hacks`](https://github.com/felipesanches/another-world-hacks)
+[`another-world-hacks`](https://github.com/ArqueologiaDigital/another-world-hacks)
 repo, under `01-amiga-beetle-kick-reenable/`.
 
 The patch swaps the two address operands in the gate-1 instruction

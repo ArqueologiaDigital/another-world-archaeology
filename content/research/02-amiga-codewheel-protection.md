@@ -92,13 +92,18 @@ project memory.
 ## Status
 
 - **Finding** ✅ retained here.
-- **Patch identification** TODO — disassemble both `resource-0x15.bin`
-  variants in the affected offset ranges and document the exact
-  opcode-level differences.
-- **Cross-release search** TODO — look for the same codewheel
-  logic in `dos`, `atari-st-1991` once we have an Atari ST
-  extractor, and the SNES / Genesis / 3DO / Macintosh / Apple IIgs
-  ports as those land.
+- **Patch identification** — opcode-level diff has been disassembled
+  out of both `resource-0x15.bin` variants. The codewheel-check
+  routine is now governed by the `CODEWHEEL_CHECK` flag in the
+  source-reconstruction repo
+  (`releases/<port>.flags:BYTECODE_BRANCH=...`), with the
+  per-release table in [`docs/glossary.md`](https://github.com/ArqueologiaDigital/another-world-source-reconstruction/blob/main/docs/glossary.md).
+- **Cross-release search** — partial: DOS and Amiga both ship the
+  codewheel check (it's the per-release `CODEWHEEL_CHECK=on/off`
+  flag value); cartridge ports (SNES-EU, Genesis-EU, GBA Foxy)
+  don't carry it (cartridges had no manual / codewheel insert).
+  Atari ST 1991 awaits its extractor (issue #0004); 3DO / Mac /
+  Apple IIgs await their respective parsers.
 
 ## Reproducing
 

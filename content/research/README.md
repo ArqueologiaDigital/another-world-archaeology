@@ -72,14 +72,16 @@ finding is comparative) records which releases it applies to.
   offset `0x486E0` (95.1 % match). Tracked as issue #0068; once
   fixed upstream, the trailing `;@if` resolves automatically.
 
-- [09 — Phase 3b first cross-branch unification (cartridge ↔ GBA INTRO)](#/research/09-phase3b-first-unification):
-  ONE unified source file (`src/levels/_unified/INTRO.asm.in` with
-  626 `;@if`/`;@elif` blocks) produces byte-identical bytecode for
-  BOTH heineman_cartridge (SNES-EU level_0) and foxy_gba_2004
-  (GBA level_0) targets. End-to-end verified: preprocessor →
-  awvm-asm → byte-match. Overhead is +46.5% vs single source. The
-  Phase 3b conditional-compilation pipeline is now demonstrated
-  on a real cross-branch pair, not just a stub.
+- [09 — Phase 3b first cross-branch unification (cartridge ↔ GBA INTRO, then 4-way LAKE)](#/research/09-phase3b-first-unification):
+  Started with ONE unified source file
+  (`src/levels/_unified/INTRO.asm.in`) producing byte-identical
+  bytecode for cartridge_1992 (SNES-EU level_0) and gba_2004
+  (GBA level_0). End-to-end verified: preprocessor → awvm-asm →
+  byte-match. The pipeline then generalised to N-way folding
+  (block-aware), with LAKE now unified across all four branches
+  (cartridge_1992 + gba_2004 + chahi_amiga_1991 + dos_1992) at
+  362 `;@if` directives — overwhelmingly real semantic
+  divergences, not noise.
 
 - [08 — Cross-branch bytecode structural similarity](#/research/08-cross-branch-structural-similarity):
   byte-level diff said the four bytecode branches share no
@@ -89,9 +91,9 @@ finding is comparative) records which releases it applies to.
   70-99% structure stage-by-stage; even Chahi → Delphine DOS
   preserves 60-92% of structure. Foxy GBA's level_0 has 0.988
   similarity to cartridge level_0 — Foxy refactored Heineman's
-  cartridge bytecode rather than re-implementing. Revises Phase
-  3b feasibility from "deferred" to "attempt within Heineman
-  lineage".
+  cartridge bytecode rather than re-implementing. This finding
+  motivated the Phase 3b plan that delivered the 4-way LAKE
+  unification in finding #09.
 
 - [07 — Bytecode round-trip is byte-identical for 5 ports (29 levels)](#/research/07-bytecode-roundtrip-byte-matching):
   the foundation for the source-reconstruction project. Every

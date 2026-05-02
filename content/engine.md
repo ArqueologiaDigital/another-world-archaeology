@@ -1,11 +1,12 @@
 # Engine architecture
 
-A working cheat-sheet of the Another World VM. Compiled from
-`init.py`, `AnotherWorld_VMTools/awvm-disasm.py`, and the labels
-already documented in `AWVM_Tools/releases/common_data/`. **This is a
-first draft and likely incomplete or wrong in places** — corrections
-welcome; the file is the source of canonical names that flow into
-`symbols/_base.yaml`.
+A working cheat-sheet of the Another World VM. Compiled from the
+per-format extractor modules (`extractors/dos_bank.py`,
+`extractors/amiga_adf.py`, etc.) and the AWVM_Tools Rust toolchain
+(disassembler, polygon decoder, ROM-set extractors). **This is a
+working draft and may be incomplete or wrong in places** —
+corrections welcome; the file is the source of canonical names
+that flow into `symbols/_base.yaml`.
 
 ## The 30-second overview
 
@@ -25,7 +26,8 @@ layer.
 ## Resources
 
 Every release exposes its content as a flat list of resources. Each
-resource has one of seven types (`init.py:7`):
+resource has one of seven types (defined in
+`extractors/dos_bank.py` and mirrored across the other extractors):
 
 | ID | Name | Notes |
 |---|---|---|
@@ -41,9 +43,14 @@ The DOS layout uses `memlist.bin` + a handful of `bank<NN>` files;
 each entry in `memlist.bin` records `bankId`, `bankOffset`,
 `packedSize`, `size`, and `type`. If `packedSize == size` the
 resource is stored raw; otherwise it is run through the
-backwards-consuming bit-stream decoder in `Bank.unpack`. Other
-release formats (Amiga ADF, Windows PAK, SNES/Genesis ROMs) repackage
-the same logical resources differently and need their own readers.
+backwards-consuming bit-stream decoder (in AWVM_Tools'
+`prepare_bank_romset` Rust module, called from
+`extractors/dos_bank.py`). Other release formats (Amiga ADF,
+Windows PAK, SNES / Genesis / GBA cartridge ROMs, Atari ST Pasti,
+3DO, etc.) repackage the same logical resources differently and
+have their own per-format extractor modules under `extractors/`.
+See [Format coverage](#/coverage) for the current per-format
+status.
 
 ## Game variables
 
@@ -189,21 +196,21 @@ deltas from the bbox centre, scaled by the draw opcode's `zoom`
 parameter (default `0x40` = 1.0).
 
 Per-stage **labelled cinematic entries** (e.g.
-`WALKING_FEET_ARRIVING_*`, `DNA_*`, `CARKEY`) are already documented
-in
-`AnotherWorld_VMTools/releases/common_data/common_data.py:LABELED_CINEMATIC_ENTRIES`.
-Those labels form the seed of the symbol map for cinematic
-addresses.
+`WALKING_FEET_ARRIVING_*`, `DNA_*`, `CARKEY`) are documented in
+the AWVM_Tools Rust crate (per-release `KNOWN_LABELS` tables in
+`awvm/src/releases/<port>.rs`). Those labels form the seed of the
+symbol map for cinematic addresses and feed back into the unified
+source-reconstruction project.
 
 ## References
 
-- `init.py` — the DOS bank reader (current canonical extractor).
-- `AnotherWorld_VMTools/awvm-disasm.py` — opcode definitions, video
-  bit-field layout, variable name table.
-- `AnotherWorld_VMTools/releases/common_data/decode_polygons.py` —
-  polygon record format.
-- `AnotherWorld_VMTools/releases/common_data/common_data.py` —
-  labelled cinematic-entry tables per game stage.
+- `extractors/dos_bank.py` — the DOS bank reader.
+- `extractors/amiga_adf.py`, `cartridge_rom.py`, `atari_st_pasti.py`,
+  `three_do_opera.py`, etc. — the other per-format extractors.
+- [`AnotherWorld_VMTools`](https://github.com/felipesanches/AnotherWorld_VMTools) —
+  Rust toolchain: disassembler, assembler, polygon decoder, video
+  bit-field layout, per-release ROM-set extractors, `KNOWN_LABELS`
+  tables.
 - Fabien Sanglard, *Another World: Code Review* — independent
   reverse-engineering writeup that overlaps and cross-checks the
   above (URL not pinned; consult only as a sanity check, not as a

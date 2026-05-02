@@ -10,9 +10,9 @@ remaining `;@if` blocks. The largest by far was at `LABEL_26A6`:
 ```
 LABEL_26A6:
     killChannel
-;@if BRANCH == "heineman_cartridge"
+;@if BRANCH == "cartridge_1992"
     FILL(55641, 0xFF)
-;@elif BRANCH == "foxy_gba_2004"
+;@elif BRANCH == "gba_2004"
     db 0x0F, 0xC6, 0x12, ...   ; 55,629 bytes of unknown data
     db ...
 ;@endif

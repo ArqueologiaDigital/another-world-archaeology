@@ -45,12 +45,12 @@ addresses.
 
 | Pair | Ratio | Matched tokens | Longest block |
 |---|---|---|---|
-| heineman_cartridge vs dos_1992 | **0.914** | 6384 / 7032 | **512 tokens** |
-| foxy_gba_2004 vs heineman_cartridge | **0.920** | 6330 / 7032 | 393 tokens |
-| foxy_gba_2004 vs dos_1992 | 0.884 | 6039 / 6933 | 375 tokens |
-| chahi_1991 vs dos_1992 | 0.600 | 4058 / 6933 | 151 tokens |
-| chahi_1991 vs heineman_cartridge | 0.598 | 4077 / 7032 | 129 tokens |
-| chahi_1991 vs foxy_gba_2004 | 0.587 | 3911 / 6729 | 129 tokens |
+| cartridge_1992 vs dos_1992 | **0.914** | 6384 / 7032 | **512 tokens** |
+| gba_2004 vs cartridge_1992 | **0.920** | 6330 / 7032 | 393 tokens |
+| gba_2004 vs dos_1992 | 0.884 | 6039 / 6933 | 375 tokens |
+| chahi_amiga_1991 vs dos_1992 | 0.600 | 4058 / 6933 | 151 tokens |
+| chahi_amiga_1991 vs cartridge_1992 | 0.598 | 4077 / 7032 | 129 tokens |
+| chahi_amiga_1991 vs gba_2004 | 0.587 | 3911 / 6729 | 129 tokens |
 
 For the LAKE stage, the **Heineman lineage** (DOS + cartridge +
 GBA) shows 88-92% structural overlap. The Chahi branch (Amiga)
@@ -87,7 +87,7 @@ AWVM_Tools' `STAGE_TITLES`) that level_0 universally meant the
 codewheel screen.
 
 The structural-similarity matrix immediately surfaced the issue:
-chahi_1991 vs heineman_cartridge for `CODE_WHEEL` was **0.083**
+chahi_amiga_1991 vs cartridge_1992 for `CODE_WHEEL` was **0.083**
 similarity (effectively zero), while `cartridge ↔ GBA CODE_WHEEL`
 was **0.988** (essentially the same content). Reading the actual
 strings confirms: SNES-EU level_0 + GBA level_0 contain
@@ -101,20 +101,20 @@ Cartridge-format ports don't have codewheel copy-protection
 **INTRO** sequence; the secret-code-entry screen (PASSCODE) is
 at a higher level slot.
 
-After renaming `heineman_cartridge/CODE_WHEEL.asm` →
-`heineman_cartridge/INTRO.asm` and the same for
-`foxy_gba_2004/`, the structural-similarity matrix now shows
+After renaming `cartridge_1992/CODE_WHEEL.asm` →
+`cartridge_1992/INTRO.asm` and the same for
+`gba_2004/`, the structural-similarity matrix now shows
 the **most striking cross-branch consistency we've found** —
 INTRO is 80%+ similar across **all four** branches:
 
 | Pair | INTRO ratio | LAKE ratio (for context) |
 |---|---|---|
-| heineman_cartridge ↔ foxy_gba_2004 | **0.988** | 0.920 |
-| heineman_cartridge ↔ dos_1992 | **0.979** | 0.914 |
-| dos_1992 ↔ foxy_gba_2004 | **0.972** | 0.884 |
-| chahi_1991 ↔ foxy_gba_2004 | 0.838 | 0.587 |
-| chahi_1991 ↔ heineman_cartridge | 0.835 | 0.598 |
-| chahi_1991 ↔ dos_1992 | 0.835 | 0.600 |
+| cartridge_1992 ↔ gba_2004 | **0.988** | 0.920 |
+| cartridge_1992 ↔ dos_1992 | **0.979** | 0.914 |
+| dos_1992 ↔ gba_2004 | **0.972** | 0.884 |
+| chahi_amiga_1991 ↔ gba_2004 | 0.838 | 0.587 |
+| chahi_amiga_1991 ↔ cartridge_1992 | 0.835 | 0.598 |
+| chahi_amiga_1991 ↔ dos_1992 | 0.835 | 0.600 |
 
 The INTRO is a fixed cinematic — same Ferrari/lab content on
 every port — so it's the same logical program with slightly
@@ -128,7 +128,7 @@ implementation): SNES-EU + GBA `STAGE_TITLES[0]` should be
 "Intro Sequence", not "Code-wheel screen".
 
 **Foxy GBA's lineage**: 99% structural similarity to
-heineman_cartridge for INTRO, 92% for LAKE. Foxy 2004 is best
+cartridge_1992 for INTRO, 92% for LAKE. Foxy 2004 is best
 described as **a refactor of Heineman's cartridge bytecode**, not
 a from-scratch implementation.
 
@@ -168,29 +168,39 @@ within the Heineman lineage (DOS / cartridge / GBA), structural
 overlap is 70-99% — large enough that a unified source is
 genuinely useful. Specifically:
 
-- LAKE: dos_1992 + heineman_cartridge share 91% structure +
+- LAKE: dos_1992 + cartridge_1992 share 91% structure +
   a 512-token longest matching block. A unified
   `heineman_lineage/LAKE.asm` with `#ifdef CARTRIDGE` blocks for
   the ~9% divergent regions is feasible.
-- ENDING / TANK / INTRO: chahi_1991 ↔ dos_1992 at 0.83-0.92
+- ENDING / TANK / INTRO: chahi_amiga_1991 ↔ dos_1992 at 0.83-0.92
   — also good candidates for two-branch unification.
 
 What remains genuinely divergent (unification is *not* attractive):
-- chahi_1991 ↔ Heineman cartridge for most stages: ~55-65%
+- chahi_amiga_1991 ↔ Heineman cartridge for most stages: ~55-65%
   similarity. Crossing the codewheel-vs-cartridge format
   boundary loses a lot.
-- chahi_1991 ↔ dos_1992 for PASSCODE, CAPSULE: ~47-53%.
-- heineman_cartridge ↔ dos_1992 for PASSCODE: 0.50.
+- chahi_amiga_1991 ↔ dos_1992 for PASSCODE, CAPSULE: ~47-53%.
+- cartridge_1992 ↔ dos_1992 for PASSCODE: 0.50.
 
-So the revised Phase 3b plan:
+So the revised Phase 3b plan was:
 
 1. Within the **Heineman lineage**, attempt a 3-target unified
    source: DOS + cartridge + GBA all build from one .asm with
    `#ifdef`s for differences.
-2. Keep **chahi_1991** as its own source tree (~60% similarity to
-   Heineman lineage isn't worth merging — too many `#ifdef`s).
+2. Keep **chahi_amiga_1991** as its own source tree (~60% similarity
+   to Heineman lineage isn't worth merging — too many `#ifdef`s).
 3. Cherry-pick high-similarity Chahi/Heineman_DOS pairs (ENDING,
    INTRO) as candidates for two-branch unification.
+
+**Outcome (as of 2026-05-02): plan was too conservative on point
+2.** Research finding [#09](#/research/09-phase3b-first-unification)
+shows that `chahi_amiga_1991` folds cleanly into the unified
+LAKE source (4-way: cart + gba + amiga + dos) once a multi-stage
+canonicalization pipeline absorbs structural divergence into
+per-branch EQU values. The 60% structural similarity manifests
+mostly as different polygon-offset numerics, not as different
+control flow, so it canonicalizes well. LAKE 4-way unified file
+has 362 `;@if` directives, all byte-matching.
 
 ## Tools
 
