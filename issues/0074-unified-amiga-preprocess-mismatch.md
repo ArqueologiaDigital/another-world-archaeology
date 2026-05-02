@@ -1,7 +1,7 @@
 ---
 id: 0074
 title: unified-LAKE preprocess+assemble mismatches expected amiga bytecode
-status: open
+status: done
 tier: A
 created: 2026-05-02
 updated: 2026-05-02
@@ -101,3 +101,20 @@ PAUSE_SLICES block to identify the exact regression.
 3. Extend `verify_stage.py` (or add `verify_unified.py`) to also
    exercise the `unified→preprocess→assemble` path so future
    regressions are caught at commit time.
+
+## Log
+
+- **2026-05-02** — Resolved by `dee6b28`. Root cause was 2 missing
+  amiga EQUs in the unified LAKE file (`HERO_RUN_RIGHT_FRAME_0` and
+  `HERO_RUN_LEFT_FRAME_3`); both were left orphaned at the
+  numeric-name level when Round 11 / Round 13 renamed amiga's
+  branch-block bodies to use semantic names but missed the EQU
+  table updates.
+- Same date — Added `tools/verify_unified.py` (sister to
+  `verify_stage.py`) so future unified-file regressions surface
+  at commit time instead of being silently masked by the
+  per-branch verify path. Discovered that INTRO.asm.in is
+  intentionally cart+gba-only (research/09: "Phase 3b first
+  cross-branch unification"), so verify_unified.py also got a
+  `unified_supports_branch()` skip-heuristic to avoid false
+  failures on stages whose unified file isn't N-way yet.
