@@ -22,8 +22,8 @@ Outputs:
   by which label they're emitted from.
 
 Usage:
-    python3 tools/asset_references.py /tmp/output/amiga/disasm \\
-        --json-out /tmp/amiga_refs.json
+    python3 tools/asset_references.py /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga/disasm \\
+        --json-out /home/fsanches/compartilhado/another-world-archaeology/tmp/amiga_refs.json
 """
 from __future__ import annotations
 

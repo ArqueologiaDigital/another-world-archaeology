@@ -28,8 +28,8 @@ the current contents of the output directory — useful for first-time
 populating the source-reconstruction repo's reference data.
 
 Usage:
-    python3 tools/verify_resources.py --port amiga --output-root /tmp/output/amiga
-    python3 tools/verify_resources.py --port amiga --output-root /tmp/output/amiga --bootstrap
+    python3 tools/verify_resources.py --port amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga
+    python3 tools/verify_resources.py --port amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga --bootstrap
 """
 from __future__ import annotations
 
@@ -39,12 +39,17 @@ import json
 import sys
 from pathlib import Path
 
+# Repo-local scratch dir for per-port disasm outputs. Survives VM
+# reboots (unlike /tmp/) but is gitignored. Path is relative to this
+# script's location: <repo>/tools/<this>.py → <repo>/tmp/.
+TMP_ROOT = Path(__file__).resolve().parent.parent / "tmp"
+
 
 # Default output-root (mirrors roundtrip_bytecode.py).
 DEFAULT_OUTPUT_ROOT: dict[str, Path] = {
-    "amiga":          Path("/tmp/output/amiga"),
-    "msdos":          Path("/tmp/output/msdos"),
-    "gba_usa":        Path("/tmp/output/gba_usa"),
+    "amiga":          TMP_ROOT / "output" / "amiga",
+    "msdos":          TMP_ROOT / "output" / "msdos",
+    "gba_usa":        TMP_ROOT / "output" / "gba_usa",
     "genesis_europe": Path("work/f15f23e1e0fa8d827c4b045d7ce3cf90"),
     "snes_eu":        Path("work/f65e3d6efe35900c0015bcb751ee567e"),
 }

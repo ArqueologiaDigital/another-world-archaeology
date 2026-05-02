@@ -12,8 +12,8 @@ For each level of a port, this driver:
 Reports per-level match status.
 
 Usage:
-    python3 tools/roundtrip_bytecode.py --port amiga --output-root /tmp/output/amiga
-    python3 tools/roundtrip_bytecode.py --port msdos --output-root /tmp/output/msdos
+    python3 tools/roundtrip_bytecode.py --port amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga
+    python3 tools/roundtrip_bytecode.py --port msdos --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/msdos
     python3 tools/roundtrip_bytecode.py --all
 """
 from __future__ import annotations
@@ -25,6 +25,11 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+# Repo-local scratch dir for per-port disasm outputs. Survives VM
+# reboots (unlike /tmp/) but is gitignored. Path is relative to this
+# script's location: <repo>/tools/<this>.py → <repo>/tmp/.
+TMP_ROOT = Path(__file__).resolve().parent.parent / "tmp"
 
 AWVM_ASM = Path(
     "/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm"
@@ -53,9 +58,9 @@ CHUNK_SIZE = 0x10000  # 64 KB per AW-VM bytecode chunk
 # Default output-root location keyed by port slug. For cartridge ports,
 # the round-trip driver reads bytecode.rom from <root>/romset/.
 DEFAULT_OUTPUT_ROOT: dict[str, Path] = {
-    "amiga":          Path("/tmp/output/amiga"),
-    "msdos":          Path("/tmp/output/msdos"),
-    "gba_usa":        Path("/tmp/output/gba_usa"),
+    "amiga":          TMP_ROOT / "output" / "amiga",
+    "msdos":          TMP_ROOT / "output" / "msdos",
+    "gba_usa":        TMP_ROOT / "output" / "gba_usa",
     "genesis_europe": Path("work/f15f23e1e0fa8d827c4b045d7ce3cf90"),
     "snes_eu":        Path("work/f65e3d6efe35900c0015bcb751ee567e"),
 }

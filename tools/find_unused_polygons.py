@@ -17,8 +17,8 @@ The resource maps live at the top of this file. Each entry is
 `(release_slug, output_root, level_index → cinematic_index)`.
 
 Usage:
-    python3 tools/find_unused_polygons.py amiga --output-root /tmp/output/amiga
-    python3 tools/find_unused_polygons.py msdos --output-root /tmp/output/msdos
+    python3 tools/find_unused_polygons.py amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga
+    python3 tools/find_unused_polygons.py msdos --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/msdos
 """
 from __future__ import annotations
 

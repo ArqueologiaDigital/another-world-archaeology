@@ -25,6 +25,11 @@ AWVM_ASM = Path(
     "/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm"
 )
 
+# Repo-local scratch dir for per-port disasm outputs. Survives VM
+# reboots (unlike /tmp/) but is gitignored. Path is relative to this
+# script's location: <repo>/tools/<this>.py → <repo>/tmp/.
+TMP_ROOT = Path(__file__).resolve().parent.parent / "tmp"
+
 # Per-port: (root-dir, format, stage→level mapping)
 # For cartridge format: bytecode is in <root>/romset/bytecode.rom at chunk N×0x10000.
 # For resource-bin format: bytecode is at <root>/resources/resource-0xNN.bin.
@@ -53,7 +58,7 @@ PORTS = {
     "msdos": {
         "branch": "dos_1992",
         "format": "resource-bin",
-        "root": Path("/tmp/output/msdos"),
+        "root": TMP_ROOT / "output" / "msdos",
         "stages": {
             "CODE_WHEEL": 0x15, "INTRO": 0x18, "LAKE": 0x1B, "PRISON": 0x1E,
             "CAVES": 0x21, "TANK": 0x24, "CAPSULE": 0x27, "ENDING": 0x2A,
@@ -64,7 +69,7 @@ PORTS = {
     "amiga": {
         "branch": "chahi_amiga_1991",
         "format": "resource-bin",
-        "root": Path("/tmp/output/amiga"),
+        "root": TMP_ROOT / "output" / "amiga",
         "stages": {
             "CODE_WHEEL": 0x15, "INTRO": 0x18, "LAKE": 0x1B, "PRISON": 0x1E,
             "CAVES": 0x21, "TANK": 0x24, "CAPSULE": 0x27, "ENDING": 0x2A,
@@ -75,7 +80,7 @@ PORTS = {
     "gba_usa": {
         "branch": "gba_2004",
         "format": "cartridge",
-        "root": Path("/tmp/output/gba_usa"),
+        "root": TMP_ROOT / "output" / "gba_usa",
         # Same as snes_eu: level_0 is INTRO (the lab scene; identical
         # strings and 0.99 structural similarity to snes_eu level_0).
         # AWVM_Tools' STAGE_TITLES labels this "Code-wheel screen" — that's
