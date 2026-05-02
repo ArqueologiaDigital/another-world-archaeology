@@ -41,31 +41,105 @@ from pathlib import Path
 
 RE_LABEL_DEF = re.compile(r'^([A-Z][A-Z_0-9]*):\s*$')
 RE_INLINE_LABEL = re.compile(r'\bLABEL_[A-Fa-f0-9]+\b')
+RE_LABEL_HEX = re.compile(r'^LABEL_[A-Fa-f0-9]+$')
 
 
-def normalize_labels_for_diff(line: str) -> str:
-    """Replace `LABEL_<HEX>` tokens with `<L>` placeholder for diff
+def is_auto_label(name: str) -> bool:
+    """True for the auto-generated `LABEL_<HEX>` form; False for
+    a semantic / hand-curated label name."""
+    return bool(RE_LABEL_HEX.match(name))
+
+
+def pick_canonical(la: str, lb: str) -> str:
+    """Choose one of two synonym names as canonical.
+
+    **Always prefer a semantic (non-`LABEL_<HEX>`) name over the
+    auto-generated form**, regardless of alphabetical order. This
+    keeps semantic names landed in upstream rounds from being
+    undone by a later canonicalization pass that sees a
+    `LABEL_<HEX>` synonym in another branch.
+
+    If both names are semantic, or both are `LABEL_<HEX>`, fall
+    back to alphabetical `min` for determinism.
+    """
+    a_is_hex = is_auto_label(la)
+    b_is_hex = is_auto_label(lb)
+    if a_is_hex and not b_is_hex:
+        return lb
+    if b_is_hex and not a_is_hex:
+        return la
+    return min(la, lb)
+
+
+def build_label_normalize_pattern(*label_sets: set[str]) -> re.Pattern:
+    """Build a regex that matches any label name (auto-generated OR
+    semantic) so the diff-normalization step can collapse them all
+    to a `<L>` placeholder. Without this, a line like
+    `jmp COMPUTE_RANDOM_BIT_MASKS` in branch A wouldn't align with
+    `jmp LABEL_0353` in branch B during the diff pass — only one
+    side would normalize, and difflib wouldn't pair them.
+
+    Names are sorted longest-first to avoid prefix-match issues
+    when alternation is built (e.g. `LABEL_AB` vs `LABEL_AB_CD`).
+    The auto-`LABEL_<HEX>` regex is kept as a fallback so any
+    label that wasn't pre-collected (e.g., synthesized later)
+    still normalizes.
+    """
+    all_names: set[str] = set()
+    for s in label_sets:
+        all_names |= s
+    if not all_names:
+        return RE_INLINE_LABEL
+    parts = sorted(all_names, key=lambda n: -len(n))
+    return re.compile(
+        r'\b(?:'
+        + '|'.join(re.escape(p) for p in parts)
+        + r'|LABEL_[A-Fa-f0-9]+)\b'
+    )
+
+
+def normalize_labels_for_diff(
+    line: str, pattern: re.Pattern = RE_INLINE_LABEL
+) -> str:
+    """Replace label tokens with `<L>` placeholder for diff
     alignment. Without this, difflib eagerly matches lines like
     `LABEL_1219:` to lines with the SAME NAME in the other branch,
     even when they're at different LOGICAL positions — defeating
-    synonym detection."""
-    return RE_INLINE_LABEL.sub("<L>", line)
+    synonym detection.
+
+    `pattern` defaults to the legacy LABEL_<HEX>-only matcher; pass
+    a fuller pattern from `build_label_normalize_pattern()` to also
+    collapse semantic names.
+    """
+    return pattern.sub("<L>", line)
 
 
 def find_label_synonyms(a_lines: list[str], b_lines: list[str]) -> list[tuple[str, str]]:
     """Return list of (label_a, label_b) synonym pairs found via diff alignment.
 
-    Aligns label-normalized versions of both files: any line containing
-    `LABEL_<HEX>` gets the labels replaced with `<L>` before difflib
-    matches it. This makes lines like `LABEL_1219:` and `LABEL_1225:`
-    look identical to the matcher (`<L>:` vs `<L>:`), so the structural
-    alignment is preserved — and we can then extract label names at
-    corresponding positions to find synonym pairs."""
-    a_norm = [normalize_labels_for_diff(l) for l in a_lines]
-    b_norm = [normalize_labels_for_diff(l) for l in b_lines]
+    Aligns label-normalized versions of both files: any LABEL token
+    (auto-generated `LABEL_<HEX>` OR a semantic name like
+    `COMPUTE_RANDOM_BIT_MASKS`) gets replaced with `<L>` before
+    difflib matches the line. This makes lines like `LABEL_1219:` and
+    `COMPUTE_RANDOM_BIT_MASKS:` look identical to the matcher, so
+    the structural alignment is preserved — and we can then extract
+    label names at corresponding positions to find synonym pairs.
+
+    The semantic-name collapsing matters when one branch has been
+    partially renamed by an earlier round (e.g. amiga's
+    `LABEL_0351` → `COMPUTE_RANDOM_BIT_MASKS`) but the other branch
+    still uses the auto-generated form."""
+    a_label_names = collect_all_labels("\n".join(a_lines))
+    b_label_names = collect_all_labels("\n".join(b_lines))
+    norm_pattern = build_label_normalize_pattern(a_label_names, b_label_names)
+    a_norm = [normalize_labels_for_diff(l, norm_pattern) for l in a_lines]
+    b_norm = [normalize_labels_for_diff(l, norm_pattern) for l in b_lines]
     sm = difflib.SequenceMatcher(None, a_norm, b_norm, autojunk=False)
     synonyms: list[tuple[str, str]] = []
     seen: set[tuple[str, str]] = set()
+    # Token-extractor: find any label-name token in the line (auto OR
+    # semantic). Uses the same pattern as the normalizer.
+    extract_labels = norm_pattern
     for tag, i1, i2, j1, j2 in sm.get_opcodes():
         if tag == 'equal':
             # Lines that are "equal" under normalization but DIFFER in
@@ -79,8 +153,8 @@ def find_label_synonyms(a_lines: list[str], b_lines: list[str]) -> list[tuple[st
                 b_orig = b_lines[bi]
                 if a_orig == b_orig:
                     continue
-                a_labels = RE_INLINE_LABEL.findall(a_orig)
-                b_labels = RE_INLINE_LABEL.findall(b_orig)
+                a_labels = extract_labels.findall(a_orig)
+                b_labels = extract_labels.findall(b_orig)
                 if len(a_labels) != len(b_labels):
                     continue
                 for la, lb in zip(a_labels, b_labels):
@@ -234,14 +308,16 @@ def main() -> None:
     skipped_dup_target = 0  # multiple renames pointing to same target name
     fresh_names = 0  # used a fresh name to resolve real conflicts
 
-    # First pass: propose renames (canonical = lexicographic min).
-    # Skip self-pairs (la == lb).
+    # First pass: propose renames using `pick_canonical()` —
+    # which prefers a semantic name over the auto-generated
+    # `LABEL_<HEX>` form, falling back to lexicographic min when
+    # both are the same kind. Skip self-pairs (la == lb).
     proposed: list[tuple[str, str, str, str]] = []  # (branch, old, new, original_pair_other)
     for la, lb in synonyms:
         if la == lb:
             skipped_self += 1
             continue
-        canonical = min(la, lb)
+        canonical = pick_canonical(la, lb)
         if canonical == la:
             proposed.append((b_branch, lb, la, la))
         else:
