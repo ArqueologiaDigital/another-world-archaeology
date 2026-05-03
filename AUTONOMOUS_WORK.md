@@ -176,6 +176,50 @@ attempting to fold, verify_unified should remain 27/27. If it
 breaks, revert and check whether the body has CINEMATIC_xxx
 references with diverging EQU values across branches.
 
+## State as of 2026-05-04 (LAKE methodology applied — rename rounds, all stages)
+
+User directive (received 2026-05-04): apply the LAKE methodology
+fully — semantic-rename LABEL_<HEX> labels first across all stages,
+THEN chapter-split (later), THEN folds (later still). The fold work
+done in earlier sessions was reverted to single-file per-arm state.
+
+**Rename progress per stage / arm:**
+
+| Stage      | cart | dos  | amiga | Notes |
+|------------|-----:|-----:|------:|-------|
+| ENDING     |   33 |   34 |    35 | most-complete; ~50-60% named |
+| PASSCODE   |   83 |   67 |    22 | cart fully done; dos/amiga via match_arms |
+| CAVES      |   21 |   22 |    11 | early — shared helpers + first round |
+| PRISON     |   23 |   25 |    15 | early — shared helpers + first round |
+| CAPSULE    |   20 |   21 |     7 | early — shared helpers only |
+| TANK       |   17 |   24 |    19 | early — round 1 + auto-matches |
+| CODE_WHEEL |    - |   20 |    17 | 2-arm only; round 1 done |
+
+Total: ~580 named routines across all stages.
+
+**New tools built this session:**
+- `tools/match_arms.py` — symbolic-abstracted cart→arm label matcher
+  (handles operands as placeholders so the same instruction sequence
+  matches across arms even with different label addresses).
+- `tools/find_singletons.py` — finds most-referenced single-instruction
+  (ret-only / killChannel-only) labels per arm. Used to identify
+  SHARED_RET and KILL_CHANNEL_LANDING across stages.
+- `tools/reconstruct_arms.py` — inverse of multi_fold.py; rebuilds
+  un-folded `<arm>.inc` from chunks + unified file body.
+
+**Cross-stage convention established:** these names are now reused
+across all stages where the patterns appear:
+- `SHARED_RET` (most-referenced ret-only label, ~200-300 refs/stage)
+- `KILL_CHANNEL_LANDING` (most-referenced killChannel-only label,
+  ~20-70 refs/stage)
+- Plus ~15 other helpers carried over from prior fold work
+  (CLEAR_PAGES_1_2_AND_BLIT, COPY_HASH_VAR_37_TO_RANGE, etc.)
+
+**Still in flight:** CAVES, PRISON, CAPSULE need more rounds. TANK
+and CODE_WHEEL also need more. The dispatchers / 16-case fall-through
+chains (visible in PASSCODE) probably exist in other stages too —
+they're internal labels that don't strictly need names.
+
 ## State as of 2026-05-03 ~21:00 (manual session, not a cron tick)
 
 The user is back home. They asked for another work session manually
