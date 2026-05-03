@@ -101,3 +101,10 @@ ask questions; commit at every passing-verify step.
 Job `a9bf83b9` fires every 2 hours at :17 with a prompt that
 re-reads TaskList and continues. 7-day expiry — should auto-stop
 once tasks are done.
+
+**Caveat**: despite `durable=true` being passed, `CronList` reports
+the job as "session-only". `.claude/scheduled_tasks.json` does not
+exist, only `.claude/scheduled_tasks.lock`. If this Claude session
+exits (e.g. due to OS reboot, terminal close, or runtime crash),
+the cron is gone and the user will need to re-create it. For now,
+as long as this REPL is running, cron will fire.
