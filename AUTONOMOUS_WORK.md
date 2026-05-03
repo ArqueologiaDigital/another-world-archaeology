@@ -79,6 +79,60 @@ the same stage, each arm needs to be split into N+1 chunks (pre /
 mid_1 / ... / mid_N-1 / post). This will get unwieldy past ~5
 folds per stage.
 
+## State as of 2026-05-03 ~17:30 (end of cron tick #5)
+
+**Folds landed across two stages**:
+- CAPSULE (#95, in_progress): 6 folds = 364 bytes
+  - COPY_HASH_VAR_37_TO_RANGE (117b, 3-arm)
+  - DERIVE_VAR12_11_10_FROM_VAR9 (69b, 3-arm)
+  - INIT_RANGE_48_TO_4D_TO_MAX (61b, 3-arm)
+  - RAMP_VAR1_PLUS_C_9_5_3_BREAKS (40b, 3-arm)
+  - INIT_BIRD_AI_VARS (40b, **2-arm cart+dos only** — first 2-arm fold)
+  - INIT_HASH_VARS_A9_TO_AD (37b, 2-arm cart+dos)
+- CODE_WHEEL (#97, in_progress): 2 folds = 68 bytes
+  - CLEAR_PAGES_1_2_AND_BLIT (15b, from tick #4)
+  - INIT_PROGRESS_HASH_VARS (53b)
+
+**Important fold-safety lesson**: tried to fold PLAY_3SFX_PAL_3_PAUSE_4
+in CAPSULE (80 bytes, cart+dos symbolically identical). Reverted —
+awvm-asm uses `;@raw=...` annotations as authoritative for some
+opcodes (specifically `video offset=CINEMATIC_xxx`). When cart and
+dos have the same SYMBOLIC source but different EQU values for
+CINEMATIC_xxx (cart's = 0x75D0 vs dos's = 0x8C80, encoded as
+offset/2 in the video opcode), the bytes differ. A folded body
+with one set of `;@raw=` only matches one branch's bytes.
+
+The fold-safe criterion is now: **byte-identical AND
+symbolic-identical**. find_foldable_routines.py was updated to
+require both (commit fce9958). Survey of fold-safe candidates per
+stage:
+
+| Stage      | Fold-safe bytes |
+|------------|----------------:|
+| CODE_WHEEL |             285 |
+| ENDING     |             989 |
+| PASSCODE   |             106 |
+| TANK       |           1,049 |
+| CAPSULE    |           1,862 |
+| CAVES      |           3,838 |
+| PRISON     |           4,011 |
+| **Total**  |      **12,140** |
+
+(was 18,031 with v2's symbolic-only criterion — 5,891 bytes were
+operand-routines that can't be safely folded.)
+
+## Suggested workplan for cron tick #6
+
+Continue folding fold-safe candidates:
+1. CODE_WHEEL: 13 candidates remaining (after INIT_PROGRESS), totalling
+   ~232 bytes. All 2-arm (amiga+dos).
+2. CAPSULE: 1862 - 364 = 1498 bytes still foldable.
+3. PRISON has the most fold opportunity (4011 bytes) — start there
+   for highest impact per tick.
+
+Each fold takes ~5-10 minutes once muscle-memorized. A full tick
+should land 5-8 folds.
+
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
 
 ## Suggested workplan for cron tick #5
