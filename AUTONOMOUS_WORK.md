@@ -12,20 +12,26 @@ the game. Methodology: rename → fold → chapter-split.
 
 ## State as of 2026-05-04 (FOLD MILESTONE for all 7 stages)
 
-**100 cross-arm fold operations landed across all 7 new stages.**
+**705 cross-arm fold operations landed across all 7 new stages.**
 
 Per-stage fold tally:
 
 | Stage      | Folds | Arm-instances | Comment |
 |------------|------:|--------------:|---------|
-| CAPSULE    |    21 |             63| 3-arm hash/init helpers + many SET_VAR |
-| CAVES      |    33 |             99| Same + ramp-loop variants |
-| CODE_WHEEL |    14 |             28| 2-arm only (amiga + dos; no cart for this stage) |
-| ENDING     |     7 |             21| Hero-fade and channel teardown helpers |
-| PASSCODE   |     6 |             14| Modest — passcode validation diverges per port |
-| PRISON     |     5 |             15| Initial seed; many more candidates remain (LABEL_<HEX>) |
-| TANK       |    14 |             38| Tank-drive init + WAIT helpers |
-| **TOTAL**  | **100** | **278**     |         |
+| CAPSULE    |   179 |           438 | 3-arm hash/init helpers + many SET_VAR + body-hash routines |
+| CAVES      |   218 |           579 | Most complex stage |
+| CODE_WHEEL |    14 |            28 | 2-arm only (amiga + dos; no cart for this stage) |
+| ENDING     |    28 |            63 | Hero-fade and channel teardown helpers |
+| PASSCODE   |     5 |            12 | Modest — passcode validation diverges per port |
+| PRISON     |   238 |           552 | Most folds (round 2 added +33) |
+| TANK       |    23 |            59 | Tank-drive init + WAIT helpers |
+| **TOTAL**  | **705** |       **1731** |         |
+
+This is a 7× increase from the 100-fold milestone of 2026-05-03.
+
+The leap was driven by the auto_fold_rename + auto_fold tools that
+automatically rename LABEL_<HEX> tuples to body-shape-derived names
+(or FOLD_BODY_<sha>-style hash names as fallback) before folding.
 
 This is built on top of:
 - Massive rename rounds: ~3000+ named routines across all stages
