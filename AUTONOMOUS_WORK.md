@@ -133,6 +133,40 @@ Continue folding fold-safe candidates:
 Each fold takes ~5-10 minutes once muscle-memorized. A full tick
 should land 5-8 folds.
 
+## State as of 2026-05-03 ~18:30 (end of cron tick #6)
+
+**Folds landed this tick** (8 total, 744 bytes):
+
+CAVES (#96, in_progress): 6 folds = 446 bytes
+- COPY_HASH_VAR_37_TO_RANGE (117b, 3-arm)
+- INIT_HASH_VARS_67_66_65_68_69 (97b, amiga+cart only)
+- DERIVE_VAR12_11_10_FROM_VAR9 (69b, 3-arm)
+- INIT_RANGE_48_TO_4D_TO_MAX (61b, 3-arm)
+- PRELOAD_CAVES_RESOURCES (58b, amiga+dos only)
+- INIT_AI_VARS_AT_280_10 (44b, 3-arm) — also includes a rename round
+
+ENDING (#98, in_progress): 2 folds = 298 bytes
+- DRAW_STARS_PAGE0_CIN_000 (149b, amiga+dos)
+- DRAW_STARS_PAGE3_CIN_004 (149b, amiga+dos)
+
+The ENDING folds were a pleasant surprise: 149-byte routines
+referencing CINEMATIC_xxx that nonetheless folded safely because
+amiga+dos happen to share identical EQU values for those cinematic
+indices in ENDING (CINEMATIC_000..007 all match between branches).
+
+**Cumulative across all ticks**: 16 folds, ~1,476 bytes folded.
+
+## Suggested workplan for cron tick #7
+
+1. Continue ENDING (still 8+ candidates, ~691 bytes remaining incl.
+   the 82b LABEL_0970 + 52b 3-arm + 52b 2-arm + multiple 30-40b)
+2. Or pivot to PRISON (highest fold value) — many 50-117 byte
+   candidates already renamed in tick #4.
+3. Or finish CAVES first (37 bytes max remaining; mostly small).
+
+Lowest-id pending task is now #99 (PASSCODE) — small, only 106
+fold-safe bytes. Could finish quickly to mark task done.
+
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
 
 ## Suggested workplan for cron tick #5
