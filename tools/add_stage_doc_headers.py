@@ -229,6 +229,46 @@ def add_header(asm_in: Path, header: str) -> bool:
     return True
 
 
+BRANCH_LABELS = {
+    "cartridge_1992": "cartridge_1992 (Heineman SNES + Genesis port)",
+    "dos_1992": "dos_1992 (Daniel Morais MS-DOS port)",
+    "chahi_amiga_1991": "chahi_amiga_1991 (Eric Chahi original Amiga release)",
+    "gba_2004": "gba_2004 (Foxy Game Boy Advance port)",
+}
+
+
+def per_branch_header(stage: str, branch: str) -> str:
+    body = HEADERS.get(stage)
+    if body is None:
+        return ""
+    # Replace the "Branches that ship STAGE" block with a single
+    # this-branch line. Match from "; Branches that ship" to either
+    # "; Notable" or end of the indented block.
+    lines = body.splitlines()
+    out: list[str] = []
+    i = 0
+    while i < len(lines):
+        ln = lines[i]
+        if ln.startswith("; Branches that ship"):
+            out.append(f"; This file: {BRANCH_LABELS.get(branch, branch)}")
+            out.append(";")
+            # Skip until a blank or start-of-section line
+            i += 1
+            while i < len(lines):
+                nxt = lines[i]
+                # Stop at the next blank `;` line or a `; ` paragraph
+                # boundary that starts with a non-indented `;`.
+                if nxt.strip() == ";" or (
+                    nxt.startswith("; ") and not nxt.startswith(";   ")
+                ):
+                    break
+                i += 1
+            continue
+        out.append(ln)
+        i += 1
+    return "\n".join(out)
+
+
 def main() -> int:
     n_added = 0
     for stage, header in HEADERS.items():
@@ -242,6 +282,21 @@ def main() -> int:
         else:
             print(f"  {stage}: already had header")
     print(f"\nHeaders added to {n_added} unified files.")
+
+    # Per-branch sources: src/levels/<branch>/<STAGE>.asm
+    n_per_branch = 0
+    for asm in sorted(LEVELS.glob("*/*.asm")):
+        if asm.parent.name in {"_unified", "_canonicalized"}:
+            continue
+        branch = asm.parent.name
+        stage = asm.stem
+        hdr = per_branch_header(stage, branch)
+        if not hdr:
+            continue
+        if add_header(asm, hdr):
+            n_per_branch += 1
+            print(f"  {branch}/{stage}: header added")
+    print(f"Headers added to {n_per_branch} per-branch files.")
     return 0
 
 
