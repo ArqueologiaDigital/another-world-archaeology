@@ -10,6 +10,42 @@ before doing anything.
 Apply the LAKE chapter-split methodology to every other stage of
 the game. Methodology: rename → fold → chapter-split.
 
+## State as of 2026-05-04 evening (per-branch source sync)
+
+After the fold polish round, propagated semantic names from unified
+files into per-branch sources:
+
+**INTRO sync** (issue #0077):
+- 13 cart, 59 dos, 60 gba, 34 amiga renames in round 1
+- 3+5+5+2 in round 2
+- Total: 181 renames across 4 per-branch INTRO sources
+
+**LAKE sync** (issue #0075 — closed):
+- Per-branch LAKE was already substantially renamed (cart 0, amiga 0,
+  dos 10, gba 2 LABEL_<HEX> remaining). Closed the issue.
+
+**Stage sync** (new — applies to CAPSULE/CAVES/CODE_WHEEL/ENDING/
+PASSCODE/PRISON/TANK):
+- Round 1: 754 renames across 21 per-branch sources
+- Round 2: 78 more renames
+- Total: 832 per-branch renames
+
+These renames sync the unified  chunk
+labels (which were renamed during the fold work) into the per-branch
+ source-of-truth files (which
+verify_stage uses).
+
+**Tools added:**
+-  — unified intro → cart per-branch
+-  — cart per-branch → dos/gba/amiga
+-  — same approach for LAKE
+-  — for the 7 new stages
+
+All sync tools use abstracted-body matching (LABEL_<HEX>/JUNK__<HEX>
+tokens replaced with placeholder).
+
+verify 29/29 + 27/27 maintained throughout.
+
 ## State as of 2026-05-04 (post-fold polish)
 
 After fold completion, polished the codebase:
