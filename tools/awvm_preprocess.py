@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Preprocessor for AW VM .asm.in source files with conditional blocks.
 
-Source format adds three new comment-syntax directives:
+Source format adds four new comment-syntax directives:
 
     ;@if <flag-expr>
     ;@elif <flag-expr>
     ;@else
     ;@endif
+
+    ;@include "<relative-path>"
 
 A `flag-expr` is one of:
     BRANCH == "<branch-name>"
@@ -19,12 +21,21 @@ A `flag-expr` is one of:
 Flags + their values come from a per-target `.flags` file (the same
 ones at another-world-source-reconstruction/releases/<target>.flags).
 
+`;@include` inlines the referenced file's content verbatim at the
+include site. The path is resolved relative to the file containing
+the `;@include` directive (so an include in
+`src/levels/_unified/LAKE.asm.in` saying `;@include "lake/foo.inc"`
+loads `src/levels/_unified/lake/foo.inc`). Includes can nest, with
+a depth limit of 8 to catch cycles.
+
 The preprocessor:
 1. Reads the .flags file (KEY=VALUE pairs).
 2. Reads the .asm.in source.
-3. For each `;@if` block, evaluates the condition against the flags.
-4. Keeps only the matched branch's content; strips others.
-5. Writes the result as a plain .asm file ready for awvm-asm.
+3. **Pre-pass**: expands `;@include` directives recursively.
+4. For each `;@if` block, evaluates the condition against the flags.
+5. Keeps only the matched branch's content; strips others.
+6. Expands `FILL(n, 0xXX)` macros into `db` directives.
+7. Writes the result as a plain .asm file ready for awvm-asm.
 
 `BRANCH` is special — it's set from the .flags file's
 `BYTECODE_BRANCH` value (so the same flag drives both the build
@@ -42,6 +53,47 @@ from pathlib import Path
 
 
 RE_DIRECTIVE = re.compile(r"^\s*;@(if|elif|else|endif)\b\s*(.*?)\s*$")
+RE_INCLUDE = re.compile(r'^\s*;@include\s+"([^"]+)"\s*(?:;.*)?$')
+
+MAX_INCLUDE_DEPTH = 8
+
+
+def expand_includes(text: str, base_dir: Path, depth: int = 0,
+                    visited: set | None = None) -> str:
+    """Recursively inline `;@include "path"` directives.
+
+    Path resolution: relative to `base_dir`, the directory of the
+    file currently being processed. Recursion stops at
+    MAX_INCLUDE_DEPTH; cycle detection uses `visited` (set of
+    resolved absolute paths currently on the include stack).
+    """
+    if depth > MAX_INCLUDE_DEPTH:
+        raise RecursionError(
+            f"include depth exceeded {MAX_INCLUDE_DEPTH}; possible cycle")
+    if visited is None:
+        visited = set()
+
+    out: list[str] = []
+    for line in text.splitlines():
+        m = RE_INCLUDE.match(line)
+        if not m:
+            out.append(line)
+            continue
+        rel = m.group(1)
+        target = (base_dir / rel).resolve()
+        if target in visited:
+            raise RecursionError(f"include cycle detected at {target}")
+        if not target.is_file():
+            raise FileNotFoundError(f"include not found: {target} (from {base_dir})")
+        sub = target.read_text()
+        sub_expanded = expand_includes(
+            sub, target.parent, depth + 1, visited | {target})
+        # Drop a trailing newline so the line-by-line concat below works
+        # without producing a blank line for every include.
+        if sub_expanded.endswith("\n"):
+            sub_expanded = sub_expanded[:-1]
+        out.append(sub_expanded)
+    return "\n".join(out)
 
 # `FILL(n, 0xXX)` macro — expands to `n` bytes of value `0xXX` at preprocess
 # time. Useful for compact representation of trailing-padding regions in
@@ -201,6 +253,7 @@ def main() -> None:
 
     flags = parse_flags(args.flags)
     src = args.input.read_text()
+    src = expand_includes(src, args.input.resolve().parent)
     out = preprocess(src, flags)
     out = expand_fill_macros(out)
     args.output.write_text(out)
