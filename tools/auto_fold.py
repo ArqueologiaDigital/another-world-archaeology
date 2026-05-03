@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Auto-fold cross-arm fold candidates via multi_fold.py."""
+"""Auto-fold v3: handles 2-arm folds where primary arm doesn't have the routine."""
 import re
 import subprocess
 import sys
@@ -9,13 +9,9 @@ AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction"
 ARCH = Path("/home/fsanches/compartilhado/another-world-archaeology")
 
 if len(sys.argv) < 2:
-    sys.exit("usage: auto_fold.py STAGE [--limit N]")
+    sys.exit("usage: auto_fold3.py STAGE")
 
 STAGE = sys.argv[1].upper()
-LIMIT = None
-for a in sys.argv[2:]:
-    if a.startswith('--limit='):
-        LIMIT = int(a.split('=')[1])
 
 
 def find_candidates():
@@ -56,7 +52,6 @@ def find_candidates():
 
 
 def get_byte_positions(arm):
-    """Return dict label_name -> (chunk_filename, line_number)."""
     stage_dir = AW_SRC / "src/levels/_unified" / STAGE.lower()
     positions = {}
     for inc in sorted(stage_dir.glob(f"{arm}*.inc")):
@@ -72,37 +67,50 @@ def main():
     cands = find_candidates()
     print(f"{STAGE}: {len(cands)} foldable candidates", file=sys.stderr)
     
-    # Get byte positions in each arm
     arm_positions = {}
     for arm in ('cart', 'dos', 'amiga'):
         stage_dir = AW_SRC / "src/levels/_unified" / STAGE.lower()
         if any(stage_dir.glob(f"{arm}*.inc")):
             arm_positions[arm] = get_byte_positions(arm)
     
-    # Order candidates by primary arm's byte position. If cart exists, use cart;
-    # else dos.
+    # Topological order: for each candidate, its global position is the 'highest' position
+    # across all arms it appears in (where 'highest' means latest in byte order).
+    # We sort by primary-arm position if present, else fall back.
+    
+    # Strategy: compute order using ALL arms by walking a DAG.
+    # Simpler: use cart order as primary, but for candidates not in cart,
+    # interpolate using their position relative to cart-anchored neighbors in dos.
+    
     if 'cart' in arm_positions:
-        order_arm = 'cart'
+        primary = 'cart'
     elif 'dos' in arm_positions:
-        order_arm = 'dos'
+        primary = 'dos'
     else:
-        order_arm = list(arm_positions.keys())[0]
+        primary = next(iter(arm_positions))
     
-    ordered = []
-    for size, name, arms in cands:
-        if name not in arm_positions[order_arm]:
-            continue
-        bo = arm_positions[order_arm][name]
-        ordered.append((bo, size, name, arms))
-    ordered.sort()
+    # Order each candidate by primary-arm position. For candidates not in primary,
+    # use dos position interpolated.
+    def candidate_order(cand):
+        size, name, arms = cand
+        if primary in arms and name in arm_positions[primary]:
+            return arm_positions[primary][name]
+        # Find this candidate's position in another arm and interpolate
+        for arm in ('dos', 'amiga', 'cart'):
+            if arm in arms and name in arm_positions.get(arm, {}):
+                # Use this position but with a different filename prefix
+                fname, line = arm_positions[arm][name]
+                # Substitute the arm prefix with primary's prefix to get a comparable position
+                return (fname.replace(f"{arm}", primary), line)
+        return ('zzz', 0)
     
-    # Filter: for each arm involved in a candidate, the order in that arm must match the global order.
-    # Greedy: walk through ordered list; for each candidate, check that ALL its arms have this candidate
-    # AFTER all previously-accepted candidates that share an arm with it.
+    # Apply order
+    ordered = sorted(cands, key=candidate_order)
+    
+    # Filter cross-arm order consistency
     accepted = []
     last_pos_per_arm = {arm: ("", 0) for arm in arm_positions}
     skipped_oo = 0
-    for bo, size, name, arms in ordered:
+    for size, name, arms in ordered:
         ok = True
         for arm in arms:
             pos = arm_positions[arm].get(name)
@@ -115,17 +123,14 @@ def main():
         if not ok:
             skipped_oo += 1
             continue
-        accepted.append((bo, size, name, arms))
+        accepted.append((size, name, arms))
         for arm in arms:
             last_pos_per_arm[arm] = arm_positions[arm][name]
     
     print(f"Order-skipped: {skipped_oo}, Accepted: {len(accepted)}", file=sys.stderr)
     
-    if LIMIT:
-        accepted = accepted[:LIMIT]
-    
     fold_args = []
-    for _, size, name, arms in accepted:
+    for size, name, arms in accepted:
         arms_str = ','.join(sorted(arms))
         fold_args.append(f"{name}:{arms_str}")
     
