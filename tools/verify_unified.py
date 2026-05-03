@@ -59,14 +59,38 @@ def stage_from_unified_path(p: Path) -> str:
 
 
 def unified_supports_branch(unified: Path, branch: str) -> bool:
-    """Return True iff the unified file mentions this branch in a
-    `;@if BRANCH ==` (or `;@elif BRANCH ==` / `;@if BRANCH in (...)`)
-    directive. A unified file built for cart+gba only will not contain
+    """Return True iff the unified file (or any of its `;@include`d
+    files, transitively) mentions this branch in a `;@if BRANCH ==`
+    (or `;@elif BRANCH ==` / `;@if BRANCH in (...)`) directive.
+    A unified file built for cart+gba only will not contain
     `chahi_amiga_1991` or `dos_1992`, and trying to preprocess it for
-    those branches just emits the unified file's top-level body, which
-    will not byte-match unless coincidence."""
-    text = unified.read_text()
-    return f'"{branch}"' in text  # simplest: branch name appears as a quoted token
+    those branches just emits the top-level body, which will not
+    byte-match unless coincidence.
+
+    The transitive include walk is needed because chapter-split
+    unified files put branch arms inside `.inc` files; the main
+    `.asm.in` may not directly mention any branch token."""
+    visited = set()
+
+    def scan(path: Path) -> bool:
+        if path in visited:
+            return False
+        visited.add(path)
+        try:
+            text = path.read_text()
+        except (FileNotFoundError, OSError):
+            return False
+        if f'"{branch}"' in text:
+            return True
+        # Walk includes: ;@include "<rel-path>"
+        import re
+        for m in re.finditer(r'^\s*;@include\s+"([^"]+)"', text, re.MULTILINE):
+            target = (path.parent / m.group(1)).resolve()
+            if scan(target):
+                return True
+        return False
+
+    return scan(unified)
 
 
 def verify_unified_one(unified: Path, src_tree: Path) -> tuple[int, int]:
