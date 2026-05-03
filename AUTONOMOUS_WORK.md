@@ -135,7 +135,7 @@ should land 5-8 folds.
 
 ## State as of 2026-05-03 ~18:30 (end of cron tick #6)
 
-**Folds landed this tick** (8 total, 744 bytes):
+**Folds landed this tick** (10 total, 790 bytes):
 
 CAVES (#96, in_progress): 6 folds = 446 bytes
 - COPY_HASH_VAR_37_TO_RANGE (117b, 3-arm)
@@ -149,23 +149,32 @@ ENDING (#98, in_progress): 2 folds = 298 bytes
 - DRAW_STARS_PAGE0_CIN_000 (149b, amiga+dos)
 - DRAW_STARS_PAGE3_CIN_004 (149b, amiga+dos)
 
+PASSCODE (#99, in_progress): 2 folds = 46 bytes
+- SUM_HASH_VARS_TO_VAR_37 (31b, amiga+dos)
+- CLEAR_PAGES_1_2_AND_BLIT (15b, 3-arm)
+
 The ENDING folds were a pleasant surprise: 149-byte routines
 referencing CINEMATIC_xxx that nonetheless folded safely because
 amiga+dos happen to share identical EQU values for those cinematic
 indices in ENDING (CINEMATIC_000..007 all match between branches).
 
-**Cumulative across all ticks**: 16 folds, ~1,476 bytes folded.
+**Cumulative across all ticks**: 18 folds, ~1,522 bytes folded.
 
 ## Suggested workplan for cron tick #7
 
-1. Continue ENDING (still 8+ candidates, ~691 bytes remaining incl.
-   the 82b LABEL_0970 + 52b 3-arm + 52b 2-arm + multiple 30-40b)
-2. Or pivot to PRISON (highest fold value) — many 50-117 byte
-   candidates already renamed in tick #4.
-3. Or finish CAVES first (37 bytes max remaining; mostly small).
+Pending: #100 (PRISON) and #101 (TANK), plus continuing the
+in-progress folds in CAPSULE/CAVES/CODE_WHEEL/ENDING/PASSCODE.
 
-Lowest-id pending task is now #99 (PASSCODE) — small, only 106
-fold-safe bytes. Could finish quickly to mark task done.
+PRISON has the most fold opportunity (4011 bytes), all already
+renamed in tick #4 (DRAW_CIN_*_BLOCK and the hash helpers).
+Each PRISON fold: ~100 bytes. Tick #7 should land 4-6 PRISON folds
+to maximize value.
+
+Reminder: the fold-safety criterion is byte-identical bodies
+(operand-free or with cross-arm-matching EQU values). When
+attempting to fold, verify_unified should remain 27/27. If it
+breaks, revert and check whether the body has CINEMATIC_xxx
+references with diverging EQU values across branches.
 
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
 
