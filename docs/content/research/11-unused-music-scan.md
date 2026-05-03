@@ -6,10 +6,12 @@ Are there MUSIC resources in the AW resource catalog that the
 shipping bytecode never plays via `song id=` — and if so, what
 do they sound like? This is the music-side counterpart of
 [research/06](#/research/06-unused-polygons-survey)'s unused-polygon
-work, and ties into [issue #0055](#/issues/0055-unused-music-scan-enumerate-music-resources-scan-all-reachab)
-("unused music scan: enumerate music resources, scan all
+work, and ties into [issue #0056](#/issues/0056-unused-music-scan-enumerate-music-resources-scan-all-reachab)
+("unused MUSIC scan: enumerate music resources, scan all
 reachable bytecode for `song id=` references, flag any that the
-engine never triggers").
+engine never triggers"). This pass covers the MS-DOS package only;
+acceptance criteria for full coverage need every port's
+extraction (issues #0008–#0011 etc.).
 
 ## Method
 
