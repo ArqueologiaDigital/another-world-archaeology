@@ -272,8 +272,10 @@ def main():
     ap.add_argument("--instrument", action="append", nargs=2,
                     metavar=("RESOURCE_ID", "PATH"),
                     help="specify instrument file by resource ID")
-    ap.add_argument("--max-seconds", type=float, default=60.0,
-                    help="render at most this many seconds (default 60)")
+    ap.add_argument("--max-seconds", type=float, default=600.0,
+                    help="render at most this many seconds (default 600 — high "
+                         "enough to let any normal AW song finish naturally; "
+                         "the song's natural end is num_order × 64 × delay_ms)")
     ap.add_argument("--override-delay", type=int,
                     help="override the music header's initial delay")
     args = ap.parse_args()
@@ -289,6 +291,11 @@ def main():
             print(f"    slot {i+1}: resource 0x{rid:04X}, volume 0x{vol:04X}")
     print(f"  num_order: {music['num_order']}")
     print(f"  order table: {[f'{x:02X}' for x in music['order_table'][: music['num_order']]]}")
+    natural_len_sec = music["num_order"] * 64 * music["delay"] * MS_PER_DELAY_UNIT / 1000
+    print(f"  natural length at header delay: {natural_len_sec:.1f} sec")
+    if args.override_delay is not None:
+        override_len_sec = music["num_order"] * 64 * args.override_delay * MS_PER_DELAY_UNIT / 1000
+        print(f"  natural length at --override-delay 0x{args.override_delay:04X}: {override_len_sec:.1f} sec")
     print()
 
     instruments: dict[int, bytes] = {}
