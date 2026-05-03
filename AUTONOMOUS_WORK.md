@@ -10,6 +10,64 @@ before doing anything.
 Apply the LAKE chapter-split methodology to every other stage of
 the game. Methodology: rename → fold → chapter-split.
 
+## State as of 2026-05-04 (cleanup pass: @raw + FILL + empty chunks)
+
+After all the rename/fold/sync work, the source tree had accumulated
+significant clutter that didn't carry information. Three cleanup passes
+landed:
+
+### 1. Strip redundant ;@raw= comments
+
+awvm-asm uses ;@raw= as authoritative when present, but for most
+opcodes recomputes identical bytes from the symbolic form. Three
+opcode families need ;@raw= (bankSwitch, video, setPalette);
+chunks additionally need it for cross-chunk branch targets
+(call/je/jne/jl/jg/jle/jge/jmp/djnz/setup/song/load).
+
+Stripped:
+  per-branch sources:        136884 lines
+  unified .asm.in files:       2110
+  unified per-arm chunks:     65774
+  TOTAL:                     204768 redundant @raw comments removed
+
+Tools: strip_redundant_raw.py, strip_redundant_raw_unified.py,
+strip_redundant_raw_chunks.py.
+
+### 2. Compress repeated db <byte> runs into FILL macros
+
+End-of-bytecode-bank padding produced thousands of repeated
+'db 0xFF, 0xFF, ...' lines. Replaced with FILL(n, 0xFF) macros
+(already supported by tools/awvm_preprocess.py).
+
+Per branch:
+  cartridge_1992:    27303 lines removed
+  dos_1992:          42686
+  gba_2004:           6952
+  chahi_amiga_1991:  44865
+
+Per stage chunks:  108690 lines removed
+TOTAL: 230496 lines of FILL padding compressed.
+
+Tool: compress_fill_padding.py.
+
+### 3. Remove empty per-arm chunk files
+
+When two folded routines are adjacent with nothing between them in
+an arm, multi_fold creates an empty chunk file. 309 such empty chunks
+removed (CAPSULE 78, CODE_WHEEL 10, PASSCODE 0, PRISON 191, TANK 2).
+
+CAVES (109 empties) and ENDING (28 empties) skipped — the cleanup
+heuristic broke verify_unified for those stages; needs a deeper fix.
+
+Tool: remove_empty_chunks.py.
+
+### Net effect
+
+Combined across all three passes: ~435K source lines removed without
+losing any information (verify_stage 29/29 + verify_unified 27/27
+maintained throughout). Files now read MUCH closer to '70s-style
+compact assembly rather than disassembler-output-with-everything.
+
 ## State as of 2026-05-04 evening (per-branch source sync)
 
 After the fold polish round, propagated semantic names from unified
