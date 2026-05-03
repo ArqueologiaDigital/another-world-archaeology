@@ -12,7 +12,7 @@ the game, then split each unified file into per-feature `.inc`
 chapter files for readability. The user is away; do not stop to
 ask questions; commit at every passing-verify step.
 
-## State as of 2026-05-03 ~07:00 (commit 52c25e2)
+## State as of 2026-05-03 ~07:30 (commit c167f88)
 
 **Done:**
 - LAKE.asm.in → 1850 lines + 65 chapters under
@@ -20,15 +20,19 @@ ask questions; commit at every passing-verify step.
 - `tools/awvm_preprocess.py` supports `;@include "..."` (commit e0c96f2).
 - `tools/split_asm_chapter.py` is the generic per-stage chapter
   splitter (commit 52c25e2).
-- Verify_stage **29/29** and verify_unified **7/7** must remain
-  green at every commit.
+- **Skeleton unified files** for CAPSULE/CAVES/CODE_WHEEL/ENDING/
+  PASSCODE/PRISON/TANK (commit c167f88) — each is a thin branch
+  dispatcher that ;@includes the per-branch source verbatim.
+- Verify_stage **29/29** and verify_unified now **27/27** must
+  remain green at every commit.
 
-**Pending tasks (TaskList #87..94):**
-- #87: split `INTRO.asm.in` (4384 lines) into chapters under
-  `src/levels/_unified/intro/`.
-- #88..#94: create skeleton unified files for stages that don't
-  have one — CAVES, PASSCODE, PRISON, TANK, ENDING, CAPSULE,
-  CODE_WHEEL.
+**Pending tasks:**
+- #87 (deferred): split INTRO into chapters — needs semantic
+  rename round first (task #102).
+- #95..101: fold byte-identical cross-arm routines in the 7 new
+  skeleton-unified files (CAPSULE, CAVES, CODE_WHEEL, ENDING,
+  PASSCODE, PRISON, TANK).
+- #102: semantic-rename INTRO LABEL_<HEX> → feature names.
 
 ## Workflow (per chapter or per stage)
 
@@ -49,25 +53,23 @@ ask questions; commit at every passing-verify step.
    - Work bottom-up so line numbers above don't shift.
    - Commit every 5-10 chapter cuts as a single commit (per stage),
      not after each one.
-3. **For skeleton-unified tasks** (CAVES et al, where no unified exists):
-   - Build a thin "branch dispatcher" `<STAGE>.asm.in`:
-     ```
-     ;@if BRANCH == "cartridge_1992"
-     ;@include "<stage_lower>/cart_<STAGE>.inc"
-     ;@elif BRANCH == "dos_1992"
-     ;@include "<stage_lower>/dos_<STAGE>.inc"
-     ;@elif BRANCH == "chahi_amiga_1991"
-     ;@include "<stage_lower>/amiga_<STAGE>.inc"
-     ;@endif
-     ```
-     Adjust arms to skip branches that don't ship the stage (e.g.,
-     gba doesn't have ENDING; cart doesn't have CODE_WHEEL).
-   - Place each per-branch source file (`src/levels/<branch>/<STAGE>.asm`)
-     as the matching `.inc` file in `src/levels/_unified/<stage_lower>/`.
-   - Run verify_unified — verify_unified.py uses
-     `unified_supports_branch()` to skip branches whose stage isn't
-     in the unified file, so absent arms won't false-fail.
-   - Commit per stage.
+3. **For skeleton-fold tasks** (#95..#101, where unified is currently
+   a thin dispatcher and we want to identify byte-identical cross-arm
+   routines and fold them):
+   - Workflow:
+     1. Pick two arms (e.g. cart and dos `.inc` files).
+     2. Find routines whose body is byte-identical between them.
+     3. Move that routine OUT of both arm files and into the parent
+        `<STAGE>.asm.in` at top-level (depth 0).
+     4. Verify byte-equivalence per branch via verify_unified.
+     5. Repeat with all arm pairs / triples.
+   - Useful sub-routines to start with: helper functions
+     (KILL_CHANNEL_ROUTINE, COMPUTE_RANDOM_BIT_MASKS, etc.) that
+     are typically byte-identical across the 1992-era branches.
+   - Don't try to fold every routine; prioritize the long-tail of
+     small helpers first, then move to drawer routines, then the
+     game-logic routines. Game-logic often has small per-port
+     differences that need `;@if` blocks within the body.
 
 ## Common pitfalls
 
