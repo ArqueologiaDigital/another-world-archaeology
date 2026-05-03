@@ -12,6 +12,19 @@ the game, then split each unified file into per-feature `.inc`
 chapter files for readability. The user is away; do not stop to
 ask questions; commit at every passing-verify step.
 
+## State as of 2026-05-03 ~10:30 (after cron tick #2)
+
+INTRO semantic-rename: 12 rounds applied total, ~140 labels named
+in the unified file's cart-bytecode arm. Down from ~342 unique
+LABEL_<HEX> to ~240 still numeric. Verify maintained 29/29 + 27/27
+throughout. Per-branch dos/gba/amiga sync still pending.
+
+Remaining INTRO work is mostly intermediate djnz loop bodies
+(wait/delay loops inside scene transitions). Each requires
+individual body inspection to name semantically. Tools that
+would speed this up: a "loop pattern" detector that recognizes
+the canonical wait-loop / drift-loop / text-display-loop forms.
+
 ## State as of 2026-05-03 ~08:55 (commits ef2d919..9d2a4bc)
 
 INTRO semantic-rename in progress: 7 rounds applied so far, ~61
