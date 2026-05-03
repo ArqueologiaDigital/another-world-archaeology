@@ -12,6 +12,14 @@ the game, then split each unified file into per-feature `.inc`
 chapter files for readability. The user is away; do not stop to
 ask questions; commit at every passing-verify step.
 
+## State as of 2026-05-03 ~08:55 (commits ef2d919..9d2a4bc)
+
+INTRO semantic-rename in progress: 7 rounds applied so far, ~61
+labels named (entry/init, channel-entry routines, scene delays,
+DNA animation, intro-decor draws, city sequence, text display).
+Verify still 29/29 + 27/27. Per-branch dos/gba/amiga sync NOT
+done — those branches still have LABEL_<HEX> at most positions.
+
 ## State as of 2026-05-03 ~07:30 (commit c167f88)
 
 **Done:**
