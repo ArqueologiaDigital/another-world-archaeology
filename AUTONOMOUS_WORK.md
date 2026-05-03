@@ -12,6 +12,30 @@ the game, then split each unified file into per-feature `.inc`
 chapter files for readability. The user is away; do not stop to
 ask questions; commit at every passing-verify step.
 
+## State as of 2026-05-03 ~14:30 (end of cron tick #3)
+
+**INTRO chapter-split DONE** (#87): 15 chapters under src/levels/_unified/intro/.
+Main INTRO.asm.in went from 4384 → 605 lines. Drive-by fix in same tick:
+verify_unified.py now walks ;@include transitively (commit f52c717).
+
+**INTRO semantic-rename DONE** (#102): all referenced LABEL_<HEX>
+labels in INTRO have been given semantic names. 113+ labels named
+across rounds 13-36 this session. The 56 remaining LABEL_<HEX>
+entries are all **orphan killChannel terminators** — unreferenced
+filler bytes between routines, intentionally left as LABEL_<HEX>.
+
+Remaining open work in the task list (all blocked):
+  #95-101: Fold byte-identical cross-arm routines for the 7 new
+  skeleton-unified stages. **Blocked**: per-branch sources have 0
+  semantic names overlapping across arms; folding by name match
+  is impossible until either (a) per-branch semantic-rename rounds
+  for those stages OR (b) a structural-bytecode-equivalence tool
+  exists. See task descriptions for details.
+
+Per-branch sync of INTRO renames (cart→dos/gba/amiga) is a logical
+next task but hasn't been filed as an issue yet — could become a
+new task once the cron resumes.
+
 ## State as of 2026-05-03 ~10:30 (after cron tick #2)
 
 INTRO semantic-rename: 12 rounds applied total, ~140 labels named
