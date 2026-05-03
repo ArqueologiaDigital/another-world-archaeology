@@ -1,23 +1,36 @@
 #!/usr/bin/env python3
-"""Match cart routines to arm routines by ABSTRACTED symbolic body.
+"""Match named routines from one arm to numeric labels in another arm
+by ABSTRACTED symbolic body.
 
-For each line, replace operands that look like labels (e.g. LABEL_<HEX>,
-named routines) with a placeholder _LABEL_. This way two routines with
-the same instruction sequence but different label targets count as a match.
+For each line, replace operands that look like labels (LABEL_<HEX>
+or named routines) with a placeholder. Two routines with the same
+abstracted instruction sequence — but different label targets — match.
 
-Usage: python3 /tmp/match_cart_to_arm_v2.py STAGE OTHER_ARM
+Usage:
+    python3 tools/match_arms.py STAGE TO_ARM           (FROM defaults to cart)
+    python3 tools/match_arms.py STAGE FROM_ARM TO_ARM  (explicit FROM)
+
+Output: 'old_label=new_name' lines (sed-friendly).
 """
 import os, re, sys
 from pathlib import Path
 
-if len(sys.argv) != 3:
+if len(sys.argv) not in (3, 4):
     sys.exit(__doc__)
 
 STAGE = sys.argv[1].lower()
-OTHER = sys.argv[2]
+if len(sys.argv) == 3:
+    FROM_ARM, TO_ARM = "cart", sys.argv[2]
+else:
+    FROM_ARM, TO_ARM = sys.argv[2], sys.argv[3]
+
 AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction")
-CART = AW_SRC / f"src/levels/_unified/{STAGE}/cart.inc"
-ARM = AW_SRC / f"src/levels/_unified/{STAGE}/{OTHER}.inc"
+CART = AW_SRC / f"src/levels/_unified/{STAGE}/{FROM_ARM}.inc"
+ARM = AW_SRC / f"src/levels/_unified/{STAGE}/{TO_ARM}.inc"
+if not CART.is_file():
+    sys.exit(f"FROM-arm not found: {CART}")
+if not ARM.is_file():
+    sys.exit(f"TO-arm not found: {ARM}")
 
 
 def parse_routines(path):
