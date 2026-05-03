@@ -115,13 +115,26 @@ def main():
                 bodies[r] = "\n".join(lines[rng[0] - 1:rng[1] - 1]).rstrip()
                 break
 
+    # Per-arm: build a list of chunk names in order. Naming convention:
+    # `<arm>__entry.inc` for the chunk before any folded routine in this
+    # arm; `<arm>__post_<ROUTINE>.inc` for the chunk that immediately
+    # follows <ROUTINE> in this arm's byte-address order.
+    arm_chunk_names = {}
+    for arm, (path, text, splits) in arm_data.items():
+        names = [f"{arm}__entry"]
+        for routine_idx, _, _ in splits:
+            rname = ROUTINES[routine_idx][0]
+            names.append(f"{arm}__post_{rname}")
+        arm_chunk_names[arm] = names
+
     # For each arm, write chunks
     for arm, (path, text, splits) in arm_data.items():
         lines = text.splitlines()
+        names = arm_chunk_names[arm]
         cursor = 1
         for chunk_idx, (_, start, end) in enumerate(splits):
             chunk_lines = lines[cursor - 1:start - 1]
-            out = STAGE_DIR / f"{arm}_chunk_{chunk_idx}.inc"
+            out = STAGE_DIR / f"{names[chunk_idx]}.inc"
             out.write_text("\n".join(chunk_lines).rstrip() + "\n")
             print(f"wrote {out.relative_to(AW_SRC)} ({len(chunk_lines)} lines)",
                   file=sys.stderr)
@@ -129,7 +142,7 @@ def main():
         # Final chunk
         chunk_idx = len(splits)
         chunk_lines = lines[cursor - 1:]
-        out = STAGE_DIR / f"{arm}_chunk_{chunk_idx}.inc"
+        out = STAGE_DIR / f"{names[chunk_idx]}.inc"
         out.write_text("\n".join(chunk_lines).rstrip() + "\n")
         print(f"wrote {out.relative_to(AW_SRC)} ({len(chunk_lines)} lines)",
               file=sys.stderr)
@@ -157,8 +170,9 @@ def main():
         for arm in ARMS:
             if arm in emit_arms_chunks:
                 ci = emit_arms_chunks[arm]
+                chunk_name = arm_chunk_names[arm][ci]
                 print(f';@{prefix} BRANCH == "{BR[arm]}"')
-                print(f';@include "{STAGE.lower()}/{arm}_chunk_{ci}.inc"')
+                print(f';@include "{STAGE.lower()}/{chunk_name}.inc"')
                 prefix = "elif"
                 emitted_any = True
         if emitted_any:
