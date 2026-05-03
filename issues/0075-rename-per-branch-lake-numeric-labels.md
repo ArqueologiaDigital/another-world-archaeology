@@ -62,7 +62,29 @@ LABEL_<HEX> matcher.
 | `dos_1992`          | 21                        | 95.3% (449 → 21) |
 | `chahi_amiga_1991`  | 0                         | 100%       |
 
-Total remaining: 52 LABEL_<HEX> across 3 branches.
+### After manual-rename rounds (commits 4c0c170, 4c276ca, 3458552, 9b2e773, 618d3bb, be30de9)
+
+Direct manual semantic-name assignment for the hard cases the matcher
+couldn't resolve (typically: trampolines, identical-body bundle drawers,
+edge-check dispatchers).
+
+| Branch              | Unique active LABEL_<HEX> | Final reduction |
+|---------------------|---------------------------|-----------------|
+| `cartridge_1992`    | 0                         | 100%            |
+| `gba_2004`          | 2                         | 99.6% (517 → 2) |
+| `dos_1992`          | 10                        | 97.8% (449 → 10) |
+| `chahi_amiga_1991`  | 0                         | 100%            |
+
+Total remaining: 12 LABEL_<HEX>. Each blocks on an existing semantic
+name in its branch (e.g., dos has `LESTER_AT_POOL_LOOP:` defined at a
+non-canonical byte address; the actually-canonical byte's label
+`LABEL_1128` cannot take that name without first correcting the
+mis-placed one). Future cleanup needs to:
+1. Identify each remaining LABEL_<HEX>'s correct semantic name.
+2. Find the existing label currently holding that name.
+3. Determine that label's correct name (probably another already-renamed
+   semantic name, or a unique name needed).
+4. Chain-rename through.
 
 ### Why ~115 labels can't be auto-resolved
 
