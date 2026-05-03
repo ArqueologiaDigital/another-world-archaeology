@@ -68,6 +68,27 @@ gets queued for playback.
   retransmits this 12 bytes of dead instructions rather than
   optimizing them out.
 
+## Listening note (Felipe, 2026-05-03)
+
+After rendering: **"the song feels very tense"**.
+
+This is a meaningful clue about where it was meant to fit. The
+opening of LAKE — Lester swinging on the vine, dropping into the
+pool, wading calmly while drinking — is not tense. The tense
+moments in LAKE are all later: the beast first appearing in the
+background, the beast chasing Lester, the slug attack, the
+escape. So a "tense" 26-second cue is more consistent with one
+of those scenes than with the calm pool-entry that LAKE actually
+opens with.
+
+Hypothesis: 0x89 was originally written as an ambient
+beast-encounter / chase theme and was cut in favor of the silent
+"only stinger sounds" approach the shipping LAKE uses. The
+preload at level setup (rather than at the beast's scene
+transition) is consistent with it being meant to play as a
+sustained background loop covering the whole encounter, not as
+a one-shot cue.
+
 ## Open questions
 
 1. **Is music 0x89 a recognizable AW track?** Other music IDs
