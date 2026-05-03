@@ -57,10 +57,13 @@ ARMS = ["amiga", "cart", "dos"]
 
 
 def find_orig_inc(arm):
+    """Return path to <arm>.inc if it exists, else None.
+    Some stages don't have all 3 arms (e.g., CODE_WHEEL has only
+    amiga+dos), in which case the caller skips the missing arm."""
     p = STAGE_DIR / f"{arm}.inc"
     if p.is_file():
         return p
-    sys.exit(f"FATAL: expected un-split {p}")
+    return None
 
 
 def find_routine_lines(text, routine):
@@ -82,6 +85,9 @@ def main():
     arm_data = {}
     for arm in ARMS:
         path = find_orig_inc(arm)
+        if path is None:
+            # Stage doesn't have this arm — skip
+            continue
         text = path.read_text()
         # Per-arm split points: routines that are fold-safe FOR this arm
         # AND present in this arm's source.
@@ -168,7 +174,7 @@ def main():
         prefix = "if"
         emitted_any = False
         for arm in ARMS:
-            if arm in emit_arms_chunks:
+            if arm in emit_arms_chunks and arm in arm_chunk_names:
                 ci = emit_arms_chunks[arm]
                 chunk_name = arm_chunk_names[arm][ci]
                 print(f';@{prefix} BRANCH == "{BR[arm]}"')
@@ -178,8 +184,8 @@ def main():
         if emitted_any:
             print(";@endif")
 
-    # Emit pre-first chunk
-    emit_arm_block({arm: 0 for arm in ARMS})
+    # Emit pre-first chunk — only for arms that actually have data
+    emit_arm_block({arm: 0 for arm in arm_chunk_names})
     print()
 
     for slot_idx, (rname, fold_arms) in enumerate(ROUTINES):
