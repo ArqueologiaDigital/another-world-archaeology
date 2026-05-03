@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Auto-fold v4: tries each arm as primary ordering and picks the one
-that maximizes accepted candidates."""
+"""Auto-fold v5: handles dedup-named multi-label tuples by splitting
+them into separate single-label folds when names match across arms."""
 import re
 import subprocess
 import sys
@@ -20,7 +20,7 @@ def find_candidates():
         ['python3', str(ARCH / 'tools/find_foldable_routines.py'), STAGE],
         capture_output=True, text=True
     )
-    cands = []
+    cands = []  # (size, name, set_of_arms)
     for line in result.stdout.splitlines():
         m = re.match(r'\s*(\d+)b\s+(\d)arms\s+(.*)', line)
         if not m:
@@ -28,27 +28,41 @@ def find_candidates():
         size = int(m.group(1))
         rest = m.group(3).strip()
         parts = [p.strip() for p in rest.split('/')]
-        arm_label = {}
-        ambiguous = False
+        arm_labels = {}
         for part in parts:
-            pm = re.match(r'(\w+)=(\S+)$', part)
-            if not pm:
+            pm = re.match(r'(\w+)=(.+)$', part)
+            if pm:
+                arm = pm.group(1)
+                labels = pm.group(2).split(',')
+                arm_labels[arm] = labels
+        if not arm_labels:
+            continue
+        
+        # If all arms have the same single label name, it's a simple fold
+        single_name_set = set()
+        is_simple = all(len(ls) == 1 for ls in arm_labels.values())
+        if is_simple:
+            names = {ls[0] for ls in arm_labels.values()}
+            if len(names) == 1:
+                name = next(iter(names))
+                if not (name.startswith('LABEL_') or name.startswith('JUNK_')):
+                    cands.append((size, name, set(arm_labels.keys())))
+            continue
+        
+        # Multi-label tuple: try to split into per-name folds
+        # Find names that appear in ALL arms involved
+        all_names = set()
+        for ls in arm_labels.values():
+            all_names.update(ls)
+        # For each name, check if it's in every arm in this tuple
+        for name in all_names:
+            if name.startswith('LABEL_') or name.startswith('JUNK_'):
                 continue
-            arm = pm.group(1)
-            label = pm.group(2)
-            if ',' in label:
-                ambiguous = True
-                break
-            arm_label[arm] = label
-        if ambiguous or not arm_label:
-            continue
-        names = set(arm_label.values())
-        if len(names) != 1:
-            continue
-        name = next(iter(names))
-        if name.startswith('LABEL_') or name.startswith('JUNK_'):
-            continue
-        cands.append((size, name, set(arm_label.keys())))
+            arms_with_this = {arm for arm, ls in arm_labels.items() if name in ls}
+            if arms_with_this == set(arm_labels.keys()):
+                # This name appears in all involved arms — fold candidate
+                cands.append((size, name, arms_with_this))
+    
     return cands
 
 
@@ -58,14 +72,13 @@ def get_byte_positions(arm):
     for inc in sorted(stage_dir.glob(f"{arm}*.inc")):
         text = inc.read_text()
         for i, line in enumerate(text.splitlines(), 1):
-            m = re.match(r'^([A-Z_][A-Z_0-9]+):$', line)
+            m = re.match(r'^([A-Z_][A-Za-z_0-9]+):$', line)
             if m:
                 positions[m.group(1)] = (inc.name, i)
     return positions
 
 
 def evaluate(cands, arm_positions, primary):
-    """Return (accepted_list, skipped_count) for given primary arm."""
     def candidate_order(cand):
         size, name, arms = cand
         if primary in arms and name in arm_positions.get(primary, {}):
@@ -106,7 +119,6 @@ def main():
         if any(stage_dir.glob(f"{arm}*.inc")):
             arm_positions[arm] = get_byte_positions(arm)
     
-    # Try each primary and pick the best
     best_primary = None
     best_accepted = []
     best_skipped = float('inf')
