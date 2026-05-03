@@ -50,18 +50,39 @@ def parse_routines(path):
         yield cur_label, cur_body
 
 
+_PRESERVE_PREFIXES = (
+    "CINEMATIC_", "COMMON_VIDEO_", "POLY_", "PAL_", "MUS_", "SFX_",
+    "BANK_", "TEXT_", "PAUSE_", "LAST_", "HERO_", "RANDOM_",
+    "SCROLL_", "HACK_VAR_",
+)
+_PRESERVE_EXACT = {
+    "PAUSE_SLICES", "LAST_KEYCHAR", "HERO_ACTION",
+    "HERO_POS_LEFT_RIGHT", "HERO_POS_UP_DOWN", "HERO_POS_JUMP_DOWN",
+    "HERO_POS_MASK", "HERO_ACTION_POS_MASK",
+    "RANDOM_SEED", "MUS_MARK", "SCROLL_Y",
+}
+
+
 def abstracted_body(body):
-    """Strip ;@raw= and abstract label-like identifiers in operands."""
+    """Strip ;@raw= and abstract label-like identifiers in operands.
+
+    Only LABEL_<HEX> / JUNK__<HEX> identifiers are abstracted (the
+    per-arm numeric labels that legitimately differ across arms).
+    Named operands such as CINEMATIC_086 / COMMON_VIDEO_128 are
+    preserved verbatim — they encode different bytes in `;@raw=` and
+    must not be conflated.
+
+    Already-named cross-arm routines (SHARED_RET, DRAW_CIN_xxx, etc.)
+    are also preserved: when the FROM routine and TO routine both call
+    SHARED_RET, the body matches; when one still has LABEL_<HEX> in
+    that slot, the abstraction will not match yet — that's correct.
+    """
     out = []
     for ln in body:
         s = re.sub(r';@raw=[^;]*$', '', ln).rstrip()
         if not s.strip():
             continue
-        # Abstract label-name operands (anything matching [A-Z_][A-Z_0-9]+ that's NOT a register or var)
-        # Replace LABEL_<HEX> and ALL_CAPS_NAMES with _LABEL_ when they appear as operand
-        s = re.sub(r'\b(LABEL_[0-9A-F]+|JUNK__[0-9A-F]+|[A-Z_][A-Z_0-9]+)\b',
-                   lambda m: '_LABEL_' if not m.group(0) in {'PAUSE_SLICES','LAST_KEYCHAR','HERO_ACTION','HERO_POS_LEFT_RIGHT','HERO_POS_UP_DOWN','HERO_POS_JUMP_DOWN','HERO_POS_MASK','HERO_ACTION_POS_MASK','RANDOM_SEED','MUS_MARK','HACK_VAR_67','HACK_VAR_DC','HACK_VAR_F7','HACK_VAR_54','SCROLL_Y'} else m.group(0),
-                   s)
+        s = re.sub(r'\b(LABEL_[0-9A-F]+|JUNK__[0-9A-F]+)\b', '_LABEL_', s)
         out.append(s)
     return "\n".join(out)
 
