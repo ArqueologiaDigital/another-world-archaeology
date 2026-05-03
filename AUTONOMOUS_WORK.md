@@ -27,7 +27,64 @@ filler bytes between routines, intentionally left as LABEL_<HEX>.
 Issue #0077 filed: per-branch INTRO sync (cart→dos/gba/amiga).
 That's the natural follow-up but is NOT in the task list yet.
 
-## Suggested workplan for cron tick #4
+## State as of 2026-05-03 ~16:30 (end of cron tick #4)
+
+**Cross-arm fold candidates: surfaced and renamed across all 7
+new-stages.** Built tools/find_foldable_routines.py to identify
+routines whose **symbolic source bodies** match across per-arm
+.inc files (the safe fold criterion — same source assembles to
+matching bytes regardless of EQU table differences). Used it to
+rename 91 cross-arm pairs/triples across all 7 stages:
+
+| Stage      | Renamed cross-arm pairs | Foldable bytes |
+|------------|------------------------:|---------------:|
+| CODE_WHEEL |                      16 |          327 |
+| ENDING     |                      19 |        1,485 |
+| PASSCODE   |                       9 |          188 |
+| TANK       |                      15 |        1,062 |
+| PRISON     |                      14 |        5,893 |
+| CAVES      |                      11 |        6,089 |
+| CAPSULE    |                       7 |        2,987 |
+| **Total**  |                     **91** |   **18,031** |
+
+Cross-stage shared helpers identified:
+- `CLEAR_PAGES_1_2_AND_BLIT` — appears in CODE_WHEEL, ENDING, TANK, PASSCODE
+- `COPY_HASH_VAR_37_TO_RANGE` — appears in PRISON, CAVES, CAPSULE
+- `DERIVE_VAR12_11_10_FROM_VAR9` — appears in PRISON, CAVES, CAPSULE
+- `INIT_RANGE_48_TO_4D_TO_MAX` — appears in PRISON, CAVES, CAPSULE
+- `SUM_HASH_VARS_TO_VAR_37` / `SUM_HASH_VARS_TO_VAR_64` — variants in
+  CODE_WHEEL/PASSCODE / TANK
+- `SET_VAR_E6_F_PAUSE_4` / `SET_VAR_E6_5_PAL_B` — set-pause helpers
+  in PASSCODE / ENDING
+
+Fold tasks #95-101 are **still pending** — the renames are the
+prerequisite but the actual fold (move bodies into top-level
+unified file) hasn't been done yet. The tasks are now actionable:
+each renamed pair/triple is a direct fold candidate. Rough
+ordering by value: PRISON > CAVES > CAPSULE > ENDING > TANK >
+CODE_WHEEL > PASSCODE.
+
+verify_stage 29/29 + verify_unified 27/27 maintained throughout.
+
+## Suggested workplan for cron tick #5
+
+If cron tick #5 fires:
+1. Read this file + CLAUDE.md.
+2. Try the actual FOLD step on one stage (PRISON has highest
+   value at ~5.9KB foldable). The mechanics:
+   a. Pick a routine that's now renamed with a shared name.
+   b. Plan the byte-stream split: where does the routine sit in
+      each per-branch arm? What chunks of code precede / follow
+      it?
+   c. Move the body OUT of each .inc file into the top-level
+      <STAGE>.asm.in, between two `;@if BRANCH ==` blocks that
+      include the now-split pre/post per-arm chunks.
+   d. Verify byte-equivalence per-branch.
+3. If too complex for a single tick, instead: iterate more rename
+   rounds on smaller candidates (4-bytes etc.) to fully exhaust
+   the fold-candidate list per stage.
+
+## Suggested workplan for cron tick #4 (HISTORICAL — done)
 
 The TaskList now contains only the 7 blocked fold tasks (#95-101).
 None of them are immediately actionable; they need either prior
