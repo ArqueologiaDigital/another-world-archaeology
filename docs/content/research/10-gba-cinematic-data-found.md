@@ -116,13 +116,13 @@ cinematics into SVGs without error:
 
 | Address | Cinematic | Type | Output |
 |---|---|---|---|
-| `0x0404` | CINEMATIC_006 | hierarchy → 2 fills | [SVG](../assets/research-10/CINEMATIC_006.svg) |
-| `0x041C` | CINEMATIC_010 | hierarchy → 2 fills | [SVG](../assets/research-10/CINEMATIC_010.svg) |
-| `0x0460` | CINEMATIC_017 | hierarchy → 3 fills | [SVG](../assets/research-10/CINEMATIC_017.svg) |
-| `0x05B8` | CINEMATIC_032 | hierarchy → 17 fills | [SVG](../assets/research-10/CINEMATIC_032.svg) |
-| `0xEC10` | CINEMATIC_339 | hierarchy → 3 fills | [SVG](../assets/research-10/CINEMATIC_339.svg) |
-| `0xEC64` | CINEMATIC_340 | hierarchy → 1 fill | [SVG](../assets/research-10/CINEMATIC_340.svg) |
-| `0xED2C` | CINEMATIC_345 | hierarchy → 1 fill | [SVG](../assets/research-10/CINEMATIC_345.svg) |
+| `0x0404` | CINEMATIC_006 | hierarchy → 2 fills | [SVG](assets/research-10/CINEMATIC_006.svg) |
+| `0x041C` | CINEMATIC_010 | hierarchy → 2 fills | [SVG](assets/research-10/CINEMATIC_010.svg) |
+| `0x0460` | CINEMATIC_017 | hierarchy → 3 fills | [SVG](assets/research-10/CINEMATIC_017.svg) |
+| `0x05B8` | CINEMATIC_032 | hierarchy → 17 fills | [SVG](assets/research-10/CINEMATIC_032.svg) |
+| `0xEC10` | CINEMATIC_339 | hierarchy → 3 fills | [SVG](assets/research-10/CINEMATIC_339.svg) |
+| `0xEC64` | CINEMATIC_340 | hierarchy → 1 fill | [SVG](assets/research-10/CINEMATIC_340.svg) |
+| `0xED2C` | CINEMATIC_345 | hierarchy → 1 fill | [SVG](assets/research-10/CINEMATIC_345.svg) |
 
 (Renderings use a synthetic rainbow palette since the real GBA
 palette extraction isn't done yet — the shapes are real, the

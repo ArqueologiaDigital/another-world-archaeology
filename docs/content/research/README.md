@@ -67,6 +67,20 @@ finding is comparative) records which releases it applies to.
   cover for broken-by-design content, not an authorial accident.
   The beetle's polygon data is byte-stable across ports.
 
+- [11 — Unused-music scan & rendered cut-content gallery](#/research/11-unused-music-scan):
+  systematic counterpart of research/06 for the audio side. The
+  shipping AW soundtrack has only 2 music tracks (intro `0x07`,
+  ending `0x8A`); the rest of the game is scored by sound-effect
+  stingers over silence. A third track, **`0x89`**, is preloaded
+  inside an unreachable code block in LAKE.asm and never plays —
+  cut content. Rendered to WAV via the new
+  `tools/aw_music_to_wav.py` (a Python port of rawgl's
+  `sfxplayer.cpp`); listening confirms it as a tense ambient loop
+  that fits LAKE's actual narrative (Lester drowning + tentacle
+  threat) perfectly. The 12-byte dead-code preload pattern is
+  byte-identical across all 5 ports, so the cut goes back to
+  Chahi's original 1991 AMIGA release.
+
 - [10 — GBA `LABEL_26A6` mystery solved: 55 KB of trailing data is the level_0 cinematic.rom](#/research/10-gba-cinematic-data-found):
   the unified-INTRO `;@if` block at `LABEL_26A6` showed cartridge's
   trailing-padding (`FILL(55641, 0xFF)`) vs GBA's mysterious 55 KB

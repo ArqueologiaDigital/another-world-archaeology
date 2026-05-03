@@ -21,7 +21,12 @@ const Markdown = (function () {
     text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     text = text.replace(/\b_([^_]+)_\b/g, "<em>$1</em>");
     text = text.replace(/(^|[^\*])\*([^\*\n]+)\*([^\*]|$)/g, "$1<em>$2</em>$3");
-    // Links
+    // Links — but if the URL points at an audio file (.wav/.ogg/.mp3),
+    // render an <audio controls> player instead of a plain anchor. The
+    // link text becomes the player's caption (rendered before the player).
+    text = text.replace(/\[([^\]]+)\]\(([^)\s]+\.(?:wav|ogg|mp3))\)/gi,
+      '<figure class="audio-figure"><figcaption>$1</figcaption>' +
+      '<audio controls preload="none" src="$2">$1</audio></figure>');
     text = text.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
     return text;
   }
