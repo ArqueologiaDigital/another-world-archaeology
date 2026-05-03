@@ -24,17 +24,28 @@ across rounds 13-36 this session. The 56 remaining LABEL_<HEX>
 entries are all **orphan killChannel terminators** — unreferenced
 filler bytes between routines, intentionally left as LABEL_<HEX>.
 
-Remaining open work in the task list (all blocked):
-  #95-101: Fold byte-identical cross-arm routines for the 7 new
-  skeleton-unified stages. **Blocked**: per-branch sources have 0
-  semantic names overlapping across arms; folding by name match
-  is impossible until either (a) per-branch semantic-rename rounds
-  for those stages OR (b) a structural-bytecode-equivalence tool
-  exists. See task descriptions for details.
+Issue #0077 filed: per-branch INTRO sync (cart→dos/gba/amiga).
+That's the natural follow-up but is NOT in the task list yet.
 
-Per-branch sync of INTRO renames (cart→dos/gba/amiga) is a logical
-next task but hasn't been filed as an issue yet — could become a
-new task once the cron resumes.
+## Suggested workplan for cron tick #4
+
+The TaskList now contains only the 7 blocked fold tasks (#95-101).
+None of them are immediately actionable; they need either prior
+per-branch rename work for the new stages (CAPSULE/CAVES/etc.) or
+a structural-bytecode-equivalence tool that doesn't yet exist.
+
+If the next cron tick fires with no other direction:
+1. Read this file + CLAUDE.md.
+2. Check TaskList — if all visible tasks are blocked, look at
+   `issues/0077` (sync INTRO renames per-branch) which is open
+   and tractable, even if not in the task list.
+3. Or: pick one of the new skeleton stages (CAVES is a good
+   choice — it's a long stage with multiple branches) and start
+   semantic-rename rounds on its per-branch sources. This builds
+   the vocabulary needed to later unblock the corresponding fold
+   task (#96).
+4. Verify maintained: 29/29 + 27/27 throughout.
+5. Update this file at the end of the tick.
 
 ## State as of 2026-05-03 ~10:30 (after cron tick #2)
 
