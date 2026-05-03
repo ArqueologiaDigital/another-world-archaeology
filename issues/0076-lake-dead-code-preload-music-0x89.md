@@ -125,7 +125,25 @@ cover format-specific extraction work).
 
 ## Action items
 
-1. Render music 0x89 to WAV using one of the methods above.
+1. ~~Render music 0x89 to WAV using one of the methods above.~~
+   **Done.** Wrote `tools/aw_music_to_wav.py`, a Python AW music
+   renderer based on rawgl's `sfxplayer.cpp` semantics (Amiga
+   period→Hz, 4-channel mixing, sample looping, volume effects).
+   Rendered output is at `tmp/rendered_audio/lake_dead_music_0x89.wav`
+   (26.5 sec, 22050 Hz mono, peak ~10k of 32k = comfortable
+   headroom).
+
+   Stats from the music header:
+   - Initial delay: 0x2F88 (104 ms/row)
+   - 4 patterns × 64 rows × 4 channels = 16384 events total
+   - Order table: `[0x00, 0x01, 0x01, 0x01]` — pattern 0 once,
+     then pattern 1 three times. Total length: 256 rows × 104 ms
+     ≈ 26.5 seconds.
+
+   Verified the renderer against two known AW music tracks
+   (0x07 and 0x8A) — both render to plausible audio (peak/rms
+   sensible, ≥72% non-zero samples).
+
 2. Cross-check whether other ports' LAKE bytecode also has the
    `jmp` (i.e., whether the disable is universal or AMIGA-introduced
    and inherited).
