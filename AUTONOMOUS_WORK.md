@@ -64,6 +64,21 @@ each renamed pair/triple is a direct fold candidate. Rough
 ordering by value: PRISON > CAVES > CAPSULE > ENDING > TANK >
 CODE_WHEEL > PASSCODE.
 
+**First actual fold landed (commit 5992cc1)**: the 15-byte
+CLEAR_PAGES_1_2_AND_BLIT routine in CODE_WHEEL is now defined ONCE
+in CODE_WHEEL.asm.in instead of being duplicated in dos.inc and
+amiga.inc. The architecture: each per-arm .inc gets bisected into
+`_pre` (everything before the routine's byte address) and `_post`
+(everything after). The shared body lives at the top-level unified
+file between `;@if` arms that include the appropriate pre/post
+chunk. The natural assembled layout puts the shared body at the
+correct byte address per-branch (no `org` directive needed).
+
+Limitation: the pre/post bisection scales linearly. For N folds in
+the same stage, each arm needs to be split into N+1 chunks (pre /
+mid_1 / ... / mid_N-1 / post). This will get unwieldy past ~5
+folds per stage.
+
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
 
 ## Suggested workplan for cron tick #5
