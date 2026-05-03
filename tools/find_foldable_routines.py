@@ -77,6 +77,30 @@ def body_bytes(body_lines):
     return bytes(out)
 
 
+def body_symbolic(body_lines):
+    """Extract the symbolic-source representation of a routine body.
+
+    Strips comments (anything after `;`), blank lines, and trailing
+    whitespace. The resulting string is what would assemble — but
+    operands are kept SYMBOLIC (e.g., `CINEMATIC_004`, `LABEL_0000`),
+    so two routines with the same bytes but different symbolic
+    operand names will compare as DIFFERENT.
+
+    This is the safe fold criterion: routines with identical
+    `body_symbolic()` can be merged into a shared top-level body
+    without altering the assembled output, regardless of EQU table
+    differences between branches.
+    """
+    out = []
+    for ln in body_lines:
+        # Strip the `;@raw=...` and any trailing comment, but keep the instruction
+        s = re.sub(r';.*$', '', ln).rstrip()
+        if not s.strip():
+            continue
+        out.append(s)
+    return "\n".join(out)
+
+
 def main():
     if len(sys.argv) != 2:
         sys.exit(__doc__)
@@ -91,43 +115,52 @@ def main():
         arms[arm] = list(parse_routines(inc))
         print(f"{arm}: {len(arms[arm])} labels in {inc.name}")
 
-    # Build per-arm byte→label maps
+    # Build per-arm symbolic→(label, byte_count) maps. We key on the
+    # SYMBOLIC body (post `;`-strip) because that's what fold-safety
+    # requires: identical symbolic source between arms is the criterion
+    # that survives EQU-table differences between branches. (Two
+    # routines with same bytes but different symbolic operand names
+    # would NOT be safe to fold — folding renames the operand to one
+    # name and the EQU value would differ between branches.)
     arm_maps = {}
     for arm, routines in arms.items():
         m = {}
         for label, body in routines:
-            bb = body_bytes(body)
-            if len(bb) == 0:
+            sym = body_symbolic(body)
+            if not sym:
                 continue
-            m.setdefault(bb, []).append(label)
+            bb_len = len(body_bytes(body))
+            m.setdefault(sym, []).append((label, bb_len))
         arm_maps[arm] = m
 
-    # Find pairs / triples of byte-identical routines across arms
-    # Use intersection of byte sets across all arm maps
-    all_bytes = set()
+    # Find symbolic-equivalent routines across arms
+    all_syms = set()
     for m in arm_maps.values():
-        all_bytes |= set(m.keys())
+        all_syms |= set(m.keys())
 
     matches = []
-    for bb in all_bytes:
-        present_in = {arm: m[bb] for arm, m in arm_maps.items() if bb in m}
+    for sym in all_syms:
+        present_in = {arm: m[sym] for arm, m in arm_maps.items() if sym in m}
         if len(present_in) >= 2:
-            matches.append((bb, present_in))
+            # Use byte count from the first arm (all should agree)
+            first_lbl, n_bytes = next(iter(present_in.values()))[0]
+            matches.append((sym, n_bytes, present_in))
 
     # Sort by body length (descending — longest fold first)
-    matches.sort(key=lambda x: -len(x[0]))
+    matches.sort(key=lambda x: -x[1])
 
-    print(f"\nFound {len(matches)} cross-arm byte-identical routine bodies:")
+    print(f"\nFound {len(matches)} cross-arm symbolic-equivalent routine bodies "
+          "(safe to fold):")
     print(f"(rows: body_size  arms_present  arm_label / arm_label / ...)")
     total_bytes = 0
-    for bb, present_in in matches:
-        n_bytes = len(bb)
+    for sym, n_bytes, present_in in matches:
         # Count fold value: bytes × (arms - 1) since each fold reduces
         # by (arms-1) copies (one source-of-truth remains).
         fold_value = n_bytes * (len(present_in) - 1)
         total_bytes += fold_value
         cells = "  /  ".join(
-            f"{arm}={','.join(lbls)}" for arm, lbls in sorted(present_in.items())
+            f"{arm}={','.join(lbl for lbl, _ in lbls)}"
+            for arm, lbls in sorted(present_in.items())
         )
         print(f"  {n_bytes:4d}b  {len(present_in)}arms  {cells}")
     print(f"\nTotal foldable bytes: {total_bytes}")
