@@ -38,24 +38,31 @@ But the per-branch source files in
 | `dos_1992`          | 325                       | 885   |
 | `chahi_amiga_1991`  | 0                         | 0     |
 
-### After signature-matching renames (commits fb47a6b through 832274d)
+### After signature-matching renames (commits fb47a6b through 832274d, 31fbe22)
 
 Used a code-signature matching approach: for each per-branch
 LABEL_<HEX>, take the next N instructions, mask out label-name
 references (replacing with `%LABEL%`), and look up the masked
 signature in the unified-preprocessed file's index of
-semantic-named labels. Applied with N=2, 4, 6, 8, and with
+semantic-named labels. Applied with N=2, 4, 6, 8, 16, and with
 fully-masked sigs (masking ALL referenced labels including
 already-renamed semantic ones).
 
-| Branch              | Unique active LABEL_<HEX> | Notes |
-|---------------------|---------------------------|-------|
-| `cartridge_1992`    | 37                        | down from 372 |
-| `gba_2004`          | 40                        | down from 381 |
-| `dos_1992`          | 38                        | down from 325 |
-| `chahi_amiga_1991`  | 0                         | clean |
+### After safe-fix round (commit ddcffff)
 
-amiga is fully clean. ~115 LABEL_<HEX> remain across the other 3 branches.
+Two-pass: first fix existing semantic-named labels in cart/gba/dos
+whose body matches a different unified name (only for safe-prefix
+names like AMBIENT_*, DROPLET_POS_*, JUNK_*), then re-run the
+LABEL_<HEX> matcher.
+
+| Branch              | Unique active LABEL_<HEX> | Reduction |
+|---------------------|---------------------------|-----------|
+| `cartridge_1992`    | 13                        | 96.5% (495 → 13) |
+| `gba_2004`          | 18                        | 96.5% (517 → 18) |
+| `dos_1992`          | 21                        | 95.3% (449 → 21) |
+| `chahi_amiga_1991`  | 0                         | 100%       |
+
+Total remaining: 52 LABEL_<HEX> across 3 branches.
 
 ### Why ~115 labels can't be auto-resolved
 
