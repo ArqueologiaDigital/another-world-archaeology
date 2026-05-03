@@ -10,28 +10,28 @@ before doing anything.
 Apply the LAKE chapter-split methodology to every other stage of
 the game. Methodology: rename → fold → chapter-split.
 
-## State as of 2026-05-04 (FOLD MILESTONE for all 7 stages)
+## State as of 2026-05-04 (FOLD MILESTONE — tasks #95-101 completed)
 
-**705 cross-arm fold operations landed across all 7 new stages.**
+**814 cross-arm fold operations landed across all 7 new stages.**
+Tasks #95-101 marked completed; 39 residual candidates tracked in
+issue #0081.
 
-Per-stage fold tally:
+Per-stage final fold tally:
 
-| Stage      | Folds | Arm-instances | Comment |
-|------------|------:|--------------:|---------|
-| CAPSULE    |   179 |           438 | 3-arm hash/init helpers + many SET_VAR + body-hash routines |
-| CAVES      |   218 |           579 | Most complex stage |
-| CODE_WHEEL |    14 |            28 | 2-arm only (amiga + dos; no cart for this stage) |
-| ENDING     |    28 |            63 | Hero-fade and channel teardown helpers |
-| PASSCODE   |     5 |            12 | Modest — passcode validation diverges per port |
-| PRISON     |   238 |           552 | Most folds (round 2 added +33) |
-| TANK       |    23 |            59 | Tank-drive init + WAIT helpers |
-| **TOTAL**  | **705** |       **1731** |         |
+| Stage      | Folds | Coverage | Comment |
+|------------|------:|---------:|---------|
+| CAPSULE    |   179 |     ~88% | v4 used; v5+dedup regressed for this stage |
+| CAVES      |   264 |     ~97% | 8 residual (4 single-routine in nested chunks, 4 ambiguous) |
+| CODE_WHEEL |    14 |     100% | All 2-arm candidates folded |
+| ENDING     |    28 |     100% | All 3-arm candidates folded |
+| PASSCODE   |     6 |      75% | 2 residual (1-byte name conflicts) |
+| PRISON     |   299 |     ~99% | 2 residual (count-mismatch tuples) |
+| TANK       |    24 |     ~96% | 1 residual (count-mismatch tuple) |
+| **TOTAL**  | **814** | **~95%** |         |
 
-This is a 7× increase from the 100-fold milestone of 2026-05-03.
-
-The leap was driven by the auto_fold_rename + auto_fold tools that
-automatically rename LABEL_<HEX> tuples to body-shape-derived names
-(or FOLD_BODY_<sha>-style hash names as fallback) before folding.
+Residual ~39 candidates documented in issue #0081 (4 categories:
+order-skipped within nested chunks, count-mismatch tuples, orphan
+ret/killChannel terminators, 1-byte name conflicts).
 
 This is built on top of:
 - Massive rename rounds: ~3000+ named routines across all stages
