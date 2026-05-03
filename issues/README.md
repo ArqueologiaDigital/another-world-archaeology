@@ -10,8 +10,8 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 
 | status | A | B | C | D | other |
 |---|---|---|---|---|---|
-| **open** | 11 | 16 | 20 | 4 | · |
-| **in-progress** | · | 1 | · | 1 | · |
+| **open** | 11 | 15 | 20 | 4 | · |
+| **in-progress** | · | 2 | · | 1 | · |
 | **blocked** | 2 | · | 12 | · | · |
 | **done** | 7 | 1 | 4 | 1 | · |
 | **wontfix** | · | · | 1 | · | · |
@@ -52,7 +52,7 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 - ○ [#0069](./0069-unify-asm-collapse-2-of-3-agreement-to-reduce-amiga-diff-count.md) — unify_asm: collapse 2-of-3 agreement to reduce amiga 3-way diff count `unify-asm` `optimisation` `phase-3b`
 - ○ [#0072](./0072-canonicalize-inline-labels-duplicate-label-on-cascading-skip.md) — canonicalize_inline_labels: rename creates duplicate label when cascading partner is skipped by another conflict `canonicalize-inline-labels` `bug` `phase-3b`
 - ○ [#0073](./0073-awvm-asm-silently-drops-long-symbol-name.md) — awvm-asm silently drops setup-call line when label name is too long `awvm-tools` `assembler` `bug`
-- ○ [#0077](./0077-sync-intro-renames-per-branch.md) — Sync INTRO semantic renames into per-branch dos/gba/amiga sources `unify` `semantic-rename` `intro`
+- ⏵ [#0077](./0077-sync-intro-renames-per-branch.md) — Sync INTRO semantic renames into per-branch dos/gba/amiga sources `unify` `semantic-rename` `intro`
 
 ### Tier C
 

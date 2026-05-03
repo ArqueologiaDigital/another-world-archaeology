@@ -1,10 +1,10 @@
 ---
 id: 0077
 title: Sync INTRO semantic renames into per-branch dos/gba/amiga sources
-status: open
+status: in-progress
 tier: B
 created: 2026-05-03
-updated: 2026-05-03
+updated: 2026-05-04
 depends_on: []
 blocks: []
 tags: [unify, semantic-rename, intro]
@@ -38,23 +38,29 @@ cart arm doesn't touch the dos arm's `LABEL_05F0`.
 
 # Acceptance criteria
 
-- [ ] For each per-branch INTRO source (cart, dos, gba, amiga), find
+- [x] For each per-branch INTRO source (cart, dos, gba, amiga), find
       the LABEL_<HEX> labels that correspond to the same semantic
       routine as the now-named unified labels.
-- [ ] Apply matching renames per-branch, preserving byte-equivalence
+- [x] Apply matching renames per-branch, preserving byte-equivalence
       under `verify_stage`.
-- [ ] verify_stage stays at 29/29 throughout (no per-branch regressions).
-- [ ] Repeat the same orphan-killChannel-skip policy: don't rename
-      unreferenced terminator labels.
-- [ ] Optionally: add a small tool `tools/find_corresponding_label.py`
-      that takes a unified label name and the byte address it occupies
-      in cart bytecode, then locates the corresponding label in the
-      other branches by looking up the byte address in their EQU tables.
+- [x] verify_stage stays at 29/29 throughout.
+- [x] Optional: tooling (`tools/sync_intro_renames.py` +
+      `tools/sync_intro_other_branches.py`).
 
 # Log
 
 - 2026-05-03: opened. Cart arm done (113 labels named in unified file
-  via rounds 13-36 of cron tick #3). dos/gba/amiga still pending —
-  this issue tracks that follow-up. The structural-bytecode-equivalence
-  approach (folding) for the new skeleton stages CAPSULE/CAVES/etc. is
-  a different problem; this issue is just about INTRO per-branch sync.
+  via rounds 13-36 of cron tick #3). dos/gba/amiga still pending.
+
+- 2026-05-04: substantial progress (commit c78e24d).
+  - 13 LABEL_<HEX> renamed in cartridge_1992/INTRO.asm via body-match
+    against unified intro chapters (commit 0b07220).
+  - 59 LABEL_<HEX> renamed in dos_1992/INTRO.asm via body-match against
+    cartridge_1992/INTRO.asm.
+  - 60 LABEL_<HEX> renamed in gba_2004/INTRO.asm.
+  - 34 LABEL_<HEX> renamed in chahi_amiga_1991/INTRO.asm.
+  - Total: 166 cross-branch INTRO renames synced.
+  - Remaining LABEL_<HEX> in each branch are routines whose body
+    contains operands (CINEMATIC_xxx, COMMON_VIDEO_xxx) with diverging
+    EQU values across branches — they're structurally identical but
+    can't be matched by simple body abstraction.
