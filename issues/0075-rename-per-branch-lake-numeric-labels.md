@@ -38,9 +38,48 @@ But the per-branch source files in
 | `dos_1992`          | 325                       | 885   |
 | `chahi_amiga_1991`  | 0                         | 0     |
 
-amiga is now fully clean. ~75% of remaining labels in each cart/gba/dos
-file are SINGLE-REFERENCE (typically conditional skip-targets used by
-exactly one jne/je/jl/jg).
+### After signature-matching renames (commits fb47a6b through 832274d)
+
+Used a code-signature matching approach: for each per-branch
+LABEL_<HEX>, take the next N instructions, mask out label-name
+references (replacing with `%LABEL%`), and look up the masked
+signature in the unified-preprocessed file's index of
+semantic-named labels. Applied with N=2, 4, 6, 8, and with
+fully-masked sigs (masking ALL referenced labels including
+already-renamed semantic ones).
+
+| Branch              | Unique active LABEL_<HEX> | Notes |
+|---------------------|---------------------------|-------|
+| `cartridge_1992`    | 37                        | down from 372 |
+| `gba_2004`          | 40                        | down from 381 |
+| `dos_1992`          | 38                        | down from 325 |
+| `chahi_amiga_1991`  | 0                         | clean |
+
+amiga is fully clean. ~115 LABEL_<HEX> remain across the other 3 branches.
+
+### Why ~115 labels can't be auto-resolved
+
+These are typically:
+- **Identical-body collisions**: two unified-file routines with
+  byte-identical bodies (e.g., HERO_TICK_BUNDLE_046_047 has same
+  body as HERO_TICK_BUNDLE_044_045 in cart but at different byte
+  addresses; signature match is ambiguous).
+- **Branch-specific code paths**: cart's T026..T030_031 chain
+  versus dos/amiga's shorter version means cart has more
+  inline-skip targets that don't exist in unified at all.
+- **Existing semantic-name conflicts**: some per-branch labels
+  were already renamed in earlier rounds with names that turn
+  out to be wrong (e.g., AMBIENT_CH25_DELAY_F1 in cart was
+  actually at the AMBIENT_RND_CASE_3 byte address). Those need
+  to be fixed first before LABEL_<HEX> at the AMBIENT_CH25_DELAY_F1
+  byte address can be properly named.
+
+A re-run of the semantic-mismatch fixer (8-instr signatures)
+identified 51 such mis-named labels across cart/gba/dos but the
+fix replaced some semantically-meaningful names (e.g.,
+ENTER_FIRST_SCREEN_TO_THE_RIGHT) with same-body-different-role
+names (VINE_EXIT_LEFT_TO_FIRST). The fixer needs longer
+signatures or a manual-review step before its results are safe.
 
 ## Examples of remaining per-branch labels
 
