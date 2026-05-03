@@ -176,6 +176,48 @@ attempting to fold, verify_unified should remain 27/27. If it
 breaks, revert and check whether the body has CINEMATIC_xxx
 references with diverging EQU values across branches.
 
+## State as of 2026-05-03 ~21:00 (manual session, not a cron tick)
+
+The user is back home. They asked for another work session manually
+and gave new guidance: future autonomous sessions should use 30-min
+ticks (not 2h), and each tick should proactively dispatch more work
+when idle. (Saved as memory `feedback_autonomous_tick_cadence.md`.)
+
+This session built **`tools/multi_fold.py`** — a batch-fold helper
+that takes a stage + ordered list of `ROUTINE:arm1,arm2,...` specs
+and does the chunk-bisection + unified-file generation in one pass.
+It's the breakthrough that made the next progress possible:
+
+- **PRISON: 12 folds in one shot, 846 bytes** (commit 0d69f9d)
+- **TANK: 15 folds in one shot, 922 bytes** (commit 200277a)
+- **ENDING: re-folded from scratch with 20 routines, ~957 bytes**
+  (commit 0348007 — superseded the earlier 2-fold commit 73154c1)
+
+The reconstruction trick for ENDING: `cat <arm>_pre.inc + body0 +
+<arm>_mid.inc + body1 + <arm>_post.inc > <arm>.inc` rebuilds the
+original arm file, then `multi_fold.py` re-runs with the full
+candidate set. Future stages with partial folds (CAPSULE, CAVES,
+CODE_WHEEL, PASSCODE) can do the same.
+
+**Cumulative across all sessions: 65 folds, ~5,247 bytes folded.**
+
+Per-stage status after this session:
+
+| Stage      | Folds | Folded bytes | Remaining (fold-safe) |
+|------------|------:|-------------:|----------------------:|
+| CAPSULE    |     6 |          364 |              ~1,498   |
+| CAVES      |     6 |          446 |              ~3,101   |
+| CODE_WHEEL |     2 |           68 |                ~232   |
+| ENDING     |    20 |          957 |                  ~32  |
+| PASSCODE   |     2 |           46 |                  ~45  |
+| PRISON     |    12 |          846 |              ~2,918   |
+| TANK       |    15 |          922 |                  ~98  |
+
+ENDING and TANK are essentially done. The big remaining
+opportunities are CAVES (~3.1 KB) and PRISON (~2.9 KB) and
+CAPSULE (~1.5 KB). All three would benefit from the reconstruct-
+then-refold pattern with `multi_fold.py`.
+
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
 
 ## Suggested workplan for cron tick #5
