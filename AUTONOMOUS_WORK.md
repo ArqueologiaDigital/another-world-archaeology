@@ -10,6 +10,67 @@ before doing anything.
 Apply the LAKE chapter-split methodology to every other stage of
 the game. Methodology: rename → fold → chapter-split.
 
+## State as of 2026-05-04 (post-fold polish)
+
+After fold completion, polished the codebase:
+
+- **156 FOLD_BODY/DEDUP routines renamed** to semantic names by
+  body-pattern recognition (DELAY_<N>_QUANTUMS, INLINE_SET_VAR<X>_TO_Y,
+  DRIFT_DOWN_VAR<X>_<N>X, INIT_VARS_<...>, etc.)
+- **65 cross-stage names unified** — when the same byte-identical body
+  appeared in 2+ stages with different names, picked the highest-
+  quality name and propagated it.
+- **263 chunk filenames aligned** with their preceding routine's
+  current label (so /post_FOLD_BODY_xxx.inc files reflect what they
+  follow).
+
+Final naming quality across all 7 stages:
+
+| Stage      | Folds | Semantic | % |
+|------------|------:|---------:|--:|
+| CAPSULE    |   179 |      117 | 65% |
+| CAVES      |   264 |      166 | 62% |
+| CODE_WHEEL |    14 |       14 | 100% |
+| ENDING     |    28 |       28 | 100% |
+| PASSCODE   |     6 |        6 | 100% |
+| PRISON     |   299 |      216 | 72% |
+| TANK       |    24 |       24 | 100% |
+| **TOTAL**  | **814** | **571** | **70%** |
+
+243 routines remain with FOLD_BODY_<sha> or DEDUP_<seq> generic names —
+these are the long-tail of unique-shape bodies that don't fit auto-
+namable patterns. They could be renamed manually with semantic insight.
+
+New tools landed:
+-  — body-shape renamer for FOLD_BODY
+-  — body-shape renamer for DEDUP
+- Cross-stage helper candidates: 142
+
+  117b  CAPSULE,CAVES,PRISON: COPY_HASH_VAR_37_TO_RANGE
+   69b  CAPSULE,CAVES,PRISON: DERIVE_VAR12_11_10_FROM_VAR9
+   61b  CAPSULE,CAVES,PRISON: INIT_RANGE_48_TO_4D_TO_MAX
+   27b  CAPSULE,CAVES,PRISON: FOLD_BODY_358B_6F629262
+   27b  CAPSULE,PRISON: FOLD_BODY_358B_DF9AE0DF
+   23b  CAPSULE,CAVES,PRISON: SPLIT_VAR09_BITS_INTO_VAR0D
+   21b  CAPSULE,CAVES: INIT_VARS_AA_AD_5B_5E_PLUS1
+   16b  CAPSULE,CAVES,PRISON: CLEAR_PAGES_1_2_AND_BLIT_CHAIN_X8
+   16b  CAPSULE,CAVES: FOLD_BODY_189B_29E88AAE
+   15b  CODE_WHEEL,ENDING,TANK: CLEAR_PAGES_1_2_AND_BLIT
+   14b  CAPSULE,CAVES: FOLD_BODY_206B_44F9C1BD
+   14b  CAPSULE,CAVES: FOLD_BODY_206B_F444FCB9
+   13b  CAPSULE,CAVES,PRISON: ACCUMULATE_HASH_INTO_VAR37_38
+   13b  CAPSULE,CAVES: INIT_VARS_2F_29_12
+   13b  CAPSULE,CAVES: INIT_VARS_2F_29_12
+   13b  CAPSULE,CAVES,PRISON: FOLD_BODY_189B_794E4590
+   13b  CAPSULE,CAVES: INIT_VARS_A1_A4_A7
+   12b  CAPSULE,CAVES: FOLD_BODY_200B_1AFE2B0B
+   12b  CAPSULE,CAVES: FOLD_BODY_200B_5D805D1F
+   12b  CAPSULE,CAVES: FOLD_BODY_200B_37F93421 — surfaces cross-stage helper bodies
+- Unifying 0 cross-stage names — unifies names across stages
+-  — aligns chunk filenames with current
+  labels (BUG: don't run after cross-stage unification — can produce
+  duplicate filenames that break verify)
+
 ## State as of 2026-05-04 (FOLD MILESTONE — tasks #95-101 completed)
 
 **814 cross-arm fold operations landed across all 7 new stages.**
