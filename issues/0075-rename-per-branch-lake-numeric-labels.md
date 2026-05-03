@@ -1,7 +1,7 @@
 ---
 id: 0075
 title: Rename per-branch LAKE.asm numeric LABEL_<HEX> labels to semantic names
-status: open
+status: in-progress
 tier: D
 created: 2026-05-02
 updated: 2026-05-02
@@ -18,7 +18,9 @@ labels — every label has a semantic name (commits 0da69e2..2b03913,
 ~30 chained semantic-rename rounds totalling ~1500 renames).
 
 But the per-branch source files in
-`src/levels/<branch>/LAKE.asm` still have many numeric labels:
+`src/levels/<branch>/LAKE.asm` still have numeric labels.
+
+### Initial state (before cleanup)
 
 | Branch              | Unique LABEL_<HEX> | Total occurrences |
 |---------------------|--------------------|-------------------|
@@ -27,10 +29,18 @@ But the per-branch source files in
 | `dos_1992`          | 449                | 1009              |
 | `chahi_amiga_1991`  | 133                | 142               |
 
-Most of these are intermediate code points or routine entries
-that don't directly correspond to unified-file labels — the
-renames in unified didn't propagate to per-branch sources for
-those positions because they have different byte addresses.
+### After dead-label cleanup (commits f7680b9, ce5adce) and amiga rename (7f5a97a)
+
+| Branch              | Unique active LABEL_<HEX> | Total |
+|---------------------|---------------------------|-------|
+| `cartridge_1992`    | 372                       | 970   |
+| `gba_2004`          | 381                       | 989   |
+| `dos_1992`          | 325                       | 885   |
+| `chahi_amiga_1991`  | 0                         | 0     |
+
+amiga is now fully clean. ~75% of remaining labels in each cart/gba/dos
+file are SINGLE-REFERENCE (typically conditional skip-targets used by
+exactly one jne/je/jl/jg).
 
 ## Examples of remaining per-branch labels
 

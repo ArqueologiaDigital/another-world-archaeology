@@ -10,8 +10,8 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 
 | status | A | B | C | D | other |
 |---|---|---|---|---|---|
-| **open** | 8 | 16 | 20 | 4 | · |
-| **in-progress** | · | · | · | · | · |
+| **open** | 8 | 16 | 20 | 3 | · |
+| **in-progress** | · | · | · | 1 | · |
 | **blocked** | 2 | · | 12 | · | · |
 | **done** | 7 | 1 | 4 | · | · |
 | **wontfix** | · | · | 1 | · | · |
@@ -90,7 +90,7 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 - ○ [#0040](./0040-wayback-batch-run.md) — Submit references/sources.csv to Wayback Save Page Now in batch `infrastructure` `wayback` `provenance`
 - ○ [#0041](./0041-per-release-page-generation.md) — Generate per-release pages in the static doc site from metadata.json `infrastructure` `docs`
 - ○ [#0042](./0042-cross-resource-md5-index.md) — Build cross-release md5 index of all extracted resources `infrastructure` `genealogy` `tooling`
-- ○ [#0075](./0075-rename-per-branch-lake-numeric-labels.md) — Rename per-branch LAKE.asm numeric LABEL_<HEX> labels to semantic names `source-reconstruction` `semantic-rename` `lake`
+- ⏵ [#0075](./0075-rename-per-branch-lake-numeric-labels.md) — Rename per-branch LAKE.asm numeric LABEL_<HEX> labels to semantic names `source-reconstruction` `semantic-rename` `lake`
 
 ## Closed
 
