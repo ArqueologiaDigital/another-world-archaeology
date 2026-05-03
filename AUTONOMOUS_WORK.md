@@ -183,29 +183,42 @@ fully — semantic-rename LABEL_<HEX> labels first across all stages,
 THEN chapter-split (later), THEN folds (later still). The fold work
 done in earlier sessions was reverted to single-file per-arm state.
 
-**Rename progress per stage / arm:**
+**Rename progress per stage / arm (after multiple rounds — 2026-05-03 evening):**
 
 | Stage      | cart | dos  | amiga | Notes |
 |------------|-----:|-----:|------:|-------|
-| ENDING     |   33 |   34 |    35 | most-complete; ~50-60% named |
-| PASSCODE   |   83 |   67 |    22 | cart fully done; dos/amiga via match_arms |
-| CAVES      |   21 |   22 |    11 | early — shared helpers + first round |
-| PRISON     |   23 |   25 |    15 | early — shared helpers + first round |
-| CAPSULE    |   20 |   21 |     7 | early — shared helpers only |
-| TANK       |   17 |   24 |    19 | early — round 1 + auto-matches |
-| CODE_WHEEL |    - |   20 |    17 | 2-arm only; round 1 done |
+| ENDING     |   43 |   40 |    38 | small stage; near-complete |
+| PASSCODE   |   84 |   72 |    26 | cart fully done; dos/amiga partial |
+| CAVES      |   55 |   45 |    38 | top dispatchers + sprite + helpers done |
+| PRISON     |   57 |   50 |    43 | similar |
+| CAPSULE    |   41 |   36 |    15 | hero/alien dispatchers + helpers |
+| TANK       |   31 |   37 |    29 | round 3 done — all WAIT_*_PLAY_*_DRAW_* helpers |
+| CODE_WHEEL |    - |   28 |    23 | 2-arm only; rounds 1-3 done |
 
-Total: ~580 named routines across all stages.
+Total: ~1240 named routines across all stages.
 
-**New tools built this session:**
+**Pending: parallel low-nibble dispatchers in big stages (CAPSULE,
+CAVES, PRISON).** Each stage has 4-8 dispatchers with the same shape
+(`mov F8, var09; and 0xF; je 1, ...; je 2, ...`) that drive different
+inner sprites. Naming them by inner CIN range is the obvious approach
+once we reach them.
+
+**Tools built this session:**
 - `tools/match_arms.py` — symbolic-abstracted cart→arm label matcher
   (handles operands as placeholders so the same instruction sequence
-  matches across arms even with different label addresses).
+  matches across arms even with different label addresses). Fixed to
+  only abstract LABEL_<HEX>/JUNK__<HEX>; preserves CINEMATIC_NNN /
+  COMMON_VIDEO_NNN / named routines verbatim. Supports cart→arm,
+  arm1→arm2, etc.
 - `tools/find_singletons.py` — finds most-referenced single-instruction
   (ret-only / killChannel-only) labels per arm. Used to identify
   SHARED_RET and KILL_CHANNEL_LANDING across stages.
 - `tools/reconstruct_arms.py` — inverse of multi_fold.py; rebuilds
   un-folded `<arm>.inc` from chunks + unified file body.
+
+**Issue 0078 closed**: match_arms.py over-abstracted operand fields
+(CINEMATIC_086 vs CINEMATIC_087 looked the same to the matcher). Fixed
+in commit b51ae35; matcher now sound for cross-arm matching.
 
 **Cross-stage convention established:** these names are now reused
 across all stages where the patterns appear:
