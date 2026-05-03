@@ -72,22 +72,29 @@ gets queued for playback.
 
 After rendering: **"the song feels very tense"**.
 
-This is a meaningful clue about where it was meant to fit. The
-opening of LAKE — Lester swinging on the vine, dropping into the
-pool, wading calmly while drinking — is not tense. The tense
-moments in LAKE are all later: the beast first appearing in the
-background, the beast chasing Lester, the slug attack, the
-escape. So a "tense" 26-second cue is more consistent with one
-of those scenes than with the calm pool-entry that LAKE actually
-opens with.
+This fits the actual LAKE scene narrative perfectly. LAKE is the
+**very first playable scene of the game**: Lester is teleported
+into the alien world after the lab experiment misfires, materializes
+underwater inside the lake, and has only seconds to swim to the
+surface before drowning. After surfacing, a tentacled creature
+(`SNEAKY_TENTACLE_FROM_THE_POOL` in the bytecode) reaches up from
+the depths and tries to grab him and drag him back down — that's
+what `THE_BEAST_KILLS_LESTER` is the death routine for.
 
-Hypothesis: 0x89 was originally written as an ambient
-beast-encounter / chase theme and was cut in favor of the silent
-"only stinger sounds" approach the shipping LAKE uses. The
-preload at level setup (rather than at the beast's scene
-transition) is consistent with it being meant to play as a
-sustained background loop covering the whole encounter, not as
-a one-shot cue.
+So the LAKE level is high-stakes from the very first frame. A
+tense 26-second ambient loop preloaded at level start — for the
+underwater swim + the entire tentacle encounter on the shore —
+fits exactly.
+
+Revised hypothesis: 0x89 was the **intended opening-scene ambient
+theme** for the whole LAKE encounter, scoring the underwater
+panic and the tentacle threat. The shipping version cut it and
+relies on silence + the stinger-sound effects (e.g., the slug
+attack's `play id=0x4F` hits) to convey tension instead. We
+don't know why it was cut — the leading guesses are still memory
+pressure, performance during the loaded-resource setup, or a
+late-stage authorial decision that "silence + stings" was more
+effective than a sustained musical bed.
 
 ## Open questions
 
