@@ -6,7 +6,7 @@
 
 PYTHON ?= python3
 
-.PHONY: help all docs tools fetch extract disasm verify-references clean
+.PHONY: help all docs tools fetch extract disasm verify-references check clean
 
 help:
 	@echo "Targets:"
@@ -17,6 +17,7 @@ help:
 	@echo "  make extract SLUG=<slug> Extract a single release (by metadata.json slug)"
 	@echo "  make disasm              Disassemble BYTECODE resources via awvm-disasm"
 	@echo "  make verify-references   Check sha256 of every file listed in references/MANIFEST.sha256"
+	@echo "  make check               Quick health checks: issue-tracker schema + ;@raw= ban + reference hashes"
 	@echo "  make clean               Remove generated artefacts (preserves original_files/, cruft/, sessions/)"
 
 all: docs
@@ -51,6 +52,17 @@ disasm:
 	@exit 1
 
 verify-references:
+	@$(PYTHON) tools/verify_references.py
+
+# Quick health-check sweep: fast tools that detect known regressions.
+# - Issue tracker schema/reference integrity (`tools/issues.py validate`)
+# - `;@raw=` annotation ban (Phase 2 of #0083; should remain at zero
+#   in active source forever after the migration completed 2026-05-04)
+# - References-manifest hashes (frozen-file integrity)
+.PHONY: check
+check:
+	@$(PYTHON) tools/issues.py validate
+	@$(PYTHON) tools/audit_raw_annotations.py --strict
 	@$(PYTHON) tools/verify_references.py
 
 clean:
