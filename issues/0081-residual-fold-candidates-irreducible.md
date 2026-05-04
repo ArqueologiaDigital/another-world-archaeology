@@ -79,3 +79,27 @@ across arms. NOT a fold candidate (different semantics).
   (95.4%); remaining 39 are documented above. Tasks #95-101 are
   substantively complete (95%+) and can be marked done; this issue
   tracks the irreducible residue.
+
+- 2026-05-04 (later): Category 4 partial. Unified PASSCODE's
+  TRIVIAL_RET across all three arms (source-reconstruction commit
+  `cb9e0ae`):
+
+      cart:  TRIVIAL_RET__CART__ENTRY  -> TRIVIAL_RET
+      dos:   TRIVIAL_RET__DOS__ENTRY   -> TRIVIAL_RET
+      amiga: TRIVIAL_RET_PASSCODE      -> TRIVIAL_RET
+
+  Each arm had exactly one TRIVIAL_RET definition in its arm-
+  specific include; the suffixes were defensive but unnecessary
+  given `;@if BRANCH ==` mutual-exclusion. verify still 29/29 +
+  27/27.
+
+  The other Category 4 case (amiga's `AMIGA_PASSCODE_BANK_INIT`
+  vs cart's `JUNK__001E` vs dos's `KILL_CHAN_AT_0021`) is a real
+  semantic divergence — the 1-byte routines have different roles
+  per arm — and is correctly *not* a fold candidate.
+
+  CAVES has a similar `TRIVIAL_RET_2 / TRIVIAL_RET_3 /
+  TRIVIAL_RET_AMIGA` cluster, but each arm has multiple ret-only
+  routines at different bytecode positions there, so the
+  numerical suffixes are doing real disambiguation work, not
+  gratuitous. Leaving CAVES untouched.
