@@ -230,6 +230,32 @@ single contiguous animation found in any stage's dead code
 and shipped in the polygon resource bank but never drawn at
 runtime.
 
+#### Sample of the 689..720 range
+
+The second CAPSULE dead-only range (CIN_689..720, ~30 frames)
+is more visually diverse than the 614..676 range. Sample
+renders at
+`docs/assets/research-19-capsule-silenced-cinematics/range_689_720/`:
+
+![CAPSULE silenced range 689-720 samples](../assets/research-19-capsule-silenced-cinematics/range_689_720/range_689_720_grid.png)
+
+The 8-frame sample (689, 692, 695, 700, 705, 710, 715, 720)
+shows mixed content:
+
+- 689, 700: small UI-like coloured squares (green, cyan)
+- 692, 695: large cyan/teal blocks (panel, wall, or door frame)
+- **705**: a **clear humanoid figure** (red body, green/yellow
+  legs, blue head) in a crouching/combat pose — likely an alien
+  NPC or hero combat sprite
+- **710**: a smaller humanoid figure with weapon-like
+  appendages (red/green/yellow)
+- 720: yellow vertical-dash pattern (HUD/ammo indicator?)
+
+This range contains **substantive sprite content** not in the
+shipping game — alien character poses or hero combat frames
+authored for CAPSULE but never invoked. Distinct from the
+debris-particles flavour of the 614..676 range.
+
 CAVES-`dos_1992`: 65 trans-dead, including the silenced
 cinematic frame loop at `LABEL_3A3C`. The DOS variant of this
 silencer loops `CINEMATIC_880..890` (11 frames, 2-tick break
