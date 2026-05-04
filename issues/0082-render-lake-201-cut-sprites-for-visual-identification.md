@@ -150,3 +150,28 @@ for off in offsets:
   4 (tag clusters with hypotheses), 5 (research/12 update with
   visual findings) still pending — these need a human reviewer
   to scan the PNG gallery and classify.
+
+- 2026-05-04 (later): parent-group attribution finished, refining
+  the investigation. New `tools/find_parent_polygons.py` walks
+  the polygon hierarchy in reverse: 86 of 87 parent groups for
+  LAKE cut sub-polys map to **named amiga animation cycles**
+  (HERO_RESUME_LEFT 10 frames, HERO_LEAP_LEFT/RIGHT 10 each,
+  POOL_LESTER 7 frames, etc. — see research/12 and
+  `docs/cut_content/cut_attribution.json`).
+
+  Sample render of the entire HERO_RESUME_LEFT cycle (10 frames
+  at amiga LAKE palette 5) lives at
+  `tmp/cut_animations/HERO_RESUME_LEFT/<offset>.png`. Each frame
+  is composed of 10-11 sub-polygons (head, torso, limbs, etc.),
+  consistent with a detailed hero pose. Viewing the 10 frames in
+  sequence would show the lost stop→walk-left transition
+  animation that DOS removed.
+
+  Verified that amiga's HERO_RESUME_LEFT_F4 32-byte group bytes
+  do NOT appear anywhere in DOS's LAKE polygon bank (full
+  byte-search) — confirming this animation was physically removed,
+  not just relocated to a different offset.
+
+  Remaining acceptance items still need a human reviewer to scan
+  the per-frame renders and confirm/refute the rebuild
+  interpretation per cycle.
