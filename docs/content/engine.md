@@ -106,6 +106,15 @@ particular jobs (input handling, music, hero-state machines,
 enemy AI, environment animations) but the assignment is convention,
 not engine-enforced.
 
+For the empirical map of which channel runs which feature in each
+stage, see [research/17 — VM thread-channel map](#/research/17-vm-channel-map).
+Cross-stage frequency: `0x14` is the most heavily used (466 setups
+across 9 stages), `0x3C` is the canonical blit/pause-quantum loop
+(349 setups). Per-stage role inference (compact heatmap) at the
+bottom of the same research note shows which channels host
+`actor` / `cin-draw` / `ambient` / `init` / `cleanup` threads in
+each stage.
+
 ## Opcode set
 
 Opcodes are 1 byte, with operands following. The high bits select
