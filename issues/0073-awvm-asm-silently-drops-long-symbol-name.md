@@ -75,3 +75,59 @@ fix should go into AWVM_Tools after the owner reviews.
 - Related: `tools/verify_stage.py` is the byte-match guardrail
   that caught this; without it, the silent truncation would have
   shipped.
+
+## Root cause (2026-05-04)
+
+Reproduced and narrowed: the bug is **NOT length-related**. Any
+label name containing the **substring `EQU`** triggers the silent
+drop, regardless of length. Tested with names of various lengths:
+
+  `SEQUENCE` (8 chars)         FAIL
+  `SEQUE` (5)                  FAIL
+  `SEQU` (4)                   FAIL
+  `EQU` (3)                    FAIL
+  `MY_EQU` (6)                 FAIL
+  `EQU_TEST` (8)               FAIL
+  `SEQ` (3)                    OK
+  `SEQX` (4)                   OK
+  `BEAST_SURPRISE_FLASH_LOOP`  OK (no `EQU` substring)
+  `BEAST_FLASH_SEQUENCE`       FAIL (has `EQU` in `SEQUENCE`)
+
+The cause is in `awvm/src/asm.rs:parse_lines`:
+
+```rust
+if line.contains("EQU") {
+    if let Some(idx) = line.find("EQU") {
+        let name = line[..idx].trim().to_owned();
+        let value_str = line[idx + 3..].trim();
+        if let OperandValue::Int(v) = parse_value(value_str) {
+            symbols.insert(name, v);
+        }
+    }
+    continue;       // ← DROPS THE LINE silently
+}
+```
+
+The check `line.contains("EQU")` is substring, not
+word-boundary. Any line containing `EQU` anywhere (including
+inside an identifier like `SEQUENCE`) is treated as an EQU
+definition. The `value_str` parse then fails (Symbol, not Int),
+no insert happens, and `continue` skips the rest of the line's
+parsing — the actual instruction is silently dropped.
+
+## Proposed fix (one-line)
+
+Change the guard to require word-boundary `EQU`:
+
+```rust
+let is_equ_def = line.split_whitespace().any(|t| t == "EQU");
+if is_equ_def {
+    // ... existing EQU parse ...
+}
+```
+
+Or use a regex `\bEQU\b`. The intent is: only treat the line as
+an EQU definition when `EQU` appears as a standalone token, not
+as a substring of an identifier.
+
+Pending owner ack before patching `awvm/src/asm.rs`.
