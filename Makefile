@@ -21,8 +21,19 @@ help:
 
 all: docs
 
-docs:
+docs: docs-channel-map
 	@$(PYTHON) tools/gen_docs_data.py
+
+# Regenerate per-stage VM channel map (research/17), the
+# role-inference heatmap section, and the unnamed-setup-target
+# working list (`docs/unnamed_setup_targets.md`). Run whenever a
+# semantic-rename round lands so the docs reflect the current
+# source state.
+.PHONY: docs-channel-map
+docs-channel-map:
+	@$(PYTHON) tools/build_channel_map.py
+	@$(PYTHON) tools/build_channel_role_summary.py
+	@$(PYTHON) tools/list_unnamed_setup_targets.py
 
 tools:
 	@echo "make tools: not yet implemented (TODO: tools/sync_external_tools.py to clone or fast-forward AWVM_Tools at the commit pinned in tools/AWVM_Tools.lock)"
