@@ -41,20 +41,29 @@ missing trailing byte after `setPalette` (`;@raw=0x0B,IDX,0xFF`).
 
 # Acceptance criteria
 
-Per CLAUDE.md, awvm-asm changes need owner sign-off before
-implementation. This issue is the proposal stub; implementation
-proceeds after owner ack.
+Owner directives (received 2026-05-04):
+- `;@enc=alt` for least-common video zoom encoding (bit-1 alt
+  zoom-bit pattern; 568 instances across per-branch sources).
+- `;@enc=legacy_d` / `;@enc=legacy_e` for the 9 bankSwitch
+  instances using non-canonical operand words.
+- New explicit `_trailing` operand on `setPalette` for the 3
+  palette-0 trailing-0x00 cases. Both encoder and decoder updated.
+- After migration: `;@raw=` is **strictly forbidden** — parser
+  rejection in awvm-asm + audit `--check` enforcement.
 
-- [ ] Owner reviews the residue snapshot and picks which
-      patterns to teach the encoder.
-- [ ] awvm-asm fixed for the picked patterns (PR upstream).
-- [ ] `tools/audit_raw_annotations.py --all` re-run; new
-      `tools/strip_redundant_raw_annotations.py --all` pass
-      strips newly-redundant annotations.
-- [ ] `tools/audit_raw_annotations.py --check` wired into
-      pre-commit / CI to prevent regressions.
-- [ ] Snapshot regenerated; residue shrinks to within owner-
-      approved budget.
+Detailed migration plan: `docs/raw_to_enc_migration_plan.md`.
+
+- [ ] awvm-asm: `parse_enc_marker`, `Instruction.enc` field,
+      encoder branches in `encode_video` / `bankSwitch` / new
+      `setPalette` `_trailing` operand handler.
+- [ ] awvm-disasm: pattern-aware emission of `;@enc=alt`,
+      `;@enc=legacy_d`, `;@enc=legacy_e`, and `_trailing=0x00`
+      operand. Phase 1 keeps `;@raw=` for unknown patterns.
+- [ ] Source migration: rewrite every `;@raw=` to the new forms.
+- [ ] `verify_stage` 29/29 + `verify_unified` 27/27 still green.
+- [ ] Phase 2: rip `;@raw=` parsing from awvm-asm.
+- [ ] `tools/audit_raw_annotations.py --check` rejects any
+      `;@raw=` occurrence. Wired into pre-commit / CI.
 
 # Log
 
