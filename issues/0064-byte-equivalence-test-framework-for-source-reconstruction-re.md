@@ -4,7 +4,7 @@ title: Byte-equivalence test framework for source-reconstruction repo (CI gate)
 status: open
 tier: C
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-05
 depends_on: []
 blocks: []
 tags: [reconstruction, testing, build]
@@ -37,3 +37,31 @@ The test framework should:
 # Log
 
 - 2026-04-30: opened.
+
+- 2026-05-05: partial. Added `make test` aggregate gate to the
+  source-reconstruction Makefile (commit `c5346bd`). The new rule
+  wraps the existing checks the project considers blocking:
+
+      verify-stages   per-port .asm round-trip      (29/29)
+      verify-unified  unified .asm.in round-trip    (27/27)
+      verify-all      bytecode + raw resources × 5 ports
+      lint            lint-raw + others
+
+  Pre-commit / CI hooks can now invoke `make test` instead of
+  knowing the full chain. Also added a `verify-unified` rule
+  (the underlying script existed in archaeology but wasn't
+  wired into the source-recon Makefile).
+
+  Acceptance criteria status:
+    - [x] Aggregate `make test` rule (✓ — invoked by CI)
+    - [ ] `tests/byte_equivalence.py` standalone driver — not
+          implemented yet; the existing per-stage / per-port
+          verifiers in archaeology/tools/ already cover the
+          byte-comparison work, so this would be a thin
+          aggregator + reporter.
+    - [x] Passes for Phase 1 — confirmed (verify-stages 29/29,
+          verify-unified 27/27 already green).
+
+  Remaining: write `tests/byte_equivalence.py` that produces
+  cleaner per-artifact PASS/FAIL output with byte-level diff
+  on FAIL.
