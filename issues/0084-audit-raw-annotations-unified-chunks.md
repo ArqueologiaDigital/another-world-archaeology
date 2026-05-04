@@ -1,7 +1,7 @@
 ---
 id: 0084
 title: Audit `;@raw=` annotations in unified chunks (per-(.asm.in, port) framework)
-status: open
+status: done
 tier: B
 created: 2026-05-04
 updated: 2026-05-04
@@ -35,20 +35,30 @@ self-contained:
 
 # Acceptance criteria
 
-- [ ] Extend the audit/strip tools to operate at the
+- [x] Extend the audit/strip tools to operate at the
       `(.asm.in, port)` granularity. For each unified `.asm.in`
       and each port that consumes it, compute a baseline +
       stripped pair using the `verify_unified.py`
       preprocess+assemble pipeline.
-- [ ] Bisect on chunk annotation rank, but verify the post-strip
+- [x] Bisect on chunk annotation rank, but verify the post-strip
       bytes against EVERY consuming port (not just one).
-- [ ] Run the sweep across the unified tree.
-- [ ] Update `docs/raw_annotation_load_bearing.md` with both
+- [x] Run the sweep across the unified tree.
+- [x] Update `docs/raw_annotation_load_bearing.md` with both
       per-branch and unified-chunk residue.
-- [ ] Surviving load-bearing annotations should match (or
+- [x] Surviving load-bearing annotations should match (or
       strictly subset) the per-branch residue catalogued in
       issue #0083.
 
 # Log
 
 - 2026-05-04: opened. Follow-up to #0083 mass-strip.
+- 2026-05-04: done — covered by the per-arm strip
+  (`tools/strip_redundant_raw_unified_chunks.py`,
+  source-reconstruction commit `c522caf`) and the multi-port
+  shared-chunk strip
+  (`tools/strip_redundant_raw_unified_shared.py`,
+  source-reconstruction commit `2c2dcd0`). Combined: 60,991 +
+  632 = 61,623 redundant annotations stripped from unified
+  chunks. Subsequent migration + literal-replacement +
+  collision-rename sweeps brought the active source tree to 0
+  `;@raw=` annotations (per #0083 closure).
