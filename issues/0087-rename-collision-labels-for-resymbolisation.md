@@ -90,6 +90,13 @@ sites, plus 61 more multi-defined symbols across 250 sites).
   archaeology commit `14a876e`). 966 renames across 214 chunks;
   624 still unrenameable. Resymbolize then applied 58 more
   literals. Source-reconstruction commit `7874804`.
+- 2026-05-04: third sweep (`da0a6d2`) found 20 more chunks for
+  rename (diminishing returns) but no new resymbolisation
+  opportunities surfaced. Source has plateaued.
 
-  Cumulative: 217 / 389 literal sites resolved (56%); 172 still
-  unsymbolisable.
+  Final cumulative: 217 / 389 literal sites resolved (56%);
+  **172 remain unsymbolisable** because their target addresses
+  are defined ONLY by labels whose every chunk-level rename
+  caused byte mismatch. To resolve those would require
+  coordinated multi-chunk renames that the per-chunk tool can't
+  do safely in isolation.
