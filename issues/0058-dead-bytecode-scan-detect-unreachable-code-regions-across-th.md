@@ -84,3 +84,35 @@ oracle.is_statically_referenced(level=2, address=0x34AA)  # → True
 
 - 2026-04-30: opened. Surfaced as the shared infrastructure for
   the asset-scan family (#0054–#0057).
+
+- 2026-05-04: first-pass gate detector landed
+  (`tools/detect_setup_gates.py`). Detects the specific
+  setup-then-overwrite idiom — two `setup channel=N` opcodes in
+  the same straight-line block (no `break`/`ret`/`killChannel`/
+  `bankSwitch`/`freezeChannel`/`jmp`/label/`;@if` between).
+  First sweep: 181 gates across all 4 branches. Includes the
+  research/05 canonical cases (Gate 1: BEETLE_INIT_POS_THEN_WALK_LEFT
+  → KILL_CHANNEL_ROUTINE on ch=0x09; Gate 2: BEETLE_KICK_DETECTOR
+  → WAIT_FOR_BEETLE_OFFSCREEN_THEN_KILL on ch=0x2E in LAKE).
+
+  Output: `docs/setup_gate_inventory.md` (human) + `.json`
+  (machine). Per-branch tables list each gate's stage, channel,
+  gated address, surviving address, source loc.
+
+  Acceptance items:
+  - [ ] Build a static reachability graph from a port's full
+        disassembly (all levels). — TODO (control-flow walk
+        across je/jne/call/ret edges)
+  - [x] Detect setup-then-overwrite gates.
+  - [ ] Classify each label as: live / statically-reachable-
+        but-dead-by-gate / unreferenced. — Partial: the
+        detector's output gives the second category for each
+        gate; the first/third need the reachability graph.
+  - [x] Cross-check against research finding 05's known gates.
+        Confirmed: the canonical Gate 1 + Gate 2 patterns are
+        flagged correctly.
+  - [ ] Expose a Python API used by #0054–#0057. — TODO (the
+        current tool emits JSON; a programmatic oracle still
+        needs the reachability graph).
+  - [ ] Write `docs/content/research/07-dead-bytecode-survey.md`.
+        — TODO; the gate inventory is partial input data.
