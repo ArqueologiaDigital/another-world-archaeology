@@ -305,7 +305,35 @@ verify_unified 27/27 maintained throughout):
   repo) documenting the three-layer src/levels/ organization,
   multi-fold technique, verification regime, and per-tool reference.
 
-Still pending: Phase 3 (dispatcher case-target naming),
-Phase 5 (empty-chunk removal for CAVES + ENDING — broke
-verify earlier, needs deeper fix), Phase 6 (cross-stage helper
-extraction).
+Still pending: Phase 6 (cross-stage helper extraction).
+
+## State as of 2026-05-03 evening (continued)
+
+- **EQU localization** (per user request, post-restart):
+  CINEMATIC_SLUG_FLIP_WALKING_0 and 1370 other single-use EQUs
+  moved out of INTRO/LAKE `.asm.in` into the chunks that reference
+  them. Per-branch values preserved via `;@if BRANCH ==` blocks at
+  chunk top. Tool: `tools/localize_single_use_equs.py`.
+- **FOLD_BODY rounds 5–8**: 98 routines renamed (134 → 29
+  remaining distinct). Tools: `fold_body_rename_round_{5,6,7,8}.py`.
+- **Phase 3** (dispatcher case-target naming): 33 + 142 LABEL_<HEX>
+  case-targets renamed across per-branch sources and unified per-arm
+  scopes. Tool: `tools/rename_dispatcher_cases.py`. Per-FILE scope
+  enforced — `LABEL_<HEX>` names are address-derived and the same
+  hex can refer to unrelated routines across files.
+- **Phase 5** (empty-chunk removal redo): 137 empty chunks removed
+  from CAVES + ENDING (109 + 28). Previous attempt broke verify
+  because it tried to also collapse the surrounding `;@if`
+  structure; new tool just drops the include line and leaves the
+  conditional structure intact. Tool:
+  `tools/remove_empty_chunks_safe.py`.
+- **Phase 7** (architecture README): `docs/SOURCE_TREE.md` in
+  source-reconstruction repo.
+
+Still pending: Phase 6 (cross-stage helper extraction). Real
+constraint surfaced: AW VM bytecode uses 2-byte absolute addresses
+for jumps/calls, so a routine can only be safely "extracted" to a
+shared module if its body has no jumps/calls — otherwise the
+assembler emits different bytes per stage even from identical
+source. Trivial helpers like `killChannel`-only routines qualify;
+larger routines with internal flow do not.
