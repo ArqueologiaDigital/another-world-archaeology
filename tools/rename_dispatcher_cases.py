@@ -115,11 +115,58 @@ def rename_per_branch_files() -> tuple[int, int]:
     return files_changed, total_renames
 
 
+def collect_arm_chunks(stage_dir: Path, arm: str) -> list[Path]:
+    """Return all per-arm chunk files for the given stage + arm."""
+    out: list[Path] = []
+    out += sorted(stage_dir.glob(f"{arm}__entry.inc"))
+    out += sorted(stage_dir.glob(f"{arm}__post_*.inc"))
+    return out
+
+
+def rename_unified_arm_scope() -> tuple[int, int]:
+    """Apply per-(stage, arm) renames to unified chunks. Returns
+    (chunks_changed, total_renames)."""
+    chunks_changed = 0
+    total_renames = 0
+    for stage_dir in sorted((LEVELS / "_unified").glob("*")):
+        if not stage_dir.is_dir():
+            continue
+        for arm in ("amiga", "cart", "dos"):
+            chunks = collect_arm_chunks(stage_dir, arm)
+            if not chunks:
+                continue
+            joined = "\n".join(c.read_text() for c in chunks)
+            renames = collect_per_file_renames(joined)
+            if not renames:
+                continue
+            # Apply renames to each chunk individually
+            for chunk in chunks:
+                text = chunk.read_text()
+                new = text
+                local = 0
+                for old, new_name in renames.items():
+                    count = len(re.findall(rf"\b{re.escape(old)}\b", new))
+                    if count == 0:
+                        continue
+                    new = re.sub(rf"\b{re.escape(old)}\b", new_name, new)
+                    local += count
+                if local:
+                    chunk.write_text(new)
+                    chunks_changed += 1
+                    total_renames += local
+            print(f"  {stage_dir.name}/{arm}: {len(renames)} unique renames "
+                  f"applied across {len(chunks)} chunks")
+    return chunks_changed, total_renames
+
+
 def main() -> int:
     print("Per-branch dispatcher case-target renames:")
     n_files, n_renames = rename_per_branch_files()
-    print(f"\n{n_renames} case targets renamed across {n_files} per-branch "
-          f"sources.")
+    print(f"  -> {n_renames} renames across {n_files} per-branch sources")
+
+    print("\nUnified per-arm dispatcher case-target renames:")
+    n_chunks, n_unified_renames = rename_unified_arm_scope()
+    print(f"  -> {n_unified_renames} substitutions across {n_chunks} chunks")
     return 0
 
 
