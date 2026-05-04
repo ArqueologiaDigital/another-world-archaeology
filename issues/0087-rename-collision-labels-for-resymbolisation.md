@@ -92,11 +92,21 @@ sites, plus 61 more multi-defined symbols across 250 sites).
   literals. Source-reconstruction commit `7874804`.
 - 2026-05-04: third sweep (`da0a6d2`) found 20 more chunks for
   rename (diminishing returns) but no new resymbolisation
-  opportunities surfaced. Source has plateaued.
+  opportunities surfaced.
+- 2026-05-04: fourth pass — `tools/disambiguate_intra_chunk_dups.py`
+  (archaeology commit `68ec9da`). Discovered that the per-chunk
+  rename had created a NEW form of collision: the same renamed
+  label appearing multiple times in ONE chunk (e.g.,
+  `DEDUP_CAVES_5B_007__PRISON_INLINE_SETTERS_AND_INIT` defined
+  3× at 3 different addresses inside one file). The new tool
+  counter-suffixes each occurrence (`_001`, `_002`, …) so every
+  label maps to a unique address. After disambiguation,
+  resymbolize picked up 40 more literals
+  (source-reconstruction `74fee0d`).
 
-  Final cumulative: 217 / 389 literal sites resolved (56%);
-  **172 remain unsymbolisable** because their target addresses
-  are defined ONLY by labels whose every chunk-level rename
-  caused byte mismatch. To resolve those would require
-  coordinated multi-chunk renames that the per-chunk tool can't
-  do safely in isolation.
+  Final cumulative: **257 / 389 literal sites resolved (66%);
+  132 remain**. The 132 are in chunks where same-chunk refs
+  hit MIXED targets — disambiguating with a single
+  last-suffix rewrite breaks them. Resolving those needs
+  per-reference target-address analysis (compute encoder's
+  resolution per ref, rewrite each to the matching counter).
