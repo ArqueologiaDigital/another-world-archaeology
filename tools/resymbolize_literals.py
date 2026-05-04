@@ -120,9 +120,15 @@ def build_chunk_to_pairs() -> dict[Path, list[tuple[Path, str]]]:
 
 def assemble_for_port(
     asm_in: Path, port: str, hint: str
-) -> tuple[bytes, dict[int, set[str]]]:
-    """Return (bytes, address→{labels at that addr}) by running
-    awvm-asm and parsing its .symbols.txt sidecar."""
+) -> tuple[bytes, dict[int, set[str]], dict[str, int]]:
+    """Return (bytes, address→{labels at that addr}, name→last_addr)
+    by running awvm-asm and parsing its .symbols.txt sidecar.
+
+    `name → last_addr` records the address of the LAST definition
+    of each name (encoder's last-wins resolution). Useful for
+    asking "would `je NAME` resolve to this address?" — yes iff
+    name_to_last_addr[NAME] == addr.
+    """
     flags = RELEASES / f"{port}.flags"
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
@@ -150,13 +156,15 @@ def assemble_for_port(
         bin_data = out_asm.with_suffix(".bin").read_bytes()
         sym_path = out_asm.with_suffix(".symbols.txt")
         addr_to_labels: dict[int, set[str]] = defaultdict(set)
+        name_to_last_addr: dict[str, int] = {}
         for line in sym_path.read_text().splitlines():
             if not line.strip():
                 continue
             addr_str, name = line.split("\t", 1)
             addr = int(addr_str, 16)
             addr_to_labels[addr].add(name)
-        return bin_data, dict(addr_to_labels)
+            name_to_last_addr[name] = addr  # last write wins
+        return bin_data, dict(addr_to_labels), name_to_last_addr
 
 
 # Regex patterns for literals to re-symbolise.
@@ -217,18 +225,21 @@ def replace_literal_in_line(
 def pick_canonical_name(
     addr: int,
     consumer_tables: list[dict[int, set[str]]],
+    consumer_last_addr: list[dict[str, int]] | None = None,
 ) -> str | None:
-    """Choose a label name that:
-       1. Resolves to `addr` (i.e., is defined there) in EVERY
-          consumer port.
-       2. Has its LAST definition (in source order) at `addr` in
-          EVERY consumer port — otherwise the encoder's
-          last-wins rule would resolve the name to a different
-          address.
+    """Choose a label name that, for every consumer port:
+       - Is defined at exactly one address (no collisions, so the
+         encoder's resolution doesn't depend on source position).
 
-    Returns None if no name satisfies both. We can't safely use a
-    name whose name-collisions place its last definition at
-    another address; encoder would emit the wrong bytes.
+    `consumer_last_addr` is accepted for forward-compatibility but
+    not used here — the "last-wins-at-end-of-source" view that
+    .symbols.txt provides isn't sufficient for FORWARD references
+    in awvm-asm's two-pass encoder. A relaxation that uses it
+    safely would also need to check that the chosen name's
+    definition appears BEFORE the reference's source position;
+    that's left as future work.
+
+    Returns None if no collision-free name qualifies.
     """
     if not consumer_tables:
         return None
@@ -238,7 +249,6 @@ def pick_canonical_name(
         return None
 
     def is_unique_in(name: str, table: dict[int, set[str]]) -> bool:
-        # Defined at exactly one address (no collisions).
         addrs = [a for a, names in table.items() if name in names]
         return len(addrs) == 1
 
@@ -248,11 +258,10 @@ def pick_canonical_name(
         if all(is_unique_in(n, t) for t in consumer_tables)
     ]
     if not unique_names:
-        # No collision-free name available.
         return None
 
-    # Tiebreak: prefer non-LABEL_HHHH names (those are auto-gen
-    # placeholders), then shorter, then alphabetic.
+    # Tiebreak: prefer non-LABEL_HHHH names (auto-gen placeholders),
+    # then shorter, then alphabetic.
     unique_names.sort(key=lambda n: (n.startswith("LABEL_"), len(n), n))
     return unique_names[0]
 
@@ -279,6 +288,7 @@ def main() -> int:
     # awvm-asm per-chunk; rebuild per-chunk only after a write
     # (to verify byte-match).
     pair_cache: dict[tuple[Path, str], dict[int, set[str]]] = {}
+    pair_last_addr: dict[tuple[Path, str], dict[str, int]] = {}
     pair_baseline_bytes: dict[tuple[Path, str], bytes] = {}
 
     chunk_to_pairs = build_chunk_to_pairs()
@@ -307,7 +317,9 @@ def main() -> int:
     # Build baseline tables.
     for asm_in, port in sorted(seen_pairs):
         try:
-            b, t = assemble_for_port(asm_in, port, f"{asm_in.stem}_{port}")
+            b, t, last = assemble_for_port(
+                asm_in, port, f"{asm_in.stem}_{port}"
+            )
         except subprocess.CalledProcessError as e:
             print(
                 f"  baseline failed for {asm_in.name}/{port}: "
@@ -316,6 +328,7 @@ def main() -> int:
             )
             continue
         pair_cache[(asm_in, port)] = t
+        pair_last_addr[(asm_in, port)] = last
         pair_baseline_bytes[(asm_in, port)] = b
 
     aggregate: dict[str, int] = {}
@@ -327,11 +340,14 @@ def main() -> int:
         if not candidates:
             continue
         consumer_tables = [pair_cache.get(p, {}) for p in pairs]
+        consumer_last_addr = [pair_last_addr.get(p, {}) for p in pairs]
 
         new_lines = list(lines)
         per_chunk: dict[str, int] = {}
         for line_idx, addr, _ in candidates:
-            name = pick_canonical_name(addr, consumer_tables)
+            name = pick_canonical_name(
+                addr, consumer_tables, consumer_last_addr
+            )
             if not name:
                 per_chunk["unsymbolisable"] = (
                     per_chunk.get("unsymbolisable", 0) + 1
@@ -360,7 +376,7 @@ def main() -> int:
         ok = True
         for asm_in, port in pairs:
             try:
-                new_b, _ = assemble_for_port(
+                new_b, _, _ = assemble_for_port(
                     asm_in, port, f"{chunk.stem}__{port}_v"
                 )
             except subprocess.CalledProcessError as e:
