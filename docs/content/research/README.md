@@ -128,6 +128,20 @@ finding is comparative) records which releases it applies to.
   byte-identity finding now at the cartridge-ROM level (not just
   the bytecode resource).
 
+- [19 — Dead bytecode survey: 1,121 transitively-dead labels across 4 ports](#/research/19-dead-bytecode-survey):
+  Static reachability survey of every disassembled stage
+  across the 4 most-complete ports (`dos_1992`,
+  `cartridge_1992`, `chahi_amiga_1991`, `gba_2004`). Builds on
+  research/05 (beetle gates) and research/18 (gate inventory)
+  by tracing live entry points through call/jmp/branch/setup
+  and label-fall-through edges. Surfaces **511** trans-dead
+  labels in dos_1992 alone. Headline findings: PASSCODE has
+  a complete unused 16-glyph alphabet (CINEMATIC_000..015) —
+  the live UI uses a different glyph set (CIN_036+); LAKE's
+  43 trans-dead labels are exactly the silenced BEETLE_AI
+  subgraph; CAPSULE's 248 trans-dead are likely the entire
+  callee tree of the silenced LABEL_5C58 dispatcher.
+
 - [18 — Setup-then-overwrite gate inventory (4 ports × 9 stages)](#/research/18-setup-gate-inventory):
   static survey of the `setup channel=N, address=X; setup
   channel=N, address=Y` idiom across the whole game. **22 gates

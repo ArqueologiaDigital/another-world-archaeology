@@ -1,0 +1,213 @@
+# 19 — Dead bytecode survey: 1,121 transitively-dead labels across 4 ports
+
+Static reachability survey of every disassembled stage in
+the four most-complete ports of *Another World*. Builds on
+research/05's beetle finding and research/18's gate inventory
+to answer the bigger question: **how much shipped bytecode
+never executes?**
+
+## Method
+
+Three layers of analysis, all under `tools/`:
+
+1. **`detect_setup_gates.py`** — finds `setup channel=N,
+   addr=X; setup channel=N, addr=Y` idioms in the same
+   straight-line block. The first setup's target is queued
+   then immediately overwritten before the scheduler can
+   dispatch it; classified as silencer / reschedule / swap.
+
+2. **`build_reachability_graph.py`** — walks the static
+   call/jmp/branch/setup graph from every live entry point
+   (every `setup` target plus the stage's first label as the
+   engine's implicit start). Treats `break` as
+   yield-and-continue (NOT a terminator), and follows
+   fall-through across label boundaries when no terminator
+   is hit. Suppresses silencer-gate gated targets.
+
+3. **Classification** of every label into:
+
+   - **live** — reachable from some live entry point
+   - **dead-by-gate** — silenced via `setup-then-overwrite`
+   - **transitively-dead** — referenced (e.g. via call from
+     a dead-by-gate routine) but no live entry-point trace
+     reaches it
+   - **unreferenced** — not the target of any opcode
+
+`break`-not-terminator and fall-through-across-labels were
+the two correctness fixes that made the reachability picture
+tractable. Earlier versions that treated `break` as a
+terminator dropped 1,597 LAKE labels into the wrong category.
+
+## Cross-port counts
+
+The four most-complete branches we have full per-stage
+disassembly for. Counts are total labels in each category:
+
+| Branch | Total | Live | Dead-by-gate | Trans-dead | Unref |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `dos_1992` | 9,556 | 8,043 | 4 | 511 | 1,002 |
+| `cartridge_1992` | 9,251 | 7,796 | 4 | 466 | 988 |
+| `chahi_amiga_1991` | 8,393 | 7,251 | 2 | 97 | 1,047 |
+| `gba_2004` | 1,005 | 897 | 2 | 47 | 60 |
+
+(GBA only ships INTRO + LAKE, hence the much smaller total.)
+
+**Headline observation**: dos_1992 and cartridge_1992 have
+~5× the transitively-dead label count of chahi_amiga_1991
+(511 / 466 vs 97). This aligns with research/05's observation
+that DOS-lineage ports add a second beetle silencer (gate 2
+on channel 0x09) that amiga lacks — and now we see the
+amplification: a single extra silencer cascades into an
+entire dead BEETLE_AI subgraph. The amiga doesn't have that
+silencer, so the AI subgraph is reachable (even though the
+beetle is non-interactive due to gate 1).
+
+## Headline finding 1 — LAKE BEETLE subgraph (research/05 cross-checked)
+
+LAKE-`dos_1992` static analysis:
+
+- **2 dead-by-gate**: `BEETLE_INIT_POS_THEN_WALK_LEFT`,
+  `BEETLE_KICK_DETECTOR` — exactly the two beetle silencers
+  research/05 documented.
+- **43 transitively-dead** — the entire BEETLE AI subgraph
+  reached only from those two gates. Includes:
+
+  - `BEETLE_AI_DEC_LEFT_FAR` / `BEETLE_AI_DEC_LEFT_MID` /
+    `BEETLE_AI_DEC_LEFT_NEAR` — direction & distance scoring
+  - `BEETLE_AI_GO_LEFT_BOUNDED` /
+    `BEETLE_AI_GO_RIGHT_BOUNDED` — movement primitives
+  - `BEETLE_AI_DISPATCH_BY_HERO_X` — hero-position dispatch
+  - `BEETLE_KICK_DETECTOR_FROM_LEFT` — kick-from-left variant
+  - …and 36 more
+
+This is exactly the "broken-by-design" cut content the
+verification hack in `another-world-hacks` revealed
+qualitatively. The static graph confirms the size of the
+silenced subgraph: ~45 labels worth of beetle interaction
+authored, present in shipped bytecode, never reachable.
+
+## Headline finding 2 — PASSCODE has a complete unused alphabet
+
+PASSCODE-`dos_1992` has 84 transitively-dead labels (32% of
+the stage). The most striking cluster: a **complete 16-glyph
+alphabet drawing chain that the live UI never invokes**.
+
+Linear-search dispatch chain (each label tests a key code,
+draws a glyph, falls through if no match):
+
+```
+PASSCODE_RESTART_OR_DRAW_CIN_016:
+    deleteChannels first=0x00, last=0x3F      ; nuke all channels
+    setup channel=0x3C, address=KILL_CHAN_AT_0021
+    killChannel                               ; <-- TERMINATOR
+    jne [0x05], 0x00, DRAW_CIN_015_AT_2D_2E_KEY01
+    video type=1, offset=CINEMATIC_016, x=[0x2d], y=[0x2e], zoom=0x40
+
+DRAW_CIN_015_AT_2D_2E_KEY01:
+    jne [0x05], 0x01, DRAW_CIN_014_AT_2D_2E_KEY02
+    video type=1, offset=CINEMATIC_015, ...
+DRAW_CIN_014_AT_2D_2E_KEY02:
+    jne [0x05], 0x02, DRAW_CIN_013_AT_2D_2E_KEY03
+    ...
+```
+
+Everything below `killChannel` is dead. The 16 labels
+`DRAW_CIN_000_AT_2D_2E_KEY10` through
+`DRAW_CIN_015_AT_2D_2E_KEY01` (drawing CINEMATIC_000..015 at
+position `[0x2D]/[0x2E]`) are never reached.
+
+The live PASSCODE UI uses a **different** glyph chain
+(`DRAW_GLYPH_KEY00_CIN_036` etc., drawing CINEMATIC_036+).
+So this is two separate alphabets in the bytecode: one live
+(CIN_036 onward), one dead (CIN_000..015).
+
+Possible interpretation: an earlier version of the passcode
+screen used CIN_000..015 as glyph art, then the alphabet was
+replaced (different polygon set, different layout) and the
+old chain was cordoned off behind a `killChannel` rather
+than physically removed. Authorship-wise, the `killChannel`
++ dispatch-chain pattern is too structured to be accidental.
+
+(Additional PASSCODE trans-dead clusters: 5 `LOAD_VAR0B..0F_
+TO_HASH_VAR1D` siblings, 3 `JUNK__06C1`/`_0733`/`_1088`
+already-named-as-dead routines, 11 `LABEL_HHHH` placeholders
+clustered around 0x03E5–0x06D3 — likely a single dead
+subroutine cluster that semantic-rename hasn't reached.)
+
+## Headline finding 3 — CAPSULE has the largest dead subgraph
+
+CAPSULE-`dos_1992`: 248 transitively-dead labels (10% of the
+stage). Not yet investigated; tracked as #0088. The single
+dead-by-gate label `LABEL_5C58` (research/18 silencer)
+appears to be the entry to a substantial dispatch routine
+(`LABEL_5C58:` does memory ops then a chain of `call`s to
+multiple sub-routines), so the 248 trans-dead set is likely
+this routine's entire callee tree.
+
+CAVES-`dos_1992`: 65 trans-dead, including the silenced
+cinematic frame loop at `LABEL_3A3C` and its
+CINEMATIC_870..873 polygon frames (research/18).
+
+PRISON-`dos_1992`: 58 trans-dead. Investigate next.
+
+## Cross-stage rollup (dos_1992)
+
+| Stage | Total | Live | Dead-by-gate | Trans-dead | Unref |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `CAPSULE` | 2,438 | 1,937 | 1 | 248 | 252 |
+| `CAVES` | 3,031 | 2,593 | 1 | 65 | 372 |
+| `CODE_WHEEL` | 254 | 244 | 0 | 0 | 11 |
+| `ENDING` | 102 | 85 | 0 | 1 | 17 |
+| `INTRO` | 344 | 283 | 0 | 5 | 57 |
+| `LAKE` | 653 | 607 | 2 | 43 | 1 |
+| `PASSCODE` | 265 | 172 | 0 | 84 | 9 |
+| `PRISON` | 2,196 | 1,891 | 0 | 58 | 247 |
+| `TANK` | 273 | 231 | 0 | 7 | 36 |
+
+## Limitations & follow-ups
+
+- **`freezeChannel` treated as terminator.** A frozen channel
+  could in theory be re-scheduled by another channel's
+  `setup`, in which case the instruction after the freeze
+  IS reachable. Treating it as terminator is conservative
+  (false-positive trans-dead) but rare enough not to
+  meaningfully shift the counts.
+- **`call` returns are modelled as fall-through.** No
+  separate return-edge tracking; we assume any `ret`-bearing
+  callee returns. This is correct for AW VM in practice.
+- **Per-stage scope.** Cross-stage edges (rare in AW; the
+  scheduler runs one stage's bytecode in isolation) are not
+  followed.
+- **No data-flow.** The walker doesn't reason about the
+  values of vars or hash-table contents. A label reached
+  only when `[VAR_X] == constant_that_never_holds` is still
+  marked live. That kind of dead-code is undetectable
+  without value-flow analysis.
+
+The identified trans-dead subgraphs are the most valuable
+follow-up:
+
+- `CAPSULE` 248 trans-dead — investigate the LABEL_5C58
+  callee tree (#0088).
+- `PASSCODE` 16-glyph alphabet (CINEMATIC_000..015) — render
+  each frame to PNG and confirm visual identification as an
+  alphabet alternate.
+- `PRISON` 58 trans-dead — uninvestigated.
+- `CAPSULE` `LOAD_VAR0B..0F_TO_HASH_VAR1D` and similar
+  multiple-variable initializer clusters in PASSCODE — look
+  like template variations of a single dead loader.
+
+## Reproducing
+
+```bash
+python3 tools/detect_setup_gates.py
+# wrote docs/setup_gate_inventory.{json,md}
+
+for branch in dos_1992 cartridge_1992 chahi_amiga_1991 gba_2004; do
+    python3 tools/build_reachability_graph.py --branch "$branch"
+done
+# wrote docs/reachability_graph_<branch>.{json,md} (one per branch)
+```
+
+Tracked as #0058 (full reachability oracle) and #0088 (the
+new CAPSULE/CAVES gate findings).
