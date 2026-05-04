@@ -40,16 +40,21 @@ are excluded from the unused set conservatively.
 
 # Acceptance criteria
 
-- [ ] Build PALETTE-resource enumerator (parses each PALETTE
+- [x] Build PALETTE-resource enumerator (parses each PALETTE
       resource and lists 32 palette slots, each with 16 colours).
-- [ ] Render each palette as a 16-swatch SVG strip.
-- [ ] Build setPalette-reference scanner (literal-index only,
+- [x] Render each palette as a 16-swatch SVG strip
+      (`tools/render_palette_swatches.py` →
+      `docs/assets/research-16-unused-palettes/level<N>_<STAGE>.svg`).
+- [x] Build setPalette-reference scanner (literal-index only,
       with a separate report on variable-index uses).
 - [ ] Reachability filter (depends on #0058).
 - [ ] Diff at both layers (unused resources, unused slots within
-      resources).
-- [ ] Per-port + cross-port comparison.
-- [ ] Catalog as `docs/content/research/06d-unused-palettes.md`.
+      resources). (Slot-level diff done via
+      `tools/unused_palette_scan.py`; resource-level needs new
+      heuristic since AW implicitly loads each level's PALETTE.)
+- [ ] Per-port + cross-port comparison. (DOS done; other ports
+      gated on per-port resource extraction.)
+- [x] Catalog as `docs/content/research/16-unused-palettes.md`.
 
 # Log
 

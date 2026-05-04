@@ -36,18 +36,19 @@ The opcodes to scan for:
 
 # Acceptance criteria
 
-- [ ] Build SOUND-resource enumerator (parses memlist + emits
+- [x] Build SOUND-resource enumerator (parses memlist + emits
       `(index, size, md5)` per SOUND).
-- [ ] Build SOUND-reference scanner (extracts all `playSound id=N`
+- [x] Build SOUND-reference scanner (extracts all `playSound id=N`
       from disasm, with global aggregation across all levels).
 - [ ] Reachability filter (depends on #0058 setup-then-overwrite
       gate detection).
 - [ ] Per-port + cross-port diff. A SOUND unused on all ports is
-      a strong cut-content signal.
-- [ ] Render (or play / extract WAV from) each unused SOUND for
-      auditioning.
-- [ ] Catalog as part of `docs/content/research/06-unused-polygons.md`
-      or split into `06b-unused-sounds.md`.
+      a strong cut-content signal. (DOS done; other ports gated
+      on per-port resource extraction.)
+- [x] Render (or play / extract WAV from) each unused SOUND for
+      auditioning. (`tools/aw_sound_to_wav.py` →
+      `docs/assets/research-15-unused-sounds/sound_0xNN.wav`.)
+- [x] Catalog as `docs/content/research/15-unused-sounds.md`.
 
 # Log
 
