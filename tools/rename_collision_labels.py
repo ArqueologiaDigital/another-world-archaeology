@@ -101,16 +101,23 @@ def build_chunk_to_pairs() -> dict[Path, list[tuple[Path, str]]]:
     return out
 
 
-def all_label_defs() -> dict[str, list[Path]]:
-    """name → list of chunk files defining this label."""
-    out: dict[str, list[Path]] = defaultdict(list)
+def all_label_defs() -> dict[str, set[Path]]:
+    """name → set of chunk files defining this label.
+
+    Multiple definitions within the same file collapse to one
+    entry per file — a label defined N times in a single chunk
+    isn't a "collision across chunks." (Cross-chunk collisions
+    are what we want to rename; same-chunk repeats are intra-
+    chunk last-wins.)
+    """
+    out: dict[str, set[Path]] = defaultdict(set)
     for path in (LEVELS / "_unified").rglob("*.inc"):
         try:
             text = path.read_text()
         except OSError:
             continue
         for m in RE_LABEL_DEF.finditer(text):
-            out[m.group(1)].append(path)
+            out[m.group(1)].add(path)
     return out
 
 
@@ -164,6 +171,39 @@ def rename_in_chunk(
     return pattern.sub(new_name, text)
 
 
+def rename_def_only(
+    text: str, old_name: str, new_name: str
+) -> str:
+    """Rename ONLY the `<old_name>:` label-definition lines in
+    `text`. Leaves `<jump-family> <old_name>` references (and any
+    other `<old_name>` occurrences) intact.
+
+    Use this when the local def's bytes-address differs from the
+    encoder's last-wins address for `old_name`: renaming
+    references would re-target them to the local (shadowed)
+    address; leaving references intact keeps them resolving to
+    the last-wins address (which is what their pre-rename bytes
+    encoded).
+    """
+    # The match consumes the rest of the line up to (but not
+    # including) the trailing newline, so we have to re-attach it.
+    out_lines = []
+    for line in text.splitlines(keepends=True):
+        # Strip trailing newline for matching, then re-attach.
+        if line.endswith("\n"):
+            body, nl = line[:-1], "\n"
+        else:
+            body, nl = line, ""
+        m = re.match(rf"^(\s*){re.escape(old_name)}:(.*)$", body)
+        if m:
+            out_lines.append(
+                f"{m.group(1)}{new_name}:{m.group(2)}{nl}"
+            )
+        else:
+            out_lines.append(line)
+    return "".join(out_lines)
+
+
 def process_chunk(
     chunk: Path,
     label_to_chunks: dict[str, list[Path]],
@@ -207,39 +247,49 @@ def process_chunk(
     except subprocess.CalledProcessError:
         return counts
 
-    # Rename each collision label INDEPENDENTLY — try one at a
-    # time, verify, keep on success. This way one bad rename
-    # doesn't poison the whole chunk.
+    # Rename each collision label INDEPENDENTLY. Try two
+    # strategies in order; keep the first that preserves bytes.
+    #   A. rename_in_chunk: rename def + every reference inside
+    #      the chunk. Works when same-chunk refs target the
+    #      LOCAL def.
+    #   B. rename_def_only: rename ONLY the def line; leave refs
+    #      intact. Works when same-chunk refs target an EXTERNAL
+    #      (last-wins) def — the shadowed def's address gets a
+    #      new name, but refs still hit the same address.
     cur_text = text
     chunk_tag = chunk_descriptor(chunk)
     for original in collisions:
         new_name = f"{original}__{chunk_tag}"
-        # Avoid double-renaming if a previous run already applied
-        # this name (idempotence).
         if new_name in cur_text:
             continue
-        candidate_text = rename_in_chunk(cur_text, original, new_name)
-        if candidate_text == cur_text:
-            continue
-        chunk.write_text(candidate_text)
-        ok = True
-        for asm_in, port in consumers:
-            try:
-                new_b = assemble_for_port(
-                    asm_in, port, f"{chunk.stem}__{port}_v"
-                )
-            except subprocess.CalledProcessError:
-                ok = False
+
+        renamed = False
+        for strategy in (rename_in_chunk, rename_def_only):
+            candidate_text = strategy(cur_text, original, new_name)
+            if candidate_text == cur_text:
+                continue
+            chunk.write_text(candidate_text)
+            ok = True
+            for asm_in, port in consumers:
+                try:
+                    new_b = assemble_for_port(
+                        asm_in, port, f"{chunk.stem}__{port}_v"
+                    )
+                except subprocess.CalledProcessError:
+                    ok = False
+                    break
+                if new_b != baseline_bytes[(asm_in, port)]:
+                    ok = False
+                    break
+            if ok:
+                cur_text = candidate_text
+                counts["renamed"] = counts.get("renamed", 0) + 1
+                renamed = True
                 break
-            if new_b != baseline_bytes[(asm_in, port)]:
-                ok = False
-                break
-        if ok:
-            cur_text = candidate_text
-            counts["renamed"] = counts.get("renamed", 0) + 1
-        else:
-            counts["restored"] = counts.get("restored", 0) + 1
-            chunk.write_text(cur_text)
+            else:
+                chunk.write_text(cur_text)
+        if not renamed:
+            counts["unrenameable"] = counts.get("unrenameable", 0) + 1
 
     if dry_run:
         chunk.write_text(text)
