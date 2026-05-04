@@ -85,8 +85,9 @@ are excluded from the unused set conservatively.
   Acceptance items:
   - [x] Build PALETTE-resource enumerator (manifest reads it
         already; #defined = 9 in DOS).
-  - [ ] Render each palette as a 16-swatch SVG strip
-        (gated on a palette-render tool).
+  - [x] Render each palette as a 16-swatch SVG strip — built
+        `tools/render_palette_swatches.py`. 32×16 grid SVG with
+        unused rows greyed-out.
   - [x] Build setPalette-reference scanner (literal-index, per-level).
   - [ ] Reachability filter (depends on #0058).
   - [ ] Diff layer-1 (unused resources): naive scan finds 0 PALETTE
@@ -96,5 +97,14 @@ are excluded from the unused set conservatively.
         meaningful.
   - [x] Per-port: DOS done. Other ports' resources need extraction.
   - [ ] Cross-port comparison.
-  - [ ] Render unused palettes for visual inspection.
-  - [ ] Catalog as `docs/content/research/06d-unused-palettes.md`.
+  - [x] Render unused palettes for visual inspection — all 9 DOS
+        levels rendered to
+        `docs/assets/research-16-unused-palettes/level<N>_<STAGE>.svg`.
+  - [x] Catalog as `docs/content/research/16-unused-palettes.md`
+        (parallel to research/15 — the sound-scan finding —
+        rather than as 06d).
+
+- 2026-05-04: rendering + cataloguing items closed
+  (archaeology commit). Three items remain (all gated on other
+  work): reachability filter (#0058), layer-1 diff (needs new
+  heuristic), and cross-port comparison (gated on extraction).
