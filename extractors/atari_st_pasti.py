@@ -181,6 +181,69 @@ def _extract_fat12_to(reader: Fat12Reader, out_dir: Path, written: list[Path],
             written.append(target)
 
 
+def synthesize_memlist_from_start_prg(start_prg: bytes) -> bytes:
+    """Extract the embedded resource directory from `START.PRG`.
+
+    The Atari ST 1991 release does not ship a `memlist.bin` on disk —
+    the resource directory is embedded inside `AUTO/START.PRG` (the
+    boot loader, also present at the disk root as `START.PRG`).
+
+    Embedded layout:
+      offset:  `0x7ef2` in `START.PRG`
+      stride:  20 bytes per entry
+      length:  walked until `state == 0xFF` terminator
+
+    Each entry uses big-endian fields (68000 native order):
+
+        offset  field
+        0       state (1)        — 0x00 valid, 0xFF terminator
+        1       type (1)         — same enum as Amiga: SOUND=0,
+                                   MUSIC=1, POLY_ANIM=2, PALETTE=3,
+                                   BYTECODE=4, POLY_CINEMATIC=5,
+                                   UNKNOWN=6
+        2-5     bufPtr (4)
+        6       rankNum (1)
+        7       bankId (1)       — 1-indexed bank file (BANK01..)
+        8-11    bankOffset (4)
+        12-13   unkC (2)
+        14-15   packedSize (2)
+        16-17   unkE (2)
+        18-19   size (2)
+
+    This function returns the raw embedded bytes (BE) including the
+    terminator, suitable for storage as `memlist.bin`. AWVM_Tools'
+    `awvm-disasm` does NOT yet understand this layout for the Atari
+    ST format (only DOS little-endian is supported); registering an
+    `atari_st` release in AWVM_Tools is gated on owner review per
+    the project's external-tool change policy. The synthesised file
+    is preserved here so cross-port checksum comparisons against the
+    Amiga release (which uses the same format) work without re-
+    parsing START.PRG every time.
+
+    See archaeology issue #0004 for the cross-port verification
+    that confirmed this offset and format.
+    """
+    MEMLIST_OFFSET = 0x7EF2
+    ENTRY_SIZE = 20
+    if len(start_prg) < MEMLIST_OFFSET + ENTRY_SIZE:
+        raise ValueError(
+            f"atari-st-pasti: START.PRG is {len(start_prg)} bytes, "
+            f"too short to hold the memlist at 0x{MEMLIST_OFFSET:04X}"
+        )
+    out = bytearray()
+    pos = MEMLIST_OFFSET
+    while pos + ENTRY_SIZE <= len(start_prg):
+        entry = start_prg[pos : pos + ENTRY_SIZE]
+        out.extend(entry)
+        if entry[0] == 0xFF:
+            return bytes(out)
+        pos += ENTRY_SIZE
+    raise ValueError(
+        f"atari-st-pasti: walked off the end of START.PRG without "
+        f"finding the 0xFF terminator (started at 0x{MEMLIST_OFFSET:04X})"
+    )
+
+
 def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
     zip_files = [f for f in release_meta.get("files", [])
                  if f.get("name", "").lower().endswith(".zip")]
@@ -206,11 +269,28 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
             reader = Fat12Reader(st_bytes)
             _extract_fat12_to(reader, disk_out, written)
 
+    # Synthesise memlist.bin from the embedded resource directory in
+    # START.PRG (disk 1, AUTO/ folder).
+    start_prg_path = work_dir / "another_world_disk_1" / "AUTO" / "START.PRG"
+    if not start_prg_path.is_file():
+        # Fall back to disk root copy (the two are byte-identical).
+        start_prg_path = work_dir / "another_world_disk_1" / "START.PRG"
+    memlist_synthesised = False
+    if start_prg_path.is_file():
+        memlist_bytes = synthesize_memlist_from_start_prg(start_prg_path.read_bytes())
+        memlist_path = work_dir / "memlist.bin"
+        memlist_path.write_bytes(memlist_bytes)
+        written.append(memlist_path)
+        memlist_synthesised = True
+
     rel_files = sorted(p.relative_to(work_dir).as_posix() for p in written)
     manifest = {
         "format": "atari-st-pasti",
         "resource_count": len(rel_files),
         "files": rel_files,
+        "memlist_synthesised": memlist_synthesised,
     }
+    if memlist_synthesised:
+        manifest["memlist_source"] = "AUTO/START.PRG offset 0x7EF2 (big-endian, 20-byte entries)"
     (work_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return manifest
