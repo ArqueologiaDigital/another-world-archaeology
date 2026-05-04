@@ -157,6 +157,31 @@ old chain was cordoned off behind a `killChannel` rather
 than physically removed. Authorship-wise, the `killChannel`
 + dispatch-chain pattern is too structured to be accidental.
 
+### Visual confirmation
+
+Rendered the 16 CIN_000..015 polygons from
+`work/076117919d1dca51e486f33b8f7817e3/bin/0x7f-POLY_CINEMATIC.bin`
+(DOS PASSCODE POLY_CINEMATIC) at zoom 256:
+
+![Unused 16-glyph alphabet](../assets/research-19-passcode-unused-alphabet/alphabet_grid.png)
+
+These are pixel-art alphanumeric glyphs — the first slot is a
+clean "K", later slots show what look like 2-3-character codes
+("I1", "I9", "U5", "N16", etc.). The glyphs are drawn in a
+small bitmapped font.
+
+Compare with the LIVE PASSCODE glyphs at CIN_036+ rendered
+the same way:
+
+![Live PASSCODE glyphs (sample)](../assets/research-19-passcode-unused-alphabet/live_for_comparison/live_alphabet_grid.png)
+
+The live UI uses **completely different shapes** — large blocky
+letters like "OK" and "DEL". The dead CIN_000..015 alphabet is
+a pixel-art font from an earlier passcode-screen design that was
+replaced by the larger blocky font in the shipping game. Both
+fonts ship in the polygon resource bank; only the second one
+ever draws.
+
 (Additional PASSCODE trans-dead clusters: 5 `LOAD_VAR0B..0F_
 TO_HASH_VAR1D` siblings, 3 `JUNK__06C1`/`_0733`/`_1088`
 already-named-as-dead routines, 11 `LABEL_HHHH` placeholders
