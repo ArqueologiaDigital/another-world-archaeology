@@ -531,3 +531,33 @@ this is OK.
 
 All chapter-splits verified at each step; verify_stage 29/29 +
 verify_unified 27/27 maintained throughout the sweep.
+
+## State as of 2026-05-04 (LAKE front-matter chapter)
+
+Final chapter-split iteration extracted LAKE's front-matter
+bytecode (ENTRY_POINT_OF_LAKE_LEVEL through INTRO_WAIT_KEY_PRESS,
+226 lines covering 8 depth-0 routines) into
+`lake/lake_entry_and_init.inc`. LAKE.asm.in is now 114 lines
+(down from 339 last tick, 1836 originally) — almost entirely
+just stage doc header + 66 chapter chunk includes.
+
+All 9 unified `.asm.in` files final state:
+
+  INTRO       43 lines  (14 chapter chunks)
+  ENDING      66 lines   (4)
+  PASSCODE    69 lines   (1)
+  LAKE       114 lines  (66)
+  TANK       124 lines   (5)
+  CODE_WHEEL 177 lines   (1)
+  CAPSULE    213 lines   (4)
+  CAVES      303 lines   (4)
+  PRISON     337 lines   (3)
+
+Total: 1446 lines (down from ~14000+ before the chapter-split
+sweep began this session). Each `.asm.in` is now a thin
+orchestration layer — stage doc header + chapter chunk include
+list.
+
+INTRO is the cleanest model (43 lines, 14 well-named chapters);
+LAKE follows the same pattern with 66 chapters. All other stages
+are similarly structured.
