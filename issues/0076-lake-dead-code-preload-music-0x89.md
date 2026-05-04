@@ -4,7 +4,7 @@ title: Investigate LAKE's dead-code preload of music 0x89 + 3 sound instruments
 status: open
 tier: A
 created: 2026-05-03
-updated: 2026-05-03
+updated: 2026-05-04
 tags: [lake, music, dead-code, archaeology]
 ---
 
@@ -172,9 +172,33 @@ cover format-specific extraction work).
    (0x07 and 0x8A) — both render to plausible audio (peak/rms
    sensible, ≥72% non-zero samples).
 
-2. Cross-check whether other ports' LAKE bytecode also has the
+2. ~~Cross-check whether other ports' LAKE bytecode also has the
    `jmp` (i.e., whether the disable is universal or AMIGA-introduced
-   and inherited).
+   and inherited).~~ **Done 2026-05-04.** All four per-branch LAKE
+   sources contain the byte-identical pattern:
+
+   ```
+       load id=0x002D
+       jmp INIT_AUDIO_AND_SCENE_AFTER_LOADS
+       load id=0x0089       ; MUSIC
+       load id=0x0002       ; SOUND
+       load id=0x0081       ; SOUND
+       load id=0x0003       ; SOUND
+   INIT_AUDIO_AND_SCENE_AFTER_LOADS:
+   ```
+
+   Verified across `cartridge_1992/LAKE.asm`, `dos_1992/LAKE.asm`,
+   `chahi_amiga_1991/LAKE.asm`, and `gba_2004/LAKE.asm`. The dead
+   code is **introduced in the original 1991 amiga release** and
+   **preserved verbatim in every subsequent port** (1992 dos, 1992
+   cart, 2004 gba). This rules out the possibility that any port
+   removed it — they all inherited the unreachable preload from
+   Eric Chahi's original bytecode.
+
+   Conclusion: music 0x89 is **genuine 1991-era cut content**, not
+   a port-specific artifact. The `jmp` was added by the original
+   author before release; subsequent automated bytecode pipelines
+   never touched it.
 3. Compare 0x89 against the released soundtrack (Eric Serra's
    AW soundtrack album, plus any in-game music heard) — does it
    match anything we know, or is it genuinely unreleased?
