@@ -150,13 +150,24 @@ After the awvm-asm + awvm-disasm changes land:
 
 ## Acceptance
 
-- [ ] awvm-asm + awvm-disasm support `;@enc=alt`, `;@enc=legacy_d`,
+- [x] awvm-asm + awvm-disasm support `;@enc=alt`, `;@enc=legacy_d`,
       `;@enc=legacy_e`, and `setPalette` with `_trailing` operand.
-- [ ] Source migration rewrites every surviving `;@raw=` to the new
-      forms.
-- [ ] `verify_stage` 29/29 + `verify_unified` 27/27 still green
+      (AnotherWorld_VMTools commit `ad99497`.)
+- [x] Source migration rewrites every surviving `;@raw=` to the new
+      forms. (per-branch: source-reconstruction commit `e1f42fa`;
+      per-arm + shared chunks: `2c4f30e`, `2c2dcd0`, `d630744`.)
+- [x] `verify_stage` 29/29 + `verify_unified` 27/27 still green
       after migration.
-- [ ] `;@raw=` parser removed from awvm-asm.
-- [ ] `tools/audit_raw_annotations.py --check` rejects any `;@raw=`
-      presence.
-- [ ] No `;@raw=` anywhere in `src/levels/`.
+- [x] `;@raw=` parser removed from awvm-asm.
+      (AnotherWorld_VMTools commit `a1c6661` — parser now panics
+      on `;@raw=`. Disasm fallback also dropped: `de940c8`.)
+- [x] `tools/audit_raw_annotations.py --strict` rejects any
+      `;@raw=` presence. Wired into source-reconstruction
+      `Makefile` as `make lint` (commit `f8d3530`).
+- [x] No `;@raw=` anywhere in active `src/levels/`.
+
+**Migration complete: 2026-05-04.**
+
+For follow-up, see #0086 log: per-chunk re-symbolisation of the
+literal addresses (e.g., `0x533A` → `<UNIQUE_NAME>_RET`) is a
+readability cleanup if/when needed.
