@@ -99,10 +99,41 @@ oracle.is_statically_referenced(level=2, address=0x34AA)  # → True
   (machine). Per-branch tables list each gate's stage, channel,
   gated address, surviving address, source loc.
 
+- 2026-05-04 (later): three iterations of the detector landed
+  same day after debugging a false-positive and improving
+  classification. Final state:
+
+  - **Conditional-jump block-end fix** (commit `da0dc92`).
+    `je`/`jne`/`jg`/`jge`/`jl`/`jle`/`djnz` now count as
+    block-end. Removed 159 false positives caused by the
+    "play-once-via-VAR_B4-flag" idiom in PRISON, where a
+    conditional jump between two setups can branch around the
+    second on the taken-jump path. Total dropped 181 → 22.
+
+  - **`KILL_CHAN_AT_*` / `KILL_IF_*` prefixes**
+    (commit `630cc24`). The killer-name heuristic was missing
+    auto-named single-line `killChannel` labels. After fix,
+    silencer count rose 7 → 12 (5 new CAPSULE/CAVES silencers).
+
+  - **Body-aware killer index** (commit `b5ed749`). Now
+    `_build_killer_index()` scans every label's body and
+    treats single-line `killChannel` bodies as killers
+    regardless of name, eliminating the "other" catch-all.
+
+  Final categorisation:
+
+  | Category | Count |
+  | --- | ---: |
+  | silencer | 12 |
+  | reschedule | 3 |
+  | swap | 7 |
+
+  All 22 gates classified; no unknowns.
+
   Acceptance items:
   - [ ] Build a static reachability graph from a port's full
         disassembly (all levels). — TODO (control-flow walk
-        across je/jne/call/ret edges)
+        across je/jne/call/ret edges).
   - [x] Detect setup-then-overwrite gates.
   - [ ] Classify each label as: live / statically-reachable-
         but-dead-by-gate / unreferenced. — Partial: the
