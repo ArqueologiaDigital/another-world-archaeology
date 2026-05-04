@@ -6,7 +6,7 @@ tier: B
 created: 2026-05-04
 updated: 2026-05-04
 depends_on: []
-blocks: []
+blocks: [0090]
 tags: [tooling, vm, gui, interactive, dev-experience]
 ---
 
@@ -135,3 +135,39 @@ awvm-asm).
   by sketching the IPC protocol for Phase 1 in a separate
   doc and wait for owner review of the tech-stack choice
   before committing to a specific path.
+
+- 2026-05-04 (later): pivoted away from a from-scratch port.
+  Owner pointed out that
+  https://github.com/malandrin/another-world-suite already
+  ships a working browser-based AW VM (Rust+WASM engine + Vue
+  frontend with disassembler / threads / registers panels).
+  Stack choice now: extend the Suite with a source-editor
+  window. Working in a sibling clone at
+  `../another-world-suite` on a feature branch
+  `source-editor` — not pushed anywhere upstream, treated as
+  a local fork.
+
+  - **Phase 1 (UI shell)** — DONE. Suite commit "add
+    SourceEditor window + engine assemble_source stub
+    (Phase 1)" 4a2ea55. Adds a `<Window>`-shell editor pane
+    pre-populated with the bouncing-ball demo from
+    forum.fiozera.com.br/t/127, two action buttons ("assemble"
+    / "assemble + load"), engine stubs `assemble_source(&str)`
+    and `replace_active_part_bytecode(&[u8])`.
+  - **Phase 3 (engine: replace bytecode + reset VM)** — DONE.
+    Suite commit "implement replace_active_part_bytecode +
+    bump wasm-bindgen (Phase 3)" d6db7a2. Implements the
+    bytecode swap + thread reset, bumps wasm-bindgen 0.2.62 →
+    0.2.93 to build on current Rust, wires the frontend's
+    onSourceLoaded() to refresh the views. Both native and
+    `wasm32-unknown-unknown` builds verified.
+  - **Phase 2 (engine: actually call awvm-asm)** — BLOCKED on
+    issue #0090 (awvm-asm in-memory `assemble_bytes()` API
+    proposal awaiting owner review).
+  - **Phase 4 (audio backend, breakpoints, debug map)** —
+    deferred until 1+2+3 are settled.
+
+  Phases 1 and 3 are independently shippable: they let the
+  user open the editor window, write source, see the planned
+  flow, and the bytecode-replacement path is exercised the
+  moment Phase 2 lands.
