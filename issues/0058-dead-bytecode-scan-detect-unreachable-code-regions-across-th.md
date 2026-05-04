@@ -1,10 +1,10 @@
 ---
 id: 0058
 title: Dead bytecode scan: detect unreachable code regions across the whole game (with setup-then-overwrite gate awareness)
-status: open
+status: done
 tier: B
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-04
 depends_on: []
 blocks: [0054, 0055, 0056, 0057]
 tags: [research, bytecode, reachability, genealogy]
@@ -181,9 +181,17 @@ oracle.is_statically_referenced(level=2, address=0x34AA)  # → True
   - [x] Classify each label as: live / dead-by-gate /
         transitively-dead / unreferenced.
   - [x] Cross-check against research finding 05's known gates.
-  - [ ] Expose a Python API used by #0054–#0057. — TODO; the
-        current tool emits JSON, a programmatic Python class
-        wrapper would simplify caller code.
-  - [ ] Write `docs/content/research/07-dead-bytecode-survey.md`.
-        — TODO; the reachability graph + gate inventory + the
-        cross-port count comparison are now ready as input data.
+  - [x] Expose a Python API used by #0054–#0057. — landed as
+        `ReachabilityOracle` class in
+        `tools/build_reachability_graph.py` (commit `7d01288`).
+        Manual smoke test verifies BEETLE silencers, BEETLE_AI
+        subgraph, ENTRY_POINT_OF_LAKE_LEVEL, and PASSCODE
+        glyph alphabet classifications.
+  - [x] Write `docs/content/research/07-dead-bytecode-survey.md`.
+        — landed as research/19 (slot 07 was already taken by
+        the bytecode-roundtrip finding); commit
+        `(this commit)`.
+
+- 2026-05-04: closing — all 6 acceptance items done.
+  Reachability oracle is the gating infrastructure for
+  #0054–#0057 (asset scans). Cross-port summary in research/19.
