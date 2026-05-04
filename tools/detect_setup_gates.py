@@ -56,11 +56,15 @@ RE_SETUP = re.compile(
     r"address=(?P<addr>\S+)\s*$"
 )
 # Instructions that terminate the current straight-line block.
-# Once we see one, prior `setup` opcodes can't overwrite via fall-through.
-# Match end-of-line (`break\n`) AND followed-by-space variants
-# (`bankSwitch 6 ; comment`).
+# After any of these, prior `setup` opcodes can't overwrite via
+# fall-through. Conditional jumps (je/jne/jg/jge/jl/jle/djnz)
+# also count: when taken they branch around the second setup, so
+# the first setup may still run on the taken path even though
+# fall-through reaches a second setup. Treating the conditional
+# as a block-end avoids the false-positive gate report.
 RE_BLOCK_END = re.compile(
-    r"^\s*(break|ret|killChannel|bankSwitch|freezeChannel|jmp)(\s|$)"
+    r"^\s*(break|ret|killChannel|bankSwitch|freezeChannel|jmp"
+    r"|je|jne|jg|jge|jl|jle|djnz)(\s|$)"
 )
 # A label definition also restarts the block (control flow can
 # jump into here from elsewhere; prior setup state is unknown).

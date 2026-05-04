@@ -24,19 +24,19 @@ file, splits at block boundaries, and reports each consecutive
 
 | Stage | cart 1992 | amiga 1991 | dos 1992 | gba 2004 |
 | --- | ---: | ---: | ---: | ---: |
-| LAKE | 7 | **5** | 7 | 7 |
-| PRISON | 12 | 15 | 15 | — |
-| CAVES | 22 | 21 | 22 | — |
-| CAPSULE | 16 | 11 | 17 | — |
-| TANK | 1 | — | 1 | — |
-| CODE_WHEEL | — | 1 | 1 | — |
+| LAKE | 2 | **1** | 2 | 2 |
+| CAPSULE | 4 | 1 | 4 | — |
+| CAVES | 2 | 2 | 2 | — |
 
-Em-dashes mean the port doesn't ship that stage. The cart 1992
+Em-dashes mean the port doesn't ship that stage (or the stage
+has zero gates after the conditional-`je` fix). The cart 1992
 column covers both SNES-EU and Genesis-EU (they share
 byte-identical bytecode per research/07).
 
-**Total: 181 gates surfaced across the four-port × seven-stage
-matrix.**
+**Total: 22 gates surfaced** across the four-port × three-stage
+matrix. After the conditional-`je` block-end fix, most stages
+have zero gates and LAKE drops to 1 (amiga) / 2 (others).
+**All 7 silencers are in LAKE.**
 
 ## Headline findings
 
@@ -47,35 +47,44 @@ gates against:
 
 | Category | Count | Description |
 | --- | ---: | --- |
-| **silencer** | 16 | substantive routine → killer (the surviving routine kills the channel, possibly after a delay; the gated routine never runs — likely deliberate cut-content) |
+| **silencer** | 7 | substantive routine → killer (the gated routine never runs — deliberate cut-content per research/05) |
 | reschedule | 0 | killer → substantive (none found — the game uses kill as a tear-down, not as a placeholder) |
-| swap | 24 | substantive → substantive (changed mind; both are real game logic, only the second runs) |
-| other | 141 | at least one side is a `LABEL_HHHH` placeholder; can't classify without semantic-rename |
+| swap | 0 | substantive → substantive (changed mind; both are real game logic, only the second runs) |
+| other | 15 | at least one side is a `LABEL_HHHH` placeholder; can't classify without semantic-rename |
 
-The **silencers are the highest-interest cases**. Of the 16:
+All 7 silencers are LAKE beetle gates (the canonical
+research/05 pattern, detailed below).
 
-  - 7 are LAKE beetle gates (the canonical research/05 pattern,
-    detailed below).
-  - **9 are PRISON variable-init silencers** that no prior
-    research note has called out:
+### Note on the conditional-`je` pattern (false-positive avoided)
 
-| Channel | Gated routine | Surviving | Cart | Amiga | DOS |
-| :---: | --- | --- | :---: | :---: | :---: |
-| `0x01` | `INIT_VARS_E7_E8` | `KILL_CHANNEL_LANDING` | ✅ | ✅ | ✅ |
-| `0x02` | `INLINE_SET_VARE9_TO_8` | `KILL_CHANNEL_LANDING` | ✅ | ✅ | ✅ |
-| `0x05` | `INLINE_SET_VARE7_TO_5` | `KILL_CHANNEL_LANDING` | ✅ | ✅ | ✅ |
+An earlier version of the detector treated only `break`,
+`ret`, `killChannel`, `bankSwitch`, `freezeChannel`, and `jmp`
+as block-end. That mis-classified PRISON's
+"play-once-via-VAR_B4-flag" pattern as 9 cut-content
+silencers:
 
-These three silencers gate variable-initialisation routines for
-vars `[0xE7]`, `[0xE8]`, `[0xE9]` — high state vars that look
-like they were tracking some PRISON-specific feature
-(possibly a lock count, sub-screen state, or a meta-state for
-the prison-cart sequence). Three different channels (0x01,
-0x02, 0x05) all set up this same way. **Same gates present on
-all three pre-anniversary ports** — meaning whatever was being
-silenced was cut BEFORE the port-split (i.e., during the
-original 1991 amiga authoring) and persisted through the 1992
-DOS / cart rebuilds. A NEW cut-content signal worth following
-up.
+```
+setup channel=0x01, address=INIT_VARS_E7_E8           ; start E7/E8 anim
+je [0xB4], 0x00, LABEL_8592                            ; if first visit, skip silence
+setup channel=0x01, address=KILL_CHANNEL_LANDING      ; otherwise silence
+LABEL_8592:
+    ...
+```
+
+Because `je`/`jne`/`jg`/`jge`/`jl`/`jle`/`djnz` are
+conditional, the second setup is reachable only on the
+fall-through path; the taken-jump path skips it. The first
+setup CAN run on the taken-jump path. Treating the conditional
+as block-end means the detector no longer flags this idiom as
+a gate. Updated detector (commit landing this update): 22
+total gates, 7 silencers, all in LAKE.
+
+The PRISON `[0xE7]/[0xE8]/[0xE9]` routines turned out to be a
+"play this animation only on first visit" feature: VAR_B4 is
+initialised to 0, the animation loop sets it to 1 when it
+finishes, and subsequent visits silence the loop start. Real
+shipped feature, not cut content. Useful reminder that gate
+detection without control-flow analysis can over-report.
 
 ### Amiga 1991 LAKE has ONE FEWER gate than later ports
 
