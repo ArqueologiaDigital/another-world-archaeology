@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**95 tools.**
+**96 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -32,6 +32,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `cross_port_polygon_diff.py` | Cross-port polygon-byte diff for a single stage. |
 | `cross_port_used_polygon_diff.py` | Cross-port USED-polygon diff for a single stage. |
 | `cross_release_md5_index.py` | Build a cross-release md5 index for AW resources. |
+| `detect_setup_gates.py` | Detect setup-then-overwrite gates in AW VM bytecode. |
 | `disambiguate_intra_chunk_dups.py` | Disambiguate intra-chunk duplicate label definitions. |
 | `equ_alias_for_stuck_literals.py` | For each literal-address operand that `resymbolize_literals.py` |
 | `extract_cross_stage_helpers.py` | Phase 6: extract cross-stage shared helpers to `_unified/_helpers/`. |
