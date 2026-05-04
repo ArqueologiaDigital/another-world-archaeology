@@ -1,7 +1,7 @@
 ---
 id: 0087
 title: Rename collision-suffering labels (SHARED_RET, DEDUP_*, …) to unlock the 386 literal-address sites
-status: open
+status: done
 tier: B
 created: 2026-05-04
 updated: 2026-05-04
@@ -118,7 +118,12 @@ sites, plus 61 more multi-defined symbols across 250 sites).
   Source-reconstruction commit `567fe69-pred`: 86 literals
   rewritten across LAKE (10 aliases) + PRISON (11 aliases).
 
-  Final cumulative: **343 / 389 jump-target literals resolved
-  (88%); 0 remain**. Remaining 46 unsymbolisable cases are
-  video-offset literals (a different operand mechanism the
-  EQU-alias approach was scoped to skip).
+- 2026-05-04: extended `tools/equ_alias_for_stuck_literals.py`
+  to handle `_unified/_helpers/*.inc` chunks (cross-stage:
+  EQUs go in a shared `_helpers_equ_aliases.inc` and every
+  `<STAGE>.asm.in` gets the include line). Final sweep cleared
+  the 46 video-offset literals.
+
+  Source-reconstruction commit `45abfad`. Active source tree is
+  now **literal-address-FREE** (0 remaining of 389; 100%
+  resolved).
