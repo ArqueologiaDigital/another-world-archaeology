@@ -63,3 +63,43 @@ Methods to discriminate:
 - 2026-04-30: opened. Surfaced from the cartridge port cross-check
   (research/05). The SNES↔Genesis byte-identity is decisive; the
   DOS divergence is the genealogy puzzle.
+
+- 2026-05-04: partial answer from research/08 (cross-branch
+  structural similarity, 2026-05-01).
+  `tools/bytecode_structural_diff.py` produced a LAKE-stage
+  opcode-only similarity matrix:
+
+  | Pair | opcode_only ratio | Matched tokens | Longest block |
+  |---|---|---|---|
+  | cartridge_1992 vs dos_1992 | **0.914** | 6384 / 7032 | 512 |
+  | gba_2004 vs cartridge_1992 | 0.920 | 6330 / 7032 | 393 |
+  | gba_2004 vs dos_1992       | 0.884 | 6039 / 6933 | 375 |
+
+  91% opcode-only match between DOS and cartridge means the two
+  1992 Heineman ports run **the same logical program** with
+  different concrete addresses — strongly favouring hypothesis (2)
+  (forked snapshots from a common ancestor) over hypothesis (1)
+  (mechanical post-processor).
+
+  The 9% mismatch is concentrated in:
+  - Animation-frame dispatchers (per issue #0079: cart's CIN_169
+    draw routine has explicit pixel adjustment that DOS's doesn't,
+    suggesting cart was built from an earlier internal source where
+    polygon anchors weren't yet aligned).
+  - Cinematic bank renumbering (per issue #0080: amiga 1991
+    renumbered indices for the 1992 ports; cart and DOS converged
+    on similar but not identical numbering schemes).
+
+  Acceptance items:
+  - [x] Structured diff (research/08 covered LAKE).
+  - [ ] Other levels (gun-bearing 3, 4, 6) — partial: research/08's
+        full-branch-pair matrix exists but per-level breakdown for
+        levels 3/4/6 specifically isn't yet documented.
+  - [ ] Update `docs/content/genealogy.md` with the conclusion.
+
+  Tentative conclusion (pending genealogy.md write-up): DOS and
+  cartridge are **forked from a common 1992 source** rather than
+  one being the parent of the other. Both retain ~91% logical
+  overlap; per-port edits explain the remainder. The amiga 1991
+  release is more distant (~60% similarity to either) — confirming
+  it as the shared ancestor that both 1992 ports inherited from.
