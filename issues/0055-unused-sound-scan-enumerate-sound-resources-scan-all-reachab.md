@@ -80,8 +80,15 @@ The opcodes to scan for:
   - [ ] Reachability filter (depends on #0058)
   - [ ] Per-port + cross-port diff (DOS done; other ports gated
         on extraction)
-  - [ ] Render unused SOUNDs for auditioning (renderer needed —
-        could reuse `tools/aw_music_to_wav.py`'s sample-decoder
-        path)
-  - [ ] Catalog as research/06b-unused-sounds.md (or merge into
-        the existing unused-music research note)
+  - [x] Render unused SOUNDs for auditioning (`tools/aw_sound_to_wav.py`
+        wraps the SOUND-resource decoder; rendered the 4 unused
+        DOS SOUNDs to
+        `docs/assets/research-15-unused-sounds/sound_0xNN.wav`)
+  - [x] Catalog as `docs/content/research/15-unused-sounds.md`
+        (parallel to research/11 — the music-scan finding —
+        rather than merged in).
+
+- 2026-05-04: rendering + cataloguing items closed
+  (archaeology commit). Two items remain (both gated on other
+  work): reachability filter (#0058) and cross-port diff
+  (gated on per-port resource extraction).
