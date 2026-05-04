@@ -69,22 +69,51 @@ LAKE-`dos_1992` static analysis:
 - **2 dead-by-gate**: `BEETLE_INIT_POS_THEN_WALK_LEFT`,
   `BEETLE_KICK_DETECTOR` — exactly the two beetle silencers
   research/05 documented.
-- **43 transitively-dead** — the entire BEETLE AI subgraph
-  reached only from those two gates. Includes:
+- **43 transitively-dead** — split into roughly 4 categories:
 
-  - `BEETLE_AI_DEC_LEFT_FAR` / `BEETLE_AI_DEC_LEFT_MID` /
-    `BEETLE_AI_DEC_LEFT_NEAR` — direction & distance scoring
-  - `BEETLE_AI_GO_LEFT_BOUNDED` /
-    `BEETLE_AI_GO_RIGHT_BOUNDED` — movement primitives
-  - `BEETLE_AI_DISPATCH_BY_HERO_X` — hero-position dispatch
-  - `BEETLE_KICK_DETECTOR_FROM_LEFT` — kick-from-left variant
-  - …and 36 more
+  - **BEETLE-related** (~16 labels): `BEETLE_AI_DEC_LEFT_FAR/MID/NEAR`,
+    `BEETLE_AI_DEC_RIGHT_*`, `BEETLE_AI_GO_LEFT_BOUNDED`,
+    `BEETLE_AI_GO_RIGHT_BOUNDED`, `BEETLE_AI_DISPATCH_BY_HERO_X`,
+    `BEETLE_KICK_DETECTOR_FROM_LEFT`, plus scaffolding
+    (`MAYBE_RESTART_BEETLE_WALKING_LEFT/RIGHT`,
+    `RESTART_BEETLE_KICK_DETECTOR`, `JMP_TO_BEETLE_GO_RIGHT`,
+    `YIELD_THEN_JUMP_TO_3711/3767`). This is the "broken-by-design"
+    cut content the another-world-hacks verification revealed.
+  - **Random ambient sound logic** (6 labels):
+    `AMBIENT_RND_CASE_1/3/5`, `PLAY_AMBIENT_F05/F16/F19`,
+    `PLAY_RANDOM_AMBIENT_SOUND`, `RANDOM_AMBIENT_SOUND_LOOP`.
+    A random-sound effect system that never fires in shipping LAKE.
+  - **Hero-landing animation** (5 labels): `HERO_LAND_LEFT_HOLD_LOOP`,
+    `HERO_LAND_RIGHT_HOLD_LOOP`, `WAIT_HERO_ACTION_TO_RESPAWN`,
+    `WAIT_HERO_JUMP_DOWN_INPUT`, `LESTER_DRIFT_R_PHASE_3`. Distinct
+    from the beetle: a "Lester lands after leap" animation cluster
+    that's reached only via dead intra-label tails (after
+    unconditional `jmp HERO_LEAP_R_F0_LOOP` + `killChannel`).
+  - **Visual-effect helpers** (~6 labels): `DRAW_4_DROPLETS_LOOP`,
+    `DRAW_4_DROPLETS_END_KILL`, `RESET_DROPLET_72_X_IF_OFFSCREEN`,
+    `RESET_DROPLET_73_X_IF_OFFSCREEN`, `PARTICLE_BURST_3X_LOOP`,
+    `PARTICLE_BURST_CYCLE_LOOP_2`, `REED_PLANT_FRAMES_5_TO_7_LOOP`.
+    Particle-burst + droplet + reed-plant animation routines never
+    invoked.
+
+The non-beetle cut content is significant: HERO_LAND animations
+and PARTICLE_BURST_2 frames are visually identifiable cut content
+distinct from the beetle subgraph. PNG renderings at
+`docs/assets/research-19-lake-non-beetle-cut-content/`:
+
+  - `hero_land_pair.png` — left + right Lester landing pose
+  - `particle_burst_2_sequence.png` — 5 frames of dust-particle burst
+  - `lake_scene3_decor.png` — a tall pillar/scenery decoration
+
+These rendered nicely; some others (`landing_after_swing_12`,
+`reed_plant_5`) have group-polygon coordinates that fall off the
+default-position render canvas — TODO to render with proper offset.
 
 This is exactly the "broken-by-design" cut content the
 verification hack in `another-world-hacks` revealed
 qualitatively. The static graph confirms the size of the
-silenced subgraph: ~45 labels worth of beetle interaction
-authored, present in shipped bytecode, never reachable.
+silenced subgraph: ~45 labels worth of authored content, present
+in shipped bytecode, never reachable.
 
 ## Headline finding 2 — PASSCODE has a complete unused alphabet
 
