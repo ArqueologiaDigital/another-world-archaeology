@@ -441,3 +441,35 @@ Three rebuild patterns documented in research/06:
     USED content — full re-spritefication, not just renumbering.
 
 Issues updated this round: #0054, #0080, research/06.
+
+## State as of 2026-05-04 (parent-group attribution)
+
+The 207 LAKE cut sub-polys were attributed to **86 named amiga
+hero/Lester animation parent groups** via a new
+`tools/find_parent_polygons.py` (inverts polygon-walker's child
+→ parent traversal). Composite breakdown:
+
+  HERO_RESUME_LEFT: 10 frames cut    HERO_LEAP_LEFT/RIGHT: 10 each
+  HERO_RESUME_RIGHT: 7 frames        POOL_LESTER: 7 frames
+  HERO_RUN_LEFT/RIGHT: 6 each        HERO_FALL_LEFT: 4 frames
+  HERO_WALK_LEFT/RIGHT: 4 each       HERO_STOP_LEFT/RIGHT: 3 each
+  HERO_OUT_POOL, LESTER_WAIT, etc.: 1-3 each
+
+HERO_RESUME_LEFT is the cleanest pure-cut case: amiga has 10
+group polygons at the named offsets (0x0310..0x0574 + 0x0ADC..0x0B54),
+DOS's polygon bank has PARSE-FAIL or unrelated content at all 10,
+and DOS LAKE.asm has no matching CINEMATIC_HERO_RESUME_LEFT_F* EQU
+declarations. The 10-frame stop→walk-left smoothing animation was
+removed from the 1992 rebuild.
+
+HERO_LEAP_RIGHT was rebuilt rather than cut — DOS has its own
+HERO_LEAP_RIGHT_LOOP routine but uses DRAW_HERO_STOP_R_BUNDLE_NN_MM
+helpers (composite/bundled sprites) instead of the 10 individual
+amiga frames.
+
+New tool: `tools/attribute_cut_polygons.py` walks the same
+attribution across all stages and writes
+`docs/cut_content/cut_attribution.json`. CAPSULE/TANK/CAVES
+attribution is shallower because their CINEMATIC_<NNN> EQUs aren't
+semantically renamed yet — the breakdown surfaces "CINEMATIC_NNN"
+labels rather than "HERO_*" labels.
