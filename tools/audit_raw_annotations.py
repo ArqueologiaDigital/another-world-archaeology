@@ -274,14 +274,74 @@ def main() -> int:
         "pre-commit / CI. Defaults to scanning every per-branch "
         "stage file unless --file/--branch is given.",
     )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="text-only check: exit nonzero if ANY `;@raw=` exists "
+        "anywhere under src/levels/. Implies --check. This is the "
+        "post-migration enforcement mode (every load-bearing "
+        "`;@raw=` should have been rewritten to a `;@enc=…` form, "
+        "so `;@raw=` should be entirely absent from the source "
+        "tree).",
+    )
     args = parser.parse_args()
+
+    if args.strict:
+        # Text-only sweep — no assembly required. Skips `_canonicalized/`
+        # and `_phase3b_demo/` reference trees: those are frozen
+        # disasm-output snapshots kept for provenance, not part of the
+        # active build path that verify_stage / verify_unified consult.
+        # Active source = per-branch `<branch>/` dirs + `_unified/`
+        # tree.
+        levels = SRC_ROOT / "src" / "levels"
+        SKIP_DIRS = {"_canonicalized", "_phase3b_demo"}
+
+        def in_active(path: Path) -> bool:
+            for parent in path.relative_to(levels).parents:
+                if parent.name in SKIP_DIRS:
+                    return False
+            return True
+
+        offenders: list[tuple[Path, int]] = []
+        for path in sorted(levels.rglob("*.asm")) + sorted(
+            levels.rglob("*.inc")
+        ) + sorted(levels.rglob("*.asm.in")):
+            if not in_active(path):
+                continue
+            try:
+                text = path.read_text()
+            except OSError:
+                continue
+            if ";@raw=" in text:
+                count = text.count(";@raw=")
+                offenders.append((path, count))
+        if offenders:
+            print(
+                "FAIL (--strict): found `;@raw=` annotations in "
+                f"{len(offenders)} files (post-migration these must "
+                "all be `;@enc=…` instead):",
+                file=sys.stderr,
+            )
+            for path, count in offenders[:50]:
+                print(
+                    f"  {count:5d} × `;@raw=`  {path.relative_to(SRC_ROOT)}",
+                    file=sys.stderr,
+                )
+            if len(offenders) > 50:
+                print(
+                    f"  …and {len(offenders) - 50} more files",
+                    file=sys.stderr,
+                )
+            return 1
+        print("OK (--strict): no `;@raw=` anywhere under src/levels/.")
+        return 0
 
     if args.check and not (args.file or args.branch or args.all):
         # In --check mode, default to scanning everything.
         args.all = True
 
     if not (args.file or args.branch or args.all):
-        parser.error("--file, --branch, --all, or --check is required")
+        parser.error("--file, --branch, --all, --check, or --strict is required")
 
     files: list[Path] = []
     if args.file:
