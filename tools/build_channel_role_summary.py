@@ -67,18 +67,24 @@ def stage_of(path: Path) -> str | None:
 
 # Order matters — first match wins. More specific patterns first.
 ROLE_PATTERNS: list[tuple[str, re.Pattern]] = [
-    ("unnamed",  re.compile(r"^LABEL_[0-9A-F]+(?:_AT_[0-9A-F]+)?$")),
-    ("cleanup",  re.compile(r"^(KILL_CHANNEL_|KILL_CHAN_)")),
-    ("cv-draw",  re.compile(r"(^|_)(DRAW_CV_|INLINE_DRAW_CV_|GUARDED_DRAW_CV_)")),
-    ("cin-draw", re.compile(r"(^|_)(DRAW_CIN(?:EMATIC)?_|HANG_DRAW_CIN_)")),
-    ("blit",     re.compile(r"(^|_)BLIT(_|TER_)")),
-    ("framebuf", re.compile(r"(^|_)(CLEAR_|FILL_|COPY_PAGE_|COPY_VIDEO_PAGE_|BLIT_FROM_PAGE_)")),
+    ("unnamed",  re.compile(r"^(LABEL|JUNK)_+[0-9A-F]+(?:_AT_[0-9A-F]+)?$")),
+    ("cleanup",  re.compile(r"^(KILL_CHANNEL_|KILL_CHAN_|DELETE_CHANNELS_|DELETE_ALL_CHANS_)")),
+    ("cv-draw",  re.compile(r"(^|_)(DRAW_CV[_0-9]|INLINE_DRAW_CV_|GUARDED_DRAW_CV_|DRAW_COMMON_VIDS?_|STEP_DRAW_CV)")),
+    ("cin-draw", re.compile(r"(^|_)(DRAW_CIN(?:EMATIC)?S?[_0-9]|HANG_DRAW_CIN_|DRAW_CITY_|DRAW_INTRO_DECOR_|FILL_AND_DRAW_CIN_|FILL_FF_AND_DRAW_|DRAW_LAKE_|DRAW_STARS_|DRAW_BEAST_|HANG_DRAWING_)")),
+    ("blit",     re.compile(r"(^|_)(BLIT(_|TER_|TER$)|RENDER_FRAME_|HANG_BLITTING_|SHOW_PAGE_)")),
+    ("framebuf", re.compile(r"(^|_)(CLEAR_|FILL_|COPY_PAGE|COPY_VIDEO_PAGE_|BLIT_FROM_PAGE_|COPY_BG_PAGE_|COPY_FF_|SET_PAL_|FADE_PAL_|PAL_FADE_|PALETTE_FADE_|PALETTE_FLASH_|SET_PALETTE_)")),
     ("scroll",   re.compile(r"(^|_)SCROLL_")),
-    ("music",    re.compile(r"(^|_)(MUSIC_|PLAY_(?:SFX|SONG|FX)|SONG_|SFX_)")),
-    ("delay",    re.compile(r"(^|_)(DELAY_|WAIT_|PAUSE_)")),
-    ("actor",    re.compile(r"(^|_)(HERO_|BEAST_|BEETLE_|LESTER_|ENEMY_|TENTACLE_|SLUG_|SOLDIER_|MUTANT_|GUARD_)")),
-    ("init",     re.compile(r"(^|_)(INIT_|SETUP_|INLINE_SET_|SET_VAR|RESET_)")),
-    ("anim",     re.compile(r"(_LOOP$|^ANIM_|_ANIMATE_|_DRIFT_|^LOOP_)")),
+    ("music",    re.compile(r"(^|_)(MUSIC_|PLAY_(?:SFX|SONG|FX|MUSIC|BG_AUDIO)|SONG_|SFX_|AMBIENT_)")),
+    ("delay",    re.compile(r"(^|_)(DELAY_|WAIT_|PAUSE_|HOLD_|BREAK_LOOP)")),
+    ("actor",    re.compile(r"(^|_)(HERO_|BEAST_|BEETLE_|LESTER_|ENEMY_|TENTACLE_|SLUG_|SOLDIER_|MUTANT_|GUARD_|ALIEN_|BIRD_|TANK_|GETTING_OUT_)")),
+    ("text",     re.compile(r"(^|_)(DISPLAY_TEXT_|TEXT_|SHOW_TEXT_|SUBTITLE_)")),
+    ("init",     re.compile(r"(^|_)(INIT_|SETUP_|INLINE_SET_|SET_VAR|RESET_|BANK\d+_|BANK_INIT|BANKSWITCH_|ENTRY_POINT_|LEVEL_INIT$|TRANSITION_)")),
+    ("ambient",  re.compile(r"(^|_)(BUBBLES_|DECOR_|DROPLET_|SPARKLE_|SCATTER_(DOTS|3DOT|8DOT)|SMOKE_|FIRE_|BG$|_BG_|BACKGROUND_|SCENE_|GOO_|VINE_|CALM_|POOL_|LAB_|CONSOLE_|SINKING_|PARTICLE_|GLARE_|UPDATE_POSITION_OF_|SCHEDULE_(?:LAKE|INTRO)_DEC|WAVY_)")),
+    ("anim",     re.compile(r"(_LOOP$|^ANIM_|_ANIMATE_|_ANIM_|_DRIFT_|^LOOP_|_STEP_RIGHT|_STEP_LEFT|^ALTERNATE_|^ANIMATE_|_TIMING$|_FADE_|_CYCLE|_ANIMATION$|_ANIMATION_)")),
+    ("dispatch", re.compile(r"(^|_)(DISPATCH_|DISPATCHER_|HANDLE_)")),
+    ("counter",  re.compile(r"(^|_)(INCREMENT_VAR|DECREMENT_VAR|COMPUTE_|ACCUMULATE_|TWEEN_|RAMP_|MARK_VAR)")),
+    ("actor",    re.compile(r"(^|_)(WALK_|RESUME_WALK|MAYBE_RESUME_WALK)")),
+    ("cin-draw", re.compile(r"(^|_)(ZOOM_LOOP_CIN|ZOOM_CIN_)")),
 ]
 
 
