@@ -49,18 +49,28 @@ def parse_routines(text: str):
         yield cur, cur_body
 
 
-def abstracted_body(body: list[str]) -> str:
+def abstracted_body(body: list[str], aggressive: bool = False) -> str:
+    """Abstract a routine body to a string for matching.
+
+    `aggressive=True` also abstracts CINEMATIC_<NNN>, COMMON_VIDEO_<NNN>,
+    and POLY_<NNN> operands — useful when the same logical routine
+    references different concrete CIN/CV indices in different arms.
+    """
     out = []
     for ln in body:
         s = re.sub(r";@raw=[^;]*$", "", ln).rstrip()
         if not s.strip():
             continue
         s = re.sub(r"\b(LABEL_[0-9A-Fa-f]+|JUNK__[0-9A-Fa-f]+)\b", "_LABEL_", s)
+        if aggressive:
+            s = re.sub(r"\bCINEMATIC_[A-Z_0-9]+\b", "_CIN_", s)
+            s = re.sub(r"\bCOMMON_VIDEO_\d+\b", "_CV_", s)
+            s = re.sub(r"\bPOLY_\d+\b", "_POLY_", s)
         out.append(s.strip())
     return "\n".join(out)
 
 
-def sync_stage(stage: str) -> dict[str, int]:
+def sync_stage(stage: str, aggressive: bool = False) -> dict[str, int]:
     """Returns {branch: rename_count}."""
     stage_dir = LEVELS / "_unified" / stage.lower()
     if not stage_dir.is_dir():
@@ -73,7 +83,7 @@ def sync_stage(stage: str) -> dict[str, int]:
         if (label.startswith("LABEL_") or label.startswith("JUNK_")
                 or label.startswith("FOLD_BODY_") or label.startswith("DEDUP_")):
             continue
-        sym = abstracted_body(body)
+        sym = abstracted_body(body, aggressive=aggressive)
         if sym:
             # First-seen wins; if multiple chunks define the same body,
             # keep the first.
@@ -87,7 +97,7 @@ def sync_stage(stage: str) -> dict[str, int]:
             if (label.startswith("LABEL_") or label.startswith("JUNK_")
                     or label.startswith("FOLD_BODY_") or label.startswith("DEDUP_")):
                 continue
-            sym = abstracted_body(body)
+            sym = abstracted_body(body, aggressive=aggressive)
             if sym:
                 unified_bodies.setdefault(sym, label)
 
@@ -110,7 +120,7 @@ def sync_stage(stage: str) -> dict[str, int]:
         for label, body in parse_routines(text):
             if not label.startswith("LABEL_"):
                 continue
-            sym = abstracted_body(body)
+            sym = abstracted_body(body, aggressive=aggressive)
             if not sym or sym not in unified_bodies:
                 continue
             new_name = unified_bodies[sym]
@@ -137,12 +147,17 @@ def sync_stage(stage: str) -> dict[str, int]:
 def main() -> int:
     stages = ["INTRO", "LAKE", "PRISON", "CAVES", "CAPSULE",
               "TANK", "ENDING", "PASSCODE", "CODE_WHEEL"]
-    if len(sys.argv) > 1:
-        stages = [s.upper() for s in sys.argv[1:]]
+    aggressive = False
+    args = sys.argv[1:]
+    if "--aggressive" in args:
+        aggressive = True
+        args = [a for a in args if a != "--aggressive"]
+    if args:
+        stages = [s.upper() for s in args]
     total = 0
     for stage in stages:
-        print(f"=== {stage} ===")
-        counts = sync_stage(stage)
+        print(f"=== {stage}{'  (aggressive)' if aggressive else ''} ===")
+        counts = sync_stage(stage, aggressive=aggressive)
         total += sum(counts.values())
     print(f"\nTotal: {total} renames applied")
     return 0
