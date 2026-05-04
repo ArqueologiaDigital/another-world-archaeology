@@ -473,3 +473,31 @@ attribution across all stages and writes
 attribution is shallower because their CINEMATIC_<NNN> EQUs aren't
 semantically renamed yet — the breakdown surfaces "CINEMATIC_NNN"
 labels rather than "HERO_*" labels.
+
+## State as of 2026-05-04 (sprite-pipeline rebuild verdict)
+
+Refined the cross-port sprite-byte finding by walking the actual
+DOS bytecode at hero-animation states. DOS DOES preserve hero
+animations like HERO_RESUME_LEFT and HERO_LEAP_LEFT — but uses
+COMPOSITE helpers (`DRAW_VIDEO_NNN_AND_CIN_002`,
+`DRAW_HERO_SHADOW_BUNDLE_NN_MM`) that draw shared `COMMON_VIDEO`
+sprites instead of amiga's per-stage `CINEMATIC_HERO_*` detail
+frames. Verified the same composite-helper architecture in
+`cartridge_1992/LAKE.asm` and `gba_2004/LAKE.asm` — the pipeline
+shift propagated to ALL post-1991 ports.
+
+**Final archaeology verdict**: the 1991→1992 port wasn't a content
+cut, it was a **sprite pipeline rebuild**. The 1991 amiga release
+gave each stage its own dedicated detail sprites for hero
+animations; the 1992 DOS rebuild unified these by using the
+shared `COMMON_VIDEO` bank + per-stage cinematic overlays
+composited via helper routines. amiga's per-stage richness was
+traded for DOS's bank-friendly shared-sprite approach. Every
+port from 1992 onward inherits this architecture; only the
+original 1991 amiga release uses the per-stage detail-sprite
+pipeline.
+
+This is the inflection point of the entire AW port lineage —
+explains why no two post-1991 ports byte-match amiga (the
+pipeline differs at the polygon-bank level even when the
+bytecode-level animation logic is preserved).
