@@ -48,8 +48,12 @@ gates against:
 | --- | ---: | --- |
 | **silencer** | 12 | substantive routine → killer (the gated routine never runs — deliberate cut-content per research/05) |
 | **reschedule** | 3 | killer → substantive (kill scheduled, immediately replaced with real logic — placeholder-then-real pattern) |
-| swap | 0 | substantive → substantive (changed mind; both are real game logic, only the second runs) |
-| other | 7 | at least one side is a `LABEL_HHHH` placeholder where the kill-vs-substantive role hasn't been confirmed |
+| **swap** | 7 | substantive → substantive (the first is queued then overwritten; the second runs. Often a placeholder cinematic replaced by real game logic) |
+
+Killer detection is **body-aware**: a label whose body is a
+single `killChannel` instruction is treated as a killer
+regardless of name. This catches auto-named labels like
+`LABEL_3A26` that would otherwise look substantive.
 
 The 12 silencers split as:
 
@@ -68,6 +72,13 @@ The 3 reschedules are CAPSULE channel `0x2E` (cart, amiga,
 dos): an initial `setup ch=0x2E, addr=KILL_CHAN_AT_59A3` is
 immediately replaced by a substantive routine. The kill was
 the placeholder, the substantive routine is the real wiring.
+
+The 7 swaps are real "we changed our mind" patterns where
+both sides are substantive. In CAVES, the queued cinematic
+walking animation `LABEL_39E3`/`LABEL_37D0` (cart/amiga) is
+overwritten by a real walking-AI routine on the same channel
+(0x14) — the cinematic placeholder pattern, but here the
+override is also real game logic rather than a kill.
 
 ### Note on the conditional-`je` pattern (false-positive avoided)
 

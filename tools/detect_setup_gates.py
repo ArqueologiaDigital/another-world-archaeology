@@ -115,7 +115,48 @@ def _is_killer(name: str) -> bool:
     return False
 
 
-def classify_gate(gated: str, surviving: str) -> str:
+def _build_killer_index(branch_dir: Path) -> set[str]:
+    """Scan all `.asm` files under `branch_dir` for labels whose
+    body is a single `killChannel`. Returns the set of label names.
+    This catches `LABEL_HHHH`-named single-line killers that the
+    name heuristic would miss.
+
+    A "single-line killChannel" means: label, then a sole
+    `killChannel` instruction, then end-of-routine (blank line,
+    next label, or EOF). Multi-instruction routines that happen
+    to contain `killChannel` are NOT classified as killers here —
+    only routines whose entry-point execution unconditionally
+    kills the channel."""
+    killers: set[str] = set()
+    RE_LABEL = re.compile(r"^([A-Z_][A-Z0-9_]+):\s*$")
+    RE_KILL = re.compile(r"^\s*killChannel\s*$")
+    for asm in branch_dir.glob("*.asm"):
+        lines = asm.read_text().splitlines()
+        i = 0
+        while i < len(lines):
+            m = RE_LABEL.match(lines[i])
+            if m:
+                label = m.group(1)
+                # Look at the next non-blank line.
+                j = i + 1
+                while j < len(lines) and lines[j].strip() == "":
+                    j += 1
+                if j < len(lines) and RE_KILL.match(lines[j]):
+                    # Confirm there's no other instruction before
+                    # the routine ends (next label or blank line
+                    # before another label).
+                    k = j + 1
+                    while k < len(lines) and lines[k].strip() == "":
+                        k += 1
+                    if k >= len(lines) or RE_LABEL.match(lines[k]):
+                        killers.add(label)
+            i += 1
+    return killers
+
+
+def classify_gate(
+    gated: str, surviving: str, killer_index: set[str] | None = None
+) -> str:
     """Classify a gate by what's being gated:
         - silencer:    substantive → killer (the surviving routine
                        kills the channel, possibly after a delay;
@@ -128,27 +169,27 @@ def classify_gate(gated: str, surviving: str) -> str:
         - swap:        substantive → substantive (changed mind;
                        both are real game logic, only the second
                        runs).
-        - other:       at least one side is a `LABEL_HHHH`
-                       placeholder whose role hasn't been
-                       semantically identified yet.
+
+    The `killer_index` (built per-branch from
+    `_build_killer_index`) catches `LABEL_HHHH`-named single-line
+    `killChannel` bodies that the name heuristic alone would miss.
     """
-    is_kill_g = _is_killer(gated)
-    is_kill_s = _is_killer(surviving)
+    if killer_index is None:
+        killer_index = set()
+    is_kill_g = _is_killer(gated) or gated in killer_index
+    is_kill_s = _is_killer(surviving) or surviving in killer_index
     if is_kill_s and not is_kill_g:
         return "silencer"
     if is_kill_g and not is_kill_s:
         return "reschedule"
     if not is_kill_g and not is_kill_s:
-        if (
-            re.fullmatch(r"LABEL_[0-9A-F]+", gated)
-            or re.fullmatch(r"LABEL_[0-9A-F]+", surviving)
-        ):
-            return "other"
         return "swap"
-    return "other"
+    # Both classified as killers — kill→kill is unusual but treat
+    # as swap (no behavioural difference at runtime).
+    return "swap"
 
 
-def scan_file(path: Path) -> list[dict]:
+def scan_file(path: Path, killer_index: set[str]) -> list[dict]:
     """Return [{file, line, channel, gated, surviving, category}, ...]."""
     out: list[dict] = []
     lines = path.read_text().splitlines()
@@ -182,7 +223,9 @@ def scan_file(path: Path) -> list[dict]:
                         "gated_address": prev_addr,
                         "surviving_line": i,
                         "surviving_address": addr,
-                        "category": classify_gate(prev_addr, addr),
+                        "category": classify_gate(
+                            prev_addr, addr, killer_index
+                        ),
                     }
                 )
         pending[ch] = (i, addr)
@@ -203,14 +246,17 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    # Group by branch → list of gates.
+    # Group by branch → list of gates. Build the per-branch
+    # killer index first so single-line `killChannel`-bodied
+    # `LABEL_HHHH` labels classify as killers regardless of name.
     by_branch: dict[str, list[dict]] = defaultdict(list)
     for branch in BRANCHES:
         branch_dir = LEVELS / branch
         if not branch_dir.is_dir():
             continue
+        killer_index = _build_killer_index(branch_dir)
         for asm in sorted(branch_dir.glob("*.asm")):
-            gates = scan_file(asm)
+            gates = scan_file(asm, killer_index)
             for g in gates:
                 g["branch"] = branch
                 g["stage"] = asm.stem
@@ -252,21 +298,21 @@ def main() -> int:
     md.append("## Category breakdown (cross-branch)")
     md.append("")
     md.append(
-        "Each gate is classified by what it's gating:\n\n"
-        "- **silencer** — substantive routine → `KILL_CHANNEL_*`.\n"
+        "Each gate is classified by what it's gating. Killer "
+        "detection is body-aware: any label whose body is a\n"
+        "single `killChannel` instruction counts as a killer\n"
+        "regardless of name.\n\n"
+        "- **silencer** — substantive routine → killer.\n"
         "  The surviving address kills the channel; the gated\n"
         "  routine never runs. Likely deliberate cut-content\n"
         "  (research/05).\n"
-        "- **reschedule** — `KILL_CHANNEL_*` → substantive.\n"
+        "- **reschedule** — killer → substantive.\n"
         "  The gated kill-self gets replaced by a real routine —\n"
         "  common idiom for tearing down and starting fresh on\n"
         "  the same channel.\n"
         "- **swap** — substantive → substantive. Both are real\n"
         "  game logic; only the second runs (the first was a\n"
-        "  changed mind).\n"
-        "- **other** — at least one side is a `LABEL_HHHH`\n"
-        "  placeholder whose role hasn't been semantically\n"
-        "  identified yet.\n"
+        "  changed mind, possibly a placeholder cinematic).\n"
     )
     cat_totals: dict[str, int] = defaultdict(int)
     for gates in by_branch.values():
@@ -274,7 +320,7 @@ def main() -> int:
             cat_totals[g["category"]] += 1
     md.append("| Category | Count |")
     md.append("| --- | ---: |")
-    for cat in ("silencer", "reschedule", "swap", "other"):
+    for cat in ("silencer", "reschedule", "swap"):
         md.append(f"| `{cat}` | {cat_totals.get(cat, 0)} |")
     md.append("")
 

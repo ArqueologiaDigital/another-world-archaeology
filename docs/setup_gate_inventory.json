@@ -7,7 +7,7 @@
       "gated_address": "LABEL_9A9E",
       "surviving_line": 1501,
       "surviving_address": "LABEL_BE04",
-      "category": "other",
+      "category": "swap",
       "branch": "cartridge_1992",
       "stage": "CAPSULE"
     },
@@ -18,7 +18,7 @@
       "gated_address": "LABEL_9A8A",
       "surviving_line": 1503,
       "surviving_address": "LABEL_B74A",
-      "category": "other",
+      "category": "swap",
       "branch": "cartridge_1992",
       "stage": "CAPSULE"
     },
@@ -51,7 +51,7 @@
       "gated_address": "LABEL_39E3",
       "surviving_line": 1298,
       "surviving_address": "LABEL_EA2E",
-      "category": "other",
+      "category": "swap",
       "branch": "cartridge_1992",
       "stage": "CAVES"
     },
@@ -108,7 +108,7 @@
       "gated_address": "LABEL_37D0",
       "surviving_line": 1264,
       "surviving_address": "LABEL_E41E",
-      "category": "other",
+      "category": "swap",
       "branch": "chahi_amiga_1991",
       "stage": "CAVES"
     },
@@ -143,7 +143,7 @@
       "gated_address": "LABEL_9A35",
       "surviving_line": 1473,
       "surviving_address": "LABEL_BD20",
-      "category": "other",
+      "category": "swap",
       "branch": "dos_1992",
       "stage": "CAPSULE"
     },
@@ -154,7 +154,7 @@
       "gated_address": "LABEL_9A21",
       "surviving_line": 1475,
       "surviving_address": "LABEL_B666",
-      "category": "other",
+      "category": "swap",
       "branch": "dos_1992",
       "stage": "CAPSULE"
     },
@@ -187,7 +187,7 @@
       "gated_address": "LABEL_39F9",
       "surviving_line": 1311,
       "surviving_address": "LABEL_E9A5",
-      "category": "other",
+      "category": "swap",
       "branch": "dos_1992",
       "stage": "CAVES"
     },
