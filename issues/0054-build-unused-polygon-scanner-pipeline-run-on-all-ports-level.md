@@ -134,3 +134,28 @@ because level 4 doesn't reference it.
   research/06 update) still pending. Note research/06 already
   exists with the level-2 first-pass; this scan extends it
   significantly.
+
+- 2026-05-04 (extension): cross-port sprite-byte diff via
+  `tools/cross_port_polygon_diff.py`. Hashes every solid polygon
+  on each port and computes the symmetric difference at the
+  byte-content level (not just the unused/used split).
+
+  Per-stage cross-port summary:
+
+  | Stage      | only-amiga | only-dos | Pattern             |
+  |------------|------------|----------|---------------------|
+  | CODE_WHEEL | 0          | 8        | DOS added 8 sprites |
+  | INTRO      | 2          | 2        | nearly stable       |
+  | LAKE       | 206        | 0        | dos trimmed 206     |
+  | PRISON     | 1          | 1        | nearly stable       |
+  | CAVES      | 10         | 20       | minor bidir         |
+  | TANK       | 0          | 94       | DOS added 94 sprites|
+  | CAPSULE    | 466        | 398      | major bidir rework  |
+  | ENDING     | 1          | 1        | nearly stable       |
+
+  Acceptance item #6 (cross-port comparison) substantively
+  advanced — the raw byte-content delta is now computable for any
+  pair of ports' POLY_CINEMATIC resources. Rendering of the
+  unique-per-port sprites (acceptance #5) is the next step that
+  would let a reviewer visually identify what was added/removed
+  per stage.
