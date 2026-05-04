@@ -407,3 +407,37 @@ follow-up work focused on per-branch sync and archaeology:
   unused polygons vs DOS's 472 (645 more) — consistent with the
   CAPSULE alien-CIN renumbering finding (#0080), suggesting amiga
   retained pre-renumbering polygon vestiges that DOS trimmed.
+
+## State as of 2026-05-04 (cross-port sprite-byte archaeology)
+
+New `tools/cross_port_polygon_diff.py` (raw byte set difference)
+and `tools/cross_port_used_polygon_diff.py` (intersected with
+"used by that port's bytecode") surface the cleanest cut-content
+finding in the entire archaeology project so far:
+
+  | Stage      | amiga-USES-but-dos-LACKS | dos-USES-but-amiga-LACKS |
+  |------------|--------------------------|--------------------------|
+  | LAKE       | **201 sprites**          | 0                        |
+  | CAPSULE    | 107                      | 360                      |
+  | TANK       | 0                        | 90                       |
+  | CODE_WHEEL | 0                        | 8                        |
+  | CAVES      | 0                        | 16                       |
+  | INTRO/PRISON/ENDING/PASSCODE | ≤2     | ≤2                       |
+
+LAKE's 201 amiga-only-USED sprites is the cleanest "1991-era cut
+content" set in the project: amiga bytecode actively renders 201
+unique solid polygons that DOS removed entirely from the bank.
+
+Persisted offsets:
+  - `docs/cut_content/cut_polygons_amiga_only.json`
+  - `docs/cut_content/dos_added_polygons.json`
+
+Three rebuild patterns documented in research/06:
+  - **DOS-additive** (CODE_WHEEL +8, TANK +93, CAVES +16): the
+    1992 port added new sprite content.
+  - **Amiga-vestigial** (LAKE 201 cut): DOS rebuild excised
+    sprites the 1991 amiga release shipped + actively rendered.
+  - **Major rework** (CAPSULE 107+360): both ports have unique
+    USED content — full re-spritefication, not just renumbering.
+
+Issues updated this round: #0054, #0080, research/06.
