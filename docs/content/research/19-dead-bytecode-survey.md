@@ -105,9 +105,16 @@ distinct from the beetle subgraph. PNG renderings at
   - `particle_burst_2_sequence.png` — 5 frames of dust-particle burst
   - `lake_scene3_decor.png` — a tall pillar/scenery decoration
 
-These rendered nicely; some others (`landing_after_swing_12`,
-`reed_plant_5`) have group-polygon coordinates that fall off the
-default-position render canvas — TODO to render with proper offset.
+These rendered nicely. Two others (`landing_after_swing_12`,
+`reed_plant_5`) initially appeared empty because their
+group-polygon sub-coordinates fall outside the default 320×200
+canvas at the rendered position. After adding the `--auto-fit`
+flag to `tools/polygon_render.py` (expands viewBox to contain
+all path points), they render correctly: `landing_after_swing_12`
+shows Lester's full body in a walking-landing pose with a thin
+red curve representing the swing-vine he just released;
+`reed_plant_5` shows yellow + blue horizontal segments forming
+reed-grass blades.
 
 This is exactly the "broken-by-design" cut content the
 verification hack in `another-world-hacks` revealed
@@ -284,16 +291,27 @@ PRISON-`dos_1992`: 58 trans-dead, 21 dead-only video offsets:
 
 ![PRISON dead-only sample](../assets/research-19-prison-dead-only-cinematics/prison_dead_only_grid.png)
 
-Visual reading: `CIN_127` and `CIN_690` are large red squares
-(possibly full-screen overlay or scene transition fills);
-`CIN_697`/`CIN_700`/`CIN_705` show Lester's lower-body sprites
-(red boots + blue/green legs) — three distinct walking-pose
-frames not invoked by any live PRISON code. These look like
-authored hero leg-animation frames cut from the shipping
-PRISON sprite pipeline. Several frames (688/689/691/692/693)
-render as empty — likely group-polygon coordinates off the
-default render canvas, similar to LAKE's `landing_after_swing_12`
-and `reed_plant_5`.
+Visual reading (re-rendered with `--auto-fit` to show
+group-polygon sub-coordinates that fall outside the default
+320×200 canvas):
+
+  - `CIN_127`: large red square (full-screen scene-transition fill)
+  - `CIN_688`: a small **alien creature head** — blue body with
+    green stripe, lollipop/balloon-pin shape. New cut creature.
+  - `CIN_689`, `CIN_690`: standing leg pairs (blue/green)
+  - `CIN_691`: Lester's full leg-pair sprite with red boots
+  - `CIN_692`: **nearly full Lester sprite** — red torso, blue/
+    green legs, red boots
+  - `CIN_693`: legs + torso fragment (mid-action pose)
+  - `CIN_697`: large red panel with yellow/blue dot pattern
+    (HUD or background grid)
+  - `CIN_700`: walking-pose leg pair (blue/green legs, red boots)
+  - `CIN_705`: small green/blue fragment
+
+PRISON's silenced subgraph contains **substantial authored Lester
+sprite work** — multiple distinct walking, standing, and
+mid-action poses, plus an alien creature head sprite — none of
+which the shipping PRISON code ever draws.
 
 JUNK_-prefixed wrappers (e.g. `JUNK__65D0:` which draws CIN_688)
 were already identified as dead in earlier semantic-rename

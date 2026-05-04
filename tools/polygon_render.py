@@ -157,13 +157,39 @@ class Renderer:
             self.pdata_offset = saved
 
 
+def compute_bbox(paths: list[SvgPath]) -> tuple[float, float, float, float]:
+    """Return (min_x, min_y, max_x, max_y) of all path points."""
+    if not paths:
+        return (0.0, 0.0, 0.0, 0.0)
+    min_x = min(p[0] for path in paths for p in path.points)
+    min_y = min(p[1] for path in paths for p in path.points)
+    max_x = max(p[0] for path in paths for p in path.points)
+    max_y = max(p[1] for path in paths for p in path.points)
+    return (min_x, min_y, max_x, max_y)
+
+
 def to_svg(paths: list[SvgPath], canvas_w: int = CANVAS_W,
-           canvas_h: int = CANVAS_H, bg: str = "#000") -> str:
+           canvas_h: int = CANVAS_H, bg: str = "#000",
+           auto_fit: bool = False, padding: int = 8) -> str:
+    """Emit an <svg>. If auto_fit is True, expand the viewBox to
+    contain all path points (with `padding` extra pixels on each
+    side). Default canvas size is 320×200 for the AW VM target."""
+    if auto_fit and paths:
+        min_x, min_y, max_x, max_y = compute_bbox(paths)
+        # Expand viewBox to contain everything plus padding.
+        vb_x = int(min(0, min_x - padding))
+        vb_y = int(min(0, min_y - padding))
+        vb_w = int(max(canvas_w, max_x + padding) - vb_x)
+        vb_h = int(max(canvas_h, max_y + padding) - vb_y)
+    else:
+        vb_x, vb_y = 0, 0
+        vb_w, vb_h = canvas_w, canvas_h
     out = [
         f'<?xml version="1.0" encoding="UTF-8"?>',
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{canvas_w}" '
-        f'height="{canvas_h}" viewBox="0 0 {canvas_w} {canvas_h}">',
-        f'  <rect width="{canvas_w}" height="{canvas_h}" fill="{bg}"/>',
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{vb_w}" '
+        f'height="{vb_h}" viewBox="{vb_x} {vb_y} {vb_w} {vb_h}">',
+        f'  <rect x="{vb_x}" y="{vb_y}" width="{vb_w}" '
+        f'height="{vb_h}" fill="{bg}"/>',
     ]
     for path in paths:
         r, g, b = path.color
@@ -186,6 +212,10 @@ def main() -> None:
                    help="palette index within the PALETTE resource (default 0)")
     p.add_argument("--palette-half", choices=["first", "second"], default="first",
                    help="which half of the PALETTE resource to use (default 'first' = brighter)")
+    p.add_argument("--auto-fit", action="store_true",
+                   help="expand viewBox to contain all path points (for "
+                        "group polygons whose sub-coordinates fall off the "
+                        "default 320×200 canvas)")
     args = p.parse_args()
 
     data = args.resource.read_bytes()
@@ -197,7 +227,7 @@ def main() -> None:
 
     renderer = Renderer(data, palette)
     renderer.render(args.offset, color=0xFF, zoom=args.zoom)
-    svg = to_svg(renderer.paths, bg=args.bg)
+    svg = to_svg(renderer.paths, bg=args.bg, auto_fit=args.auto_fit)
     if args.output:
         args.output.write_text(svg)
         print(f"wrote {args.output} ({len(renderer.paths)} path(s))", file=sys.stderr)
