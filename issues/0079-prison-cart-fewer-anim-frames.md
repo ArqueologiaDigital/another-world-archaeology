@@ -94,3 +94,44 @@ zero-length.
   itself differs or just its origin metadata. That requires the
   cart polygon extractor (not yet implemented; see CLAUDE.md TODO
   on cart format support).
+
+- 2026-05-04 (later): rendered the dos+amiga-only frames cart
+  is missing. CIN_169 and CIN_241 (only present as dispatcher
+  targets in dos+amiga, not cart) both depict **red trapezoid
+  shapes with green stripe accents** — visually a barrel/object-
+  base sprite. Their pair partners CIN_168 (cart+dos+amiga) and
+  CIN_240 (cart+dos+amiga) are **pink/magenta horizontal sweep
+  shapes** — laser-beam streaks.
+
+  Pair interpretation:
+    - 168 / 169: muzzle/beam pair (streak + barrel)
+    - 240 / 241: same pair at a different position
+    - cart has only the streak-half (168, 240) — it's missing
+      the barrel-half (169, 241)
+
+  Looking at the surrounding code in dos:
+  ```
+  LABEL_5363:
+      video type=0, offset=COMMON_VIDEO_239, x=[0x07], y=[0x08], zoom=0x40
+      mov [0xF5], [0x07]
+      jg [0xF6], 0x00, DRAW_CIN_241_IF_VAR09_EQ_1
+      video type=0, offset=COMMON_VIDEO_240, x=[0x07], y=[0x08], zoom=0x40
+      jmp DRAW_CIN_241_IF_VAR09_EQ_1
+  ```
+
+  The branch on [0xF6] decides whether to use the 241-variant.
+  Cart's PRISON omits the entire `_241_IF_VAR09_EQ_1` dispatcher,
+  so this conditional never fires there.
+
+  Polygon offsets confirm CIN_169 and CIN_241 ARE present in
+  cart's resource bank (defined as EQU 0xBD12 and 0xBDB0
+  respectively in `cartridge_1992/PRISON.asm`), so the cart
+  bytecode is intentionally not invoking them — not a missing-
+  asset issue. This is **bytecode-level regression**: cart's
+  PRISON build dropped the 2nd-variant gun draws while still
+  shipping the polygon data.
+
+  Renders at `docs/assets/research-prison-cart-missing-frames/`
+  (pair_grid.png + 4 individual PNG/SVG). Visual confirmation
+  closes the "investigate why bytecode never references them"
+  acceptance item.
