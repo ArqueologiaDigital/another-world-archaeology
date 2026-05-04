@@ -35,6 +35,7 @@ docs-channel-map:
 	@$(PYTHON) tools/build_channel_map.py
 	@$(PYTHON) tools/build_channel_role_summary.py
 	@$(PYTHON) tools/list_unnamed_setup_targets.py
+	@$(PYTHON) tools/build_tool_index.py
 
 tools:
 	@echo "make tools: not yet implemented (TODO: tools/sync_external_tools.py to clone or fast-forward AWVM_Tools at the commit pinned in tools/AWVM_Tools.lock)"
