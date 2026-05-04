@@ -191,12 +191,44 @@ subroutine cluster that semantic-rename hasn't reached.)
 ## Headline finding 3 — CAPSULE has the largest dead subgraph
 
 CAPSULE-`dos_1992`: 248 transitively-dead labels (10% of the
-stage). Not yet investigated; tracked as #0088. The single
-dead-by-gate label `LABEL_5C58` (research/18 silencer)
-appears to be the entry to a substantial dispatch routine
-(`LABEL_5C58:` does memory ops then a chain of `call`s to
-multiple sub-routines), so the 248 trans-dead set is likely
-this routine's entire callee tree.
+stage). Tracked as #0088. The single dead-by-gate label
+`LABEL_5C58` (research/18 silencer) is the entry to a
+substantial dispatch routine. The asset side reveals
+**98 dead-only `video offset=` references** in CAPSULE — by
+far the largest dead-asset cluster in any stage. The references
+break down into three contiguous-ish ranges:
+
+  - `CINEMATIC_378`, `CINEMATIC_387..390` — 5 isolated frames
+  - **`CINEMATIC_614..676`** — 63 contiguous frames, called by
+    a `if VAR_13 == X then draw CINEMATIC_Y` dispatch chain
+    (each label a per-state video draw, e.g.
+    `LABEL_61C3` draws CIN_630, `LABEL_61CF` draws CIN_629, etc.)
+  - **`CINEMATIC_689..720`** — another ~30 contiguous frames
+
+Sample of the silenced animation rendered from CAPSULE's
+POLY_CINEMATIC `0x28`:
+
+![CAPSULE silenced dispatch samples](../assets/research-19-capsule-silenced-cinematics/silenced_dispatch_samples.png)
+
+Visual reading (frames 614, 620, 630, 640, 650, 660, 670, 676):
+multi-coloured polygons depicting **scattered debris/particles
+and fragments** — orange, purple, yellow, pink shapes including
+a horizontal bar, scattered dots, small pyramidal/triangular
+fragments, and ground-line strips. The dispatcher's pattern of
+"draw frame N if VAR_13 == M" suggests a state-driven debris
+animation — possibly a capsule explosion, destruction sequence,
+or particle vortex. Unlike most rendered cut content, this set
+uses multiple synthetic-palette colours, indicating the
+polygons have real colour information (not single-channel
+silhouettes).
+
+The 63-frame contiguous range (CIN_614..676) is the largest
+single contiguous animation found in any stage's dead code
+— substantially bigger than LAKE's BEETLE_FLYING_FRAME_*
+(5 frames) or PASSCODE's 16-glyph alphabet. That's
+**at least one full elaborate animation sequence** authored
+and shipped in the polygon resource bank but never drawn at
+runtime.
 
 CAVES-`dos_1992`: 65 trans-dead, including the silenced
 cinematic frame loop at `LABEL_3A3C`. The DOS variant of this
