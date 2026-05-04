@@ -299,6 +299,33 @@ JUNK_-prefixed wrappers (e.g. `JUNK__65D0:` which draws CIN_688)
 were already identified as dead in earlier semantic-rename
 rounds.
 
+### TANK / ENDING / CODE_WHEEL — small dead-only sets
+
+The remaining stages have small dead-only sets. Renders at
+`docs/assets/research-19-tank-ending-codewheel-dead-only/`.
+
+**TANK (8 dead-only)**:
+
+![TANK dead-only sample](../assets/research-19-tank-ending-codewheel-dead-only/tank_dead_only_grid.png)
+
+  - **`CINEMATIC_146..149`** — 4-frame **jellyfish-like
+    creature** animation: red blob body with red+green trailing
+    tendrils, distinct poses across the 4 frames. A planned
+    alien enemy (or environmental hazard) for the TANK arena
+    that never appears in the shipping tank-combat scene.
+  - `CINEMATIC_199`: yellow trapezoid (UI / building)
+  - `CINEMATIC_276`: small purple/magenta line
+  - `CINEMATIC_277`: small cyan boot-like shape
+  - `CINEMATIC_278`: large orange object with green trim
+    (weapon / vehicle component / face?)
+
+**ENDING (3 dead-only)** + **CODE_WHEEL (1 dead-only)**:
+all three (ENDING `CINEMATIC_108`, COMMON_VIDEO_291,
+COMMON_VIDEO_301; CODE_WHEEL `CINEMATIC_079`) point to offset
+`0x000C` — typically a placeholder/null polygon at the start of
+the resource. Render as small green squares, confirming they
+are stub polygons rather than real assets.
+
 ## Cross-stage rollup (dos_1992)
 
 | Stage | Total | Live | Dead-by-gate | Trans-dead | Unref |
