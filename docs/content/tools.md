@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**101 tools.**
+**102 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -30,6 +30,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `collapse_empty_arms.py` | Collapse empty `;@if`/`;@elif`/`;@else`/`;@endif` arms. |
 | `compress_fill_padding.py` | Compress trailing runs of 'db 0xFF, ...' into FILL(n, 0xFF) macros. |
 | `consolidate_common_vars.py` | Phase 1b: replace inline var-alias EQUs in per-branch and unified |
+| `cross_port_liveness_audit.py` | Cross-port liveness audit for previously-claimed cut content. |
 | `cross_port_polygon_diff.py` | Cross-port polygon-byte diff for a single stage. |
 | `cross_port_used_polygon_diff.py` | Cross-port USED-polygon diff for a single stage. |
 | `cross_release_md5_index.py` | Build a cross-release md5 index for AW resources. |
