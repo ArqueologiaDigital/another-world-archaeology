@@ -326,12 +326,12 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x14` | cart | `RESUME_R_AFTER_VINE_LAND` | src/levels/_unified/lake/lester_drift_and_swing.inc:290 (+1 more) |
 | `0x15` | shared | `DECOR_AT_327_164_BLINK_LOOP` | src/levels/_unified/lake/lester_at_pool_animations.inc:44 |
 | `0x15` | shared | `DECOR_F9_THEN_F10_LOOP` | src/levels/_unified/lake/scene_transition_and_decor.inc:37 |
-| `0x15` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_leap_right_kicks_crouch_pool.inc:374 (+5 more) |
-| `0x15` | dos | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_leap_right_kicks_crouch_pool.inc:607 |
+| `0x15` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_walk_run_movement.inc:119 (+5 more) |
+| `0x15` | dos | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_walk_run_movement.inc:352 |
 | `0x15` | shared | `LOOP_DRAW_DECOR_215_AT_327_164` | src/levels/_unified/lake/lake_intro_setup.inc:126 |
 | `0x15` | shared | `POST_RUN_LEFT_DECEL_LOOP` | src/levels/_unified/lake/hero_dispatch_and_leap_left.inc:47 |
 | `0x15` | amiga | `WAIT_RUN_LEFT_THEN_DECEL` | src/levels/_unified/lake/hero_dispatch_and_leap_left.inc:49 |
-| `0x15` | shared | `WAIT_RUN_RIGHT_THEN_DECEL` | src/levels/_unified/lake/hero_leap_right_kicks_crouch_pool.inc:122 |
+| `0x15` | shared | `WAIT_RUN_RIGHT_THEN_DECEL` | src/levels/_unified/lake/hero_leap_and_land.inc:122 |
 | `0x16` | shared | `HERO_AI_DISPATCH` | src/levels/_unified/lake/getting_out_of_pool_animation.inc:249 |
 | `0x16` | shared | `HERO_PHYSICS_TICK` | src/levels/_unified/lake/pool_underwater_cinematic.inc:548 |
 | `0x16` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lake_intro_setup.inc:39 (+2 more) |
