@@ -4,7 +4,7 @@ title: Verify whether regular shots double-hit at close range (tap pulse + regul
 status: open
 tier: A
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-04
 depends_on: []
 blocks: []
 tags: [research, gun-ammo, dos, follow-up]
@@ -47,3 +47,75 @@ or whether they hit different targets in practice.
 - 2026-04-30: opened. Surfaced from the gun-ammo cost-model
   correction; flagged as "open follow-up" in research/01's
   appendix.
+
+- 2026-05-04: partial trace of `PRISON.asm` (DOS 1992). Located the
+  shot pipeline; key labels:
+
+  - **Lester's tap-pulse spawn** at `LABEL_3801` — `-1` energy, sound
+    `0x0052 ch=0`, writes pos/metadata into first free of slots
+    `0x88/0x89/0x8A`.
+  - **Guards' tap-pulse spawn** at `LABEL_37A6` — `0x0052 ch=1`,
+    slots `0x8B/0x8C/0x8D`. (Newly identified — the collision
+    dispatcher's "second loop" is *guard fire*, not a second
+    Lester-shot type as could have been guessed from the 0x29 flag.)
+  - **Lester's regular-pulse spawn** at `LABEL_45CB` — `-10` energy,
+    sound `0x0058 ch=0`, calls `LABEL_4185` to write into first free
+    of slots `0xA0/0xA3/0xA6` (not 0xA9/0xAC).
+  - **Guards' regular-pulse spawn** at `LABEL_4137` — same sound
+    `0x0058 ch=1`, slots `0xA9/0xAC`. Owner-id from `[0x10]`.
+  - **Superblast spawn** at `LABEL_4662` — `-100` energy, **reuses**
+    slot `0x88` with HP value `0x64` (=100) and `OR 0x8000` flag.
+    Confirms research/01's claim that superblast piggybacks on the
+    tap-class slot.
+
+- The per-frame **tap-pulse update + collision** lives at
+  `LABEL_3869` (Lester, `[0x29]:=0`) and `LABEL_38CA` (guards,
+  `[0x29]:=1`). Both call `LABEL_3991` per slot. `LABEL_3991`
+  advances the bullet (`[0x21] += 0x28` first frame, `+= [0x11]+0x3C`
+  thereafter) and calls `LABEL_468E` for collision. If `[0x1D]≠0`
+  after the collision call, the shot is fizzled via `LABEL_3BB3`.
+
+- The per-frame **regular-pulse update** lives at `LABEL_4245`,
+  iterating slots `0xA0/A3/A6/A9/AC` and calling `LABEL_42C2`.
+  **Crucially, `LABEL_42C2` does NOT call `LABEL_468E` or any
+  collision routine** — it only renders the bullet trail
+  (CINEMATIC_201 / 522..533) and decrements range. This means
+  regular pulses do *not* run their own per-frame hit-detection
+  through the same collision path as taps.
+
+- The collision routine at `LABEL_468E` calls `LABEL_4717` (broad
+  phase: scans all 5 regular-shot slots `0xA0..0xAC`, tags hits
+  on Lester-owned slots with tags `0x14..0x18` — these are
+  *bullet-vs-bullet collisions*, where a tap intercepts a regular
+  in flight, not a tap-on-actor hit) and then dispatches by
+  `[0x29]`:
+  - `[0x29]==0` (Lester's tap path) → `LABEL_477E` tests slots B/C
+    (`0x70/72`, `0x78/7A`) for guard hits, tagging `0x29`/`0x2A`.
+  - `[0x29]==1` (guards' tap path) → `LABEL_46E8` tests slot A
+    (`0x68/6A` = Lester) for actor hit, tagging `0x28`.
+
+- Tag dispatch in `LABEL_3A0D`:
+  - `0x14..0x18` → `LABEL_3A4A` plays sound `0x005C` (deflection)
+  - `0x1E` → `LABEL_3A68` (hit Lester via separate path)
+  - `0x28` → `LABEL_3AAD` ch=`0x23` (Lester death)
+  - `0x29` → `LABEL_3AAD` ch=`0x25` (slot-B guard death)
+  - `0x2A` → `LABEL_3AAD` ch=`0x27` (slot-C guard death)
+
+- **Open**: where exactly does Lester's *regular pulse* damage
+  guards? `LABEL_42C2` only renders. Hypothesis still being
+  validated: either (a) the regular pulse setup also writes a
+  twin tap-class slot (no evidence yet), or (b) the broad-phase
+  in `LABEL_4717` is bidirectional — when the slot's bullet
+  trajectory crosses a guard's hitbox, it tags the *guard*'s
+  slot for damage rather than the bullet's slot. The tag
+  semantics in `LABEL_47AB` need a more careful trace
+  (the `jne [HACK_VAR_67], [0x26]` gate at `LABEL_47BE` reads
+  like "skip unless this slot is Lester-owned" — surprising and
+  worth re-verifying).
+
+- **Cross-port comparison still TODO** (Amiga, Genesis-EU). Until
+  the DOS path itself is fully understood the comparison is
+  premature.
+
+- Remaining acceptance criteria not yet satisfied; closing
+  blocked on the open hypothesis above.
