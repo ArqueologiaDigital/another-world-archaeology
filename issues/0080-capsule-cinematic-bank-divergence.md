@@ -111,3 +111,47 @@ the high-nibble dispatchers we already named).
   **Still pending**:
     - [ ] Cart polygon extraction (gated on cartridge_rom
       extractor implementing polygon decode).
+
+- 2026-05-04 (extension): cross-port polygon-byte diff via new
+  `tools/cross_port_polygon_diff.py`. Hashes every solid polygon
+  on each port and computes the symmetric difference.
+
+  CAPSULE-specific results (amiga ↔ DOS):
+  - amiga: 2119 solid polygons (1827 unique by content)
+  - dos:   2033 solid polygons (1759 unique by content)
+  - common content: 1361 unique sprites
+  - **only-in-amiga: 466**
+  - **only-in-dos: 398**
+
+  CAPSULE is the most divergent stage at the solid-polygon level —
+  most stages show ≤20 unique-per-port sprites, and several
+  (PRISON, ENDING, INTRO) are nearly byte-identical.
+
+  Cross-stage summary (amiga 1991 ↔ dos 1992 sprite-content diff):
+
+  | Stage      | only-amiga | only-dos | Net        |
+  |------------|------------|----------|------------|
+  | CODE_WHEEL | 0          | 8        | DOS added  |
+  | INTRO      | 2          | 2        | stable     |
+  | LAKE       | 206        | 0        | dos trimmed|
+  | PRISON     | 1          | 1        | stable     |
+  | CAVES      | 10         | 20       | minor      |
+  | TANK       | 0          | 94       | DOS added  |
+  | CAPSULE    | 466        | 398      | rework     |
+  | ENDING     | 1          | 1        | stable     |
+
+  CAPSULE's bidirectional bigness (466+398) is unique to this
+  stage and revises the earlier "purely renumbering" verdict:
+  while the **named-and-mapped** alien sub-anim CINs (issue
+  context table) are byte-identical headers between ports, the
+  bank as a whole has substantial sprite-content divergence — both
+  ports ship sprite bytes the other doesn't have.
+
+  **Refined conclusion**: the documented alien sub-anim CIN_109..113
+  / 180..184 mapping IS purely a renumbering (sprite content is
+  the same; bytes match at the header level). But the bank around
+  those routines includes 466 amiga-only + 398 dos-only sprites
+  that don't survive the renumbering — actual content rework, not
+  just repacking. CAPSULE underwent significant rework between
+  1991 and 1992, of which the alien-sub-anim renumbering is just
+  one slice.
