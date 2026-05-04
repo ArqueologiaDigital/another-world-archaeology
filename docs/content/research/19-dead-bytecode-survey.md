@@ -368,11 +368,20 @@ The remaining stages have small dead-only sets. Renders at
 
 ![TANK dead-only sample](../assets/research-19-tank-ending-codewheel-dead-only/tank_dead_only_grid.png)
 
-  - **`CINEMATIC_146..149`** — 4-frame **jellyfish-like
-    creature** animation: red blob body with red+green trailing
-    tendrils, distinct poses across the 4 frames. A planned
-    alien enemy (or environmental hazard) for the TANK arena
-    that never appears in the shipping tank-combat scene.
+  - **`CINEMATIC_146..149`** — 4-frame jellyfish-like polygons:
+    red blob body with red+green trailing tendrils.
+    **Cross-port reading: dead in DOS only.** In cart, all 4
+    are LIVE — drawn in `LABEL_05F6:` as part of a TANK
+    title/intro sequence at canvas centre (x=160, y=100).
+    In amiga, 3 of 4 are LIVE (CIN_146, 148, 149 — only 147
+    is dead-only there, drawn at x=[0x4b]/[0x4c] dynamic
+    coords). DOS draws the same 4 polygons at scattered fixed
+    positions (x=77/137/97/185, y=201/220/146/172, etc.) —
+    likely an authored-but-disabled multi-position layout that
+    was simplified to centre-only on cart. Originally cut from
+    cart and amiga as multi-position, kept as centre-only;
+    in DOS the multi-position version still exists but is
+    unreached.
   - `CINEMATIC_199`: yellow trapezoid (UI / building)
   - `CINEMATIC_276`: small purple/magenta line
   - `CINEMATIC_277`: small cyan boot-like shape
