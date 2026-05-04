@@ -561,3 +561,48 @@ list.
 INTRO is the cleanest model (43 lines, 14 well-named chapters);
 LAKE follows the same pattern with 66 chapters. All other stages
 are similarly structured.
+
+## State as of 2026-05-04 (gratuitous-label-suffix cleanup)
+
+After the chapter-split sweep landed, autonomous ticks pursued a
+cross-port label-naming cleanup. The unified
+`_unified/<stage>/<arm>__post_<NAME>.inc` chunk files used to
+suffix every label in them with `__<ARM>__POST_<NAME>` — e.g.
+`DRAW_CIN_241__CART__POST_SHARED_RET`. The suffix had been
+defensive against same-arm intra-file collisions, but with
+`;@if BRANCH ==` arms in the parent chunk's `;@include` block
+making arms mutually exclusive, and within a chunk each canonical
+name being unique, the suffix was just dead weight.
+
+Cleanup landed in source-reconstruction across multiple commits:
+
+- `fb6735e` PRISON cart: `DISPATCH_VAR09_BIT0_TO_5460` →
+  `DRAW_CIN_241_IF_VAR09_EQ_1` (canonical name already used in
+  amiga + dos).
+- `8bd4c8a` PRISON cart: drop `__CART__POST_SHARED_RET` suffix on
+  body labels (`DRAW_CIN_240`, `DRAW_CIN_241`).
+- `cb9e0ae` PASSCODE: unify `TRIVIAL_RET` across arms (drop
+  `__CART__ENTRY` / `__DOS__ENTRY` / `_PASSCODE` suffix variants).
+- `3eae1f6` PASSCODE: bulk-strip `__<ARM>__ENTRY` from 172 labels
+  in `<arm>__entry.inc` files (372 line changes).
+- `7a72dc4` ALL stages: bulk-strip `__<ARM>__POST_<NAME>` from
+  217 chunk files (2867 label-token replacements).
+
+After this round, **zero** `__<ARM>__POST_<X>` or `__<ARM>__ENTRY`
+suffixed labels remain in `src/levels/_unified/`. The unified arm
+files now use the same canonical names that the per-port
+disassemblies use. This closes the cross-port label-search
+asymmetry that originally led to false-positive divergence
+findings (e.g., #0079's "cart is missing this dispatcher" claim,
+which became wontfix + the renaming pass that followed).
+
+Tool added: `tools/strip_chunk_suffixes.py` (archaeology). Picks
+up new chunks added in the future automatically — re-runnable, no-
+op when no suffixes remain.
+
+Issues closed in this round: `#0043` (gun-shot collision trace —
+regular pulse purely visual, no double-damage at close range),
+`#0079` (PRISON cart dispatch disproof, premise wrong), `#0091`
+(cart label rename complete).
+
+verify_stage 29/29 + verify_unified 27/27 maintained throughout.
