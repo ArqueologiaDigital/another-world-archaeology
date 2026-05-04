@@ -93,3 +93,30 @@ The opcodes to scan for:
   (archaeology commit). Two items remain (both gated on other
   work): reachability filter (#0058) and cross-port diff
   (gated on per-port resource extraction).
+
+- 2026-05-04 (later): reachability-filter item closed.
+  `tools/unused_sound_scan_v2.py` builds on the
+  `ReachabilityOracle` from #0058 to filter dead-code
+  references at both label level AND intra-label level
+  (post-jmp instructions count as dead).
+
+  Validation: research/11's music 0x89 finding (preloaded
+  in LAKE inside an unreachable jmp-skipped block) is now
+  detected automatically — v2 scanner reports 0x89 as
+  "dead-only (referenced ONLY from dead code)". v1 reported
+  it as "used" because the naive regex didn't see the jmp
+  before the load.
+
+  DOS results: 4 unreferenced non-empty SOUNDs unchanged
+  (0x2E, 0x37, 0x38, 0x42). MUSIC dead-only count is 1
+  (0x89 — research/11). v1 scan was correct for the
+  unreferenced case but incomplete for dead-code references.
+
+  Acceptance items:
+  - [x] Build SOUND-resource enumerator
+  - [x] Build SOUND-reference scanner
+  - [x] Reachability filter (#0058 oracle wired in)
+  - [ ] Per-port + cross-port diff (DOS done; other ports
+        gated on extraction)
+  - [x] Render unused SOUNDs for auditioning
+  - [x] Catalog as research/15-unused-sounds.md

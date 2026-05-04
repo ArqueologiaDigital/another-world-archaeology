@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**97 tools.**
+**98 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -99,6 +99,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `unify_cross_stage_names.py` | Unify names across stages for routines with identical bodies. |
 | `unused_palette_scan.py` | Naive unused-PALETTE scanner. |
 | `unused_sound_scan.py` | Naive unused-SOUND scanner for a DOS-format port. |
+| `unused_sound_scan_v2.py` | Unused-SOUND scanner with reachability filtering (post-#0058). |
 | `verify_references.py` | Verify the integrity of every file listed in `references/MANIFEST.sha256`. |
 | `verify_resources.py` | Per-port verification that all extracted resources match expected md5s. |
 | `verify_stage.py` | Phase 3a stage-based byte-match verifier. |
