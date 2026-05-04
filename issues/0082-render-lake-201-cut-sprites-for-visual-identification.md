@@ -90,3 +90,35 @@ for off in offsets:
 
 - 2026-05-04: opened. Surfaced from the cross-port sprite-byte
   diff in research/12.
+
+- 2026-05-04 (later): offset distribution analysis. The 207 cut
+  amiga offsets cluster bimodally:
+
+  - **Low region** (0x300..0x1FFF): concentrated around named
+    hero-animation frames in amiga LAKE.asm — `HERO_FALL_LEFT_*`
+    (0x0A3C..0x0B54), `HERO_RESUME_LEFT_*` (0x0310..0x0574,
+    0x0ADC..0x0B54), `HERO_LIFTOFF` (0x0E78),
+    `GETTING_OUT_OF_THE_POOL_*` (0x105C, 0x10F8),
+    `RIGHT_KICK_1` (0x1D2E).
+  - **High region** (0xF400..0xFAFF): adjacent to
+    `HERO_WALK_LEFT_FRAME_*` (0xF738..0xF888),
+    `HERO_RUN_LEFT_FRAME_*` (0xF8E4..0xFAA8),
+    `HERO_STOP_LEFT_FRAME_*` (0xFB08..0xFBB4),
+    `HERO_RUN_RIGHT_FRAME_*` (0xF438..0xF4D8).
+
+  **Hypothesis**: the 201 cut sprites are mostly **extra hero
+  animation frames** — additional in-between poses in the
+  walk/run/stop/fall/resume/jump/getting-out-of-pool cycles that
+  the 1991 amiga release shipped, which the 1992 DOS rebuild
+  decimated to a coarser frame count.
+
+  This is consistent with the genealogy story: the 1991 amiga
+  release was Eric Chahi's original handcrafted polygon-art
+  release, while the 1992 DOS port (Daniel Morais) was a
+  re-engineered build that may have prioritised cartridge-friendly
+  bank sizes over animation smoothness.
+
+  Visual rendering still needed to confirm the hypothesis on a
+  per-sprite basis, but the address-clustering already strongly
+  suggests this is "trimmed hero animation frames", not "removed
+  cutscene actors".
