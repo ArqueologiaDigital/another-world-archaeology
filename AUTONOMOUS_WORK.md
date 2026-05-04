@@ -380,3 +380,30 @@ follow-up work focused on per-branch sync and archaeology:
     the sub-polygon offsets within the bank differ.
   - **Issue #0077** (INTRO sync per-branch) closed — all
     acceptance criteria met.
+
+## State as of 2026-05-04 (archaeology investigations cont'd)
+
+- **Issue #0007** (Mac Estr resource type) closed — `Estr` is
+  classic Mac OS error-string table, not AW data. Decoded ~15
+  Pascal strings + confirmed byte-stable across v1.0.2 + v1.0.3.
+- **Issue #0076** action 2 done — LAKE dead-code preload of music
+  0x89 is byte-identical in all 4 ports (1991 amiga + 1992 dos +
+  1992 cart + 2004 gba). Music 0x89 is genuine 1991-era cut content
+  preserved across every subsequent port.
+- **Issue #0044** partial — semantic-rename rounds confirm the
+  beetle wing-flip range CIN_661..669 in Amiga LAKE = LIFT_FRAME_*
+  + FLYING_FRAME_* (lift off + fly), qualitatively matching the
+  original wings-opening hypothesis. PNG rendering still gated on
+  rsvg-convert/inkscape (not installed locally).
+- **Issue #0055** progress — `tools/unused_sound_scan.py` shipped.
+  DOS has 4 SOUND resources never play'd OR loaded (0x2E, 0x37,
+  0x38, 0x42), candidate cut-content sounds.
+- **Issue #0057** progress — `tools/unused_palette_scan.py`
+  shipped. DOS has 113 unused palette slot-indices summed across
+  all levels; PASSCODE uses only 2 of 32, ENDING skips the entire
+  low half (0-9).
+- **Issue #0054** progress — `find_unused_polygons.py` re-run for
+  DOS + Amiga. Cross-port comparison shows amiga CAPSULE has 1117
+  unused polygons vs DOS's 472 (645 more) — consistent with the
+  CAPSULE alien-CIN renumbering finding (#0080), suggesting amiga
+  retained pre-renumbering polygon vestiges that DOS trimmed.
