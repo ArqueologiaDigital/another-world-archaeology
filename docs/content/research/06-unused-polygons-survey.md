@@ -393,3 +393,45 @@ limbs. Compare against the cutscene's actual reused background
   shortlist. New tool `tools/render_at_all_palettes.py` enables
   per-palette sweep for definitive identification of which game
   palette the polygon was authored for.
+
+- **2026-05-04** — extended scan to ALL levels (0..8) on both
+  the DOS and Amiga ports. Per-level unused-polygon counts
+  (output of `tools/find_unused_polygons.py`):
+
+  | Level | Stage             | DOS unused | Amiga unused |
+  |-------|-------------------|------------|--------------|
+  | 0     | CODE_WHEEL        | 54         | 59           |
+  | 1     | INTRO             | 37         | 37           |
+  | 2     | LAKE              | 57         | 64           |
+  | 3     | PRISON            | 253        | 333          |
+  | 4     | CAVES             | 227        | 299          |
+  | 5     | TANK              | 232        | 246          |
+  | 6     | CAPSULE           | 472        | **1117**     |
+  | 7     | ENDING (DOS) / PASSCODE (Amiga) | 240 | 221 |
+  | 8     | PASSCODE (DOS only) | 143      | n/a          |
+
+  **Largest cross-port discrepancy: CAPSULE.** Amiga's CAPSULE
+  poly resource has 1117 unused polygons vs DOS's 472 — 645 more.
+  This dovetails with [issue #0080](#/issues)'s finding that the
+  amiga 1991 polygon bank was repacked with a different cinematic
+  numbering for the 1992 ports; the 645 extras are likely
+  pre-renumbering vestiges that the DOS rebuild trimmed.
+
+  Combined with the LAKE-level cross-port finding from the
+  initial pass, this suggests the unused-polygon survey is most
+  productive when:
+  1. Targeted at specific scenes (level 2 beetle-attacker
+     cutscene was a clean win because the missing-actor hypothesis
+     was sharply defined).
+  2. Filtered to "unused on DOS / used on Amiga" — that delta
+     surfaces sprites that were physically present in 1991 but
+     stripped from the 1992 rebuild. CAPSULE is the next high-
+     value target with that filter.
+
+  Tooling note: the per-level counts include polygons reachable
+  only via group-polygon hierarchy. The naive scanner doesn't yet
+  do global cross-level reachability ([issue
+  #0058](#/issues)) — when a level shares polygon offsets with
+  another level via the engine's resource-loading pattern, those
+  cross-level uses are NOT counted as "reachable" in the current
+  per-level scan.
