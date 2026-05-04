@@ -128,6 +128,44 @@ finding is comparative) records which releases it applies to.
   byte-identity finding now at the cartridge-ROM level (not just
   the bytecode resource).
 
+- [17 — VM thread-channel map (per stage)](#/research/17-vm-channel-map):
+  static scan of every `setup channel=NN, address=ROUTINE` opcode
+  in the unified source (4,082 total) grouped by stage and
+  channel. Each AW VM channel (0x00..0x3F) is a separate
+  cooperatively-scheduled thread. Surfaces canonical roles
+  (`0x3C` is the blit/pause loop with 349 setups; `0x14` is the
+  heaviest-used at 466) and per-stage feature wiring (which
+  channels host actor animation, music timing, cinematic
+  drawing, etc.).
+
+- [16 — Unused PALETTE slots (DOS port)](#/research/16-unused-palettes):
+  113 of the 32 × 9 = 288 palette slots across DOS's nine levels
+  are never selected by any reachable `setPalette N` opcode.
+  Notable: slot 28 is unused in EVERY level; PASSCODE uses only
+  2 of 32 (slots 0 and 5); ENDING skips the entire low half.
+  Visual catalogue at
+  `docs/assets/research-16-unused-palettes/level<N>_<STAGE>.svg`.
+
+- [15 — Unused SOUND resources (DOS port)](#/research/15-unused-sounds):
+  4 non-empty SOUNDs (0x2E, 0x37, 0x38, 0x42) are never `play`'d
+  OR `load`'d by any DOS bytecode. All one-shot samples,
+  0.15-0.67 s. Renders at
+  `docs/assets/research-15-unused-sounds/sound_0xNN.wav`.
+
+- [14 — `;@raw=` load-bearing residue: AW VM redundant encodings](#/research/14-raw-annotation-residue):
+  documentation of why ~98% of `;@raw=` annotations were
+  redundant noise vs the 580-strong load-bearing residue, which
+  cluster in three patterns (video alt-zoom-bit, bankSwitch
+  legacy operand, setPalette palette-0 trailing-0). Drove the
+  `;@enc=…` migration (`;@raw=` is now strictly forbidden).
+
+- [13 — Cross-release md5 index of extracted resources](#/research/13-cross-release-md5-index):
+  Amiga 1991 → DOS 1992 reused 117 / 144 resources verbatim and
+  rebuilt exactly the per-stage triplet (PALETTE + BYTECODE +
+  POLY_CINEMATIC) for all 9 stages. 0 Amiga-only resources;
+  2 DOS-only (POLY_ANIM at 0x12, 0x13). dos↔msdos extractions
+  agree byte-for-byte across all 146 indices.
+
 - [06 — Unused-polygon survey (level 2 first pass)](#/research/06-unused-polygons-survey):
   **64 polygons in Amiga level 2 + 57 in DOS level 2 are not
   referenced from any bytecode `video` call** and aren't children
