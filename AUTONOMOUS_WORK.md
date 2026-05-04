@@ -501,3 +501,33 @@ This is the inflection point of the entire AW port lineage —
 explains why no two post-1991 ports byte-match amiga (the
 pipeline differs at the polygon-bank level even when the
 bytecode-level animation logic is preserved).
+
+## State as of 2026-05-04 (chapter-split sweep)
+
+Applied `tools/split_asm_chapter.py` (with two bug fixes — `<stage>/`
+and `_helpers/` include-path rewriting) across 5 stages. Every
+`.asm.in` is now ≤433 lines (down from up to 3808).
+
+| Stage      | Before | After | Reduction | Chapters |
+|------------|--------|-------|-----------|----------|
+| INTRO      | 591    | 43    | -93%      | (already split — 14 chapters) |
+| LAKE       | 1836   | 339   | -82%      | (already split — 65 chapters) |
+| CODE_WHEEL | 272    | 272   | (no depth-0 labels — all `;@if`-wrapped) |
+| PASSCODE   | 115    | 69    | -40%      | 1 |
+| TANK       | 504    | 124   | -76%      | 5 |
+| ENDING     | 561    | 66    | -88%      | 4 |
+| CAPSULE    | 2296   | 398   | -83%      | 3 |
+| CAVES      | 3644   | 362   | -90%      | 3 |
+| PRISON     | 3808   | 433   | -89%      | 2 |
+
+Total `.asm.in` size: 2106 lines (down from ~14000+).
+
+Every stage except CODE_WHEEL has chapter-style chunks alongside
+its per-arm fold chunks. CODE_WHEEL is the only stage where
+chapter-splitting via the depth-0-label mechanism doesn't apply
+(every routine is wrapped in a `;@if BRANCH ==` block, so there
+are no depth-0 cut points). It's small enough (272 lines) that
+this is OK.
+
+All chapter-splits verified at each step; verify_stage 29/29 +
+verify_unified 27/27 maintained throughout the sweep.
