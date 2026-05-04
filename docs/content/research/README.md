@@ -128,6 +128,16 @@ finding is comparative) records which releases it applies to.
   byte-identity finding now at the cartridge-ROM level (not just
   the bytecode resource).
 
+- [18 — Setup-then-overwrite gate inventory (4 ports × 9 stages)](#/research/18-setup-gate-inventory):
+  static survey of the `setup channel=N, address=X; setup
+  channel=N, address=Y` idiom across the whole game. Confirms
+  research/05's beetle-stage finding quantitatively: amiga 1991
+  LAKE has 5 gates, cart/dos/gba LAKE has 7 — the 2-gate
+  difference is the BEETLE silencer that amiga lacks. **181
+  gates surfaced** in total, foundational input for the
+  reachability oracle (#0058) that the asset-scan family
+  (#0054–#0057) needs.
+
 - [17 — VM thread-channel map (per stage)](#/research/17-vm-channel-map):
   static scan of every `setup channel=NN, address=ROUTINE` opcode
   in the unified source (4,082 total) grouped by stage and
