@@ -237,6 +237,41 @@ single contiguous animation found in any stage's dead code
 and shipped in the polygon resource bank but never drawn at
 runtime.
 
+#### State-machine reconstruction
+
+Mapping `jne [0x13], 0xNN, NEXT_LABEL; video CINEMATIC_X` from
+the dispatcher chain reveals VAR_13 → CINEMATIC bindings. Two
+contiguous state-ranges within the 614..676 set:
+
+  - **Set A** (VAR_13 0x6E → 0x76, 9 states): renders
+    CIN_637, 653, 652, 651, 650, 649, 648, 647, 646
+  - **Set B** (VAR_13 0x81 → 0x89, 9 states): renders
+    CIN_627, 626, 625, 624, 623, 622, 621, 620, 619
+
+Rendered in state-order at
+`docs/assets/research-19-capsule-silenced-cinematics/state_machine/`:
+
+![Set A: VAR_13 0x6E→0x76 disintegration](../assets/research-19-capsule-silenced-cinematics/state_machine/set_a_state_machine.png)
+
+![Set B: VAR_13 0x81→0x89 disintegration](../assets/research-19-capsule-silenced-cinematics/state_machine/set_b_state_machine.png)
+
+Both sets are **disintegration / destruction animations**:
+
+  - **Set A** starts with vertical purple/cyan stripes →
+    transitions through a creature with a yellow beak and
+    coloured-rim outlines (state 0x6F, the most-detailed
+    frame) → progressively scatters into orange/yellow/purple
+    particle-dust → fades to nearly nothing by state 0x76.
+  - **Set B** starts with vertical orange/purple stripes →
+    triangular purple+orange shape → progressively scatters
+    into pink/purple particle dots → tiny remnants by 0x89.
+
+The state-machine pattern (VAR_13 ascending → animation
+progressing) effectively drives "decay over time" through the
+sprite sets. These look like **two distinct death/destruction
+sequences** for two different alien entities, authored for the
+CAPSULE city scene but never invoked in the shipping bytecode.
+
 #### Sample of the 689..720 range
 
 The second CAPSULE dead-only range (CIN_689..720, ~30 frames)
