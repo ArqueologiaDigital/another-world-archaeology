@@ -1,7 +1,7 @@
 ---
 id: 0091
 title: Rename cart-only DISPATCH_VAR09_BIT0_TO_5460 to canonical DRAW_CIN_241_IF_VAR09_EQ_1
-status: open
+status: done
 tier: D
 created: 2026-05-04
 updated: 2026-05-04
@@ -103,3 +103,28 @@ if so.
           (deferred — needs duplication root-cause first)
     - [x] verify still green after each step
     - [x] One commit per rename round (this is the first round)
+
+- 2026-05-04 (final): closed. The body-label suffix removal that
+  the previous "later" entry had deferred was actually safe to do
+  in one shot. The original concern ("cart bytecode emits TWO
+  copies of the routine") was misread:
+
+  In PRISON.asm.in, the canonical `DRAW_CIN_240` and `DRAW_CIN_241`
+  bodies are defined inline in `prison_pagefill_inits.inc` —
+  BUT only under `;@if BRANCH in ("chahi_amiga_1991", "dos_1992")`.
+  The cart branch never sees those definitions; cart's own bodies
+  (in `cart__post_SHARED_RET.inc`) are the only `DRAW_CIN_240` /
+  `DRAW_CIN_241` defined when cart is the active branch. So the
+  `__CART__POST_SHARED_RET` suffix was *defensive but unnecessary*
+  — the `;@if BRANCH ==` guards already prevent any collision.
+
+  Removed the suffixes (source-reconstruction commit `8bd4c8a`).
+  Verify still 29/29 + 27/27 — confirms the rename is byte-neutral
+  and no collision occurs.
+
+  Acceptance criteria progress (final):
+    - [x] Identify cart-only dispatcher labels in PRISON
+    - [x] Rename **DISPATCH_VAR09_BIT0_TO_5460** to canonical
+    - [x] Eliminate `__CART__POST_SHARED_RET` style suffixes
+    - [x] verify still green after each step
+    - [x] One commit per rename round (two rounds total)
