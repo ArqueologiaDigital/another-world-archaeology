@@ -50,14 +50,16 @@ because level 4 doesn't reference it.
       disasm for `video type=N, offset=…` opcodes. Resolve
       port-specific addresses to absolute offsets within the
       polygon resource. Emit per-level `referenced_offsets.csv`.
-- [ ] **(3) Global reachability filter.** From a per-port set of
-      *entry points* (every level's bytecode start address + the
-      title screen + any other engine-known entries), compute the
-      transitive closure of `jmp`/`call`/`setup` targets. Mark
-      each polygon reference as "live" or "dead" based on whether
-      its containing label is reachable from any entry point
-      under runtime semantics (i.e. respecting setup-then-
-      overwrite gates — see #0058).
+- [x] **(3) Global reachability filter.** Closed by
+      `tools/unused_polygon_scan_v2.py` (commit landing this
+      check). Uses the `ReachabilityOracle` from #0058 + intra-
+      label terminator handling to surface 194 polygon offsets
+      that are referenced ONLY from dead code in the dos_1992
+      port (where v1 byte scan would have counted them as
+      "used"). Notable finds: CAPSULE 98 (silenced LABEL_5C58
+      callee tree); LAKE 12 (BEETLE landing/particle animations
+      from research/05); PASSCODE 19 (the unused 16-glyph
+      alphabet from research/19).
 - [ ] **(4) Diff.** Per-port: `unused = enumerated −
       live_referenced`. Distinguish two categories: **never-
       referenced** (no `video` opcode targets that offset) vs
@@ -159,3 +161,11 @@ because level 4 doesn't reference it.
   unique-per-port sprites (acceptance #5) is the next step that
   would let a reviewer visually identify what was added/removed
   per stage.
+
+- 2026-05-04: reachability-filter item closed via
+  `tools/unused_polygon_scan_v2.py`. Identifies 194 polygon
+  offsets referenced ONLY from dead code in dos_1992. CAPSULE
+  has 98 dead-only video references, by far the largest cluster
+  (matches the silenced LABEL_5C58 callee tree from research/19).
+  LAKE 12 + PASSCODE 19 confirm research/05 and research/19
+  cross-validations independently from the bytecode side.
