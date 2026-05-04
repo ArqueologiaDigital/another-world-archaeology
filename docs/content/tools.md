@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**102 tools.**
+**103 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -38,6 +38,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `disambiguate_intra_chunk_dups.py` | Disambiguate intra-chunk duplicate label definitions. |
 | `equ_alias_for_stuck_literals.py` | For each literal-address operand that `resymbolize_literals.py` |
 | `extract_cross_stage_helpers.py` | Phase 6: extract cross-stage shared helpers to `_unified/_helpers/`. |
+| `find_cross_port_liveness_divergences.py` | Surface every CINEMATIC offset whose liveness diverges across ports. |
 | `find_cross_stage.py` | Find routines whose bodies match across multiple stages. |
 | `find_foldable_routines.py` | Find byte-identical routine pairs across the per-branch arms of a stage. |
 | `find_parent_polygons.py` | Find PARENT group polygons that reference a given child polygon. |
