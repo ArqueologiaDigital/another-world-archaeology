@@ -115,9 +115,27 @@ if end - 1 < len(depth_in) and depth_in[end - 1] != 0:
     sys.exit(f"FATAL: cut BEFORE L{end} is at entering-depth={depth_in[end-1]}, not 0")
 
 inc_lines = lines[start - 1:end - 1]
+
+# Rewrite ;@include paths in the chapter chunk: a path like
+# `<stage>/<arm>__post_X.inc` is relative to the .asm.in's
+# directory (`_unified/`). When that line lives inside a chapter
+# chunk under `_unified/<stage>/`, the same relative path would
+# resolve to `_unified/<stage>/<stage>/<arm>__post_X.inc`. Strip
+# the leading `<stage>/` so includes resolve correctly from the
+# chunk's location.
+stage_lower = stage.lower()
+include_re = re.compile(rf'^(\s*;@include\s+")({re.escape(stage_lower)}/)([^"]+")(.*)$')
+rewritten_lines = []
+for ln in inc_lines:
+    m = include_re.match(ln)
+    if m:
+        rewritten_lines.append(f'{m.group(1)}{m.group(3)}{m.group(4)}')
+    else:
+        rewritten_lines.append(ln)
+
 INC_DIR.mkdir(parents=True, exist_ok=True)
 inc_path = INC_DIR / f"{chapter}.inc"
-inc_path.write_text("\n".join(inc_lines) + "\n")
+inc_path.write_text("\n".join(rewritten_lines) + "\n")
 
 include_directive = f';@include "{stage.lower()}/{chapter}.inc"'
 new = lines[:start - 1] + [include_directive] + lines[end - 1:]
