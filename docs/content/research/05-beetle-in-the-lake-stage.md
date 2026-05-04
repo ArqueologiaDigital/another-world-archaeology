@@ -108,7 +108,43 @@ the runtime recording.
 `BEETLE_WALKING_LEFT` and `BEETLE_WALKING_RIGHT` are bytecode
 routines on channel `0x09`, present in both ports. They render a
 7-frame walk cycle (each frame held for two video frames before
-incrementing the X coordinate by 1) and loop forever:
+incrementing the X coordinate by 1) and loop forever.
+
+#### Visual confirmation (DOS POLY_CINEMATIC 0x1C)
+
+![BEETLE_WALKING_RIGHT 7-frame cycle](../assets/research-05-beetle-frames/walking_right_sequence.png)
+
+The 7-frame walking cycle, rendered from
+`work/076117919d1dca51e486f33b8f7817e3/bin/0x1c-POLY_CINEMATIC.bin`
+at offsets `0x9FBC..0xA0B8` (zoom=256, dark background to make
+the red silhouette visible). Antennae on top, segmented body,
+multiple legs alternating per frame — unambiguously a beetle.
+
+The fall-onto-back / lying-upside-down / lift-off sequence
+(`CINEMATIC_BEETLE_DRIFT_RIGHT_FRAME_0..4`,
+`CINEMATIC_BEETLE_FLY_AWAY_FRAME_0..3`,
+`CINEMATIC_BEETLE_LIFT_FRAME_0..4`,
+`CINEMATIC_BEETLE_FLYING_FRAME_0..6`) closes issue #0044's
+visual-confirmation acceptance criteria. See
+`docs/assets/research-05-beetle-frames/` for the full PNG
+sprite-sheet set:
+
+- `walking_right_sequence.png` — 7-frame walk cycle
+- `walking_left_sequence.png` — left-mirror walk cycle
+- `drift_right_sequence.png` — beetle falls from upright onto
+  its back (5 frames, the death-by-kick result the player would
+  have seen had the broken cutscene been wired in)
+- `fly_away_sequence.png` — beetle lying on back, legs flailing
+- `beetle_lift_sequence.png` — beetle rises from upright to
+  flipped-vertical (5 frames)
+- `beetle_flying_sequence.png` — beetle rotated, presumably
+  in-flight pose (5 frames)
+- `hover_vert_sequence.png` — alternating-frame hover loop
+
+These confirm research/05's qualitative reading: the assets
+support a complete kick-and-die-on-back interaction. The
+animation set is ~30 distinct beetle poses, well beyond what's
+needed for "just walk across the screen."
 
 | Release | `BEETLE_WALKING_RIGHT` | `BEETLE_WALKING_LEFT` |
 |---|---|---|
