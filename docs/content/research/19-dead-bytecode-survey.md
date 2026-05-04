@@ -206,6 +206,13 @@ far the largest dead-asset cluster in any stage. The references
 break down into three contiguous-ish ranges:
 
   - `CINEMATIC_378`, `CINEMATIC_387..390` — 5 isolated frames
+    (rendered with `--auto-fit`; `cin_378` shows a clean
+    humanoid sprite — blue head, red torso, green legs, red
+    boots — in standing pose; `cin_387/388` are long thin
+    pink/magenta diagonal lines that look like **laser-beam
+    frames**; `cin_389/390` are smaller fragments — possibly
+    beam fade/end states. See
+    `docs/assets/research-19-capsule-silenced-cinematics/isolated_frames/`.)
   - **`CINEMATIC_614..676`** — 63 contiguous frames, called by
     a `if VAR_13 == X then draw CINEMATIC_Y` dispatch chain
     (each label a per-state video draw, e.g.
