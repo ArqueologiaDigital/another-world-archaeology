@@ -40,13 +40,6 @@ sys.path.insert(0, str(REPO_ROOT / "tools"))
 RE_RAW = re.compile(r"\s*;@raw=([0-9a-fA-FxX,\s]+)\s*$")
 
 
-def expand_text(asm_path: Path) -> str:
-    from awvm_preprocess import expand_includes, expand_fill_macros
-    text = expand_includes(asm_path.read_text(), asm_path.resolve().parent)
-    text = expand_fill_macros(text)
-    return text
-
-
 def assemble_text(text: str, hint: str) -> bytes:
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
@@ -62,60 +55,57 @@ def assemble_text(text: str, hint: str) -> bytes:
         return f.with_suffix(".bin").read_bytes()
 
 
-def split_lines(text: str) -> list[str]:
-    return text.splitlines(keepends=True)
-
-
-def reassemble_with_strip_mask(
-    lines: list[str],
-    annotation_indices: list[int],
-    strip_set: set[int],
-    hint: str,
-) -> bytes:
-    """Assemble file with only the annotations whose index is in
-    `strip_set` removed.
-
-    `annotation_indices` is the list of line-indices that carry a
-    `;@raw=` annotation.
+def apply_strip_mask(source_text: str, strip_ranks: set[int]) -> str:
+    """Return source text with the k-th annotations (k in
+    `strip_ranks`) removed. Annotation rank is the 0-based index in
+    encounter order.
     """
     out = []
-    for li, line in enumerate(lines):
-        if li in annotation_indices and li in strip_set:
-            m = RE_RAW.search(line)
-            if m:
-                line = line[: m.start()].rstrip()
-                if not line.endswith("\n"):
-                    line += "\n"
+    rank = 0
+    for line in source_text.splitlines(keepends=True):
+        if RE_RAW.search(line):
+            if rank in strip_ranks:
+                m = RE_RAW.search(line)
+                stripped = line[: m.start()].rstrip()
+                if line.endswith("\n"):
+                    stripped += "\n"
+                line = stripped
+            rank += 1
         out.append(line)
-    return assemble_text("".join(out), hint)
+    return "".join(out)
+
+
+def assemble_source(source_text: str, asm_path: Path, hint: str) -> bytes:
+    """Expand `;@include`s using `asm_path`'s parent dir as anchor
+    so that `;@include "../_common_vars.inc"` resolves correctly,
+    then assemble."""
+    from awvm_preprocess import expand_includes, expand_fill_macros
+    expanded = expand_includes(source_text, asm_path.resolve().parent)
+    expanded = expand_fill_macros(expanded)
+    return assemble_text(expanded, hint)
 
 
 def bisect_strip(
-    lines: list[str],
-    annotation_indices: list[int],
+    source_text: str,
+    asm_path: Path,
+    annotation_count: int,
     baseline: bytes,
     hint_prefix: str,
 ) -> set[int]:
-    """Return the set of annotation-indices that ARE redundant
-    (safe to strip). Uses divide-and-conquer.
+    """Return the set of annotation-RANKS (0..annotation_count-1)
+    that ARE redundant (safe to strip). Uses divide-and-conquer.
     """
     redundant: set[int] = set()
 
     def recurse(group: list[int]) -> None:
         if not group:
             return
-        # Try stripping all of `group`
         try_set = set(group) | redundant
         try:
-            out = reassemble_with_strip_mask(
-                lines, annotation_indices, try_set, hint_prefix
-            )
+            stripped_text = apply_strip_mask(source_text, try_set)
+            out = assemble_source(stripped_text, asm_path, hint_prefix)
         except subprocess.CalledProcessError:
-            # Encoder fails on some instruction's stripped form.
-            # Bisect deeper.
             if len(group) == 1:
-                # Single annotation, stripping it breaks assembly →
-                # load-bearing
                 return
             mid = len(group) // 2
             recurse(group[:mid])
@@ -126,113 +116,100 @@ def bisect_strip(
             redundant.update(group)
             return
         if len(group) == 1:
-            return  # this single annotation is load-bearing
+            return
         mid = len(group) // 2
         recurse(group[:mid])
         recurse(group[mid:])
 
-    recurse(annotation_indices)
+    recurse(list(range(annotation_count)))
     return redundant
 
 
 def process_file(path: Path, allow_bisect: bool) -> tuple[int, int]:
     """Returns (annotations_before, annotations_after)."""
-    text = expand_text(path)
-    lines = split_lines(text)
-    annotation_indices = [
-        li for li, line in enumerate(lines) if RE_RAW.search(line)
-    ]
-    if not annotation_indices:
-        print(f"  {path.name}: no annotations after expansion")
+    source_text = path.read_text()
+    annotation_count = sum(
+        1 for line in source_text.splitlines() if RE_RAW.search(line)
+    )
+    if annotation_count == 0:
+        print(f"  {path.name}: no annotations in source")
         return (0, 0)
 
-    # Reassemble baseline with NO stripping.
     try:
-        baseline = assemble_text(text, path.stem + "_base")
+        baseline = assemble_source(source_text, path, path.stem + "_base")
     except subprocess.CalledProcessError as e:
         print(
             f"  {path.name}: baseline assemble failed: {e.stderr[:120]}",
             file=sys.stderr,
         )
-        return (len(annotation_indices), len(annotation_indices))
+        return (annotation_count, annotation_count)
 
-    # First try: strip everything
+    # First try: strip everything in source
     try:
-        stripped_full = assemble_text(
-            "".join(
-                line[: RE_RAW.search(line).start()].rstrip() + "\n"
-                if RE_RAW.search(line)
-                else line
-                for line in lines
-            ),
-            path.stem + "_strip",
+        all_stripped_text = apply_strip_mask(
+            source_text, set(range(annotation_count))
+        )
+        stripped_full = assemble_source(
+            all_stripped_text, path, path.stem + "_strip"
         )
     except subprocess.CalledProcessError:
         stripped_full = None
 
     if stripped_full == baseline:
-        # All redundant — strip them all
-        new_text = read_and_strip_all(path)
-        path.write_text(new_text)
+        path.write_text(all_stripped_text)
         print(
             f"  {path.name}: ALL_REDUNDANT "
-            f"({len(annotation_indices)} annotations stripped)"
+            f"({annotation_count} annotations stripped)"
         )
-        return (len(annotation_indices), 0)
+        return (annotation_count, 0)
 
     if not allow_bisect:
         print(
             f"  {path.name}: bytes_differ — skipped "
             f"(use without --no-bisect to bisect)"
         )
-        return (len(annotation_indices), len(annotation_indices))
+        return (annotation_count, annotation_count)
 
-    # Bisect
+    print(
+        f"  {path.name}: bisecting {annotation_count} annotations…",
+        flush=True,
+    )
     redundant = bisect_strip(
-        lines, annotation_indices, baseline, path.stem
+        source_text, path, annotation_count, baseline, path.stem
     )
     if not redundant:
         print(
             f"  {path.name}: bisect found 0 redundant of "
-            f"{len(annotation_indices)} (all load-bearing??)"
+            f"{annotation_count} (all load-bearing??)"
         )
-        return (len(annotation_indices), len(annotation_indices))
+        return (annotation_count, annotation_count)
 
-    # Apply: rewrite the file with the redundant annotations stripped.
-    # NOTE: bisect operated on the EXPANDED text (post-include). To
-    # apply changes back to the on-disk file, we need to map
-    # expanded-line-indices to on-disk source files. That's
-    # out-of-scope for this initial pass — the bisect data is useful
-    # for analysis but applying it requires per-file source mapping.
-    # For now, only apply to files whose ENTIRE annotation set is
-    # redundant (handled above). Bisect mode reports the count.
+    new_text = apply_strip_mask(source_text, redundant)
+    # Sanity check: the post-strip source must still assemble to baseline.
+    try:
+        verify = assemble_source(new_text, path, path.stem + "_verify")
+    except subprocess.CalledProcessError as e:
+        print(
+            f"  {path.name}: post-strip assemble FAILED, NOT writing. "
+            f"err={e.stderr[:120]}",
+            file=sys.stderr,
+        )
+        return (annotation_count, annotation_count)
+    if verify != baseline:
+        print(
+            f"  {path.name}: post-strip bytes differ from baseline; "
+            f"NOT writing.",
+            file=sys.stderr,
+        )
+        return (annotation_count, annotation_count)
+
+    path.write_text(new_text)
     print(
-        f"  {path.name}: bisect found {len(redundant)} redundant "
-        f"of {len(annotation_indices)} "
-        f"({len(annotation_indices) - len(redundant)} load-bearing)"
+        f"  {path.name}: stripped {len(redundant)} redundant of "
+        f"{annotation_count} "
+        f"({annotation_count - len(redundant)} load-bearing kept)"
     )
-    return (
-        len(annotation_indices),
-        len(annotation_indices) - len(redundant),
-    )
-
-
-def read_and_strip_all(path: Path) -> str:
-    """Strip every `;@raw=` annotation from the on-disk file
-    (pre-expansion). Used only when audit said the file is
-    all_redundant.
-    """
-    out = []
-    for line in path.read_text().splitlines(keepends=True):
-        m = RE_RAW.search(line)
-        if not m:
-            out.append(line)
-            continue
-        new = line[: m.start()].rstrip()
-        if line.endswith("\n"):
-            new += "\n"
-        out.append(new)
-    return "".join(out)
+    return (annotation_count, annotation_count - len(redundant))
 
 
 def main() -> int:
