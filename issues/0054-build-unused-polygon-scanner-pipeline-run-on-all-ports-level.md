@@ -1,10 +1,10 @@
 ---
 id: 0054
 title: Build unused-polygon scanner pipeline + run on all ports / levels (global reachability)
-status: open
+status: in-progress
 tier: B
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-04
 depends_on: [0058]
 blocks: []
 tags: [research, polygon, assets, bytecode, genealogy]
@@ -97,3 +97,40 @@ because level 4 doesn't reference it.
   unused-polygon detection a systematic research goal after the
   verification hack revealed an unfinished cutscene whose actor
   art was never created.
+
+- 2026-05-04: per-port scan results for DOS + Amiga (running
+  `tools/find_unused_polygons.py` against each port's POLY_CINEMATIC
+  resources):
+
+  | Level | Stage      | DOS unused | Amiga unused |
+  |-------|------------|------------|--------------|
+  | 0     | CODE_WHEEL | 54         | 59           |
+  | 1     | INTRO      | 37         | 37           |
+  | 2     | LAKE       | 57         | 64           |
+  | 3     | PRISON     | 253        | 333          |
+  | 4     | CAVES      | 227        | 299          |
+  | 5     | TANK       | 232        | 246          |
+  | 6     | CAPSULE    | 472        | **1117**     |
+  | 7     | ENDING/PASSCODE | 240   | 221 (PASSCODE; ENDING n/a) |
+  | 8     | PASSCODE   | 143        | n/a          |
+
+  **Most striking observation**: amiga's CAPSULE poly resource has
+  **1117 unused polygons** vs DOS's 472 — 645 more. This is
+  consistent with the CAPSULE alien-CIN renumbering finding in
+  issue #0080: the amiga 1991 polygon bank ships with significantly
+  more sub-polygons than the 1992 DOS port, even though the
+  reachable sprite content largely overlaps.
+
+  Many of those amiga-only unused polygons are likely
+  pre-renumbering vestiges that the DOS rebuild trimmed when
+  repacking. A polygon-byte-content diff between the amiga and DOS
+  banks (filtered to the unused-on-DOS / used-on-amiga set) would
+  surface specific sprites that exist only in the original 1991
+  release — high-value cut-content candidates.
+
+  Per-port acceptance items (#1, #2, #4) — done for DOS + Amiga.
+  Items #3 (global cross-level reachability), #5 (render unused),
+  #6 (cross-port comparison rendered), #7 (catalog as
+  research/06 update) still pending. Note research/06 already
+  exists with the level-2 first-pass; this scan extends it
+  significantly.
