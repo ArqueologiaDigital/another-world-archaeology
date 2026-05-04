@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**100 tools.**
+**101 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -78,6 +78,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `scan_cross_stage_helpers.py` | Phase 6 prep: find routines defined in 2+ stages with byte-identical |
 | `simulate_gun_budget.py` | Illustrate the gun-energy quota mechanics from research finding #01. |
 | `split_asm_chapter.py` | Helper to split a chapter out of a unified .asm.in into a .inc file. |
+| `standardize_cinematic_frame_suffix.py` | Standardize CINEMATIC frame-index suffixes to bare `_N`. |
 | `strip_redundant_raw.py` | Strip redundant ;@raw= comments from .asm files. |
 | `strip_redundant_raw_annotations.py` | Strip `;@raw=` annotations whose presence does not change the |
 | `strip_redundant_raw_chunks.py` | Strip chunks with broader keeper set. |
