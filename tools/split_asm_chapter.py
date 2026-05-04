@@ -81,6 +81,13 @@ def resolve(spec):
     """Resolve a start/end specifier."""
     if spec == "EOF":
         return len(lines) + 1
+    if spec.startswith("LINE:"):
+        # LINE:<N> — cut at line N. The caller is responsible for
+        # ensuring N is at entering-depth 0 (validated below).
+        n = int(spec[len("LINE:"):])
+        if n < 1 or n > len(lines) + 1:
+            sys.exit(f"FATAL: LINE:{n} out of range (1..{len(lines)+1})")
+        return n
     if spec == "INCLUDE_NEXT":
         for i in range(start, len(lines)):
             if lines[i].strip().startswith(';@include') and depth_in[i] == 0:
