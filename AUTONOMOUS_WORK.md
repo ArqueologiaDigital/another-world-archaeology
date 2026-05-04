@@ -330,10 +330,16 @@ Still pending: Phase 6 (cross-stage helper extraction).
 - **Phase 7** (architecture README): `docs/SOURCE_TREE.md` in
   source-reconstruction repo.
 
-Still pending: Phase 6 (cross-stage helper extraction). Real
-constraint surfaced: AW VM bytecode uses 2-byte absolute addresses
-for jumps/calls, so a routine can only be safely "extracted" to a
-shared module if its body has no jumps/calls — otherwise the
-assembler emits different bytes per stage even from identical
-source. Trivial helpers like `killChannel`-only routines qualify;
-larger routines with internal flow do not.
+**Phase 6** (cross-stage helper extraction) — DONE.
+136 routines hoisted to `src/levels/_unified/_helpers/<NAME>.inc`
+with each stage's local definition replaced by
+`;@include "_helpers/<NAME>.inc"`. Constraint: jump/call-free
+bodies only (the assembler emits stage-specific operand bytes for
+flow-control instructions, so identical source would compile to
+different bytecode per stage). Tool:
+`tools/extract_cross_stage_helpers.py` + scanner
+`tools/scan_cross_stage_helpers.py`. 364 replacements across the
+9 unified `.asm.in` files. verify_stage 29/29 + verify_unified
+27/27 stay green.
+
+ALL 8 PHASES COMPLETE.
