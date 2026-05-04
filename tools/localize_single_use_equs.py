@@ -135,7 +135,13 @@ def localize_stage(asm_in: Path) -> tuple[int, int, int]:
     equ_list, name_to_decls = collect_equs(asm_in)
     candidate_names = {
         n for n in name_to_decls
-        if n.startswith("CINEMATIC_") or n.startswith("COMMON_VIDEO_")
+        if (n.startswith("CINEMATIC_") or n.startswith("COMMON_VIDEO_"))
+        # `_UNUSED_` EQUs are pinned at the top-level intentionally —
+        # they document cinematic-bank slots that are present in the
+        # resource ROM but never invoked by the game bytecode. They
+        # serve as research flags and must stay visible alongside
+        # the file's banner.
+        and "_UNUSED_" not in n
     }
     if not candidate_names:
         return 0, 0, 0
