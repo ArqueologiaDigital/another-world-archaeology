@@ -164,6 +164,52 @@ PRISON-`dos_1992`: 58 trans-dead. Investigate next.
 | `PRISON` | 2,196 | 1,891 | 0 | 58 | 247 |
 | `TANK` | 273 | 231 | 0 | 7 | 36 |
 
+## Asset-side cross-validation
+
+The label-level trans-dead counts above are the bytecode-side
+evidence. Cross-validating from the asset side (polygon, sound,
+music, palette references in dead labels):
+
+| Asset-scan v2 (dos_1992) | Live | Dead-only |
+| --- | ---: | ---: |
+| Polygon `video offset=` references | 5,071 | 194 |
+| Sound `play id=` references | 82 | 0 |
+| Music `song id=` / `load id=` | 2 | 1 (= research/11's 0x89) |
+| Palette `setPalette N` slots | 113 used | 5 dead-only |
+
+The 194 dead-only polygon references in dos_1992 break down by
+stage:
+
+| Stage | Dead-only polygons | Notable cluster |
+| --- | ---: | --- |
+| CAPSULE | 98 | LABEL_5C58 callee tree (research/18 silencer) |
+| CAVES | 32 | LABEL_3A26 frame-loop chain (research/18) |
+| PRISON | 21 | uninvestigated |
+| PASSCODE | 19 | the 16-glyph alphabet (CINEMATIC_000..015 + 3) |
+| LAKE | 12 | BEETLE landing/particle anims (CINEMATIC_HERO_LAND_*, CINEMATIC_PARTICLE_BURST_2_FRAME_*) |
+| TANK | 8 | uninvestigated |
+| ENDING | 3 | uninvestigated |
+| CODE_WHEEL | 1 | uninvestigated |
+| INTRO | 0 | confirmed: INTRO has no silencers |
+
+The 12 LAKE dead-only polygons match research/05's
+"BEETLE landing animation" finding exactly — the polygons are
+referenced by `video` opcodes inside the dead `BEETLE_AI_*`
+subgraph (verified via the reachability oracle's
+transitively-dead set). This is the first automated, end-to-end
+cross-validation of research/05's qualitative claim.
+
+The 19 PASSCODE dead-only polygons match the 16-glyph alphabet
+chain documented above; the additional 3 are the conditional
+draw routines `DRAW_CIN_058_AT_0_16_IF_VARF2_EQ_FA0` and
+`DRAW_CIN_058_AT_16_16_IF_VARDC_EQ_21` (which call
+`video offset=CINEMATIC_058`).
+
+Tools: `tools/unused_polygon_scan_v2.py`,
+`tools/unused_sound_scan_v2.py`,
+`tools/unused_palette_scan_v2.py` — all consume the same
+`ReachabilityOracle` class.
+
 ## Limitations & follow-ups
 
 - **`freezeChannel` treated as terminator.** A frozen channel
