@@ -130,7 +130,7 @@ oracle.is_statically_referenced(level=2, address=0x34AA)  # → True
 
   All 22 gates classified; no unknowns.
 
-  Acceptance items:
+  Acceptance items (after gate detector landed):
   - [ ] Build a static reachability graph from a port's full
         disassembly (all levels). — TODO (control-flow walk
         across je/jne/call/ret edges).
@@ -147,3 +147,43 @@ oracle.is_statically_referenced(level=2, address=0x34AA)  # → True
         needs the reachability graph).
   - [ ] Write `docs/content/research/07-dead-bytecode-survey.md`.
         — TODO; the gate inventory is partial input data.
+
+- 2026-05-04 (later still): static reachability graph landed
+  (`tools/build_reachability_graph.py`, commit `1643790`).
+  Walks each stage's call/jmp/branch/setup edges from every
+  live entry point (every `setup` target plus the stage's
+  first label as the engine's implicit entry), with three
+  correctness fixes during build: `break` is NOT a terminator
+  (it yields-and-continues), labels fall through across
+  boundaries when no terminator hits, and stage-first label
+  is implicit entry.
+
+  Cross-port transitively-dead label counts:
+
+  | Branch | Total | Live | Dead-by-gate | Trans-dead | Unref |
+  | --- | ---: | ---: | ---: | ---: | ---: |
+  | dos_1992 | 9556 | 8043 | 4 | 511 | 1002 |
+  | cartridge_1992 | 9251 | 7796 | 4 | 466 | 988 |
+  | chahi_amiga_1991 | 8393 | 7251 | 2 | 97 | 1047 |
+  | gba_2004 | 1005 | 897 | 2 | 47 | 60 |
+
+  The 5x difference between DOS-lineage (511, 466) and amiga
+  (97) aligns with research/05's gate-2 finding.
+
+  LAKE-specific: 43 transitively-dead labels include the
+  entire BEETLE_AI subgraph — exactly the silenced beetle
+  interaction code from research/05.
+
+  Acceptance items:
+  - [x] Build a static reachability graph from a port's full
+        disassembly (all levels).
+  - [x] Detect setup-then-overwrite gates.
+  - [x] Classify each label as: live / dead-by-gate /
+        transitively-dead / unreferenced.
+  - [x] Cross-check against research finding 05's known gates.
+  - [ ] Expose a Python API used by #0054–#0057. — TODO; the
+        current tool emits JSON, a programmatic Python class
+        wrapper would simplify caller code.
+  - [ ] Write `docs/content/research/07-dead-bytecode-survey.md`.
+        — TODO; the reachability graph + gate inventory + the
+        cross-port count comparison are now ready as input data.

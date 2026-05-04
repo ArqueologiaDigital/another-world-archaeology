@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**96 tools.**
+**97 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -19,6 +19,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `batch_render_cut_polys.py` | Batch-render every offset in cut_polygons_amiga_only.json (or |
 | `build_channel_map.py` | Extract a per-stage map of `setup channel=NN, address=…` opcodes |
 | `build_channel_role_summary.py` | Inferred channel-role summary, complementing |
+| `build_reachability_graph.py` | Build a static reachability graph for an AW VM port's bytecode. |
 | `build_tool_index.py` | Generate a Markdown index of every `tools/*.py` script. |
 | `bytecode_structural_diff.py` | Cross-branch structural-similarity analysis for AW VM bytecode. |
 | `canonicalize_bankswitch.py` | Convert `bankSwitch N` mnemonic forms to `load id=0x<HHLL>`. |
