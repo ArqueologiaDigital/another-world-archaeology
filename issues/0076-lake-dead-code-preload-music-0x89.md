@@ -202,6 +202,19 @@ cover format-specific extraction work).
 3. Compare 0x89 against the released soundtrack (Eric Serra's
    AW soundtrack album, plus any in-game music heard) — does it
    match anything we know, or is it genuinely unreleased?
-4. Consider adding a "render dead-code" mode to the future
+   *(Open — requires external research / human listening
+   comparison.)*
+4. ~~Consider adding a "render dead-code" mode to the future
    audio-asset cataloger: any MUSIC resource that no `song id=` /
-   reachable `load id=` triggers should be flagged as cut content.
+   reachable `load id=` triggers should be flagged as cut content.~~
+   **Done 2026-05-04.** `tools/unused_sound_scan_v2.py`
+   (commit `9b7ad0d`) wires in the `ReachabilityOracle` from
+   #0058 to filter `play`/`load`/`song` references that come from
+   dead bytecode. Two-tier filter: label-level
+   (dead-by-gate / transitively-dead labels) + intra-label
+   (post-jmp/ret/killChannel/freezeChannel/bankSwitch tails).
+   Validation against this issue: the scanner correctly
+   classifies music 0x89 as "dead-only (referenced ONLY from
+   dead code)" — exactly the case research/11 found by hand.
+   The asset-side cross-validation table in research/19 records
+   the result: 1 MUSIC dead-only across the dos_1992 port.
