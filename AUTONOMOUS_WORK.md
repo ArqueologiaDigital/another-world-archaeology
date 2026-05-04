@@ -343,3 +343,40 @@ different bytecode per stage). Tool:
 27/27 stay green.
 
 ALL 8 PHASES COMPLETE.
+
+## State as of 2026-05-04 (post-plan continuation)
+
+After the 8-phase plan landed, autonomous cron ticks pursued
+follow-up work focused on per-branch sync and archaeology:
+
+- **FOLD_BODY rename round 9** — 24 more routines named
+  (24 → 5 distinct remaining; the 5 are edge cases with ambiguous
+  bodies). Tool: `fold_body_rename_round_9.py`.
+- **EQU localization extension** — `localize_single_use_equs.py`
+  extended to handle the multi-chunk-but-not-asm.in case (62 more
+  EQUs moved out of INTRO/LAKE `.asm.in`). `_UNUSED_` named EQUs
+  pinned at top-level as research flags.
+- **`docs/SOURCE_TREE.md` updates** — documented `_helpers/`,
+  multi-chunk localization, and `_UNUSED_` convention.
+- **Per-branch sync expansion** — new
+  `tools/sync_all_chunks_to_per_branch.py` reads ALL chunks (not
+  just arm-prefixed), with optional `--aggressive` operand
+  abstraction. Across multiple iterations: ~1,476 LABEL_<HEX>
+  routines renamed in per-branch sources (24272 → 22796). The
+  iteration converges to a fixed point when no body abstraction
+  finds new matches.
+- **Archaeology investigations**:
+  - **Issue #0079** (PRISON cart fewer dispatch cases) — falsified
+    the "missing polygons" hypothesis. Cart DOES reference CIN_169
+    and CIN_241; the real divergence is a per-frame position
+    adjustment (cart adjusts (var07, var08) by (-2, +13) before
+    drawing CIN_169, dos draws directly). Implies a polygon-anchor
+    or coordinate-frame difference between the two 1992 ports.
+  - **Issue #0080** (CAPSULE alien CIN renumbering) — confirmed
+    the renumbering between amiga 1991 and dos 1992 is a **bank
+    repack + index renumbering**, not a sprite rewrite. All 5
+    mapped CIN pairs have identical first-4-byte headers (poly
+    type + bbox) and the vector-data tail is byte-identical; only
+    the sub-polygon offsets within the bank differ.
+  - **Issue #0077** (INTRO sync per-branch) closed — all
+    acceptance criteria met.
