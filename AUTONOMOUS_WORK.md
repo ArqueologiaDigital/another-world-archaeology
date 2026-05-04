@@ -278,3 +278,34 @@ PASSCODE is most-complete: cart 5 LABEL, dos 5 LABEL, amiga 5 LABEL.
 3. **More cross-arm matching:** the matcher finds peer routines
    automatically when the FROM arm has a name. Run more rename rounds
    then re-run match_arms.py to surface new matches.
+
+## State as of 2026-05-03 (semantics + readability + organization pass)
+
+8-phase plan executed autonomously (verify_stage 29/29 +
+verify_unified 27/27 maintained throughout):
+
+- **Phase 1a** — strip unused EQUs per file: 5532 lines removed
+  (2980 per-branch + 2552 unified-chunk).
+- **Phase 1b** — consolidate 15 var-alias EQUs into shared
+  `src/levels/_common_vars.inc`. `verify_stage.py` extended to
+  expand `;@include` directives so per-branch sources can use it.
+- **Phase 2** — stage-narrative doc headers added to all 9 unified
+  `.asm.in` files and all 28 per-branch sources (drawn from
+  `references/walkthroughs/2026-04-29-gamefaqs-aw-78570.txt` and
+  archaeology context). Tool: `tools/add_stage_doc_headers.py`.
+- **Phase 4 / rounds 5-8** — 98 FOLD_BODY routines renamed from
+  body shape (down from 134 distinct → 29 remaining). Tools:
+  `tools/fold_body_rename_round_5.py` through `_round_8.py`.
+- **EQU localization** (per user request) — 1371 single-use EQUs
+  moved out of INTRO/LAKE `.asm.in` into the chunk that
+  references them. Per-branch values preserved via
+  `;@if BRANCH ==` blocks at chunk top. Tool:
+  `tools/localize_single_use_equs.py`.
+- **Phase 7** — `docs/SOURCE_TREE.md` (in source-reconstruction
+  repo) documenting the three-layer src/levels/ organization,
+  multi-fold technique, verification regime, and per-tool reference.
+
+Still pending: Phase 3 (dispatcher case-target naming),
+Phase 5 (empty-chunk removal for CAVES + ENDING — broke
+verify earlier, needs deeper fix), Phase 6 (cross-stage helper
+extraction).
