@@ -155,3 +155,53 @@ the high-nibble dispatchers we already named).
   just repacking. CAPSULE underwent significant rework between
   1991 and 1992, of which the alien-sub-anim renumbering is just
   one slice.
+
+- 2026-05-04 (later): cross-port VAR_13 dispatcher mapping
+  reveals **clean structural deltas** in the silenced LABEL_5C58
+  callee tree (CAPSULE's largest dead subgraph, research/19):
+
+  ```
+  VAR_13   dos     cart    amiga   cart-dos   amiga-dos
+   0x6F    653     662     506     +9         -147
+   0x70    652     661     505     +9         -147
+   0x71    651     660     504     +9         -147
+   0x72    650     659     503     +9         -147
+   0x73    649     658     502     +9         -147
+   0x74    648     657     501     +9         -147
+   0x75    647     656     500     +9         -147
+   0x76    646     655     499     +9         -147
+   0x81    627     636     480     +9         -147
+   0x82    626     635     479     +9         -147
+   ... (states 0x83..0x89 same delta)
+  ```
+
+  All 17 states in the disintegration animation cluster show
+  cart = dos + 9 and amiga = dos - 147. (State 0x6E differs:
+  cart = dos + 3, amiga = dos - 6 — that mapping refers to a
+  background element in the LIVE polygon range, not the dead
+  animation cluster.)
+
+  This is **the cleanest cross-port renumbering evidence**
+  found so far for #0080:
+
+    1. The 9-frame cart→dos delta is uniform across the entire
+       disintegration cluster, suggesting cart's polygon bank
+       has 9 extra frames inserted before the cluster's start
+       relative to dos. The shift is constant, so cart's
+       polygon-bank diff vs dos is "+9 frames inserted at one
+       specific point upstream of CIN_619/646".
+    2. The 147-frame amiga→dos delta on the same cluster
+       suggests amiga's polygon bank is laid out very
+       differently — 147 fewer frames before the cluster.
+       This matches the issue's "amiga 1991 used substantially
+       different cinematic numbering" hypothesis.
+    3. The fact that the SAME VAR_13 dispatcher with the SAME
+       18 state-bindings exists in all 3 ports proves the
+       silenced animation logic was already in Eric Chahi's
+       1991 amiga release — preserved verbatim across the
+       1992 port to dos and the 1992 cartridge port.
+
+  Next: render the amiga and cart equivalents (CIN_499..506,
+  480..488 for amiga; CIN_655..662, 628..636 for cart) — gated
+  on amiga POLY_CINEMATIC extraction (#0009 et al.) and cart
+  cinematic.rom extraction (#0068).
