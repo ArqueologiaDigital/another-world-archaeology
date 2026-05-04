@@ -157,13 +157,32 @@ def localize_stage(asm_in: Path) -> tuple[int, int, int]:
         for w in re.findall(r"\b([A-Z_][A-Z_0-9]+)\b", ln):
             asm_in_body_uses.add(w)
 
+    # Determine chunk include-order from the .asm.in (so we can pick
+    # the FIRST referencing chunk as the EQU owner when multiple
+    # chunks use it).
+    include_order: dict[str, int] = {}
+    inc_re = re.compile(
+        rf'^\s*;@include\s+"{stage_lower}/([^"]+)"\s*(?:;.*)?$'
+    )
+    for i, ln in enumerate(asm_in_lines):
+        m = inc_re.match(ln)
+        if m:
+            include_order.setdefault(m.group(1), i)
+
     relocatable: dict[str, Path] = {}
     for name, chunk_set in refs.items():
         if name in asm_in_body_uses:
             continue  # used directly by .asm.in; can't relocate
-        if len(chunk_set) != 1:
+        if len(chunk_set) == 0:
             continue
-        relocatable[name] = next(iter(chunk_set))
+        # Pick the chunk that appears EARLIEST in the .asm.in's
+        # include order — that ensures the EQU is in scope for any
+        # later chunk that also references it.
+        chunks_with_order = [
+            (include_order.get(c.name, 10**9), c) for c in chunk_set
+        ]
+        chunks_with_order.sort()
+        relocatable[name] = chunks_with_order[0][1]
 
     if not relocatable:
         return 0, 0, 0
