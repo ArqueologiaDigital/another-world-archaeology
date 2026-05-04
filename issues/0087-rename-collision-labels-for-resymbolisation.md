@@ -78,3 +78,18 @@ sites, plus 61 more multi-defined symbols across 250 sites).
 
 - 2026-05-04: opened. Surfaced by the resymbolize attempt that
   cleared 3 of 389 cases.
+- 2026-05-04: first sweep with `tools/rename_collision_labels.py`
+  using the `rename_in_chunk` strategy (rename def + every
+  reference inside the chunk). 28 chunks accepted; many reverted
+  because the chunk's local references resolved to non-local
+  defs the rename shadowed. After the rename, resymbolize
+  applied 156 more literals. Source-reconstruction commit
+  `bc9018b`.
+- 2026-05-04: second sweep with the dual-strategy tool
+  (`rename_in_chunk` first, `rename_def_only` fallback;
+  archaeology commit `14a876e`). 966 renames across 214 chunks;
+  624 still unrenameable. Resymbolize then applied 58 more
+  literals. Source-reconstruction commit `7874804`.
+
+  Cumulative: 217 / 389 literal sites resolved (56%); 172 still
+  unsymbolisable.
