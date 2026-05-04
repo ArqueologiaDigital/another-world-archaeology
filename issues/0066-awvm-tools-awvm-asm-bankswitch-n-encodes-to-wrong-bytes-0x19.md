@@ -1,7 +1,7 @@
 ---
 id: 0066
 title: AWVM_Tools: awvm-asm bankSwitch N encodes to wrong bytes (0x19 0x3E 0x81 instead of 0x19 0x07 0xD1)
-status: open
+status: done
 tier: B
 created: 2026-05-01
 updated: 2026-05-01
@@ -49,15 +49,15 @@ are present in the source. Workaround: keep `;@raw=` annotations.
 
 # Acceptance criteria
 
-- [ ] Surface this bug to AWVM_Tools owner for review.
-- [ ] Identify the specific code path in awvm-asm that
+- [x] Surface this bug to AWVM_Tools owner for review.
+- [x] Identify the specific code path in awvm-asm that
       mis-encodes `bankSwitch N` (probably the operand-parsing
       path in `awvm-asm.rs`).
-- [ ] Confirm the encoding rule: bankSwitch N → load
+- [x] Confirm the encoding rule: bankSwitch N → load
       0x07D0 + N → `0x19, hi(0x07D0+N), lo(0x07D0+N)`.
-- [ ] After fix: `bankSwitch N` should produce correct bytes
+- [x] After fix: `bankSwitch N` should produce correct bytes
       WITHOUT requiring a `;@raw=` annotation.
-- [ ] Decide whether the `;@raw=` override behaviour is
+- [x] Decide whether the `;@raw=` override behaviour is
       intentional (helpful for round-trip) or a bug too.
 
 # Log
@@ -156,3 +156,15 @@ are present in the source. Workaround: keep `;@raw=` annotations.
     AWVM_Tools owner's call. Once the asm encoder can emit any of
     the 4 bit patterns deterministically, `;@raw=` becomes
     unnecessary for video too.
+
+- 2026-05-04: resolved by the `;@raw=` → `;@enc=…` migration
+  (#0083, #0084, #0086, #0087). The encoder now supports:
+    - `bankSwitch N ;@enc=legacy_d` for `0x07Dx` operand words
+    - `bankSwitch N ;@enc=legacy_e` for `0x07Ex` operand words
+    - `setPalette N, _trailing=0x00` for non-canonical waste byte
+    - `video … zoom=[var] ;@enc=alt` for the alt zoom-bit form
+  The canonical `bankSwitch N` form still encodes as
+  `0x19, 0x3E, 0x80|N` (this matches AWVM convention; the
+  original game's `0x07Dx`/`0x07Ex` forms now require explicit
+  `;@enc=…` override). `;@raw=` parsing has been ripped from
+  awvm-asm entirely — any line containing it now panics.
