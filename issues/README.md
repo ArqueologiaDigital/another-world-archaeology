@@ -10,8 +10,8 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 
 | status | A | B | C | D | other |
 |---|---|---|---|---|---|
-| **open** | 10 | 14 | 20 | 4 | · |
-| **in-progress** | · | 2 | · | · | · |
+| **open** | 10 | 13 | 20 | 4 | · |
+| **in-progress** | · | 3 | · | · | · |
 | **blocked** | 2 | · | 12 | · | · |
 | **done** | 8 | 2 | 4 | 2 | · |
 | **wontfix** | · | · | 1 | · | · |
@@ -45,7 +45,7 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 - ○ [#0054](./0054-build-unused-polygon-scanner-pipeline-run-on-all-ports-level.md) — Build unused-polygon scanner pipeline + run on all ports / levels (global reachability) `research` `polygon` `assets` `bytecode` — needs #0058
 - ⏵ [#0055](./0055-unused-sound-scan-enumerate-sound-resources-scan-all-reachab.md) — Unused SOUND scan: enumerate SOUND resources, scan all reachable bytecode for playSound references, render unused `research` `sound` `assets` `bytecode` — needs #0058
 - ⏵ [#0056](./0056-unused-music-scan-enumerate-music-resources-scan-all-reachab.md) — Unused MUSIC scan: enumerate MUSIC resources, scan all reachable bytecode for song references `research` `music` `assets` `bytecode` — needs #0058
-- ○ [#0057](./0057-unused-palette-scan-enumerate-palette-indices-in-palette-res.md) — Unused PALETTE scan: enumerate palette indices in PALETTE resources, scan setPalette references across all reachable bytecode `research` `palette` `assets` `bytecode` — needs #0058
+- ⏵ [#0057](./0057-unused-palette-scan-enumerate-palette-indices-in-palette-res.md) — Unused PALETTE scan: enumerate palette indices in PALETTE resources, scan setPalette references across all reachable bytecode `research` `palette` `assets` `bytecode` — needs #0058
 - ○ [#0058](./0058-dead-bytecode-scan-detect-unreachable-code-regions-across-th.md) — Dead bytecode scan: detect unreachable code regions across the whole game (with setup-then-overwrite gate awareness) `research` `bytecode` `reachability` `genealogy`
 - ○ [#0066](./0066-awvm-tools-awvm-asm-bankswitch-n-encodes-to-wrong-bytes-0x19.md) — AWVM_Tools: awvm-asm bankSwitch N encodes to wrong bytes (0x19 0x3E 0x81 instead of 0x19 0x07 0xD1) `awvm-tools` `bug` `assembler`
 - ○ [#0069](./0069-unify-asm-collapse-2-of-3-agreement-to-reduce-amiga-diff-count.md) — unify_asm: collapse 2-of-3 agreement to reduce amiga 3-way diff count `unify-asm` `optimisation` `phase-3b`

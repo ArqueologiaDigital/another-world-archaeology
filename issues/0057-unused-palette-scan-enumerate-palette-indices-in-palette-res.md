@@ -1,10 +1,10 @@
 ---
 id: 0057
 title: Unused PALETTE scan: enumerate palette indices in PALETTE resources, scan setPalette references across all reachable bytecode
-status: open
+status: in-progress
 tier: B
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-04
 depends_on: [0058]
 blocks: []
 tags: [research, palette, assets, bytecode, genealogy]
@@ -54,3 +54,47 @@ are excluded from the unused set conservatively.
 # Log
 
 - 2026-04-30: opened. Companion to #0054.
+
+- 2026-05-04: naive slot-level scanner shipped — `tools/unused_palette_scan.py`.
+
+  DOS-port findings (per-level, of 32 slots in each level's
+  PALETTE resource):
+
+  | Level | Stage      | #used | unused indices                         |
+  |-------|------------|-------|----------------------------------------|
+  | 0     | CODE_WHEEL | 26    | 2,8,28,29,30,31                        |
+  | 1     | INTRO      | 28    | 28,29,30,31                            |
+  | 2     | LAKE       | 20    | 0,1,4,8,12,14,16,26,27,28,30,31        |
+  | 3     | PRISON     | 18    | 0,1,3,10,13,14,16,17,22,23,24,27,28,30 |
+  | 4     | CAVES      | 26    | 0,3,4,10,20,28                         |
+  | 5     | TANK       | 16    | 0,7,8,9,17,18,20,21,22,23,24,25,26,27,28,30 |
+  | 6     | CAPSULE    | 22    | 5,7,8,10,13,15,16,18,28,30             |
+  | 7     | ENDING     | 17    | 0..9,13,14,15,30,31                    |
+  | 8     | PASSCODE   | 2     | (uses only slots 0,5; rest unused)     |
+
+  Total unused slot-indices summed across all levels: **113**.
+
+  Notable patterns:
+  - Slots 28-31 are unused in INTRO + CODE_WHEEL + most others
+    — looks like the "high four" palettes are systematically
+    excluded from selection.
+  - PASSCODE uses only 2 of 32 slots (likely a static red+grey
+    palette + nothing else).
+  - ENDING skips the entire low half (slots 0-9 unused).
+
+  Acceptance items:
+  - [x] Build PALETTE-resource enumerator (manifest reads it
+        already; #defined = 9 in DOS).
+  - [ ] Render each palette as a 16-swatch SVG strip
+        (gated on a palette-render tool).
+  - [x] Build setPalette-reference scanner (literal-index, per-level).
+  - [ ] Reachability filter (depends on #0058).
+  - [ ] Diff layer-1 (unused resources): naive scan finds 0 PALETTE
+        resources `load`'d explicitly — but the AW engine implicitly
+        loads each level's PALETTE alongside its BYTECODE, so this
+        layer needs a different-than-`load id=` heuristic to be
+        meaningful.
+  - [x] Per-port: DOS done. Other ports' resources need extraction.
+  - [ ] Cross-port comparison.
+  - [ ] Render unused palettes for visual inspection.
+  - [ ] Catalog as `docs/content/research/06d-unused-palettes.md`.
