@@ -73,7 +73,8 @@ def compute_reachable_solids(data: bytes, seed_offsets: list[int]) -> dict[int, 
     return out
 
 
-def diff_stage(stage: str) -> None:
+def diff_stage(stage: str) -> list[int]:
+    """Returns list of amiga offsets for the cut-content set."""
     spec = STAGES[stage]
     poly_idx = spec["poly"]
     level = spec["level"]
@@ -85,14 +86,14 @@ def diff_stage(stage: str) -> None:
 
     if not amiga_poly.is_file() or not dos_poly.is_file():
         print(f"{stage}: skip — missing poly resource file(s)")
-        return
+        return []
 
     # Find the disasm file
     amiga_asm = next(amiga_disasm_dir.glob("*.asm"), None)
     dos_asm = next(dos_disasm_dir.glob("*.asm"), None)
     if amiga_asm is None or dos_asm is None:
         print(f"{stage}: skip — missing disasm file(s)")
-        return
+        return []
 
     # Bytecode video=1 references
     refs_amiga = asset_references.scan_one_disasm(amiga_asm)
@@ -129,18 +130,36 @@ def diff_stage(stage: str) -> None:
     print(f"  dos-USES-but-amiga-LACKS:  {len(dos_uses_but_amiga_lacks):>4d}  "
           "(DOS additions not in 1991 bank)")
 
+    # Map back to amiga offsets for the cut-content set
+    cut_offsets = sorted(
+        off for off, h in used_amiga.items() if h in amiga_uses_but_dos_lacks
+    )
+    return cut_offsets
+
 
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("stages", nargs="*", help="stages to diff (default: all)")
+    p.add_argument("--dump-cut-content", type=Path,
+                   help="write JSON of amiga-USES-but-dos-LACKS offsets per stage")
     args = p.parse_args()
 
     stages = [s.upper() for s in args.stages] if args.stages else list(STAGES.keys())
+    cut_content_per_stage: dict[str, list[int]] = {}
     for stage in stages:
         if stage not in STAGES:
             print(f"unknown stage: {stage}")
             continue
-        diff_stage(stage)
+        cuts = diff_stage(stage)
+        if cuts:
+            cut_content_per_stage[stage] = cuts
+
+    if args.dump_cut_content:
+        import json
+        args.dump_cut_content.write_text(
+            json.dumps(cut_content_per_stage, indent=2)
+        )
+        print(f"\nWrote cut-content offsets to {args.dump_cut_content}")
     return 0
 
 
