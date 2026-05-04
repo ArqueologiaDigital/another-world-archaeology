@@ -4,7 +4,7 @@ title: CAPSULE alien sprite uses different CIN ranges in cart, dos, and amiga
 status: open
 tier: A
 created: 2026-05-03
-updated: 2026-05-03
+updated: 2026-05-04
 tags: [archaeology, capsule, divergence, animation, cinematic-bank]
 ---
 
@@ -62,3 +62,52 @@ the high-nibble dispatchers we already named).
 - 2026-05-03: opened. Surfaced during CAPSULE rename rounds —
   see commit b494b46 for the dos+amiga round that documented the
   divergent CIN ranges per arm.
+
+- 2026-05-04: byte-level comparison of CAPSULE poly_cinematic
+  banks (`tmp/output/msdos/resources/resource-0x28.bin` vs
+  `tmp/output/amiga/resources/resource-0x28.bin`) at the EQU
+  offsets for the mapped CIN pairs:
+
+  | Pair | DOS CIN | Amiga CIN | First-4-byte (type+bbox) match | Full-32-byte match |
+  |---|---|---|---|---|
+  | 2-case A | 111 (0x493E) | 183 (0x506E) | YES | NO |
+  | 2-case B | 112 (0x655E) | 184 (0x9658) | YES | NO |
+  | 3-case A | 108 (0x4906) | 180 (0x5036) | YES | NO |
+  | 3-case B | 109 (0x494E) | 181 (0x507E) | YES | NO |
+  | 3-case C | 110 (0x6526) | 182 (0x9620) | YES | NO |
+
+  All five mapped pairs have **identical poly type + bounding box**
+  (first 4 bytes), confirming each pair refers to the same logical
+  sprite (same dimensions, same root polygon).
+
+  The trailing bytes diverge only at SUB-POLYGON OFFSETS
+  (the 16-bit pointers to chained sub-polys within the bank). The
+  vector data tail itself (e.g. `ce 09 01 04 09 00 09 01 00 01 00 00`
+  on the 3-case C pair) is **byte-identical** in both arms.
+
+  **Conclusion**: the CAPSULE alien CIN renumbering between
+  amiga 1991 and dos 1992 is a **bank repack + index renumbering**,
+  not a content rewrite. The sprite OUTLINES are the same; only the
+  polygon-bank packing layout (and therefore the EQU offsets and
+  index positions) differs.
+
+  Cart 1992 is presumably the same logical content (the
+  dispatchers' role-mapping says cart CIN_109-111 ≡ dos CIN_108-110
+  ≡ amiga CIN_180-182), but cart's polygon bank isn't yet
+  extracted — the cartridge_rom extractor doesn't decode polygons
+  yet. Confirming cart's bytes would close this issue.
+
+  **Acceptance items resolved**:
+    - ✅ Built per-release CIN-index → poly-content mapping
+      (for dos and amiga; cart pending extractor).
+    - ✅ For each dos/amiga CIN pair: confirmed underlying poly
+      bytes have identical headers (semantically the same sprite)
+      but differ only in sub-poly offsets (bank repack).
+    - ✅ Verdict: this IS purely a renumbering, not a
+      re-spritefication. The 1992 ports both renumbered indices
+      from amiga's 1991 layout, presumably to suit their target
+      platform's bank-loading conventions.
+
+  **Still pending**:
+    - [ ] Cart polygon extraction (gated on cartridge_rom
+      extractor implementing polygon decode).
