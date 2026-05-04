@@ -175,3 +175,26 @@ for off in offsets:
   Remaining acceptance items still need a human reviewer to scan
   the per-frame renders and confirm/refute the rebuild
   interpretation per cycle.
+
+- 2026-05-04 (refinement): the "cut content" framing is wrong.
+  Cross-checking DOS's HERO_FALL_LEFT_LOOP routine shows DOS DOES
+  preserve a hero-resume-left animation — it just uses composite
+  helpers `DRAW_VIDEO_073_AND_CIN_002`, `DRAW_VIDEO_074_AND_*`,
+  `DRAW_VIDEO_075_AND_*`, `DRAW_VIDEO_076_AND_*` that draw shared
+  COMMON_VIDEO sprites instead of amiga's per-stage
+  CINEMATIC_HERO_RESUME_LEFT_F* frames.
+
+  Architectural shift: amiga 1991 gave each stage its own
+  dedicated detail sprites; DOS 1992 unified hero animations
+  across stages by using the COMMON_VIDEO bank + per-stage
+  overlays. The 207 amiga-only sub-polys are real artifacts of
+  this re-pipelining (the amiga-specific detail sprites are
+  literally absent from DOS's bank), but the FUNCTIONALITY (a
+  smooth resume-walk animation) is preserved in DOS via a
+  different sprite-composition strategy.
+
+  This reframes the entire archaeology angle: the 1991→1992 port
+  was a SPRITE PIPELINE REBUILD, not a content cut. amiga's
+  per-stage detail richness was traded for DOS's bank-friendly
+  shared-sprite approach. Updated `docs/content/research/12-...`
+  with this revised verdict.
