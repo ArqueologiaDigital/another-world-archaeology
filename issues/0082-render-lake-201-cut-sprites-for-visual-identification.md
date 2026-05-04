@@ -37,12 +37,15 @@ Rendering each polygon will let a human reviewer:
 
 # Acceptance criteria
 
-- [ ] Render each of the 201 unique-by-content cut sprites at
+- [x] Render each of the 201 unique-by-content cut sprites at
       amiga's LAKE palette (resource 0x1a, half=first, indices
       5..7 are the most likely shipping LAKE palettes).
-- [ ] Convert SVG output to PNG for inline embedding (this is
-      the current blocker — neither rsvg-convert nor inkscape is
-      installed in the working environment).
+      *(Done 2026-05-04 via `tools/polygon_render_png.py` +
+      `tools/batch_render_cut_polys.py`. 207 PNGs generated at
+      tmp/cut_renders/LAKE/. The cairo Python binding bypasses the
+      rsvg-convert / inkscape dependency.)*
+- [x] Convert SVG output to PNG for inline embedding.
+      *(Resolved by going direct-to-PNG via cairo; no SVG step.)*
 - [ ] Group renders by visual similarity (manually or via
       pixel-similarity hashing).
 - [ ] Tag each cluster with a hypothesis ("unused beetle-attack
@@ -122,3 +125,28 @@ for off in offsets:
   per-sprite basis, but the address-clustering already strongly
   suggests this is "trimmed hero animation frames", not "removed
   cutscene actors".
+
+- 2026-05-04 (later): PNG batch render shipped via two new tools.
+
+  `tools/polygon_render_png.py` is a direct-to-PNG variant of the
+  existing SVG renderer (uses Python cairo binding, no
+  rsvg-convert dependency). `tools/batch_render_cut_polys.py`
+  reads `docs/cut_content/cut_polygons_amiga_only.json` and
+  produces per-offset PNGs grouped per stage, plus a per-stage
+  HTML contact-sheet index.
+
+  Output landed at `tmp/cut_renders/LAKE/<offset>.png` (207 files)
+  + `tmp/cut_renders/CAPSULE/` (112) + `tmp/cut_renders/INTRO/` (2)
+  + `tmp/cut_renders/PASSCODE/` (1). Index pages at each stage's
+  `index.html` allow quick visual scanning.
+
+  Each PNG is small (700-1256 bytes) — most cut polygons are
+  individual sub-polygons rather than complete sprites. Visual
+  identification of complete sprites would need to render the
+  PARENT group polygons (which include these as sub-references)
+  rather than individual leaves.
+
+  Acceptance items 1+2 done; remaining 3 (cluster by similarity),
+  4 (tag clusters with hypotheses), 5 (research/12 update with
+  visual findings) still pending — these need a human reviewer
+  to scan the PNG gallery and classify.
