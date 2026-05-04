@@ -64,3 +64,12 @@ proceeds after owner ack.
   source-reconstruction commit `d7e50e0`. Audit + strip + check
   + snapshot tooling landed in archaeology repo (commit pending
   in the same session).
+- 2026-05-04: bisect-driven strip across all per-branch sources
+  (source-reconstruction commit `363756b`). 28,377 → 580
+  annotations remaining (98.0% stripped). Strip tool refactored
+  to operate on source-text annotation rank for safe round-trip
+  back to disk (archaeology commit `c593546`). Note: unified
+  chunks under `_unified/` still carry ~63,714 annotations from
+  the same disasm pass; those are not yet audited because the
+  audit needs a per-(`.asm.in`, port) framework that respects
+  cross-arm chunk sharing — left as a follow-up.
