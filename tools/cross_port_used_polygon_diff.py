@@ -134,6 +134,11 @@ def diff_stage(stage: str) -> list[int]:
     cut_offsets = sorted(
         off for off, h in used_amiga.items() if h in amiga_uses_but_dos_lacks
     )
+    # And dos offsets for the DOS-additions set
+    add_offsets = sorted(
+        off for off, h in used_dos.items() if h in dos_uses_but_amiga_lacks
+    )
+    diff_stage._last_dos_additions = add_offsets  # cheeky stash
     return cut_offsets
 
 
@@ -142,10 +147,13 @@ def main() -> int:
     p.add_argument("stages", nargs="*", help="stages to diff (default: all)")
     p.add_argument("--dump-cut-content", type=Path,
                    help="write JSON of amiga-USES-but-dos-LACKS offsets per stage")
+    p.add_argument("--dump-dos-additions", type=Path,
+                   help="write JSON of dos-USES-but-amiga-LACKS offsets per stage")
     args = p.parse_args()
 
     stages = [s.upper() for s in args.stages] if args.stages else list(STAGES.keys())
     cut_content_per_stage: dict[str, list[int]] = {}
+    dos_additions_per_stage: dict[str, list[int]] = {}
     for stage in stages:
         if stage not in STAGES:
             print(f"unknown stage: {stage}")
@@ -153,6 +161,9 @@ def main() -> int:
         cuts = diff_stage(stage)
         if cuts:
             cut_content_per_stage[stage] = cuts
+        adds = getattr(diff_stage, "_last_dos_additions", [])
+        if adds:
+            dos_additions_per_stage[stage] = adds
 
     if args.dump_cut_content:
         import json
@@ -160,6 +171,12 @@ def main() -> int:
             json.dumps(cut_content_per_stage, indent=2)
         )
         print(f"\nWrote cut-content offsets to {args.dump_cut_content}")
+    if args.dump_dos_additions:
+        import json
+        args.dump_dos_additions.write_text(
+            json.dumps(dos_additions_per_stage, indent=2)
+        )
+        print(f"Wrote dos-additions offsets to {args.dump_dos_additions}")
     return 0
 
 
