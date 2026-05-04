@@ -1,7 +1,7 @@
 ---
 id: 0086
 title: 366 `;@raw=` survive in `_unified/` due to EQU-value collisions across stage scopes
-status: open
+status: done
 tier: B
 created: 2026-05-04
 updated: 2026-05-04
@@ -90,3 +90,18 @@ awvm-asm; flip pre-commit / CI to enforce `--strict`.
   ~62k to 366. The migration tool's pattern matchers don't apply
   because the residue is symbol-resolution mismatch, not
   encoding-form mismatch.
+- 2026-05-04: done via literal-operand replacement (source-
+  reconstruction commits `d630744`, `5340dee`). The
+  `tools/resolve_raw_collisions.py` script decodes the address
+  word from each annotation and replaces the ambiguous symbolic
+  operand with the literal hex value, dropping the annotation.
+  Trade-off accepted: the literal `0x533A` loses the symbolic
+  readability of `SHARED_RET` etc., but the original symbols
+  were colliding under awvm-asm's last-definition-wins rule, so
+  the literal IS the unambiguous form. Per-chunk
+  re-symbolisation with unique scope-specific names is a
+  follow-up if readability becomes a problem; the priority was
+  unblocking #0083 Phase 2.
+
+  Active source tree is now `;@raw=`-FREE: per-branch + unified
+  both clean, audit `--strict` passes.

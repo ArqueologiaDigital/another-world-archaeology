@@ -1,7 +1,7 @@
 ---
 id: 0083
 title: Teach awvm-asm to encode the patterns that still need `;@raw=`
-status: open
+status: done
 tier: B
 created: 2026-05-04
 updated: 2026-05-04
@@ -82,3 +82,25 @@ Detailed migration plan: `docs/raw_to_enc_migration_plan.md`.
   the same disasm pass; those are not yet audited because the
   audit needs a per-(`.asm.in`, port) framework that respects
   cross-arm chunk sharing — left as a follow-up.
+- 2026-05-04: per-arm unified strip
+  (source-reconstruction `c522caf`): 61,746 → 755 annotations.
+  Migration on per-arm chunks
+  (source-reconstruction `2c4f30e`): 491 patterns rewritten to
+  `;@enc=…`. Archaeology tool commit `0b1b015`.
+- 2026-05-04: shared-chunk strip
+  (source-reconstruction `2c2dcd0`): 678 → 46 annotations
+  multi-port-verified. Archaeology tool commit `cbd8728`.
+  Final unified residue: 366 cases, all EQU/label collisions
+  (#0086).
+- 2026-05-04: literal-operand resolver
+  (source-reconstruction `d630744`, archaeology tool
+  commit `5340dee`) replaces every surviving annotation's
+  ambiguous symbolic operand with the literal address it
+  encodes. Active source tree is now `;@raw=`-FREE
+  (verify_stage 29/29, verify_unified 27/27, audit `--strict`
+  OK).
+- 2026-05-04: Phase 2 complete (AnotherWorld_VMTools commit
+  `a1c6661`). awvm-asm `parse_raw_marker` removed,
+  `Instruction.raw` field removed, parser now panics on any
+  source line containing `;@raw=`. Going forward `;@raw=` is
+  strictly forbidden.
