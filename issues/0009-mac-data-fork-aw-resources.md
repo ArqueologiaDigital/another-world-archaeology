@@ -152,5 +152,11 @@ big-endian table at offset 0x20.
         either an AWVM_Tools change (proposal-gated, see CLAUDE.md
         rule) or a separate per-port disassembly pipeline. Logging
         as a separate followup.
-  - [ ] Identify FILE0146's role (Mac-exclusive resource at hex
-        0x92).
+  - [x] Identify FILE0146's role (Mac-exclusive resource at hex
+        0x92). **DONE**: it's a **640x480 GIF87a image** (magic
+        `47 49 46 38 37 61` at offset 0; `file` confirms `GIF
+        image data, version 87a, 640 x 480`). Too large for AW's
+        320x200 framebuffer — must be a Mac-exclusive
+        splash/title/credits graphic, not used by the AW VM
+        runtime. Consistent with the Mac UI tradition of giving
+        each game a high-res title/promo image.
