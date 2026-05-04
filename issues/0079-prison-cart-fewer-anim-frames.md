@@ -1,11 +1,11 @@
 ---
 id: 0079
 title: PRISON cart bytecode has fewer sub-anim dispatch cases than dos/amiga
-status: open
+status: wontfix
 tier: A
 created: 2026-05-03
 updated: 2026-05-04
-tags: [archaeology, prison, divergence, animation]
+tags: [archaeology, prison, divergence, animation, disproven]
 ---
 
 # Context
@@ -135,3 +135,47 @@ zero-length.
   (pair_grid.png + 4 individual PNG/SVG). Visual confirmation
   closes the "investigate why bytecode never references them"
   acceptance item.
+
+- 2026-05-04 (final correction): the entire premise of this issue
+  is **wrong** and the previous "(later)" entry above repeats the
+  mistake. Cart's PRISON does NOT omit the 169/241 dispatchers —
+  they exist, just under autogen names. Verification via direct
+  pattern-matching:
+
+  Counting the canonical `mov [0xF8], [0x09]` / `and [0xF8], 0x000F`
+  / `je [0xF8], 0x01, <CIN>` dispatcher across all three branches
+  of `src/levels/<branch>/PRISON.asm`:
+
+      cart : 6 dispatchers (targets 168, 169, 169_WITH_POS_STEP, 240, 241, 352)
+      dos  : 6 dispatchers (same 6 targets)
+      amiga: 6 dispatchers (same 6 targets)
+
+  The "missing" dispatchers in cart are present under different
+  *label names* — for example, what amiga calls
+  `DRAW_CIN_241_IF_VAR09_EQ_1` (in `prison/amiga__post_DRAW_CIN_240.inc`)
+  is what cart calls `DISPATCH_VAR09_BIT0_TO_5460` (in
+  `prison/cart__post_SHARED_RET.inc`), with byte-identical body. The
+  dispatcher count, target cinematics, and behaviour are identical
+  across all three branches.
+
+  PRISON.asm.in (the unified source) verifies byte-clean for cart
+  / msdos / amiga simultaneously (`verify_unified.py` reports OK
+  across all three) — which by itself proves the bytecode is the
+  same across these arms.
+
+  The earlier "render the dos+amiga-only frames cart is missing"
+  exercise was therefore based on a false premise. The PNGs at
+  `docs/assets/research-prison-cart-missing-frames/` show CIN_169
+  and CIN_241 polygons that DO exist and ARE called in cart's
+  bytecode (the `video type=1, offset=CINEMATIC_169` opcodes at
+  `cartridge_1992/PRISON.asm:9199, 10486` and `:9311` for CIN_241).
+  The renders are correct in what they depict; the framing claim
+  ("cart is missing these frames") is wrong.
+
+  This issue is closed `wontfix` because:
+    - The original hypothesis is disproven.
+    - There is no remaining bytecode-level work to do (the unified
+      file already byte-matches all three arms).
+    - The naming asymmetry (cart's autogen label vs amiga/dos's
+      canonical `DRAW_CIN_241_IF_VAR09_EQ_1`) is a tracked separate
+      cleanup task — see issue #0091.
