@@ -2953,3 +2953,81 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x3C` | cart | `SCROLL_Y_BLIT_DISPATCHER` | src/levels/_unified/ending/cart__post_INIT_VARE_TO_12.inc:211 |
 | `0x3C` | dos | `SCROLL_Y_BLIT_DISPATCHER` | src/levels/_unified/ending/dos__post_DRAW_CIN_70_ANIM_LOOP.inc:117 |
 
+## Channel role inference (per stage)
+
+Compact heatmap: for each (stage, channel) the routine names setup-called on that channel are binned by well-known prefix patterns; the dominant category is shown. Empty cells mean the stage doesn't use that channel; `?` means every routine on that channel is a `LABEL_HHHH` placeholder (no semantic signal yet).
+
+Categories: `blit` (BLIT_*), `cin-draw` (DRAW_CIN_*),
+`cv-draw` (DRAW_CV_* / INLINE_DRAW_CV_*),
+`framebuf` (CLEAR_/FILL_/COPY_PAGE_*),
+`actor` (HERO_/BEAST_/…), `anim` (*_LOOP, ANIM_*),
+`init` (INIT_/SETUP_/INLINE_SET_), `cleanup` (KILL_CHANNEL_*),
+`music` (MUSIC_/SFX_/PLAY_*), `delay`, `scroll`,
+`unnamed` (only LABEL_HHHH), `mixed` (no clear winner).
+
+| channel | CAPSULE | CAVES | CODE_WHEEL | ENDING | INTRO | LAKE | PASSCODE | PRISON | TANK |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `0x00` | unnamed | unnamed |  |  |  | other |  | unnamed | mixed |
+| `0x01` | unnamed | unnamed |  |  | mixed | other |  | unnamed | mixed |
+| `0x02` | mixed | init |  |  | init | other |  | unnamed | unnamed |
+| `0x03` | unnamed | mixed |  |  | mixed | other |  | unnamed |  |
+| `0x04` | unnamed | mixed |  |  | cleanup | anim |  | unnamed | unnamed |
+| `0x05` | unnamed | unnamed |  | cin-draw | cleanup | other |  | unnamed |  |
+| `0x06` | unnamed | unnamed |  |  | cleanup | actor |  |  | unnamed |
+| `0x07` | cleanup | unnamed |  |  | cleanup | mixed |  |  |  |
+| `0x08` | other | unnamed |  |  | mixed | actor |  | mixed |  |
+| `0x09` |  |  |  |  | other | actor |  |  | unnamed |
+| `0x0A` |  |  | unnamed | mixed | mixed | other |  | mixed | unnamed |
+| `0x0B` |  |  |  | cin-draw | mixed | other |  |  | mixed |
+| `0x0C` |  |  |  | cin-draw | mixed | mixed |  |  |  |
+| `0x0D` |  |  |  | unnamed | mixed | other |  |  |  |
+| `0x0E` |  |  | unnamed | other | mixed | mixed |  |  | cin-draw |
+| `0x0F` | mixed | unnamed |  | cin-draw | mixed | other |  |  | init |
+| `0x10` | unnamed | unnamed |  | init | mixed | actor |  | unnamed |  |
+| `0x11` |  |  |  | cin-draw | mixed | other |  | cin-draw |  |
+| `0x12` |  |  |  | cv-draw | init | actor |  | cin-draw |  |
+| `0x13` | other | mixed |  | cv-draw | anim | anim |  |  |  |
+| `0x14` | unnamed | unnamed | init | mixed | mixed | actor | init | unnamed | unnamed |
+| `0x15` | mixed | unnamed |  |  | mixed | mixed |  | mixed | unnamed |
+| `0x16` | unnamed | mixed |  |  | anim | mixed |  | unnamed | unnamed |
+| `0x17` | unnamed | unnamed |  |  | anim | other |  | unnamed | other |
+| `0x18` | unnamed | unnamed |  |  | anim | actor |  | unnamed | unnamed |
+| `0x19` | cleanup | unnamed |  |  | anim |  |  |  | unnamed |
+| `0x1A` | unnamed | unnamed |  |  | anim |  |  | unnamed | unnamed |
+| `0x1B` | mixed | init |  |  | anim |  |  |  |  |
+| `0x1C` |  | unnamed |  |  | anim |  |  |  | unnamed |
+| `0x1D` | mixed |  |  |  | anim |  |  |  |  |
+| `0x1E` |  |  | mixed | mixed | anim |  |  |  |  |
+| `0x1F` |  |  |  |  | anim |  |  |  | unnamed |
+| `0x20` |  |  |  |  |  |  |  |  | mixed |
+| `0x21` |  | cleanup |  |  |  |  |  | unnamed | unnamed |
+| `0x22` | unnamed | unnamed |  |  |  |  |  | unnamed | cin-draw |
+| `0x23` | unnamed | unnamed |  |  |  |  |  | unnamed | mixed |
+| `0x24` | unnamed | unnamed |  |  |  | other |  | unnamed | unnamed |
+| `0x25` | mixed | mixed |  |  |  | other |  | unnamed | unnamed |
+| `0x26` | unnamed | unnamed |  |  |  |  |  | unnamed | unnamed |
+| `0x27` | unnamed | mixed |  |  |  |  |  | unnamed |  |
+| `0x28` | unnamed | unnamed |  |  |  | actor |  | unnamed | mixed |
+| `0x29` |  | unnamed |  |  |  | mixed |  | unnamed |  |
+| `0x2A` | other | mixed |  |  |  |  |  | unnamed | init |
+| `0x2B` | init | mixed |  |  |  | actor |  | unnamed |  |
+| `0x2C` | mixed | init | other |  |  | mixed |  |  |  |
+| `0x2D` | mixed | init |  |  |  | other |  |  |  |
+| `0x2E` | mixed | unnamed |  |  |  | actor |  |  |  |
+| `0x2F` | mixed | unnamed |  |  |  | anim |  | unnamed | unnamed |
+| `0x30` | unnamed | unnamed |  |  |  | delay |  | unnamed | cin-draw |
+| `0x31` | unnamed | unnamed |  |  |  | other |  | unnamed | cin-draw |
+| `0x32` | unnamed | unnamed | other |  |  |  |  | unnamed |  |
+| `0x33` | unnamed | unnamed |  |  |  | init |  | unnamed |  |
+| `0x34` | unnamed | unnamed |  |  |  | mixed |  | mixed | unnamed |
+| `0x35` | unnamed | mixed |  |  |  | other |  | unnamed | init |
+| `0x36` | unnamed | unnamed |  | unnamed |  | cleanup |  | unnamed |  |
+| `0x37` | unnamed | mixed |  |  |  | other |  | unnamed | unnamed |
+| `0x38` | unnamed | unnamed |  |  |  | mixed |  | mixed | unnamed |
+| `0x39` | unnamed | unnamed |  |  |  |  |  | unnamed | mixed |
+| `0x3A` | unnamed | unnamed |  |  |  |  |  | unnamed |  |
+| `0x3B` | cleanup | unnamed |  |  |  | other |  | mixed | mixed |
+| `0x3C` | unnamed | unnamed | unnamed | blit | blit | blit | mixed | mixed | other |
+| `0x3E` | unnamed | mixed |  |  |  |  |  |  |  |
+| `0x3F` | mixed | unnamed | unnamed |  |  | mixed |  | unnamed | unnamed |
+
