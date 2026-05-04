@@ -4,7 +4,7 @@ title: Recover Atari ST memlist embedded inside START.PRG
 status: open
 tier: A
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-05
 depends_on: []
 blocks: []
 tags: [extractor, atari-st, research]
@@ -63,3 +63,35 @@ can't pass Atari ST bytecode through `awvm-disasm`.
   `releases/` so `awvm-disasm <atari-st-extracted-dir> all_levels
   atari_st` works. (Per project policy, AWVM_Tools changes need
   owner review first.)
+
+- 2026-05-05: extractor enhanced. Added
+  `synthesize_memlist_from_start_prg()` to
+  `extractors/atari_st_pasti.py` (commit `6196466`); the function
+  walks the embedded directory at offset `0x7EF2` until the `0xFF`
+  terminator and returns the raw BE bytes. The `extract()` entry-
+  point now writes those bytes to `<work_dir>/memlist.bin` after
+  the FAT12 walk, and records `memlist_synthesised: true` plus
+  the source offset in `manifest.json`.
+
+  Verified output: 147 entries × 20 bytes = 2940 bytes; md5
+  `329f1aaaaf8f244e5d051b925eecd3d6`. Type distribution **exactly
+  matches DOS 1992**:
+
+      SOUND: 103, MUSIC: 3, POLY_ANIM: 12, PALETTE: 9,
+      BYTECODE: 9, POLY_CINEMATIC: 9, UNKNOWN: 1, terminator: 1
+
+  Earlier note in this log claimed Atari ST has 1 extra SOUND vs
+  DOS — that was a mis-read caused by walking past the 0xFF
+  terminator into garbage. Corrected: the two ports have
+  **identical resource counts**.
+
+  Acceptance criteria status:
+    - [x] Identify memlist offset + format (offset 0x7EF2,
+          BE 20-byte entries, terminator state=0xFF)
+    - [x] Patch extractor to write a synthesised memlist.bin
+    - [ ] Register atari_st release in AWVM_Tools (gated on
+          owner review per CLAUDE.md)
+    - [ ] Per-resource md5 comparison Atari ST vs Amiga (gated
+          on AWVM_Tools registration; partial spot-check
+          already done — resource #27 byte-matches Amiga's
+          level-2 bytecode, see 2026-04-30 entry above)
