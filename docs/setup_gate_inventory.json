@@ -1,0 +1,1820 @@
+{
+  "cartridge_1992": [
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 1500,
+      "gated_address": "LABEL_9A9E",
+      "surviving_line": 1501,
+      "surviving_address": "LABEL_BE04",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x16",
+      "gated_line": 1502,
+      "gated_address": "LABEL_9A8A",
+      "surviving_line": 1503,
+      "surviving_address": "LABEL_B74A",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 10095,
+      "gated_address": "LABEL_4099",
+      "surviving_line": 10097,
+      "surviving_address": "LABEL_40B4",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 10101,
+      "gated_address": "LABEL_3FCE",
+      "surviving_line": 10103,
+      "surviving_address": "LABEL_3FF5",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x23",
+      "gated_line": 10116,
+      "gated_address": "LABEL_41B7",
+      "surviving_line": 10118,
+      "surviving_address": "LABEL_4210",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x25",
+      "gated_line": 10122,
+      "gated_address": "LABEL_41B7",
+      "surviving_line": 10124,
+      "surviving_address": "LABEL_4210",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x27",
+      "gated_line": 10128,
+      "gated_address": "LABEL_41B7",
+      "surviving_line": 10130,
+      "surviving_address": "LABEL_4210",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x18",
+      "gated_line": 16798,
+      "gated_address": "LABEL_5C5B",
+      "surviving_line": 16799,
+      "surviving_address": "KILL_CHAN_AT_59A3",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x37",
+      "gated_line": 17108,
+      "gated_address": "LABEL_3AE8",
+      "surviving_line": 17113,
+      "surviving_address": "LABEL_3A55",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x02",
+      "gated_line": 17289,
+      "gated_address": "LABEL_0CCD",
+      "surviving_line": 17294,
+      "surviving_address": "KILL_CHAN_AT_59A3",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x3C",
+      "gated_line": 17645,
+      "gated_address": "LABEL_3009",
+      "surviving_line": 17654,
+      "surviving_address": "LABEL_2FAA",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x2E",
+      "gated_line": 17938,
+      "gated_address": "KILL_CHAN_AT_59A3",
+      "surviving_line": 17939,
+      "surviving_address": "LABEL_2A6E",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18296,
+      "gated_address": "LABEL_BC70",
+      "surviving_line": 18298,
+      "surviving_address": "LABEL_BC62",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18306,
+      "gated_address": "LABEL_BE04",
+      "surviving_line": 18308,
+      "surviving_address": "LABEL_BDF6",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18356,
+      "gated_address": "LABEL_BFCC",
+      "surviving_line": 18358,
+      "surviving_address": "LABEL_BFA8",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18366,
+      "gated_address": "LABEL_C0B2",
+      "surviving_line": 18368,
+      "surviving_address": "LABEL_C092",
+      "branch": "cartridge_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 1296,
+      "gated_address": "LABEL_39E3",
+      "surviving_line": 1298,
+      "surviving_address": "LABEL_EA2E",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x15",
+      "gated_line": 1297,
+      "gated_address": "LABEL_3A26",
+      "surviving_line": 1299,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x01",
+      "gated_line": 4930,
+      "gated_address": "LABEL_315E",
+      "surviving_line": 4933,
+      "surviving_address": "LABEL_3136",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 11108,
+      "gated_address": "LABEL_4B26",
+      "surviving_line": 11110,
+      "surviving_address": "LABEL_4B41",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 11114,
+      "gated_address": "LABEL_4A5B",
+      "surviving_line": 11116,
+      "surviving_address": "LABEL_4A82",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x23",
+      "gated_line": 11129,
+      "gated_address": "LABEL_4C44",
+      "surviving_line": 11131,
+      "surviving_address": "LABEL_4C9D",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x25",
+      "gated_line": 11135,
+      "gated_address": "LABEL_4C44",
+      "surviving_line": 11137,
+      "surviving_address": "LABEL_4C9D",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x27",
+      "gated_line": 11141,
+      "gated_address": "LABEL_4C44",
+      "surviving_line": 11143,
+      "surviving_address": "LABEL_4C9D",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x05",
+      "gated_line": 16679,
+      "gated_address": "JUNK__498E",
+      "surviving_line": 16681,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x34",
+      "gated_line": 16938,
+      "gated_address": "LABEL_CF7F",
+      "surviving_line": 16940,
+      "surviving_address": "LABEL_D026",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x3B",
+      "gated_line": 17095,
+      "gated_address": "LABEL_C794",
+      "surviving_line": 17101,
+      "surviving_address": "LABEL_C769",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x23",
+      "gated_line": 17193,
+      "gated_address": "LABEL_2FA2",
+      "surviving_line": 17203,
+      "surviving_address": "LABEL_307B",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x24",
+      "gated_line": 17196,
+      "gated_address": "LABEL_2DAB",
+      "surviving_line": 17205,
+      "surviving_address": "LABEL_2DB9",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x1B",
+      "gated_line": 17242,
+      "gated_address": "INIT_VARS_6C_6D_71_70",
+      "surviving_line": 17244,
+      "surviving_address": "INIT_VARS_71_6C_6D",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x01",
+      "gated_line": 17483,
+      "gated_address": "LABEL_315E",
+      "surviving_line": 17486,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x03",
+      "gated_line": 17700,
+      "gated_address": "LABEL_2256",
+      "surviving_line": 17702,
+      "surviving_address": "LABEL_224D",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x04",
+      "gated_line": 17857,
+      "gated_address": "LABEL_CD1A",
+      "surviving_line": 17862,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x3E",
+      "gated_line": 22636,
+      "gated_address": "LABEL_CBCD",
+      "surviving_line": 22639,
+      "surviving_address": "LABEL_CB8C",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22768,
+      "gated_address": "LABEL_EA2E",
+      "surviving_line": 22770,
+      "surviving_address": "LABEL_EA20",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22778,
+      "gated_address": "LABEL_EBC2",
+      "surviving_line": 22780,
+      "surviving_address": "LABEL_EBB4",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22828,
+      "gated_address": "LABEL_ED90",
+      "surviving_line": 22830,
+      "surviving_address": "LABEL_ED6C",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22838,
+      "gated_address": "LABEL_EE76",
+      "surviving_line": 22840,
+      "surviving_address": "LABEL_EE56",
+      "branch": "cartridge_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x09",
+      "gated_line": 1244,
+      "gated_address": "BEETLE_INIT_POS_THEN_WALK_LEFT",
+      "surviving_line": 1245,
+      "surviving_address": "KILL_CHANNEL_ROUTINE",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x2E",
+      "gated_line": 1246,
+      "gated_address": "BEETLE_KICK_DETECTOR",
+      "surviving_line": 1247,
+      "surviving_address": "WAIT_FOR_BEETLE_OFFSCREEN_THEN_KILL",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x29",
+      "gated_line": 4748,
+      "gated_address": "CHECK_IF_THE_BEAST_HAS_ALREADY_REACHED_LESTER",
+      "surviving_line": 4750,
+      "surviving_address": "WAIT_UNTIL_BEAST_CLOSE",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6813,
+      "gated_address": "HERO_FALL_LEFT_LOOP",
+      "surviving_line": 6815,
+      "surviving_address": "HERO_FALL_LEFT_PRELUDE",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6823,
+      "gated_address": "HERO_FALL_RIGHT_LOOP",
+      "surviving_line": 6825,
+      "surviving_address": "HERO_FALL_RIGHT_PRELUDE",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6849,
+      "gated_address": "HERO_LEAP_LEFT_LOOP",
+      "surviving_line": 6851,
+      "surviving_address": "HERO_LEAP_LEFT_PRELUDE",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6859,
+      "gated_address": "HERO_LEAP_RIGHT_LOOP",
+      "surviving_line": 6861,
+      "surviving_address": "HERO_LEAP_RIGHT_PRELUDE",
+      "branch": "cartridge_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 6865,
+      "gated_address": "LABEL_1023",
+      "surviving_line": 6867,
+      "surviving_address": "DRAW_CIN_146_TO_147_4F_AT_8AA18039",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 6871,
+      "gated_address": "LABEL_0F58",
+      "surviving_line": 6873,
+      "surviving_address": "DRAW_CIN_280_TO_281_2F_AT_75ED3E60",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x23",
+      "gated_line": 6885,
+      "gated_address": "LABEL_113D",
+      "surviving_line": 6887,
+      "surviving_address": "LABEL_1199",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x25",
+      "gated_line": 6895,
+      "gated_address": "LABEL_113D",
+      "surviving_line": 6897,
+      "surviving_address": "LABEL_1199",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x27",
+      "gated_line": 6901,
+      "gated_address": "LABEL_113D",
+      "surviving_line": 6903,
+      "surviving_address": "LABEL_1199",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x05",
+      "gated_line": 14176,
+      "gated_address": "INLINE_SET_VARE7_TO_5",
+      "surviving_line": 14178,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 14258,
+      "gated_address": "INIT_VARS_E7_E8",
+      "surviving_line": 14261,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x02",
+      "gated_line": 14259,
+      "gated_address": "INLINE_SET_VARE9_TO_8",
+      "surviving_line": 14262,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14820,
+      "gated_address": "LABEL_90F7",
+      "surviving_line": 14822,
+      "surviving_address": "STEP_DRAW_CIN555_LEFT4_RIGHT1",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14830,
+      "gated_address": "LABEL_928E",
+      "surviving_line": 14832,
+      "surviving_address": "DRAW_CIN555_STEP_RIGHT3",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14880,
+      "gated_address": "LABEL_9421",
+      "surviving_line": 14882,
+      "surviving_address": "LABEL_93FD",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14890,
+      "gated_address": "LABEL_9507",
+      "surviving_line": 14892,
+      "surviving_address": "LABEL_94E7",
+      "branch": "cartridge_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/cartridge_1992/TANK.asm",
+      "channel": "0x34",
+      "gated_line": 821,
+      "gated_address": "LABEL_064D",
+      "surviving_line": 823,
+      "surviving_address": "LABEL_0638",
+      "branch": "cartridge_1992",
+      "stage": "TANK"
+    }
+  ],
+  "chahi_amiga_1991": [
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x01",
+      "gated_line": 3399,
+      "gated_address": "LABEL_1FFB",
+      "surviving_line": 3402,
+      "surviving_address": "LABEL_1FD3",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 6792,
+      "gated_address": "LABEL_2B2F",
+      "surviving_line": 6794,
+      "surviving_address": "LABEL_2B4A",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 6798,
+      "gated_address": "LABEL_2A64",
+      "surviving_line": 6800,
+      "surviving_address": "LABEL_2A8B",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x23",
+      "gated_line": 6813,
+      "gated_address": "LABEL_2C4D",
+      "surviving_line": 6815,
+      "surviving_address": "LABEL_2CA0",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x25",
+      "gated_line": 6819,
+      "gated_address": "LABEL_2C4D",
+      "surviving_line": 6821,
+      "surviving_address": "LABEL_2CA0",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x27",
+      "gated_line": 6825,
+      "gated_address": "LABEL_2C4D",
+      "surviving_line": 6827,
+      "surviving_address": "LABEL_2CA0",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x2E",
+      "gated_line": 12564,
+      "gated_address": "KILL_CHAN_AT_59A3",
+      "surviving_line": 12565,
+      "surviving_address": "LABEL_17D8",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 13116,
+      "gated_address": "LABEL_9028",
+      "surviving_line": 13118,
+      "surviving_address": "LABEL_901A",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 13126,
+      "gated_address": "LABEL_9158",
+      "surviving_line": 13128,
+      "surviving_address": "LABEL_914A",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 13176,
+      "gated_address": "LABEL_92B8",
+      "surviving_line": 13178,
+      "surviving_address": "LABEL_9294",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 13186,
+      "gated_address": "LABEL_939E",
+      "surviving_line": 13188,
+      "surviving_address": "LABEL_937E",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 1262,
+      "gated_address": "LABEL_37D0",
+      "surviving_line": 1264,
+      "surviving_address": "LABEL_E41E",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x15",
+      "gated_line": 1263,
+      "gated_address": "LABEL_3813",
+      "surviving_line": 1265,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x01",
+      "gated_line": 4708,
+      "gated_address": "LABEL_2F51",
+      "surviving_line": 4711,
+      "surviving_address": "LABEL_2F29",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 10614,
+      "gated_address": "LABEL_4958",
+      "surviving_line": 10616,
+      "surviving_address": "LABEL_4973",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 10620,
+      "gated_address": "LABEL_488D",
+      "surviving_line": 10622,
+      "surviving_address": "LABEL_48B4",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x23",
+      "gated_line": 10635,
+      "gated_address": "LABEL_4A76",
+      "surviving_line": 10637,
+      "surviving_address": "LABEL_4AC9",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x25",
+      "gated_line": 10641,
+      "gated_address": "LABEL_4A76",
+      "surviving_line": 10643,
+      "surviving_address": "LABEL_4AC9",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x27",
+      "gated_line": 10647,
+      "gated_address": "LABEL_4A76",
+      "surviving_line": 10649,
+      "surviving_address": "LABEL_4AC9",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x34",
+      "gated_line": 16306,
+      "gated_address": "LABEL_CAB0",
+      "surviving_line": 16308,
+      "surviving_address": "LABEL_CB57",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x3B",
+      "gated_line": 16453,
+      "gated_address": "LABEL_C360",
+      "surviving_line": 16459,
+      "surviving_address": "LABEL_C335",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x23",
+      "gated_line": 16551,
+      "gated_address": "LABEL_2DAC",
+      "surviving_line": 16561,
+      "surviving_address": "LABEL_2E85",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x24",
+      "gated_line": 16554,
+      "gated_address": "LABEL_2BB5",
+      "surviving_line": 16563,
+      "surviving_address": "LABEL_2BC3",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x1B",
+      "gated_line": 16600,
+      "gated_address": "INIT_VARS_6C_6D_71_70",
+      "surviving_line": 16602,
+      "surviving_address": "INIT_VARS_71_6C_6D",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x01",
+      "gated_line": 16841,
+      "gated_address": "LABEL_2F51",
+      "surviving_line": 16844,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x03",
+      "gated_line": 17006,
+      "gated_address": "LABEL_20CB",
+      "surviving_line": 17008,
+      "surviving_address": "LABEL_20C2",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x04",
+      "gated_line": 17161,
+      "gated_address": "LABEL_C889",
+      "surviving_line": 17166,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x3E",
+      "gated_line": 21701,
+      "gated_address": "LABEL_C742",
+      "surviving_line": 21704,
+      "surviving_address": "LABEL_C70E",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 21810,
+      "gated_address": "LABEL_E41E",
+      "surviving_line": 21812,
+      "surviving_address": "LABEL_E410",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 21820,
+      "gated_address": "LABEL_E54E",
+      "surviving_line": 21822,
+      "surviving_address": "LABEL_E540",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 21870,
+      "gated_address": "LABEL_E6AE",
+      "surviving_line": 21872,
+      "surviving_address": "LABEL_E68A",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 21880,
+      "gated_address": "LABEL_E794",
+      "surviving_line": 21882,
+      "surviving_address": "LABEL_E774",
+      "branch": "chahi_amiga_1991",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/CODE_WHEEL.asm",
+      "channel": "0x3C",
+      "gated_line": 379,
+      "gated_address": "LABEL_0DA8",
+      "surviving_line": 383,
+      "surviving_address": "LABEL_0DB7",
+      "branch": "chahi_amiga_1991",
+      "stage": "CODE_WHEEL"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/LAKE.asm",
+      "channel": "0x2E",
+      "gated_line": 1151,
+      "gated_address": "BEETLE_KICK_DETECTOR",
+      "surviving_line": 1152,
+      "surviving_address": "WAIT_FOR_BEETLE_OFFSCREEN_THEN_KILL",
+      "branch": "chahi_amiga_1991",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6568,
+      "gated_address": "HERO_FALL_LEFT_LOOP",
+      "surviving_line": 6570,
+      "surviving_address": "HERO_FALL_LEFT_PRELUDE",
+      "branch": "chahi_amiga_1991",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6578,
+      "gated_address": "HERO_FALL_RIGHT_LOOP",
+      "surviving_line": 6580,
+      "surviving_address": "HERO_FALL_RIGHT_PRELUDE",
+      "branch": "chahi_amiga_1991",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6604,
+      "gated_address": "HERO_LEAP_LEFT_LOOP",
+      "surviving_line": 6606,
+      "surviving_address": "HERO_LEAP_LEFT_PRELUDE",
+      "branch": "chahi_amiga_1991",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6614,
+      "gated_address": "HERO_LEAP_RIGHT_LOOP",
+      "surviving_line": 6616,
+      "surviving_address": "HERO_LEAP_RIGHT_PRELUDE",
+      "branch": "chahi_amiga_1991",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 6561,
+      "gated_address": "LABEL_0FBB",
+      "surviving_line": 6563,
+      "surviving_address": "DRAW_CIN_146_TO_147_4F_AT_8AA18039",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 6567,
+      "gated_address": "LABEL_0EF0",
+      "surviving_line": 6569,
+      "surviving_address": "DRAW_CIN_280_TO_281_2F_AT_75ED3E60",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x23",
+      "gated_line": 6581,
+      "gated_address": "LABEL_10D5",
+      "surviving_line": 6583,
+      "surviving_address": "LABEL_1128",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x25",
+      "gated_line": 6591,
+      "gated_address": "LABEL_10D5",
+      "surviving_line": 6593,
+      "surviving_address": "LABEL_1128",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x27",
+      "gated_line": 6597,
+      "gated_address": "LABEL_10D5",
+      "surviving_line": 6599,
+      "surviving_address": "LABEL_1128",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13031,
+      "gated_address": "LABEL_7D25",
+      "surviving_line": 13033,
+      "surviving_address": "LABEL_7D31",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13037,
+      "gated_address": "LABEL_7D12",
+      "surviving_line": 13039,
+      "surviving_address": "LABEL_7D25",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13043,
+      "gated_address": "DRAW_CIN_090_TO_104_3F_AT_8C208B32",
+      "surviving_line": 13045,
+      "surviving_address": "LABEL_7D1E",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x05",
+      "gated_line": 13689,
+      "gated_address": "INLINE_SET_VARE7_TO_5",
+      "surviving_line": 13691,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13759,
+      "gated_address": "INIT_VARS_E7_E8",
+      "surviving_line": 13762,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x02",
+      "gated_line": 13760,
+      "gated_address": "INLINE_SET_VARE9_TO_8",
+      "surviving_line": 13763,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14138,
+      "gated_address": "LABEL_8E2B",
+      "surviving_line": 14140,
+      "surviving_address": "STEP_DRAW_CIN555_LEFT4_RIGHT1",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14148,
+      "gated_address": "LABEL_8F62",
+      "surviving_line": 14150,
+      "surviving_address": "DRAW_CIN555_STEP_RIGHT3",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14198,
+      "gated_address": "LABEL_908D",
+      "surviving_line": 14200,
+      "surviving_address": "LABEL_9069",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/chahi_amiga_1991/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14208,
+      "gated_address": "LABEL_9173",
+      "surviving_line": 14210,
+      "surviving_address": "LABEL_9153",
+      "branch": "chahi_amiga_1991",
+      "stage": "PRISON"
+    }
+  ],
+  "dos_1992": [
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 1472,
+      "gated_address": "LABEL_9A35",
+      "surviving_line": 1473,
+      "surviving_address": "LABEL_BD20",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x16",
+      "gated_line": 1474,
+      "gated_address": "LABEL_9A21",
+      "surviving_line": 1475,
+      "surviving_address": "LABEL_B666",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 10132,
+      "gated_address": "LABEL_40CD",
+      "surviving_line": 10134,
+      "surviving_address": "LABEL_40E8",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 10138,
+      "gated_address": "LABEL_4002",
+      "surviving_line": 10140,
+      "surviving_address": "LABEL_4029",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x23",
+      "gated_line": 10153,
+      "gated_address": "LABEL_41EB",
+      "surviving_line": 10155,
+      "surviving_address": "LABEL_4244",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x25",
+      "gated_line": 10159,
+      "gated_address": "LABEL_41EB",
+      "surviving_line": 10161,
+      "surviving_address": "LABEL_4244",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x27",
+      "gated_line": 10165,
+      "gated_address": "LABEL_41EB",
+      "surviving_line": 10167,
+      "surviving_address": "LABEL_4244",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x27",
+      "gated_line": 16784,
+      "gated_address": "LABEL_02D2",
+      "surviving_line": 16789,
+      "surviving_address": "LABEL_4AE8",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x18",
+      "gated_line": 16819,
+      "gated_address": "LABEL_5C58",
+      "surviving_line": 16820,
+      "surviving_address": "KILL_CHAN_AT_59A3",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x37",
+      "gated_line": 17130,
+      "gated_address": "LABEL_3A7F",
+      "surviving_line": 17135,
+      "surviving_address": "LABEL_39EC",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x02",
+      "gated_line": 17310,
+      "gated_address": "LABEL_0C0E",
+      "surviving_line": 17315,
+      "surviving_address": "KILL_CHAN_AT_59A3",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x3C",
+      "gated_line": 17637,
+      "gated_address": "LABEL_2E8C",
+      "surviving_line": 17646,
+      "surviving_address": "LABEL_2E2D",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x2E",
+      "gated_line": 17929,
+      "gated_address": "KILL_CHAN_AT_59A3",
+      "surviving_line": 17930,
+      "surviving_address": "LABEL_28F7",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18286,
+      "gated_address": "LABEL_BB8C",
+      "surviving_line": 18288,
+      "surviving_address": "LABEL_BB7E",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18296,
+      "gated_address": "LABEL_BD20",
+      "surviving_line": 18298,
+      "surviving_address": "LABEL_BD12",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18346,
+      "gated_address": "LABEL_BEE8",
+      "surviving_line": 18348,
+      "surviving_address": "LABEL_BEC4",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAPSULE.asm",
+      "channel": "0x14",
+      "gated_line": 18356,
+      "gated_address": "LABEL_BFCE",
+      "surviving_line": 18358,
+      "surviving_address": "LABEL_BFAE",
+      "branch": "dos_1992",
+      "stage": "CAPSULE"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 1309,
+      "gated_address": "LABEL_39F9",
+      "surviving_line": 1311,
+      "surviving_address": "LABEL_E9A5",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x15",
+      "gated_line": 1310,
+      "gated_address": "LABEL_3A3C",
+      "surviving_line": 1312,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x01",
+      "gated_line": 4972,
+      "gated_address": "LABEL_317A",
+      "surviving_line": 4975,
+      "surviving_address": "LABEL_3152",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 11236,
+      "gated_address": "LABEL_4C69",
+      "surviving_line": 11238,
+      "surviving_address": "LABEL_4C84",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 11242,
+      "gated_address": "LABEL_4B9E",
+      "surviving_line": 11244,
+      "surviving_address": "LABEL_4BC5",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x23",
+      "gated_line": 11257,
+      "gated_address": "LABEL_4D87",
+      "surviving_line": 11259,
+      "surviving_address": "LABEL_4DE0",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x25",
+      "gated_line": 11263,
+      "gated_address": "LABEL_4D87",
+      "surviving_line": 11265,
+      "surviving_address": "LABEL_4DE0",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x27",
+      "gated_line": 11269,
+      "gated_address": "LABEL_4D87",
+      "surviving_line": 11271,
+      "surviving_address": "LABEL_4DE0",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x05",
+      "gated_line": 16789,
+      "gated_address": "JUNK__4AD1",
+      "surviving_line": 16791,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x34",
+      "gated_line": 17039,
+      "gated_address": "LABEL_CF56",
+      "surviving_line": 17041,
+      "surviving_address": "LABEL_CFFD",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x3B",
+      "gated_line": 17186,
+      "gated_address": "LABEL_C7B3",
+      "surviving_line": 17192,
+      "surviving_address": "LABEL_C788",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x23",
+      "gated_line": 17284,
+      "gated_address": "LABEL_2FCF",
+      "surviving_line": 17294,
+      "surviving_address": "LABEL_30A8",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x24",
+      "gated_line": 17287,
+      "gated_address": "LABEL_2DD8",
+      "surviving_line": 17296,
+      "surviving_address": "LABEL_2DE6",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x1B",
+      "gated_line": 17333,
+      "gated_address": "INIT_VARS_6C_6D_71_70",
+      "surviving_line": 17335,
+      "surviving_address": "INIT_VARS_71_6C_6D",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x01",
+      "gated_line": 17574,
+      "gated_address": "LABEL_317A",
+      "surviving_line": 17577,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x03",
+      "gated_line": 17788,
+      "gated_address": "LABEL_228F",
+      "surviving_line": 17790,
+      "surviving_address": "LABEL_2286",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x04",
+      "gated_line": 17943,
+      "gated_address": "LABEL_CD2F",
+      "surviving_line": 17948,
+      "surviving_address": "KILL_CHAN_AT_7830",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x3E",
+      "gated_line": 22655,
+      "gated_address": "LABEL_CBE2",
+      "surviving_line": 22658,
+      "surviving_address": "LABEL_CBA1",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22787,
+      "gated_address": "LABEL_E9A5",
+      "surviving_line": 22789,
+      "surviving_address": "LABEL_E997",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22797,
+      "gated_address": "LABEL_EB39",
+      "surviving_line": 22799,
+      "surviving_address": "LABEL_EB2B",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22847,
+      "gated_address": "LABEL_ED07",
+      "surviving_line": 22849,
+      "surviving_address": "LABEL_ECE3",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CAVES.asm",
+      "channel": "0x14",
+      "gated_line": 22857,
+      "gated_address": "LABEL_EDED",
+      "surviving_line": 22859,
+      "surviving_address": "LABEL_EDCD",
+      "branch": "dos_1992",
+      "stage": "CAVES"
+    },
+    {
+      "file": "src/levels/dos_1992/CODE_WHEEL.asm",
+      "channel": "0x3C",
+      "gated_line": 416,
+      "gated_address": "LABEL_10B2",
+      "surviving_line": 420,
+      "surviving_address": "LABEL_10C1",
+      "branch": "dos_1992",
+      "stage": "CODE_WHEEL"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x09",
+      "gated_line": 1227,
+      "gated_address": "BEETLE_INIT_POS_THEN_WALK_LEFT",
+      "surviving_line": 1228,
+      "surviving_address": "KILL_CHANNEL_ROUTINE",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x2E",
+      "gated_line": 1229,
+      "gated_address": "BEETLE_KICK_DETECTOR",
+      "surviving_line": 1230,
+      "surviving_address": "WAIT_FOR_BEETLE_OFFSCREEN_THEN_KILL",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x29",
+      "gated_line": 4717,
+      "gated_address": "CHECK_IF_THE_BEAST_HAS_ALREADY_REACHED_LESTER",
+      "surviving_line": 4719,
+      "surviving_address": "WAIT_UNTIL_BEAST_CLOSE",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6759,
+      "gated_address": "HERO_FALL_LEFT_LOOP",
+      "surviving_line": 6761,
+      "surviving_address": "HERO_FALL_LEFT_PRELUDE",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6769,
+      "gated_address": "HERO_FALL_RIGHT_LOOP",
+      "surviving_line": 6771,
+      "surviving_address": "HERO_FALL_RIGHT_PRELUDE",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6795,
+      "gated_address": "HERO_LEAP_LEFT_LOOP",
+      "surviving_line": 6797,
+      "surviving_address": "HERO_LEAP_LEFT_PRELUDE",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6805,
+      "gated_address": "HERO_LEAP_RIGHT_LOOP",
+      "surviving_line": 6807,
+      "surviving_address": "HERO_LEAP_RIGHT_PRELUDE",
+      "branch": "dos_1992",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 6791,
+      "gated_address": "LABEL_0F9B",
+      "surviving_line": 6793,
+      "surviving_address": "DRAW_CIN_146_TO_147_4F_AT_8AA18039",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 6797,
+      "gated_address": "LABEL_0ED0",
+      "surviving_line": 6799,
+      "surviving_address": "DRAW_CIN_280_TO_281_2F_AT_75ED3E60",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x23",
+      "gated_line": 6811,
+      "gated_address": "LABEL_10B5",
+      "surviving_line": 6813,
+      "surviving_address": "LABEL_1111",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x25",
+      "gated_line": 6821,
+      "gated_address": "LABEL_10B5",
+      "surviving_line": 6823,
+      "surviving_address": "LABEL_1111",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x27",
+      "gated_line": 6827,
+      "gated_address": "LABEL_10B5",
+      "surviving_line": 6829,
+      "surviving_address": "LABEL_1111",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13399,
+      "gated_address": "LABEL_7DF0",
+      "surviving_line": 13401,
+      "surviving_address": "LABEL_7DFC",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13405,
+      "gated_address": "LABEL_7DDD",
+      "surviving_line": 13407,
+      "surviving_address": "LABEL_7DF0",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 13411,
+      "gated_address": "DRAW_CIN_090_TO_104_3F_AT_8C208B32",
+      "surviving_line": 13413,
+      "surviving_address": "LABEL_7DE9",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x05",
+      "gated_line": 14075,
+      "gated_address": "INLINE_SET_VARE7_TO_5",
+      "surviving_line": 14077,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x01",
+      "gated_line": 14156,
+      "gated_address": "INIT_VARS_E7_E8",
+      "surviving_line": 14159,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x02",
+      "gated_line": 14157,
+      "gated_address": "INLINE_SET_VARE9_TO_8",
+      "surviving_line": 14160,
+      "surviving_address": "KILL_CHANNEL_LANDING",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14715,
+      "gated_address": "LABEL_8F91",
+      "surviving_line": 14717,
+      "surviving_address": "STEP_DRAW_CIN555_LEFT4_RIGHT1",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14725,
+      "gated_address": "LABEL_9128",
+      "surviving_line": 14727,
+      "surviving_address": "DRAW_CIN555_STEP_RIGHT3",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14775,
+      "gated_address": "LABEL_92BB",
+      "surviving_line": 14777,
+      "surviving_address": "LABEL_9297",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/PRISON.asm",
+      "channel": "0x14",
+      "gated_line": 14785,
+      "gated_address": "LABEL_93A1",
+      "surviving_line": 14787,
+      "surviving_address": "LABEL_9381",
+      "branch": "dos_1992",
+      "stage": "PRISON"
+    },
+    {
+      "file": "src/levels/dos_1992/TANK.asm",
+      "channel": "0x34",
+      "gated_line": 853,
+      "gated_address": "LABEL_0675",
+      "surviving_line": 855,
+      "surviving_address": "LABEL_0660",
+      "branch": "dos_1992",
+      "stage": "TANK"
+    }
+  ],
+  "gba_2004": [
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x09",
+      "gated_line": 1234,
+      "gated_address": "BEETLE_INIT_POS_THEN_WALK_LEFT",
+      "surviving_line": 1235,
+      "surviving_address": "KILL_CHANNEL_ROUTINE",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x2E",
+      "gated_line": 1236,
+      "gated_address": "BEETLE_KICK_DETECTOR",
+      "surviving_line": 1237,
+      "surviving_address": "WAIT_FOR_BEETLE_OFFSCREEN_THEN_KILL",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x29",
+      "gated_line": 4725,
+      "gated_address": "CHECK_IF_THE_BEAST_HAS_ALREADY_REACHED_LESTER",
+      "surviving_line": 4727,
+      "surviving_address": "WAIT_UNTIL_BEAST_CLOSE",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6781,
+      "gated_address": "HERO_FALL_LEFT_LOOP",
+      "surviving_line": 6783,
+      "surviving_address": "HERO_FALL_LEFT_PRELUDE",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6791,
+      "gated_address": "HERO_FALL_RIGHT_LOOP",
+      "surviving_line": 6793,
+      "surviving_address": "HERO_FALL_RIGHT_PRELUDE",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6817,
+      "gated_address": "HERO_LEAP_LEFT_LOOP",
+      "surviving_line": 6819,
+      "surviving_address": "HERO_LEAP_LEFT_PRELUDE",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    },
+    {
+      "file": "src/levels/gba_2004/LAKE.asm",
+      "channel": "0x14",
+      "gated_line": 6827,
+      "gated_address": "HERO_LEAP_RIGHT_LOOP",
+      "surviving_line": 6829,
+      "surviving_address": "HERO_LEAP_RIGHT_PRELUDE",
+      "branch": "gba_2004",
+      "stage": "LAKE"
+    }
+  ]
+}
