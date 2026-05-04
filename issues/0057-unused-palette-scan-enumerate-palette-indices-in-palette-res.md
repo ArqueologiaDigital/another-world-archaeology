@@ -113,3 +113,16 @@ are excluded from the unused set conservatively.
   (archaeology commit). Three items remain (all gated on other
   work): reachability filter (#0058), layer-1 diff (needs new
   heuristic), and cross-port comparison (gated on extraction).
+
+- 2026-05-04 (later): reachability-filter item closed.
+  `tools/unused_palette_scan_v2.py` wires in the
+  `ReachabilityOracle` from #0058. Two-tier filter: label-level
+  + intra-label post-jmp.
+
+  DOS results:
+    - Total never-live-selected slots: 118 (v1: 113)
+    - 5 NEW dead-only slots that v1 counted as "used":
+      CAPSULE 9, CAVES 22, PRISON 12, TANK 2, TANK 12.
+
+  Each of those 5 slot indices is `setPalette N`-targeted only
+  by code in dead-by-gate / trans-dead labels or post-jmp tails.

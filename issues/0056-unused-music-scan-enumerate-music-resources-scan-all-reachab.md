@@ -39,11 +39,13 @@ finding is "unused on **every** port".
 - [x] Build MUSIC-reference scanner (`song id=N` opcode).
       *(Done — the scan in research/11 covers `song id=` and
       `load id=` opcodes.)*
-- [ ] Reachability filter (depends on #0058).
-      *(Not yet — research/11 found a case where a `load` of MUSIC
-      sits inside an unreachable code block (LAKE 0x89), bypassed
-      by an unconditional `jmp`. #0058's reachability analysis is
-      what would let the scan recognise that automatically.)*
+- [x] Reachability filter (depends on #0058).
+      *(Done — `tools/unused_sound_scan_v2.py` covers MUSIC alongside
+      SOUND. The two-tier reachability filter (label-level +
+      intra-label post-jmp) correctly classifies LAKE 0x89 as
+      "dead-only" (only referenced from `load id=0x89` after an
+      unconditional `jmp` skip) — exactly the case research/11
+      found by hand.)*
 - [x] Per-port + cross-port diff.
       *(Cross-port for MS-DOS-aligned branches; other ports' MUSIC
       resources need their extraction first.)*
@@ -70,3 +72,12 @@ finding is "unused on **every** port".
        wired into the scan; today the dead-code detection is
        manual.
   Tracked sub-finding for `0x89` specifically: issue #0076.
+
+- 2026-05-04: reachability-filter item closed. The v2 sound
+  scanner `tools/unused_sound_scan_v2.py` covers MUSIC alongside
+  SOUND (the same `play`/`load`/`song` machinery applies to both
+  resource types). Two-tier reachability filter
+  (label-level + intra-label post-jmp) correctly classifies
+  music 0x89 as "dead-only" — same automated finding research/11
+  established by hand. Issue remains open only because of
+  cross-port MUSIC extraction (the depends-on-extraction item).
