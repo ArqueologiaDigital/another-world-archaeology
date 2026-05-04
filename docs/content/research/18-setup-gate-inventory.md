@@ -36,7 +36,6 @@ byte-identical bytecode per research/07).
 **Total: 22 gates surfaced** across the four-port × three-stage
 matrix. After the conditional-`je` block-end fix, most stages
 have zero gates and LAKE drops to 1 (amiga) / 2 (others).
-**All 7 silencers are in LAKE.**
 
 ## Headline findings
 
@@ -47,13 +46,28 @@ gates against:
 
 | Category | Count | Description |
 | --- | ---: | --- |
-| **silencer** | 7 | substantive routine → killer (the gated routine never runs — deliberate cut-content per research/05) |
-| reschedule | 0 | killer → substantive (none found — the game uses kill as a tear-down, not as a placeholder) |
+| **silencer** | 12 | substantive routine → killer (the gated routine never runs — deliberate cut-content per research/05) |
+| **reschedule** | 3 | killer → substantive (kill scheduled, immediately replaced with real logic — placeholder-then-real pattern) |
 | swap | 0 | substantive → substantive (changed mind; both are real game logic, only the second runs) |
-| other | 15 | at least one side is a `LABEL_HHHH` placeholder; can't classify without semantic-rename |
+| other | 7 | at least one side is a `LABEL_HHHH` placeholder where the kill-vs-substantive role hasn't been confirmed |
 
-All 7 silencers are LAKE beetle gates (the canonical
-research/05 pattern, detailed below).
+The 12 silencers split as:
+
+- **7 in LAKE** — the canonical research/05 beetle pattern
+  (BEETLE_INIT and BEETLE_KICK_DETECTOR; detailed below).
+- **5 outside LAKE** — newly surfaced by including
+  `KILL_CHAN_AT_*` single-line `killChannel` labels in the
+  killer-detection heuristic. These are CAPSULE channel `0x18`
+  silencers (cart, dos) and CAVES channel `0x15` silencers
+  (cart, amiga, dos). The CAVES one is especially interesting:
+  the gated routine `LABEL_3A26` is a sequence of
+  `video CINEMATIC_870..873` polygon frames — a queued
+  *animation* that gets killed before its first frame plays.
+
+The 3 reschedules are CAPSULE channel `0x2E` (cart, amiga,
+dos): an initial `setup ch=0x2E, addr=KILL_CHAN_AT_59A3` is
+immediately replaced by a substantive routine. The kill was
+the placeholder, the substantive routine is the real wiring.
 
 ### Note on the conditional-`je` pattern (false-positive avoided)
 
@@ -76,8 +90,8 @@ conditional, the second setup is reachable only on the
 fall-through path; the taken-jump path skips it. The first
 setup CAN run on the taken-jump path. Treating the conditional
 as block-end means the detector no longer flags this idiom as
-a gate. Updated detector (commit landing this update): 22
-total gates, 7 silencers, all in LAKE.
+a gate. Updated detector: 22 total gates, 12 silencers
+(7 LAKE + 5 CAPSULE/CAVES), 3 reschedules, 7 unclassified.
 
 The PRISON `[0xE7]/[0xE8]/[0xE9]` routines turned out to be a
 "play this animation only on first visit" feature: VAR_B4 is
@@ -112,35 +126,69 @@ This is exactly the cut-content shape research/05 documented
 qualitatively. The static gate inventory now confirms it
 quantitatively across the full bytecode.
 
-### Other stages have many gates, mostly equal across ports
+### CAPSULE channel `0x18` silencer (cart + dos): `LABEL_5C5B`
 
-CAVES, PRISON, CAPSULE all have 11-22 gates per port, with cart
-and dos tracking each other within ±2. Most are routine
-"reschedule channel mid-routine" patterns rather than
-deliberate cut-content silencers. Distinguishing the two
-requires looking at WHAT'S being gated:
+Inside CAPSULE's `LABEL_A564` block, after a chain of
+conditional jumps decides which channels get scheduled, the
+unconditional tail does:
 
-- If the gated address is `KILL_CHANNEL_ROUTINE`, that's a
-  rescheduling (the routine kills self after running, then the
-  channel gets a new routine). 
-- If the gated address is a substantive routine (DRAW_*,
-  HERO_*, BEAST_*, etc.) and the surviving address is
-  `KILL_CHANNEL_ROUTINE`, that's a *silencer* — the
-  substantive routine never runs.
-- If both are substantive routines, it's a "we changed our
-  mind" pattern — both look like real game logic, but only the
-  second runs.
+```
+LABEL_A564:
+    setup channel=0x18, address=LABEL_5C5B          ; queue real
+    setup channel=0x18, address=KILL_CHAN_AT_59A3   ; OVERWRITE: kill
+    setup channel=0x19, address=LABEL_2121
+    ...
+```
 
-A complete reachability oracle (#0058) would walk the
-control-flow graph from every entry point, marking each gate's
-*gated_address* unreachable iff no other control-flow path
-reaches it. This first-pass detector flags every gate
-candidate; classification into the three categories above is
-follow-up.
+`LABEL_5C5B` is substantive (memory ops + a `call` chain). It
+is queued onto channel `0x18`, then immediately replaced by a
+single-line `killChannel` label. The real routine never runs.
+Present on cart and dos; absent on amiga (where the same block
+omits both setups entirely).
+
+### CAVES channel `0x15` silencer (cart + amiga + dos): a queued cinematic frame loop
+
+In CAVES's hero-arrival block (`LABEL_0030`-ish on cart):
+
+```
+setup channel=0x14, address=LABEL_39E3   ; cinematic walk
+setup channel=0x15, address=LABEL_3A26   ; cinematic anim
+setup channel=0x14, address=LABEL_EA2E   ; OVERWRITE 0x14: real walk
+setup channel=0x15, address=KILL_CHAN_AT_7830  ; OVERWRITE 0x15: kill
+```
+
+`LABEL_3A26` is a `video type=1, offset=CINEMATIC_870..873`
+polygon-frame loop — a queued *animation* whose first frame
+never draws. `LABEL_39E3` is also a CINEMATIC sequence; it
+gets replaced by `LABEL_EA2E`, a real walking-AI routine.
+This pair looks like a placeholder-cinematic pattern that
+survived into the shipping bytecode.
+
+### CAPSULE channel `0x2E` reschedule (cart + amiga + dos)
+
+Symmetric pattern, opposite direction:
+
+```
+setup channel=0x2E, address=KILL_CHAN_AT_59A3  ; placeholder kill
+setup channel=0x2E, address=LABEL_2A6E         ; OVERWRITE: real logic
+```
+
+The kill was the placeholder; the substantive routine
+`LABEL_2A6E` (conditional dispatch + game-logic calls) is the
+real wiring. The kill-as-placeholder pattern is rarer than
+the real-then-kill silencer.
+
+### A complete reachability oracle would do more
+
+A full oracle (#0058) would walk the control-flow graph from
+every entry point, marking each gate's *gated_address*
+unreachable iff no other control-flow path reaches it. This
+first-pass detector flags every gate candidate; classification
+into the four categories above is follow-up.
 
 ### GBA's only gates are in LAKE
 
-GBA-2004 only ships INTRO and LAKE. The 7 LAKE gates match
+GBA-2004 only ships INTRO and LAKE. The 2 LAKE gates match
 cart/dos. INTRO has 0 gates on every port — the opening scene
 is purely linear scheduling.
 
@@ -150,7 +198,8 @@ is purely linear scheduling.
 python3 tools/detect_setup_gates.py
 # wrote docs/setup_gate_inventory.json (machine)
 # wrote docs/setup_gate_inventory.md   (per-branch tables)
-#   181 gates across 4 branches
+#   22 gates across 4 branches
+#   12 silencers, 3 reschedules, 0 swaps, 7 other
 ```
 
 ## Implications for the asset-scan family (#0054–#0057)

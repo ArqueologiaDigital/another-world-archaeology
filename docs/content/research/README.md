@@ -130,13 +130,15 @@ finding is comparative) records which releases it applies to.
 
 - [18 — Setup-then-overwrite gate inventory (4 ports × 9 stages)](#/research/18-setup-gate-inventory):
   static survey of the `setup channel=N, address=X; setup
-  channel=N, address=Y` idiom across the whole game. Confirms
-  research/05's beetle-stage finding quantitatively: amiga 1991
-  LAKE has 5 gates, cart/dos/gba LAKE has 7 — the 2-gate
-  difference is the BEETLE silencer that amiga lacks. **181
-  gates surfaced** in total, foundational input for the
-  reachability oracle (#0058) that the asset-scan family
-  (#0054–#0057) needs.
+  channel=N, address=Y` idiom across the whole game. **22 gates
+  surfaced** total: 12 silencers (7 LAKE beetle gates per
+  research/05, plus 5 newly-found CAPSULE/CAVES silencers
+  including a queued `CINEMATIC_870..873` frame loop that never
+  draws), 3 reschedules, 7 unclassified. Confirms research/05
+  quantitatively across all four ports and surfaces additional
+  shipped-but-unreachable code paths beyond the beetle stage.
+  Foundational input for the reachability oracle (#0058) that
+  the asset-scan family (#0054–#0057) needs.
 
 - [17 — VM thread-channel map (per stage)](#/research/17-vm-channel-map):
   static scan of every `setup channel=NN, address=ROUTINE` opcode

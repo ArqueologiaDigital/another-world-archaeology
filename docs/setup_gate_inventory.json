@@ -29,7 +29,7 @@
       "gated_address": "LABEL_5C5B",
       "surviving_line": 16799,
       "surviving_address": "KILL_CHAN_AT_59A3",
-      "category": "other",
+      "category": "silencer",
       "branch": "cartridge_1992",
       "stage": "CAPSULE"
     },
@@ -40,7 +40,7 @@
       "gated_address": "KILL_CHAN_AT_59A3",
       "surviving_line": 17939,
       "surviving_address": "LABEL_2A6E",
-      "category": "other",
+      "category": "reschedule",
       "branch": "cartridge_1992",
       "stage": "CAPSULE"
     },
@@ -62,7 +62,7 @@
       "gated_address": "LABEL_3A26",
       "surviving_line": 1299,
       "surviving_address": "KILL_CHAN_AT_7830",
-      "category": "other",
+      "category": "silencer",
       "branch": "cartridge_1992",
       "stage": "CAVES"
     },
@@ -97,7 +97,7 @@
       "gated_address": "KILL_CHAN_AT_59A3",
       "surviving_line": 12565,
       "surviving_address": "LABEL_17D8",
-      "category": "other",
+      "category": "reschedule",
       "branch": "chahi_amiga_1991",
       "stage": "CAPSULE"
     },
@@ -119,7 +119,7 @@
       "gated_address": "LABEL_3813",
       "surviving_line": 1265,
       "surviving_address": "KILL_CHAN_AT_7830",
-      "category": "other",
+      "category": "silencer",
       "branch": "chahi_amiga_1991",
       "stage": "CAVES"
     },
@@ -165,7 +165,7 @@
       "gated_address": "LABEL_5C58",
       "surviving_line": 16820,
       "surviving_address": "KILL_CHAN_AT_59A3",
-      "category": "other",
+      "category": "silencer",
       "branch": "dos_1992",
       "stage": "CAPSULE"
     },
@@ -176,7 +176,7 @@
       "gated_address": "KILL_CHAN_AT_59A3",
       "surviving_line": 17930,
       "surviving_address": "LABEL_28F7",
-      "category": "other",
+      "category": "reschedule",
       "branch": "dos_1992",
       "stage": "CAPSULE"
     },
@@ -198,7 +198,7 @@
       "gated_address": "LABEL_3A3C",
       "surviving_line": 1312,
       "surviving_address": "KILL_CHAN_AT_7830",
-      "category": "other",
+      "category": "silencer",
       "branch": "dos_1992",
       "stage": "CAVES"
     },

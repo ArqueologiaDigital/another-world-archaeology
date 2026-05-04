@@ -76,11 +76,37 @@ RE_DIRECTIVE = re.compile(r"^\s*;@(?:if|elif|else|endif)\b")
 
 
 def _is_killer(name: str) -> bool:
-    """Is `name` a routine that kills its channel? Either an
-    explicit `KILL_CHANNEL_*` routine, or a name ending in `_KILL`
-    or containing `THEN_KILL` (the deferred-kill idiom — wait for
-    a condition, then kill the channel)."""
+    """Is `name` a routine whose execution kills the calling
+    channel?
+
+    Recognised forms:
+      - `KILL_CHANNEL_*` (canonical cleanup routine, body is a
+        single `killChannel`)
+      - `KILL_CHAN_AT_*` (auto-named single-line `killChannel`
+        labels, e.g. `KILL_CHAN_AT_59A3`)
+      - `KILL_IF_*` (conditional kill — once execution reaches
+        the label, the channel always kills since the body is
+        unconditionally `killChannel`; the IF qualifier reflects
+        the upstream branch, not the body)
+      - `*_KILL` / `*_THEN_KILL` (deferred-kill idiom — wait for
+        a condition, then kill the channel)
+
+    NOT recognised (intentionally):
+      - `KILL_CH_NN_NN_*` (e.g. `KILL_CH_01_04_38`) — these
+        schedule kills on OTHER channels via `setup ch=N,
+        addr=KILL_CHANNEL_ROUTINE` and `ret`, so the calling
+        channel survives.
+      - `BEAST_KILLED_*`, `BEAST_KILLS_LESTER_*`, etc. — these
+        are NPC death/cinematic routines, not channel killers.
+      - `TEARDOWN_CHANS_AND_KILL_LANDING` — schedules a landing
+        kill on a different channel, then `ret`s; the caller
+        survives.
+    """
     if name.startswith("KILL_CHANNEL"):
+        return True
+    if name.startswith("KILL_CHAN_"):
+        return True
+    if name.startswith("KILL_IF_"):
         return True
     if name.endswith("_KILL"):
         return True
