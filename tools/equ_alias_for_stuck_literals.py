@@ -173,14 +173,22 @@ def replace_literal(line: str, new_token: str) -> str | None:
 
 def stage_of_chunk(chunk: Path) -> str | None:
     """Return the stage name (lowercase) for a chunk under
-    `_unified/<stage>/...` or for `_unified/_helpers/...` returns None."""
+    `_unified/<stage>/...`. For chunks under `_unified/_helpers/...`,
+    returns the special tag `_helpers` so the tool can route their
+    EQUs into a shared cross-stage aliases file."""
     parts = chunk.relative_to(LEVELS / "_unified").parts
-    if not parts or parts[0].startswith("_"):
+    if not parts:
+        return None
+    if parts[0] == "_helpers":
+        return "_helpers"
+    if parts[0].startswith("_"):
         return None
     return parts[0]
 
 
 def stage_aliases_path(stage: str) -> Path:
+    if stage == "_helpers":
+        return LEVELS / "_unified" / "_helpers" / "_helpers_equ_aliases.inc"
     return LEVELS / "_unified" / stage / f"{stage}_equ_aliases.inc"
 
 
@@ -302,16 +310,28 @@ def main() -> int:
             name = aliases[addr]
             lines.append(f"{name}\tEQU 0x{addr:04X}")
         path.write_text("\n".join(lines) + "\n")
-        # Add the include line at the top of <STAGE>.asm.in if not already.
-        asm_in = LEVELS / "_unified" / f"{stage.upper()}.asm.in"
-        text = asm_in.read_text()
-        include_line = f';@include "{stage}/{stage}_equ_aliases.inc"'
-        if include_line not in text:
-            # Insert after the "_common_vars" include if present, else at start.
+        # Wire the include in. For per-stage aliases, into
+        # <STAGE>.asm.in. For `_helpers`, into EVERY stage's
+        # `.asm.in` (since any stage can include any helper).
+        if stage == "_helpers":
+            target_asm_ins = list((LEVELS / "_unified").glob("*.asm.in"))
+            include_line = ';@include "_helpers/_helpers_equ_aliases.inc"'
+        else:
+            target_asm_ins = [LEVELS / "_unified" / f"{stage.upper()}.asm.in"]
+            include_line = f';@include "{stage}/{stage}_equ_aliases.inc"'
+        for asm_in in target_asm_ins:
+            text = asm_in.read_text()
+            if include_line in text:
+                continue
             common_idx = text.find('_common_vars.inc')
             if common_idx != -1:
                 line_end = text.find("\n", common_idx)
-                text = text[: line_end + 1] + include_line + "\n" + text[line_end + 1 :]
+                text = (
+                    text[: line_end + 1]
+                    + include_line
+                    + "\n"
+                    + text[line_end + 1 :]
+                )
             else:
                 text = include_line + "\n" + text
             asm_in.write_text(text)
