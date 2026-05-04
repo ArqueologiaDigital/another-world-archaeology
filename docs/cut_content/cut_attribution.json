@@ -1,0 +1,1157 @@
+{
+  "cut_amiga_only_attribution": {
+    "INTRO": {
+      "n_target_children": 2,
+      "n_parent_groups": 1,
+      "n_attributed": 1,
+      "by_animation_cycle": {
+        "CINEMATIC_505": [
+          "CINEMATIC_505"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "LAKE": {
+      "n_target_children": 207,
+      "n_parent_groups": 87,
+      "n_attributed": 86,
+      "by_animation_cycle": {
+        "CINEMATIC_HERO_RESUME_LEFT": [
+          "CINEMATIC_HERO_RESUME_LEFT_F0",
+          "CINEMATIC_HERO_RESUME_LEFT_F1",
+          "CINEMATIC_HERO_RESUME_LEFT_F2",
+          "CINEMATIC_HERO_RESUME_LEFT_F3",
+          "CINEMATIC_HERO_RESUME_LEFT_F4",
+          "CINEMATIC_HERO_RESUME_LEFT_F5",
+          "CINEMATIC_HERO_RESUME_LEFT_F6",
+          "CINEMATIC_HERO_RESUME_LEFT_F7",
+          "CINEMATIC_HERO_RESUME_LEFT_F8",
+          "CINEMATIC_HERO_RESUME_LEFT_F9"
+        ],
+        "CINEMATIC_HERO_STANDING_LEFT_IDLE": [
+          "CINEMATIC_HERO_STANDING_LEFT_IDLE"
+        ],
+        "CINEMATIC_HERO_LEFT_PROFILE": [
+          "CINEMATIC_HERO_LEFT_PROFILE"
+        ],
+        "CINEMATIC_HERO_LEAP_RIGHT": [
+          "CINEMATIC_HERO_LEAP_RIGHT_F0",
+          "CINEMATIC_HERO_LEAP_RIGHT_F1",
+          "CINEMATIC_HERO_LEAP_RIGHT_F2",
+          "CINEMATIC_HERO_LEAP_RIGHT_F3",
+          "CINEMATIC_HERO_LEAP_RIGHT_F4",
+          "CINEMATIC_HERO_LEAP_RIGHT_F5",
+          "CINEMATIC_HERO_LEAP_RIGHT_F6",
+          "CINEMATIC_HERO_LEAP_RIGHT_F7",
+          "CINEMATIC_HERO_LEAP_RIGHT_F8",
+          "CINEMATIC_HERO_LEAP_RIGHT_F9"
+        ],
+        "CINEMATIC_HERO_FALL_LEFT": [
+          "CINEMATIC_HERO_FALL_LEFT_F1",
+          "CINEMATIC_HERO_FALL_LEFT_F2",
+          "CINEMATIC_HERO_FALL_LEFT_F3",
+          "CINEMATIC_HERO_FALL_LEFT_F4"
+        ],
+        "CINEMATIC_HERO_OUT_POOL": [
+          "CINEMATIC_HERO_OUT_POOL_F0",
+          "CINEMATIC_HERO_OUT_POOL_F1"
+        ],
+        "CINEMATIC_LESTER_WAIT": [
+          "CINEMATIC_LESTER_WAIT_F0",
+          "CINEMATIC_LESTER_WAIT_F1"
+        ],
+        "CINEMATIC_POOL_LESTER": [
+          "CINEMATIC_POOL_LESTER_F1",
+          "CINEMATIC_POOL_LESTER_F2",
+          "CINEMATIC_POOL_LESTER_F3",
+          "CINEMATIC_POOL_LESTER_F4",
+          "CINEMATIC_POOL_LESTER_F5",
+          "CINEMATIC_POOL_LESTER_F6",
+          "CINEMATIC_POOL_LESTER_F7"
+        ],
+        "CINEMATIC_HERO_LEAP_RIGHT_F036_BUNDLE": [
+          "CINEMATIC_HERO_LEAP_RIGHT_F036_BUNDLE"
+        ],
+        "CINEMATIC_HERO_LEAP_RIGHT_F038_BUNDLE": [
+          "CINEMATIC_HERO_LEAP_RIGHT_F038_BUNDLE"
+        ],
+        "CINEMATIC_HERO_LEAP_RIGHT_F040_BUNDLE": [
+          "CINEMATIC_HERO_LEAP_RIGHT_F040_BUNDLE"
+        ],
+        "CINEMATIC_HERO_STAND_R_BG_GHOST": [
+          "CINEMATIC_HERO_STAND_R_BG_GHOST"
+        ],
+        "CINEMATIC_HERO_RESUME_WALK_R": [
+          "CINEMATIC_HERO_RESUME_WALK_R_F0",
+          "CINEMATIC_HERO_RESUME_WALK_R_F1"
+        ],
+        "CINEMATIC_HERO_RESUME_RIGHT": [
+          "CINEMATIC_HERO_RESUME_RIGHT_F0",
+          "CINEMATIC_HERO_RESUME_RIGHT_F1",
+          "CINEMATIC_HERO_RESUME_RIGHT_F2",
+          "CINEMATIC_HERO_RESUME_RIGHT_F3",
+          "CINEMATIC_HERO_RESUME_RIGHT_F4",
+          "CINEMATIC_HERO_RESUME_RIGHT_F5",
+          "CINEMATIC_HERO_RESUME_RIGHT_F6"
+        ],
+        "CINEMATIC_HERO_LEAP_LEFT": [
+          "CINEMATIC_HERO_LEAP_LEFT_F0",
+          "CINEMATIC_HERO_LEAP_LEFT_F1",
+          "CINEMATIC_HERO_LEAP_LEFT_F2",
+          "CINEMATIC_HERO_LEAP_LEFT_F3",
+          "CINEMATIC_HERO_LEAP_LEFT_F4",
+          "CINEMATIC_HERO_LEAP_LEFT_F5",
+          "CINEMATIC_HERO_LEAP_LEFT_F6",
+          "CINEMATIC_HERO_LEAP_LEFT_F7",
+          "CINEMATIC_HERO_LEAP_LEFT_F8",
+          "CINEMATIC_HERO_LEAP_LEFT_F9"
+        ],
+        "CINEMATIC_HERO_WALK_RIGHT": [
+          "CINEMATIC_HERO_WALK_RIGHT_FRAME_0",
+          "CINEMATIC_HERO_WALK_RIGHT_FRAME_1",
+          "CINEMATIC_HERO_WALK_RIGHT_FRAME_2",
+          "CINEMATIC_HERO_WALK_RIGHT_FRAME_3"
+        ],
+        "CINEMATIC_HERO_RUN_RIGHT": [
+          "CINEMATIC_HERO_RUN_RIGHT_FRAME_0",
+          "CINEMATIC_HERO_RUN_RIGHT_FRAME_1",
+          "CINEMATIC_HERO_RUN_RIGHT_FRAME_2",
+          "CINEMATIC_HERO_RUN_RIGHT_FRAME_3",
+          "CINEMATIC_HERO_RUN_RIGHT_FRAME_4",
+          "CINEMATIC_HERO_RUN_RIGHT_FRAME_5"
+        ],
+        "CINEMATIC_HERO_STOP_RIGHT": [
+          "CINEMATIC_HERO_STOP_RIGHT_FRAME_0",
+          "CINEMATIC_HERO_STOP_RIGHT_FRAME_1",
+          "CINEMATIC_HERO_STOP_RIGHT_FRAME_2"
+        ],
+        "CINEMATIC_HERO_WALK_LEFT": [
+          "CINEMATIC_HERO_WALK_LEFT_FRAME_0",
+          "CINEMATIC_HERO_WALK_LEFT_FRAME_1",
+          "CINEMATIC_HERO_WALK_LEFT_FRAME_2",
+          "CINEMATIC_HERO_WALK_LEFT_FRAME_3"
+        ],
+        "CINEMATIC_HERO_RUN_LEFT": [
+          "CINEMATIC_HERO_RUN_LEFT_FRAME_0",
+          "CINEMATIC_HERO_RUN_LEFT_FRAME_1",
+          "CINEMATIC_HERO_RUN_LEFT_FRAME_2",
+          "CINEMATIC_HERO_RUN_LEFT_FRAME_3",
+          "CINEMATIC_HERO_RUN_LEFT_FRAME_4",
+          "CINEMATIC_HERO_RUN_LEFT_FRAME_5"
+        ],
+        "CINEMATIC_HERO_STOP_LEFT": [
+          "CINEMATIC_HERO_STOP_LEFT_FRAME_0",
+          "CINEMATIC_HERO_STOP_LEFT_FRAME_1",
+          "CINEMATIC_HERO_STOP_LEFT_FRAME_2"
+        ]
+      },
+      "unattributed_offsets": [
+        "0x1354"
+      ]
+    },
+    "CAPSULE": {
+      "n_target_children": 112,
+      "n_parent_groups": 56,
+      "n_attributed": 53,
+      "by_animation_cycle": {
+        "CINEMATIC_114": [
+          "CINEMATIC_114"
+        ],
+        "CINEMATIC_541": [
+          "CINEMATIC_541"
+        ],
+        "CINEMATIC_490": [
+          "CINEMATIC_490"
+        ],
+        "CINEMATIC_489": [
+          "CINEMATIC_489"
+        ],
+        "CINEMATIC_488": [
+          "CINEMATIC_488"
+        ],
+        "CINEMATIC_487": [
+          "CINEMATIC_487"
+        ],
+        "CINEMATIC_486": [
+          "CINEMATIC_486"
+        ],
+        "CINEMATIC_485": [
+          "CINEMATIC_485"
+        ],
+        "COMMON_VIDEO_240": [
+          "COMMON_VIDEO_240"
+        ],
+        "CINEMATIC_483": [
+          "CINEMATIC_483"
+        ],
+        "CINEMATIC_491": [
+          "CINEMATIC_491"
+        ],
+        "CINEMATIC_506": [
+          "CINEMATIC_506"
+        ],
+        "CINEMATIC_505": [
+          "CINEMATIC_505"
+        ],
+        "CINEMATIC_504": [
+          "CINEMATIC_504"
+        ],
+        "CINEMATIC_503": [
+          "CINEMATIC_503"
+        ],
+        "CINEMATIC_502": [
+          "CINEMATIC_502"
+        ],
+        "CINEMATIC_501": [
+          "CINEMATIC_501"
+        ],
+        "CINEMATIC_500": [
+          "CINEMATIC_500"
+        ],
+        "CINEMATIC_314": [
+          "CINEMATIC_314"
+        ],
+        "CINEMATIC_307": [
+          "CINEMATIC_307"
+        ],
+        "CINEMATIC_332": [
+          "CINEMATIC_332"
+        ],
+        "CINEMATIC_329": [
+          "CINEMATIC_329"
+        ],
+        "CINEMATIC_330": [
+          "CINEMATIC_330"
+        ],
+        "CINEMATIC_331": [
+          "CINEMATIC_331"
+        ],
+        "CINEMATIC_001": [
+          "CINEMATIC_001"
+        ],
+        "CINEMATIC_308": [
+          "CINEMATIC_308"
+        ],
+        "CINEMATIC_310": [
+          "CINEMATIC_310"
+        ],
+        "CINEMATIC_311": [
+          "CINEMATIC_311"
+        ],
+        "CINEMATIC_312": [
+          "CINEMATIC_312"
+        ],
+        "CINEMATIC_313": [
+          "CINEMATIC_313"
+        ],
+        "CINEMATIC_297": [
+          "CINEMATIC_297"
+        ],
+        "CINEMATIC_299": [
+          "CINEMATIC_299"
+        ],
+        "CINEMATIC_323": [
+          "CINEMATIC_323"
+        ],
+        "CINEMATIC_322": [
+          "CINEMATIC_322"
+        ],
+        "CINEMATIC_321": [
+          "CINEMATIC_321"
+        ],
+        "CINEMATIC_315": [
+          "CINEMATIC_315"
+        ],
+        "CINEMATIC_316": [
+          "CINEMATIC_316"
+        ],
+        "CINEMATIC_317": [
+          "CINEMATIC_317"
+        ],
+        "CINEMATIC_318": [
+          "CINEMATIC_318"
+        ],
+        "CINEMATIC_319": [
+          "CINEMATIC_319"
+        ],
+        "CINEMATIC_184": [
+          "CINEMATIC_184"
+        ],
+        "CINEMATIC_205": [
+          "CINEMATIC_205"
+        ],
+        "CINEMATIC_464": [
+          "CINEMATIC_464"
+        ],
+        "CINEMATIC_400": [
+          "CINEMATIC_400"
+        ],
+        "CINEMATIC_401": [
+          "CINEMATIC_401"
+        ],
+        "CINEMATIC_402": [
+          "CINEMATIC_402"
+        ],
+        "CINEMATIC_403": [
+          "CINEMATIC_403"
+        ],
+        "CINEMATIC_404": [
+          "CINEMATIC_404"
+        ],
+        "CINEMATIC_405": [
+          "CINEMATIC_405"
+        ],
+        "CINEMATIC_406": [
+          "CINEMATIC_406"
+        ],
+        "CINEMATIC_466": [
+          "CINEMATIC_466"
+        ],
+        "CINEMATIC_399": [
+          "CINEMATIC_399"
+        ],
+        "CINEMATIC_386": [
+          "CINEMATIC_386"
+        ]
+      },
+      "unattributed_offsets": [
+        "0x557C",
+        "0x6518",
+        "0x79DC"
+      ]
+    },
+    "PASSCODE": {
+      "n_target_children": 1,
+      "n_parent_groups": 1,
+      "n_attributed": 1,
+      "by_animation_cycle": {
+        "CINEMATIC_056": [
+          "CINEMATIC_056"
+        ]
+      },
+      "unattributed_offsets": []
+    }
+  },
+  "dos_added_attribution": {
+    "CODE_WHEEL": {
+      "n_target_children": 8,
+      "n_parent_groups": 6,
+      "n_attributed": 6,
+      "by_animation_cycle": {
+        "CINEMATIC_074": [
+          "CINEMATIC_074"
+        ],
+        "CINEMATIC_040": [
+          "CINEMATIC_040"
+        ],
+        "CINEMATIC_039": [
+          "CINEMATIC_039"
+        ],
+        "CINEMATIC_038": [
+          "CINEMATIC_038"
+        ],
+        "CINEMATIC_037": [
+          "CINEMATIC_037"
+        ],
+        "CINEMATIC_034": [
+          "CINEMATIC_034"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "INTRO": {
+      "n_target_children": 2,
+      "n_parent_groups": 4,
+      "n_attributed": 4,
+      "by_animation_cycle": {
+        "CINEMATIC_508": [
+          "CINEMATIC_508"
+        ],
+        "CINEMATIC_507": [
+          "CINEMATIC_507"
+        ],
+        "CINEMATIC_506": [
+          "CINEMATIC_506"
+        ],
+        "CINEMATIC_505": [
+          "CINEMATIC_505"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "PRISON": {
+      "n_target_children": 1,
+      "n_parent_groups": 1,
+      "n_attributed": 1,
+      "by_animation_cycle": {
+        "CINEMATIC_710": [
+          "CINEMATIC_710"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "CAVES": {
+      "n_target_children": 16,
+      "n_parent_groups": 13,
+      "n_attributed": 13,
+      "by_animation_cycle": {
+        "CINEMATIC_766": [
+          "CINEMATIC_766"
+        ],
+        "CINEMATIC_773": [
+          "CINEMATIC_773"
+        ],
+        "CINEMATIC_198": [
+          "CINEMATIC_198"
+        ],
+        "CINEMATIC_199": [
+          "CINEMATIC_199"
+        ],
+        "CINEMATIC_200": [
+          "CINEMATIC_200"
+        ],
+        "CINEMATIC_201": [
+          "CINEMATIC_201"
+        ],
+        "CINEMATIC_202": [
+          "CINEMATIC_202"
+        ],
+        "CINEMATIC_203": [
+          "CINEMATIC_203"
+        ],
+        "CINEMATIC_204": [
+          "CINEMATIC_204"
+        ],
+        "CINEMATIC_205": [
+          "CINEMATIC_205"
+        ],
+        "CINEMATIC_206": [
+          "CINEMATIC_206"
+        ],
+        "CINEMATIC_207": [
+          "CINEMATIC_207"
+        ],
+        "CINEMATIC_208": [
+          "CINEMATIC_208"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "TANK": {
+      "n_target_children": 93,
+      "n_parent_groups": 44,
+      "n_attributed": 44,
+      "by_animation_cycle": {
+        "CINEMATIC_091": [
+          "CINEMATIC_091"
+        ],
+        "CINEMATIC_092": [
+          "CINEMATIC_092"
+        ],
+        "CINEMATIC_093": [
+          "CINEMATIC_093"
+        ],
+        "CINEMATIC_090": [
+          "CINEMATIC_090"
+        ],
+        "CINEMATIC_094": [
+          "CINEMATIC_094"
+        ],
+        "CINEMATIC_095": [
+          "CINEMATIC_095"
+        ],
+        "CINEMATIC_096": [
+          "CINEMATIC_096"
+        ],
+        "CINEMATIC_097": [
+          "CINEMATIC_097"
+        ],
+        "CINEMATIC_098": [
+          "CINEMATIC_098"
+        ],
+        "CINEMATIC_099": [
+          "CINEMATIC_099"
+        ],
+        "CINEMATIC_100": [
+          "CINEMATIC_100"
+        ],
+        "CINEMATIC_101": [
+          "CINEMATIC_101"
+        ],
+        "CINEMATIC_102": [
+          "CINEMATIC_102"
+        ],
+        "CINEMATIC_119": [
+          "CINEMATIC_119"
+        ],
+        "CINEMATIC_106": [
+          "CINEMATIC_106"
+        ],
+        "CINEMATIC_107": [
+          "CINEMATIC_107"
+        ],
+        "CINEMATIC_108": [
+          "CINEMATIC_108"
+        ],
+        "CINEMATIC_109": [
+          "CINEMATIC_109"
+        ],
+        "CINEMATIC_113": [
+          "CINEMATIC_113"
+        ],
+        "CINEMATIC_115": [
+          "CINEMATIC_115"
+        ],
+        "CINEMATIC_116": [
+          "CINEMATIC_116"
+        ],
+        "CINEMATIC_118": [
+          "CINEMATIC_118"
+        ],
+        "CINEMATIC_088": [
+          "CINEMATIC_088"
+        ],
+        "CINEMATIC_110": [
+          "CINEMATIC_110"
+        ],
+        "CINEMATIC_111": [
+          "CINEMATIC_111"
+        ],
+        "CINEMATIC_112": [
+          "CINEMATIC_112"
+        ],
+        "CINEMATIC_114": [
+          "CINEMATIC_114"
+        ],
+        "CINEMATIC_117": [
+          "CINEMATIC_117"
+        ],
+        "CINEMATIC_089": [
+          "CINEMATIC_089"
+        ],
+        "CINEMATIC_129": [
+          "CINEMATIC_129"
+        ],
+        "CINEMATIC_131": [
+          "CINEMATIC_131"
+        ],
+        "CINEMATIC_132": [
+          "CINEMATIC_132"
+        ],
+        "CINEMATIC_133": [
+          "CINEMATIC_133"
+        ],
+        "CINEMATIC_134": [
+          "CINEMATIC_134"
+        ],
+        "CINEMATIC_130": [
+          "CINEMATIC_130"
+        ],
+        "CINEMATIC_126": [
+          "CINEMATIC_126"
+        ],
+        "CINEMATIC_128": [
+          "CINEMATIC_128"
+        ],
+        "CINEMATIC_127": [
+          "CINEMATIC_127"
+        ],
+        "CINEMATIC_121": [
+          "CINEMATIC_121"
+        ],
+        "CINEMATIC_122": [
+          "CINEMATIC_122"
+        ],
+        "CINEMATIC_120": [
+          "CINEMATIC_120"
+        ],
+        "CINEMATIC_123": [
+          "CINEMATIC_123"
+        ],
+        "CINEMATIC_124": [
+          "CINEMATIC_124"
+        ],
+        "CINEMATIC_125": [
+          "CINEMATIC_125"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "CAPSULE": {
+      "n_target_children": 361,
+      "n_parent_groups": 213,
+      "n_attributed": 166,
+      "by_animation_cycle": {
+        "CINEMATIC_327": [
+          "CINEMATIC_327"
+        ],
+        "CINEMATIC_686": [
+          "CINEMATIC_686"
+        ],
+        "CINEMATIC_496": [
+          "CINEMATIC_496"
+        ],
+        "CINEMATIC_636": [
+          "CINEMATIC_636"
+        ],
+        "CINEMATIC_635": [
+          "CINEMATIC_635"
+        ],
+        "CINEMATIC_634": [
+          "CINEMATIC_634"
+        ],
+        "CINEMATIC_633": [
+          "CINEMATIC_633"
+        ],
+        "CINEMATIC_632": [
+          "CINEMATIC_632"
+        ],
+        "COMMON_VIDEO_239": [
+          "COMMON_VIDEO_239"
+        ],
+        "CINEMATIC_630": [
+          "CINEMATIC_630"
+        ],
+        "CINEMATIC_294": [
+          "CINEMATIC_294"
+        ],
+        "CINEMATIC_293": [
+          "CINEMATIC_293"
+        ],
+        "CINEMATIC_637": [
+          "CINEMATIC_637"
+        ],
+        "CINEMATIC_653": [
+          "CINEMATIC_653"
+        ],
+        "CINEMATIC_652": [
+          "CINEMATIC_652"
+        ],
+        "CINEMATIC_651": [
+          "CINEMATIC_651"
+        ],
+        "CINEMATIC_650": [
+          "CINEMATIC_650"
+        ],
+        "CINEMATIC_649": [
+          "CINEMATIC_649"
+        ],
+        "CINEMATIC_648": [
+          "CINEMATIC_648"
+        ],
+        "CINEMATIC_647": [
+          "CINEMATIC_647"
+        ],
+        "CINEMATIC_083": [
+          "CINEMATIC_083"
+        ],
+        "CINEMATIC_085": [
+          "CINEMATIC_085"
+        ],
+        "CINEMATIC_112": [
+          "CINEMATIC_112"
+        ],
+        "CINEMATIC_034": [
+          "CINEMATIC_034"
+        ],
+        "CINEMATIC_499": [
+          "CINEMATIC_499"
+        ],
+        "CINEMATIC_552": [
+          "CINEMATIC_552"
+        ],
+        "CINEMATIC_554": [
+          "CINEMATIC_554"
+        ],
+        "CINEMATIC_214": [
+          "CINEMATIC_214"
+        ],
+        "CINEMATIC_201": [
+          "CINEMATIC_201"
+        ],
+        "CINEMATIC_562": [
+          "CINEMATIC_562"
+        ],
+        "CINEMATIC_563": [
+          "CINEMATIC_563"
+        ],
+        "CINEMATIC_570": [
+          "CINEMATIC_570"
+        ],
+        "CINEMATIC_575": [
+          "CINEMATIC_575"
+        ],
+        "CINEMATIC_319": [
+          "CINEMATIC_319"
+        ],
+        "CINEMATIC_296": [
+          "CINEMATIC_296"
+        ],
+        "CINEMATIC_573": [
+          "CINEMATIC_573"
+        ],
+        "CINEMATIC_574": [
+          "CINEMATIC_574"
+        ],
+        "CINEMATIC_587": [
+          "CINEMATIC_587"
+        ],
+        "CINEMATIC_607": [
+          "CINEMATIC_607"
+        ],
+        "CINEMATIC_608": [
+          "CINEMATIC_608"
+        ],
+        "CINEMATIC_609": [
+          "CINEMATIC_609"
+        ],
+        "CINEMATIC_610": [
+          "CINEMATIC_610"
+        ],
+        "CINEMATIC_589": [
+          "CINEMATIC_589"
+        ],
+        "CINEMATIC_605": [
+          "CINEMATIC_605"
+        ],
+        "CINEMATIC_590": [
+          "CINEMATIC_590"
+        ],
+        "CINEMATIC_606": [
+          "CINEMATIC_606"
+        ],
+        "CINEMATIC_699": [
+          "CINEMATIC_699"
+        ],
+        "CINEMATIC_698": [
+          "CINEMATIC_698"
+        ],
+        "CINEMATIC_287": [
+          "CINEMATIC_287"
+        ],
+        "CINEMATIC_290": [
+          "CINEMATIC_290"
+        ],
+        "CINEMATIC_289": [
+          "CINEMATIC_289"
+        ],
+        "CINEMATIC_282": [
+          "CINEMATIC_282"
+        ],
+        "CINEMATIC_281": [
+          "CINEMATIC_281"
+        ],
+        "CINEMATIC_487": [
+          "CINEMATIC_487"
+        ],
+        "CINEMATIC_280": [
+          "CINEMATIC_280"
+        ],
+        "CINEMATIC_279": [
+          "CINEMATIC_279"
+        ],
+        "CINEMATIC_278": [
+          "CINEMATIC_278"
+        ],
+        "CINEMATIC_276": [
+          "CINEMATIC_276"
+        ],
+        "CINEMATIC_275": [
+          "CINEMATIC_275"
+        ],
+        "CINEMATIC_273": [
+          "CINEMATIC_273"
+        ],
+        "CINEMATIC_270": [
+          "CINEMATIC_270"
+        ],
+        "CINEMATIC_271": [
+          "CINEMATIC_271"
+        ],
+        "CINEMATIC_269": [
+          "CINEMATIC_269"
+        ],
+        "CINEMATIC_566": [
+          "CINEMATIC_566"
+        ],
+        "CINEMATIC_518": [
+          "CINEMATIC_518"
+        ],
+        "CINEMATIC_510": [
+          "CINEMATIC_510"
+        ],
+        "CINEMATIC_511": [
+          "CINEMATIC_511"
+        ],
+        "CINEMATIC_512": [
+          "CINEMATIC_512"
+        ],
+        "CINEMATIC_509": [
+          "CINEMATIC_509"
+        ],
+        "CINEMATIC_513": [
+          "CINEMATIC_513"
+        ],
+        "CINEMATIC_514": [
+          "CINEMATIC_514"
+        ],
+        "CINEMATIC_515": [
+          "CINEMATIC_515"
+        ],
+        "CINEMATIC_697": [
+          "CINEMATIC_697"
+        ],
+        "CINEMATIC_693": [
+          "CINEMATIC_693"
+        ],
+        "CINEMATIC_521": [
+          "CINEMATIC_521"
+        ],
+        "CINEMATIC_325": [
+          "CINEMATIC_325"
+        ],
+        "CINEMATIC_324": [
+          "CINEMATIC_324"
+        ],
+        "CINEMATIC_326": [
+          "CINEMATIC_326"
+        ],
+        "CINEMATIC_519": [
+          "CINEMATIC_519"
+        ],
+        "CINEMATIC_520": [
+          "CINEMATIC_520"
+        ],
+        "CINEMATIC_495": [
+          "CINEMATIC_495"
+        ],
+        "CINEMATIC_567": [
+          "CINEMATIC_567"
+        ],
+        "CINEMATIC_584": [
+          "CINEMATIC_584"
+        ],
+        "CINEMATIC_612": [
+          "CINEMATIC_612"
+        ],
+        "CINEMATIC_502": [
+          "CINEMATIC_502"
+        ],
+        "CINEMATIC_503": [
+          "CINEMATIC_503"
+        ],
+        "CINEMATIC_504": [
+          "CINEMATIC_504"
+        ],
+        "CINEMATIC_306": [
+          "CINEMATIC_306"
+        ],
+        "CINEMATIC_305": [
+          "CINEMATIC_305"
+        ],
+        "CINEMATIC_613": [
+          "CINEMATIC_613"
+        ],
+        "CINEMATIC_564": [
+          "CINEMATIC_564"
+        ],
+        "CINEMATIC_579": [
+          "CINEMATIC_579"
+        ],
+        "CINEMATIC_580": [
+          "CINEMATIC_580"
+        ],
+        "CINEMATIC_581": [
+          "CINEMATIC_581"
+        ],
+        "CINEMATIC_583": [
+          "CINEMATIC_583"
+        ],
+        "CINEMATIC_582": [
+          "CINEMATIC_582"
+        ],
+        "CINEMATIC_591": [
+          "CINEMATIC_591"
+        ],
+        "CINEMATIC_611": [
+          "CINEMATIC_611"
+        ],
+        "CINEMATIC_485": [
+          "CINEMATIC_485"
+        ],
+        "CINEMATIC_694": [
+          "CINEMATIC_694"
+        ],
+        "CINEMATIC_500": [
+          "CINEMATIC_500"
+        ],
+        "CINEMATIC_505": [
+          "CINEMATIC_505"
+        ],
+        "CINEMATIC_506": [
+          "CINEMATIC_506"
+        ],
+        "CINEMATIC_508": [
+          "CINEMATIC_508"
+        ],
+        "CINEMATIC_501": [
+          "CINEMATIC_501"
+        ],
+        "CINEMATIC_695": [
+          "CINEMATIC_695"
+        ],
+        "CINEMATIC_592": [
+          "CINEMATIC_592"
+        ],
+        "CINEMATIC_593": [
+          "CINEMATIC_593"
+        ],
+        "CINEMATIC_602": [
+          "CINEMATIC_602"
+        ],
+        "CINEMATIC_601": [
+          "CINEMATIC_601"
+        ],
+        "CINEMATIC_603": [
+          "CINEMATIC_603"
+        ],
+        "CINEMATIC_604": [
+          "CINEMATIC_604"
+        ],
+        "CINEMATIC_594": [
+          "CINEMATIC_594"
+        ],
+        "CINEMATIC_596": [
+          "CINEMATIC_596"
+        ],
+        "CINEMATIC_595": [
+          "CINEMATIC_595"
+        ],
+        "CINEMATIC_597": [
+          "CINEMATIC_597"
+        ],
+        "CINEMATIC_598": [
+          "CINEMATIC_598"
+        ],
+        "CINEMATIC_586": [
+          "CINEMATIC_586"
+        ],
+        "CINEMATIC_599": [
+          "CINEMATIC_599"
+        ],
+        "CINEMATIC_600": [
+          "CINEMATIC_600"
+        ],
+        "CINEMATIC_585": [
+          "CINEMATIC_585"
+        ],
+        "CINEMATIC_556": [
+          "CINEMATIC_556"
+        ],
+        "CINEMATIC_298": [
+          "CINEMATIC_298"
+        ],
+        "CINEMATIC_299": [
+          "CINEMATIC_299"
+        ],
+        "CINEMATIC_300": [
+          "CINEMATIC_300"
+        ],
+        "CINEMATIC_301": [
+          "CINEMATIC_301"
+        ],
+        "CINEMATIC_302": [
+          "CINEMATIC_302"
+        ],
+        "CINEMATIC_303": [
+          "CINEMATIC_303"
+        ],
+        "CINEMATIC_304": [
+          "CINEMATIC_304"
+        ],
+        "CINEMATIC_322": [
+          "CINEMATIC_322"
+        ],
+        "CINEMATIC_295": [
+          "CINEMATIC_295"
+        ],
+        "CINEMATIC_559": [
+          "CINEMATIC_559"
+        ],
+        "CINEMATIC_558": [
+          "CINEMATIC_558"
+        ],
+        "CINEMATIC_565": [
+          "CINEMATIC_565"
+        ],
+        "CINEMATIC_568": [
+          "CINEMATIC_568"
+        ],
+        "CINEMATIC_309": [
+          "CINEMATIC_309"
+        ],
+        "CINEMATIC_310": [
+          "CINEMATIC_310"
+        ],
+        "CINEMATIC_317": [
+          "CINEMATIC_317"
+        ],
+        "CINEMATIC_318": [
+          "CINEMATIC_318"
+        ],
+        "CINEMATIC_315": [
+          "CINEMATIC_315"
+        ],
+        "CINEMATIC_313": [
+          "CINEMATIC_313"
+        ],
+        "CINEMATIC_316": [
+          "CINEMATIC_316"
+        ],
+        "CINEMATIC_560": [
+          "CINEMATIC_560"
+        ],
+        "CINEMATIC_335": [
+          "CINEMATIC_335"
+        ],
+        "CINEMATIC_107": [
+          "CINEMATIC_107"
+        ],
+        "CINEMATIC_005": [
+          "CINEMATIC_005"
+        ],
+        "CINEMATIC_006": [
+          "CINEMATIC_006"
+        ],
+        "CINEMATIC_490": [
+          "CINEMATIC_490"
+        ],
+        "CINEMATIC_000": [
+          "CINEMATIC_000"
+        ],
+        "CINEMATIC_493": [
+          "CINEMATIC_493"
+        ],
+        "CINEMATIC_001": [
+          "CINEMATIC_001"
+        ],
+        "CINEMATIC_339": [
+          "CINEMATIC_339"
+        ],
+        "CINEMATIC_488": [
+          "CINEMATIC_488"
+        ],
+        "CINEMATIC_486": [
+          "CINEMATIC_486"
+        ],
+        "CINEMATIC_344": [
+          "CINEMATIC_344"
+        ],
+        "CINEMATIC_338": [
+          "CINEMATIC_338"
+        ],
+        "CINEMATIC_343": [
+          "CINEMATIC_343"
+        ],
+        "CINEMATIC_341": [
+          "CINEMATIC_341"
+        ],
+        "CINEMATIC_342": [
+          "CINEMATIC_342"
+        ],
+        "CINEMATIC_337": [
+          "CINEMATIC_337"
+        ],
+        "CINEMATIC_336": [
+          "CINEMATIC_336"
+        ],
+        "CINEMATIC_491": [
+          "CINEMATIC_491"
+        ],
+        "CINEMATIC_494": [
+          "CINEMATIC_494"
+        ],
+        "CINEMATIC_321": [
+          "CINEMATIC_321"
+        ],
+        "CINEMATIC_320": [
+          "CINEMATIC_320"
+        ],
+        "CINEMATIC_002": [
+          "CINEMATIC_002"
+        ]
+      },
+      "unattributed_offsets": [
+        "0x15EE",
+        "0x38B0",
+        "0x3C00",
+        "0x3C48",
+        "0x3C94",
+        "0x54B0",
+        "0x624C",
+        "0x6258",
+        "0x6284",
+        "0x62DC",
+        "0x6324",
+        "0xC7D2",
+        "0xC952",
+        "0xCA56",
+        "0xCAD0",
+        "0xCD32",
+        "0xCE30",
+        "0xCF84",
+        "0xD06E",
+        "0xD0C2",
+        "0xD0E2",
+        "0xD102",
+        "0xD2F0",
+        "0xD3BC",
+        "0xD47A",
+        "0xD4AE",
+        "0xD750",
+        "0xDB36",
+        "0xDC3A",
+        "0xDDB6",
+        "0xDE02",
+        "0xDF2C",
+        "0xDF52",
+        "0xE5FE",
+        "0xE77A",
+        "0xE954",
+        "0xE9C0",
+        "0xE9F8",
+        "0xEAC6",
+        "0xEB3C",
+        "0xF13A",
+        "0xF62E",
+        "0xF784",
+        "0xF8AA",
+        "0xF96A",
+        "0xF97C",
+        "0xF9D4"
+      ]
+    },
+    "ENDING": {
+      "n_target_children": 1,
+      "n_parent_groups": 1,
+      "n_attributed": 1,
+      "by_animation_cycle": {
+        "CINEMATIC_108": [
+          "CINEMATIC_108"
+        ]
+      },
+      "unattributed_offsets": []
+    },
+    "PASSCODE": {
+      "n_target_children": 1,
+      "n_parent_groups": 1,
+      "n_attributed": 1,
+      "by_animation_cycle": {
+        "CINEMATIC_056": [
+          "CINEMATIC_056"
+        ]
+      },
+      "unattributed_offsets": []
+    }
+  }
+}
