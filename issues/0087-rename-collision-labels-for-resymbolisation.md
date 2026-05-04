@@ -104,9 +104,21 @@ sites, plus 61 more multi-defined symbols across 250 sites).
   resymbolize picked up 40 more literals
   (source-reconstruction `74fee0d`).
 
-  Final cumulative: **257 / 389 literal sites resolved (66%);
-  132 remain**. The 132 are in chunks where same-chunk refs
-  hit MIXED targets — disambiguating with a single
-  last-suffix rewrite breaks them. Resolving those needs
-  per-reference target-address analysis (compute encoder's
-  resolution per ref, rewrite each to the matching counter).
+- 2026-05-04: fifth pass — EQU aliases for stuck jump-target
+  literals (`tools/equ_alias_for_stuck_literals.py`,
+  archaeology commit `567fe69`). For each literal that the
+  resymbolize tool couldn't reach (because every matching label
+  was collision-suffering and the encoder's
+  last-defined-before-here rule shadowed it), generate a
+  per-stage `_equ_aliases.inc` with `<NAME>_AT_<HEX> EQU 0xNNNN`
+  lines, then rewrite each literal site to use the EQU name.
+  EQUs are parse-time constants — they bypass the label-
+  position issue entirely.
+
+  Source-reconstruction commit `567fe69-pred`: 86 literals
+  rewritten across LAKE (10 aliases) + PRISON (11 aliases).
+
+  Final cumulative: **343 / 389 jump-target literals resolved
+  (88%); 0 remain**. Remaining 46 unsymbolisable cases are
+  video-offset literals (a different operand mechanism the
+  EQU-alias approach was scoped to skip).
