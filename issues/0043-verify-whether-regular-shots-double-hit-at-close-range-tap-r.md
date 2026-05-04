@@ -1,7 +1,7 @@
 ---
 id: 0043
 title: Verify whether regular shots double-hit at close range (tap pulse + regular pulse)
-status: open
+status: done
 tier: A
 created: 2026-04-30
 updated: 2026-05-04
@@ -119,3 +119,85 @@ or whether they hit different targets in practice.
 
 - Remaining acceptance criteria not yet satisfied; closing
   blocked on the open hypothesis above.
+
+- 2026-05-04 (final): traced the rest of the pipeline. **The
+  regular pulse does not run collision detection at all** — the
+  per-frame regular routine `LABEL_42C2` is purely a renderer
+  + range-counter:
+
+      LABEL_42C2:
+          mov [0x26], [0x40]        ; depth selector
+          jge [0x27], 0x00, LABEL_42D2
+          sub [0x27], 0x8000
+          mov [0x26], [0x44]
+      LABEL_42D2:
+          jne [0x27], [HACK_VAR_67], LABEL_431B  ; non-Lester → just decrement
+          ...renders CINEMATIC_201/520..533 based on range bucket...
+      LABEL_431B:
+          sub [0x22], 0x0001         ; range -= 1
+          ret
+
+  Range starts at 0x96 (150 frames) per `LABEL_4185`'s spawn:
+  `mov [0x22], 0x0096`. After 150 frames the slot's range field
+  goes negative and the outer iterator `LABEL_4245` skips it. So
+  Lester's regular pulse simply lives for 150 frames as visual
+  feedback and then expires.
+
+  **Where does the actor-damage actually happen, then?** Only the
+  tap-pulse loop (`LABEL_3869`/`LABEL_38CA` → `LABEL_3991` →
+  `LABEL_468E`) runs collision. The press-fire sequence at
+  `PRISON.asm:15646` proves this:
+
+      sub [0x21], 0x001E
+      sub [0x27], 0x0027
+      call LABEL_3795             ; <-- tap fires on press (left dir)
+      break
+      add [0x01], 0x0001
+      video offset=CINEMATIC_558  ; gun-up animation
+      add [0x01], 0x0001
+      jne [HERO_ACTION_POS_MASK], 0x80, LABEL_944F
+      setup channel=0x17, address=LABEL_44AF   ; <-- if held, schedule regular
+                                               ; on side channel 0x17
+
+  The TAP fires immediately on press via `LABEL_3795` (left) /
+  `LABEL_3801` (right). Channel 0x17 is then conditionally given
+  `LABEL_44AF` which waits 4 frames, plays the charge animation,
+  and on action-release calls `LABEL_45CB` → `LABEL_4185`
+  (regular spawn). No additional tap is fired by the regular
+  path; no collision routine is wired up for the regular slots.
+
+  ## Answer to the issue
+
+  **There is no double-damage**. The regular pulse never makes
+  contact with enemies. Per press cycle, only the tap pulse is
+  responsible for damaging enemies (in PRISON: tag 0x29/0x2A via
+  `LABEL_477E` → `LABEL_4810` → `LABEL_3AAD` death-channel
+  setup). The regular pulse is **purely audiovisual**: louder
+  sound (`0x0058`), muzzle flash (CINEMATIC_037), longer
+  rendered trail. Its `-10` energy cost is paying for that
+  visual indulgence, not extra damage.
+
+  This also corrects research/01's appendix wording. The line
+  beginning "if you fire a regular at close range, the tap pulse
+  and the regular pulse may both reach the target" is wrong —
+  only the tap reaches anything. (Updating research/01 to match
+  in a follow-up commit.)
+
+  ## What about the superblast?
+
+  The superblast (held ≥ 20 frames) does damage, but it does so
+  by **reusing slot 0x88** (a tap-class slot) with HP encoded as
+  `0x64` (=100) plus the `OR 0x8000` shield-piercing flag — see
+  `LABEL_4662` in PRISON.asm. So the superblast also routes
+  through the tap collision pipeline; only its in-flight HP
+  value differs.
+
+  ## Cross-port
+
+  PRISON.asm.in (the unified source) byte-matches simultaneously
+  for chahi_amiga_1991, dos_1992, and cartridge_1992 (msdos +
+  amiga + genesis_europe verifies all OK), so the same model
+  applies on amiga and Genesis-EU.
+
+  Closing as `done` with the corrected mental model. Following
+  up with a research/01 wording fix in a separate commit.
