@@ -1,7 +1,7 @@
 ---
 id: 0077
 title: Sync INTRO semantic renames into per-branch dos/gba/amiga sources
-status: in-progress
+status: done
 tier: B
 created: 2026-05-03
 updated: 2026-05-04
@@ -64,3 +64,9 @@ cart arm doesn't touch the dos arm's `LABEL_05F0`.
     contains operands (CINEMATIC_xxx, COMMON_VIDEO_xxx) with diverging
     EQU values across branches — they're structurally identical but
     can't be matched by simple body abstraction.
+
+- 2026-05-04 (closing): all acceptance criteria met (LABEL_<HEX>
+  routines that *can* be matched have been renamed; verify_stage
+  stays at 29/29; tooling landed). The structurally-identical-but-
+  operand-divergent residue is tracked separately as a general
+  cross-branch matching limitation, not an INTRO-specific gap.
