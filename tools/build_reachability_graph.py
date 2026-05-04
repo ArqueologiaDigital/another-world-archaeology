@@ -224,6 +224,119 @@ def reachable_from(start: str, stage: dict, gates: set[str]) -> set[str]:
     return visited
 
 
+class ReachabilityOracle:
+    """Programmatic reachability oracle for #0058.
+
+    Used by the asset-scan family (#0054–#0057) to filter
+    out references that come from dead bytecode. Build once
+    per branch; queries are O(1) set lookups.
+
+    Usage:
+      oracle = ReachabilityOracle(branch="dos_1992")
+      oracle.is_live("LAKE", "BEETLE_INIT_POS_THEN_WALK_LEFT")  # False
+      oracle.classify("LAKE", "BEETLE_KICK_DETECTOR")           # "dead-by-gate"
+      oracle.live_labels("LAKE")                                # set[str]
+      oracle.transitively_dead("LAKE")                          # set[str]
+    """
+
+    def __init__(self, branch: str = DEFAULT_BRANCH):
+        self.branch = branch
+        self._stages = self._build(branch)
+
+    @staticmethod
+    def _load_gates(branch: str) -> set[str]:
+        gate_path = REPO_ROOT / "docs" / "setup_gate_inventory.json"
+        gated_silenced: set[str] = set()
+        if gate_path.exists():
+            gates_data = json.loads(gate_path.read_text())
+            for b, gates in gates_data.items():
+                if b != branch:
+                    continue
+                for g in gates:
+                    if g["category"] == "silencer":
+                        gated_silenced.add(g["gated_address"])
+        return gated_silenced
+
+    @classmethod
+    def _build(cls, branch: str) -> dict[str, dict]:
+        branch_dir = LEVELS / branch
+        if not branch_dir.is_dir():
+            raise FileNotFoundError(f"branch dir not found: {branch_dir}")
+        gated_silenced = cls._load_gates(branch)
+        out: dict[str, dict] = {}
+        for asm in sorted(branch_dir.glob("*.asm")):
+            stage = parse_stage(asm)
+            entries = collect_entry_points(stage) - gated_silenced
+            referenced = collect_referenced(stage)
+            if stage["label_order"]:
+                entries.add(stage["label_order"][0])
+            live: set[str] = set()
+            for entry in entries:
+                live |= reachable_from(entry, stage, gated_silenced)
+            all_labels = set(stage["labels"].keys())
+            unreferenced = all_labels - referenced
+            dead_by_gate = gated_silenced & all_labels - live
+            transitively_dead = (
+                all_labels - live - unreferenced - dead_by_gate
+            )
+            out[asm.stem] = {
+                "live": live,
+                "dead_by_gate": dead_by_gate,
+                "transitively_dead": transitively_dead,
+                "unreferenced": unreferenced,
+                "all_labels": all_labels,
+            }
+        return out
+
+    def stages(self) -> list[str]:
+        """All stage names in this branch."""
+        return sorted(self._stages.keys())
+
+    def classify(self, stage: str, label: str) -> str:
+        """Return one of: 'live', 'dead-by-gate',
+        'transitively-dead', 'unreferenced', 'unknown'."""
+        s = self._stages.get(stage)
+        if s is None or label not in s["all_labels"]:
+            return "unknown"
+        if label in s["live"]:
+            return "live"
+        if label in s["dead_by_gate"]:
+            return "dead-by-gate"
+        if label in s["transitively_dead"]:
+            return "transitively-dead"
+        if label in s["unreferenced"]:
+            return "unreferenced"
+        return "unknown"
+
+    def is_live(self, stage: str, label: str) -> bool:
+        """True iff `label` is reachable from a live entry."""
+        s = self._stages.get(stage)
+        return s is not None and label in s["live"]
+
+    def is_dead(self, stage: str, label: str) -> bool:
+        """True iff `label` is dead-by-gate or transitively-dead."""
+        return self.classify(stage, label) in (
+            "dead-by-gate",
+            "transitively-dead",
+        )
+
+    def live_labels(self, stage: str) -> set[str]:
+        s = self._stages.get(stage)
+        return set(s["live"]) if s else set()
+
+    def dead_by_gate(self, stage: str) -> set[str]:
+        s = self._stages.get(stage)
+        return set(s["dead_by_gate"]) if s else set()
+
+    def transitively_dead(self, stage: str) -> set[str]:
+        s = self._stages.get(stage)
+        return set(s["transitively_dead"]) if s else set()
+
+    def unreferenced(self, stage: str) -> set[str]:
+        s = self._stages.get(stage)
+        return set(s["unreferenced"]) if s else set()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
