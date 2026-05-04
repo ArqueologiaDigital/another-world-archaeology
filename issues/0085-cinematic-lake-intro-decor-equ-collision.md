@@ -1,7 +1,7 @@
 ---
 id: 0085
 title: chahi_amiga_1991 LAKE: `CINEMATIC_LAKE_INTRO_DECOR` EQU defined twice with different values
-status: open
+status: done
 tier: B
 created: 2026-05-04
 updated: 2026-05-04
@@ -50,3 +50,10 @@ resolves to.
   during the per-branch migration; the 4 stragglers were the
   only annotations not matching any of the three catalogued
   encoding patterns.
+- 2026-05-04: done in source-reconstruction commit `3f84f23`.
+  Renamed line 235 EQU `CINEMATIC_LAKE_INTRO_DECOR` (0x0CA0) →
+  `CINEMATIC_HERO_FALL_AND_POOL_PRELUDE` to match its callers
+  (HERO_FALL_LEFT_PRELUDE, HERO_FALL_RIGHT_PRELUDE,
+  HERO_GETTING_OUT_OF_POOL_LOOP). Line 295 keeps the canonical
+  `CINEMATIC_LAKE_INTRO_DECOR` (0xE274). Per-branch sources are
+  now `;@raw=`-FREE.
