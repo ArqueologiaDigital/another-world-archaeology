@@ -199,8 +199,25 @@ multiple sub-routines), so the 248 trans-dead set is likely
 this routine's entire callee tree.
 
 CAVES-`dos_1992`: 65 trans-dead, including the silenced
-cinematic frame loop at `LABEL_3A3C` and its
-CINEMATIC_870..873 polygon frames (research/18).
+cinematic frame loop at `LABEL_3A3C`. The DOS variant of this
+silencer loops `CINEMATIC_880..890` (11 frames, 2-tick break
+between each, then `jmp LABEL_3A3C` to repeat). Rendered at
+`docs/assets/research-19-caves-silenced-cinematic-loop/`:
+
+![CAVES silenced 11-frame cinematic loop](../assets/research-19-caves-silenced-cinematic-loop/silenced_loop_full_grid.png)
+
+The visible animation is a thin horizontal element (one or two
+small green segments) that progressively rotates and bends —
+perhaps a vine, tongue, or hinged element opening downward.
+Each frame is 5–10 polygon paths. The loop is queued onto
+channel 0x15 then immediately silenced via `setup channel=0x15,
+address=KILL_CHAN_AT_7830` (research/18 silencer). The 11-frame
+progression is structurally a real animation; it just never
+draws at runtime.
+
+(Cart `LABEL_3A26` plays a parallel `CINEMATIC_870..875` range
+with the same silencer pattern, but cart's polygon resource
+isn't yet extracted — gated on issue #0068.)
 
 PRISON-`dos_1992`: 58 trans-dead. Investigate next.
 
