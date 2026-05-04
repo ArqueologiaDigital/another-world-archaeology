@@ -251,7 +251,27 @@ draws at runtime.
 with the same silencer pattern, but cart's polygon resource
 isn't yet extracted — gated on issue #0068.)
 
-PRISON-`dos_1992`: 58 trans-dead. Investigate next.
+PRISON-`dos_1992`: 58 trans-dead, 21 dead-only video offsets:
+`CINEMATIC_127` (isolated) + `CINEMATIC_688..693` (6 frames) +
+`CINEMATIC_697..710` (14 frames). Sample renders from
+`0x1f-POLY_CINEMATIC.bin`:
+
+![PRISON dead-only sample](../assets/research-19-prison-dead-only-cinematics/prison_dead_only_grid.png)
+
+Visual reading: `CIN_127` and `CIN_690` are large red squares
+(possibly full-screen overlay or scene transition fills);
+`CIN_697`/`CIN_700`/`CIN_705` show Lester's lower-body sprites
+(red boots + blue/green legs) — three distinct walking-pose
+frames not invoked by any live PRISON code. These look like
+authored hero leg-animation frames cut from the shipping
+PRISON sprite pipeline. Several frames (688/689/691/692/693)
+render as empty — likely group-polygon coordinates off the
+default render canvas, similar to LAKE's `landing_after_swing_12`
+and `reed_plant_5`.
+
+JUNK_-prefixed wrappers (e.g. `JUNK__65D0:` which draws CIN_688)
+were already identified as dead in earlier semantic-rename
+rounds.
 
 ## Cross-stage rollup (dos_1992)
 
