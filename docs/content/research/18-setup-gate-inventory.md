@@ -40,6 +40,43 @@ matrix.**
 
 ## Headline findings
 
+### Category breakdown
+
+`tools/detect_setup_gates.py` classifies each gate by what it
+gates against:
+
+| Category | Count | Description |
+| --- | ---: | --- |
+| **silencer** | 16 | substantive routine → killer (the surviving routine kills the channel, possibly after a delay; the gated routine never runs — likely deliberate cut-content) |
+| reschedule | 0 | killer → substantive (none found — the game uses kill as a tear-down, not as a placeholder) |
+| swap | 24 | substantive → substantive (changed mind; both are real game logic, only the second runs) |
+| other | 141 | at least one side is a `LABEL_HHHH` placeholder; can't classify without semantic-rename |
+
+The **silencers are the highest-interest cases**. Of the 16:
+
+  - 7 are LAKE beetle gates (the canonical research/05 pattern,
+    detailed below).
+  - **9 are PRISON variable-init silencers** that no prior
+    research note has called out:
+
+| Channel | Gated routine | Surviving | Cart | Amiga | DOS |
+| :---: | --- | --- | :---: | :---: | :---: |
+| `0x01` | `INIT_VARS_E7_E8` | `KILL_CHANNEL_LANDING` | ✅ | ✅ | ✅ |
+| `0x02` | `INLINE_SET_VARE9_TO_8` | `KILL_CHANNEL_LANDING` | ✅ | ✅ | ✅ |
+| `0x05` | `INLINE_SET_VARE7_TO_5` | `KILL_CHANNEL_LANDING` | ✅ | ✅ | ✅ |
+
+These three silencers gate variable-initialisation routines for
+vars `[0xE7]`, `[0xE8]`, `[0xE9]` — high state vars that look
+like they were tracking some PRISON-specific feature
+(possibly a lock count, sub-screen state, or a meta-state for
+the prison-cart sequence). Three different channels (0x01,
+0x02, 0x05) all set up this same way. **Same gates present on
+all three pre-anniversary ports** — meaning whatever was being
+silenced was cut BEFORE the port-split (i.e., during the
+original 1991 amiga authoring) and persisted through the 1992
+DOS / cart rebuilds. A NEW cut-content signal worth following
+up.
+
 ### Amiga 1991 LAKE has ONE FEWER gate than later ports
 
 Amiga LAKE: 5 gates. Cart/DOS/GBA LAKE: 7. The missing two are

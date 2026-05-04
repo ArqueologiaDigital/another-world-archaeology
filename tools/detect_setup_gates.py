@@ -71,8 +71,55 @@ RE_LABEL_DEF = re.compile(r"^[A-Z_][A-Z0-9_]+:\s*$")
 RE_DIRECTIVE = re.compile(r"^\s*;@(?:if|elif|else|endif)\b")
 
 
+def _is_killer(name: str) -> bool:
+    """Is `name` a routine that kills its channel? Either an
+    explicit `KILL_CHANNEL_*` routine, or a name ending in `_KILL`
+    or containing `THEN_KILL` (the deferred-kill idiom — wait for
+    a condition, then kill the channel)."""
+    if name.startswith("KILL_CHANNEL"):
+        return True
+    if name.endswith("_KILL"):
+        return True
+    if "_THEN_KILL" in name:
+        return True
+    return False
+
+
+def classify_gate(gated: str, surviving: str) -> str:
+    """Classify a gate by what's being gated:
+        - silencer:    substantive → killer (the surviving routine
+                       kills the channel, possibly after a delay;
+                       the gated substantive routine never runs).
+                       Likely deliberate cut-content (research/05).
+        - reschedule:  killer → substantive (self-killer gets
+                       replaced by a real routine — common idiom
+                       for "tear down then start fresh on this
+                       channel").
+        - swap:        substantive → substantive (changed mind;
+                       both are real game logic, only the second
+                       runs).
+        - other:       at least one side is a `LABEL_HHHH`
+                       placeholder whose role hasn't been
+                       semantically identified yet.
+    """
+    is_kill_g = _is_killer(gated)
+    is_kill_s = _is_killer(surviving)
+    if is_kill_s and not is_kill_g:
+        return "silencer"
+    if is_kill_g and not is_kill_s:
+        return "reschedule"
+    if not is_kill_g and not is_kill_s:
+        if (
+            re.fullmatch(r"LABEL_[0-9A-F]+", gated)
+            or re.fullmatch(r"LABEL_[0-9A-F]+", surviving)
+        ):
+            return "other"
+        return "swap"
+    return "other"
+
+
 def scan_file(path: Path) -> list[dict]:
-    """Return [{file, line, channel, gated, surviving}, ...]."""
+    """Return [{file, line, channel, gated, surviving, category}, ...]."""
     out: list[dict] = []
     lines = path.read_text().splitlines()
     # Track per-channel: (line_no, address) of the last setup that
@@ -105,6 +152,7 @@ def scan_file(path: Path) -> list[dict]:
                         "gated_address": prev_addr,
                         "surviving_line": i,
                         "surviving_address": addr,
+                        "category": classify_gate(prev_addr, addr),
                     }
                 )
         pending[ch] = (i, addr)
@@ -168,6 +216,38 @@ def main() -> int:
     total = sum(len(g) for g in by_branch.values())
     md.append(f"**Total gates detected: {total}.**")
     md.append("")
+
+    # Cross-branch category breakdown — silencers are the highest-
+    # interest cases (deliberate cut-content per research/05).
+    md.append("## Category breakdown (cross-branch)")
+    md.append("")
+    md.append(
+        "Each gate is classified by what it's gating:\n\n"
+        "- **silencer** — substantive routine → `KILL_CHANNEL_*`.\n"
+        "  The surviving address kills the channel; the gated\n"
+        "  routine never runs. Likely deliberate cut-content\n"
+        "  (research/05).\n"
+        "- **reschedule** — `KILL_CHANNEL_*` → substantive.\n"
+        "  The gated kill-self gets replaced by a real routine —\n"
+        "  common idiom for tearing down and starting fresh on\n"
+        "  the same channel.\n"
+        "- **swap** — substantive → substantive. Both are real\n"
+        "  game logic; only the second runs (the first was a\n"
+        "  changed mind).\n"
+        "- **other** — at least one side is a `LABEL_HHHH`\n"
+        "  placeholder whose role hasn't been semantically\n"
+        "  identified yet.\n"
+    )
+    cat_totals: dict[str, int] = defaultdict(int)
+    for gates in by_branch.values():
+        for g in gates:
+            cat_totals[g["category"]] += 1
+    md.append("| Category | Count |")
+    md.append("| --- | ---: |")
+    for cat in ("silencer", "reschedule", "swap", "other"):
+        md.append(f"| `{cat}` | {cat_totals.get(cat, 0)} |")
+    md.append("")
+
     for branch, gates in sorted(by_branch.items()):
         md.append(f"## `{branch}`")
         md.append("")
@@ -175,14 +255,15 @@ def main() -> int:
         md.append("")
         if not gates:
             continue
-        md.append("| Stage | Channel | Gated → Surviving | Source |")
-        md.append("| --- | :---: | --- | --- |")
+        md.append("| Stage | Channel | Gated → Surviving | Category | Source |")
+        md.append("| --- | :---: | --- | :---: | --- |")
         for g in sorted(
             gates, key=lambda x: (x["stage"], int(x["channel"], 16))
         ):
             md.append(
                 f"| {g['stage']} | `{g['channel']}` | "
                 f"`{g['gated_address']}` → `{g['surviving_address']}` | "
+                f"`{g['category']}` | "
                 f"{g['file']}:{g['gated_line']}-{g['surviving_line']} |"
             )
         md.append("")
