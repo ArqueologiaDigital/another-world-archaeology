@@ -435,3 +435,40 @@ limbs. Compare against the cutscene's actual reused background
   another level via the engine's resource-loading pattern, those
   cross-level uses are NOT counted as "reachable" in the current
   per-level scan.
+
+- **2026-05-04** (later) — cross-port sprite-byte diff. Compared
+  every solid polygon's byte content between amiga and DOS ports
+  for each stage. Findings reveal three distinct rebuild patterns:
+
+  | Stage      | only-amiga | only-dos | Pattern             |
+  |------------|------------|----------|---------------------|
+  | CODE_WHEEL | 0          | 8        | DOS added 8 sprites |
+  | INTRO      | 2          | 2        | nearly stable       |
+  | LAKE       | 206        | 0        | dos trimmed 206     |
+  | PRISON     | 1          | 1        | nearly stable       |
+  | CAVES      | 10         | 20       | minor bidir         |
+  | TANK       | 0          | 94       | DOS added 94 sprites|
+  | CAPSULE    | 466        | 398      | major bidir rework  |
+  | ENDING     | 1          | 1        | nearly stable       |
+
+  - **DOS-additive** (CODE_WHEEL +8, TANK +94): the 1992 port
+    added new sprite content. TANK's +94 is striking — possibly
+    new tank-arena enemy variants or platform-specific UI.
+  - **Amiga-vestigial** (LAKE −206 in DOS): the 1992 rebuild
+    trimmed sprites that the 1991 amiga release had. Candidate
+    cut content.
+  - **Major rework** (CAPSULE 466+398 bidir): both ports have
+    unique content the other doesn't. Combined with the alien
+    sub-anim renumbering in [issue #0080](#/issues), CAPSULE
+    underwent significant content rework between 1991 and 1992
+    — not just a renumbering pass.
+
+  Tool: `tools/cross_port_polygon_diff.py`. Operates on solid
+  polygons only (skipping group polygons because their bytes
+  embed child references that differ per port even when the
+  rendered sprite matches).
+
+  Open avenue: render the only-in-amiga LAKE polygons (206
+  candidates) — these are the cleanest "1991-era cut content" set
+  in the survey. They should produce identifiable sprites under
+  amiga's LAKE palette.
