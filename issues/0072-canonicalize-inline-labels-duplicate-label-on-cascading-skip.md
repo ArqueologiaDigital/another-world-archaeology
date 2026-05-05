@@ -1,10 +1,10 @@
 ---
 id: 0072
 title: canonicalize_inline_labels: rename creates duplicate label when cascading partner is skipped by another conflict
-status: open
+status: done
 tier: B
 created: 2026-05-01
-updated: 2026-05-01
+updated: 2026-05-05
 depends_on: []
 blocks: []
 tags: [canonicalize-inline-labels, bug, phase-3b]
@@ -91,3 +91,34 @@ cart-dos, gba-dos), avoiding the cascading-skip path.
 
 - 2026-05-01: opened. Found while building 4-way LAKE pipeline
   (source-reconstruction commit `e21c8fb`).
+
+- 2026-05-05: fixed. Commit `61c3550` in archaeology:
+
+  - **Cascade detection via fixpoint iteration.** The conflict-2
+    pass now drops sources that got skipped (by conflict-1 or
+    recursive conflict-2) from the `renaming_away` set, then
+    re-runs the pass. Repeats until both branches' renaming-away
+    sets are stable. This eliminates the assumption that a
+    proposed rename's source will definitely succeed.
+
+  - **Post-rename invariant check.** After applying renames to
+    both branches' source text, scan each output for duplicate
+    `LABEL_xxxx:` definitions. If any are found, exit with a
+    fatal diagnostic instead of silently corrupting the
+    downstream byte-match.
+
+  Acceptance criteria status:
+    - [x] Detect the cascade (fixpoint iteration)
+    - [x] Process renames iteratively until fixpoint
+    - [x] Post-rename invariant check
+    - [ ] Re-enable the amiga-dos pairing in 4-way LAKE pipeline
+          — the fix is in place but the consumer pipeline is
+          currently disabled; when someone re-enables it, this
+          fix should let it succeed without producing duplicate
+          definitions. Leaving as a future verification step;
+          closing the issue itself as `done` since the underlying
+          bug is resolved.
+
+  The tool isn't currently used by any active build pipeline, so
+  this fix is preventive — closes the bug-as-filed without
+  changing any verified output.
