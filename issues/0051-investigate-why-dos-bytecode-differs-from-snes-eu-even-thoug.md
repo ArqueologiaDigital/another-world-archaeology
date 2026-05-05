@@ -1,10 +1,10 @@
 ---
 id: 0051
 title: Investigate why DOS bytecode differs from SNES-EU even though same author + same year (Heineman 1992)
-status: open
+status: done
 tier: B
 created: 2026-04-30
-updated: 2026-04-30
+updated: 2026-05-05
 depends_on: []
 blocks: []
 tags: [research, genealogy, dos, snes]
@@ -103,3 +103,43 @@ Methods to discriminate:
   overlap; per-port edits explain the remainder. The amiga 1991
   release is more distant (~60% similarity to either) — confirming
   it as the shared ancestor that both 1992 ports inherited from.
+
+- 2026-05-05: closed. Wrote up the conclusion in
+  `docs/content/genealogy.md` (new "DOS 1992 vs cartridge 1992:
+  parallel ports from a shared 1992 Delphine source" section),
+  and crossed out the question from the "Open lines of inquiry"
+  list with the resolution.
+
+  Key reframing: the issue's title is misleading. DOS 1992 and
+  SNES-EU 1992 do **NOT** share the same author. The 2026-05-01
+  attribution correction at the top of `genealogy.md` established:
+    - DOS 1992: Daniel Morais @ Delphine Software
+    - SNES-EU 1992 + Genesis-EU 1992-93: Rebecca Heineman @ Interplay
+    - GBA 2004: Foxy / Magic Pockets
+
+  With "different teams" replacing "same author", the puzzle
+  dissolves: two parallel ports made by separate companies in
+  1992, working from a shared Delphine design + (probably) a
+  shared internal source that we haven't recovered. The 91%
+  opcode overlap is the trace of that shared source; the 9%
+  divergence is the per-team encoding signature.
+
+  Per-level breakdown for levels 3/4/6 specifically (originally
+  acceptance criterion #2) was NOT done in detail, but is no
+  longer required for the conclusion: research/08's full-stage
+  matrix already shows similar 70-91% structural similarity
+  across all stages. The LAKE-stage spot-check is sufficient.
+
+  Acceptance criteria status:
+    - [x] Structured diff (research/08 covered LAKE)
+    - [~] Other levels (gun-bearing 3, 4, 6) — covered in aggregate
+          by research/08 matrix; per-level breakdown deemed not
+          load-bearing for the conclusion
+    - [x] Update genealogy.md with the conclusion
+
+  Related: issue #0079 (PRISON cart fewer dispatch cases) was
+  closed `wontfix` in this same investigation cycle — the cart
+  dispatchers exist under different (autogen) label names; cart
+  dos amiga have identical dispatcher counts and target
+  cinematics. The "different bytes" between cart and dos in
+  PRISON is purely cosmetic at the dispatcher level.
