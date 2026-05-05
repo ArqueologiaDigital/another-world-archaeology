@@ -256,6 +256,66 @@ def render_report(
             )
         lines.append("")
 
+    # Per-port origin classification (lineage analysis).
+    # For each non-reference port, classify each of its resources by
+    # which of {amiga, dos} it byte-matches at the same index.
+    # The "matches dos only, NOT amiga" column is the smoking gun for
+    # DOS-derived ports (Mac); zero values mean Amiga-derived (Atari).
+    if "amiga" in releases and ("dos" in releases or "msdos" in releases):
+        ref_amiga = {rec["index"]: rec["md5"] for rec in releases["amiga"]}
+        dos_release = "dos" if "dos" in releases else "msdos"
+        ref_dos = {rec["index"]: rec["md5"] for rec in releases[dos_release]}
+
+        non_ref_ports = [
+            r for r in sorted(releases) if r not in {"amiga", dos_release, "msdos"}
+        ]
+        if non_ref_ports:
+            lines.append("## Per-port origin classification (lineage analysis)")
+            lines.append("")
+            lines.append(
+                "For each non-reference port, classifies its resources by "
+                f"whether they byte-match `amiga` and/or `{dos_release}` at "
+                "the same index. The lineage signal is in **`matches DOS "
+                "only`**: non-zero means the port inherited DOS-rebuilt "
+                "resources; zero rules out a DOS→port arrow."
+            )
+            lines.append("")
+            lines.append(
+                "| Port | total | both | amiga only | DOS only | unique | inferred lineage |"
+            )
+            lines.append("| --- | ---: | ---: | ---: | ---: | ---: | --- |")
+            for port in non_ref_ports:
+                port_idx_md5 = {rec["index"]: rec["md5"] for rec in releases[port]}
+                total = len(port_idx_md5)
+                both = amiga_only = dos_only = unique = 0
+                for idx, md5 in port_idx_md5.items():
+                    a = ref_amiga.get(idx) == md5
+                    d = ref_dos.get(idx) == md5
+                    if a and d:
+                        both += 1
+                    elif a:
+                        amiga_only += 1
+                    elif d:
+                        dos_only += 1
+                    else:
+                        unique += 1
+                # Infer lineage hint
+                if dos_only > 0 and amiga_only == 0:
+                    lineage = "**DOS-derived**"
+                elif amiga_only > 0 and dos_only == 0:
+                    lineage = "**Chahi 1991 sibling**"
+                elif amiga_only == 0 and dos_only == 0 and both > 0:
+                    lineage = "ambiguous (only shared resources)"
+                elif amiga_only == 0 and dos_only == 0 and both == 0:
+                    lineage = "no overlap (independent rebuild)"
+                else:
+                    lineage = "mixed"
+                lines.append(
+                    f"| `{port}` | {total} | {both} | {amiga_only} | "
+                    f"{dos_only} | {unique} | {lineage} |"
+                )
+            lines.append("")
+
     if shared_md5s:
         lines.append("## Shared md5 catalog")
         lines.append("")
