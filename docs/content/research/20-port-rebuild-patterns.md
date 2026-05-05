@@ -121,6 +121,49 @@ Mac display gamut.
 320×200 framebuffer; almost certainly the splash/title/credits art,
 not used by the AW VM runtime.
 
+#### Mac is downstream of DOS, not Amiga (2026-05-05)
+
+Cross-checking each of the 10 Mac↔DOS shared md5s against Amiga
+and Atari ST 1991 confirms the lineage direction:
+
+      idx 0x14  PALETTE        shared with: DOS-only-rebuild
+      idx 0x16  POLY_CINEMATIC shared with: DOS-only-rebuild
+      idx 0x17  PALETTE        shared with: DOS-only-rebuild
+      idx 0x19  POLY_CINEMATIC shared with: DOS-only-rebuild
+      idx 0x1c  POLY_CINEMATIC shared with: DOS-only-rebuild
+      idx 0x1d  PALETTE        shared with: DOS-only-rebuild
+      idx 0x23  PALETTE        shared with: DOS-only-rebuild
+      idx 0x26  PALETTE        shared with: DOS-only-rebuild
+      idx 0x29  PALETTE        shared with: DOS-only-rebuild
+      idx 0x7d  PALETTE        shared with: DOS-only-rebuild
+
+**Every** Mac↔DOS verbatim-shared resource is one DOS rebuilt in
+the 1991→1992 port (i.e., none of them match the original
+Chahi 1991 versions). This means the Mac team sourced their
+data fork from **DOS 1992**, not from the original 1991 Amiga
+master. Even when Mac preserves resources verbatim, it's
+preserving DOS's 1992 rebuilds.
+
+The lineage arrow pointing to Mac is thus DOS → Mac, not
+Amiga → Mac:
+
+```
+Chahi 1991 master (Amiga + Atari ST)
+   │ per-stage triplet rebuild
+   ▼
+Delphine 1992 internal source (lost — only inferred)
+   ├── DOS 1992 (Morais @ Delphine)
+   │     │ data-fork hand-off
+   │     ▼
+   │   Mac 1993 (MacPlay)
+   │     - 7 PALETTE + 3 POLY_CINEMATIC verbatim from DOS
+   │     - all BYTECODE + later POLY_CINEMATIC + all POLY_ANIM rebuilt
+   │
+   └── SNES-EU 1992 (Heineman @ Interplay)
+         ├── Genesis-EU 1993 (verbatim cartridge bytecode reuse)
+         └── Foxy/Magic Pockets → GBA 2004
+```
+
 ### 3DO (issue #0003)
 
 3DO ships 263 `File<NNN>` data blobs + 30 `song<NN>` audio files
