@@ -106,10 +106,56 @@ disambiguation marker.
 ## Counter-examples we considered and rejected
 
 - **`videoFull` / `videoCinema` mnemonics**: would let us also
-  drop `zoom=0x40` from full-form CINEMATIC default zoom. Rejected
-  per project preference for fewer mnemonics.
+  drop `zoom=0x40` from the byte-literal-x-y full-form CINEMATIC
+  default zoom case (the 92 ambiguous lines). Rejected per project
+  preference for fewer mnemonics.
 - **`type=0` shorthand** (e.g., a `videoCommon` mnemonic):
   rejected; same reason.
 - **Defaulting `song delay=0x0000` and `pos=0x00`**: surveyed
   (91%, 93% of song instructions respectively, ~200 lines each)
   but the user opted to limit this round to `video` only.
+
+## Follow-up: zoom=0x40 default-omission for unambiguous full form
+(commit `5a2d4ee` in `AnotherWorld_VMTools`, commit `16a2244` in
+`another-world-source-reconstruction`)
+
+The first iteration of this migration kept `zoom=0x40` explicit in
+EVERY full-form CINEMATIC default-zoom case to avoid ambiguity with
+compact form. That was overly conservative — compact form
+(opcode 0x80+) can only encode calls where:
+
+  - x is byte-literal ≤ 0xFF
+  - y is byte-literal ≤ 0xFF
+  - offset ≤ 0xFFFE
+  - type = CINEMATIC
+
+When ANY of those constraints is violated (variable x or y, x/y >
+0xFF, large offset), compact form is impossible — so omitting
+`zoom=0x40` is unambiguous; the encoder must default to full form.
+
+Of the 2,139 source lines carrying explicit `zoom=0x40` after the
+first iteration, only 92 are truly ambiguous (byte-literal x ≤ 0xFF
+AND byte-literal y ≤ 0xFF). The other 2,047 had variable x/y or
+x/y > 0xFF. The follow-up commit drops `zoom=0x40` from the 26,129
+unambiguous full-form-CINEMATIC lines (counting all duplicates
+across per-port and unified sources) and keeps it explicit on the
+92 ambiguous lines as the marker that forces full-form encoding.
+
+Encoder logic, post follow-up: when `zoom=` is omitted in source,
+pick compact form ONLY when ALL compact constraints hold; otherwise
+fall through to full form with default zoom = 0x40. This is what
+forces the 92 ambiguous lines to retain explicit `zoom=0x40` —
+omitting it would route them to compact form, which the original
+bytecode did not use.
+
+Decoder logic, post follow-up: emit `, zoom=0x40` for full-form
+CINEMATIC default-zoom output ONLY when compact form could have
+encoded the same call. Otherwise drop it.
+
+Migration script:
+`tools/migrate_video_zoom_default.py`. Walks the source tree and
+strips `, zoom=0x40` from `video` lines whose x or y is variable,
+or whose x/y literal exceeds 0xFF. Idempotent.
+
+Final state: 47,867 + 26,129 = 73,996 video lines simplified
+across the source tree. Round-trip verified.
