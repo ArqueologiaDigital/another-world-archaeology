@@ -192,9 +192,35 @@ Two interpretations:
 Distinguishing these requires comparing against a known-pristine
 Atari ST dump (issue tracking the question filed as `#0092`).
 
-For the current finding's purposes, the byte-level diff is
-documented here as a hard cross-port observation; the
-"why" remains an open question.
+**Resolution (2026-05-05): interpretation #2 — cracked dump.**
+
+The atarimania.com PASTI dump's `START.PRG` still carries the
+**full codewheel prompt string intact**:
+
+      "B SELECT SYMBOLS CORRESPONDING TO"
+      "    AND PRESS BUTTON"
+
+(found via `strings` on the executable). This matches the
+codewheel-INTACT Amiga's prompt exactly. If Atari ST had
+genuinely shipped without the codewheel check, the executable
+wouldn't carry the prompt at all — the prompt's presence
+indicates the original release DID have a codewheel check, and
+what we have is a crack.
+
+Compared to the 2014 Amiga presskit (which patched BOTH the
+bytecode AND the prompt — replacing it with "SELECT 3 SYMBOLS
+THEN PRESS OK"), the Atari ST cracker was **less polished**: only
+the bytecode-level check was disabled; the prompt was left
+intact. Players see "select symbols corresponding to the
+codewheel" and just type their best guess — it works because the
+bytecode no longer validates.
+
+Atari ST's release-time copy protection is presumably the same
+codewheel manual that the Amiga release used (Delphine shared
+the manual across both 68k SKUs). To verify directly, a
+known-pristine Atari ST dump from a different source is still
+needed (issue #0092 closed with this resolution; a future
+acquisition would re-confirm).
 
 ## Reproducing
 

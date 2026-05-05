@@ -1,7 +1,7 @@
 ---
 id: 0092
 title: Confirm whether the Atari ST 1991 release ships without the codewheel-check (original release vs cracked dump)
-status: open
+status: done
 tier: B
 created: 2026-05-05
 updated: 2026-05-05
@@ -80,3 +80,47 @@ that mirrors the cracker's patch.
   at the codewheel-check sites identified by research/02 — too
   coincidental to be unrelated, too specific to determine
   origin without an independent pristine dump.
+
+- 2026-05-05 (later): **resolved as interpretation #2 — the
+  Atari ST extraction is from a CRACKED dump.**
+
+  Decisive evidence: ran `strings` on
+  `work/atari-st-1991/another_world_disk_1/AUTO/START.PRG` and
+  found the **full codewheel prompt string still intact**:
+
+      "B SELECT SYMBOLS CORRESPONDING TO"
+      "    AND PRESS BUTTON"
+
+  This matches the codewheel-INTACT Amiga's prompt exactly. If
+  Atari ST had genuinely shipped without the codewheel check
+  (interpretation #1), the executable wouldn't carry the prompt
+  asking the user to "select symbols corresponding to..." — the
+  whole codewheel-prompt UX flow would be absent.
+
+  Compare to the 2014 Amiga presskit cracker, who patched BOTH
+  layers — bytecode AND prompt — replacing the prompt with
+  `"SELECT 3 SYMBOLS THEN PRESS OK"` to tell the player they
+  don't need a codewheel manual (research/02). The Atari ST
+  cracker was less polished: bytecode patched, prompt left
+  intact. Players would see "select symbols corresponding to
+  the codewheel" and just type their best guess; it'd work
+  because the bytecode no longer validates.
+
+  Conclusion: **the atarimania.com PASTI dump is from a
+  cracked disc**, with a less-thorough crack than the Amiga
+  presskit. To actually understand Atari ST's release-time
+  copy-protection regime, we'd need a pristine dump. Filed as
+  a follow-up acquisition need (won't track as a separate
+  issue — it's an open item in #0017 / #0019-style "acquire
+  known-pristine X" pile).
+
+  Acceptance criteria status:
+    - [x] Acquire pristine dump → identified as future work,
+          but the strings test alone is sufficient to resolve
+          the interpretation question.
+    - [x] Resolution: **interpretation #2** (cracked dump) is
+          correct. The presence of the unmodified codewheel
+          prompt in START.PRG rules out interpretation #1.
+    - [ ] Disassemble Atari ST `0x15 BYTECODE` via AWVM_Tools
+          `atari_st` registration — still gated.
+    - [x] Update research/02 with the resolution.
