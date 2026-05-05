@@ -290,6 +290,7 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
     # reference port + validation.
     bin_dir = work_dir / "bin"
     resources_extracted = 0
+    resources_metadata: list[dict] = []
     if memlist_synthesised:
         # Late-bind the unpacker so the extractor still works if
         # the archaeology repo isn't on sys.path.
@@ -355,6 +356,17 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
             out_path.write_bytes(raw)
             written.append(out_path)
             resources_extracted += 1
+            resources_metadata.append({
+                "index": i,
+                "filename": f"0x{i:x}-{type_label}.bin",
+                "type": type_label,
+                "type_id": rtype,
+                "bank_id": bankId,
+                "bank_offset": bankOffset,
+                "packed_size": packedSize,
+                "size": size,
+                "md5": __import__("hashlib").md5(raw).hexdigest(),
+            })
 
     rel_files = sorted(p.relative_to(work_dir).as_posix() for p in written)
     manifest = {
@@ -364,6 +376,10 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
         "memlist_synthesised": memlist_synthesised,
         "resources_extracted_to_bin": resources_extracted,
     }
+    if resources_metadata:
+        # Same shape as the DOS-bank manifest's `resources[]` array,
+        # so cross_release_md5_index.py can consume it.
+        manifest["resources"] = resources_metadata
     if memlist_synthesised:
         manifest["memlist_source"] = "AUTO/START.PRG offset 0x7EF2 (big-endian, 20-byte entries)"
     (work_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
