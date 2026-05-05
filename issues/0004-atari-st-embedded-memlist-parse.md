@@ -139,3 +139,41 @@ can't pass Atari ST bytecode through `awvm-disasm`.
   hypothesis check — no surprising deltas; the 1991 Chahi master
   is cleanly preserved across both 68k SKUs). Updated research/20
   ("Port-rebuild patterns") with this Atari ST cross-port finding.
+
+- 2026-05-05 (later still): extractor now also writes per-resource
+  `bin/0x<HH>-<TYPE>.bin` files alongside `memlist.bin` (commit
+  `664e3a4`), matching the DOS extractor's layout. Uses the new
+  Python AW VM unpacker (`tools/aw_unpacker.py`, commit `36a942d`)
+  to depack compressed entries.
+
+  Validated: 131/131 valid memlist entries extracted to `bin/`,
+  0 CRC failures. Type distribution matches the memlist:
+
+      SOUND: 90, MUSIC: 3, POLY_ANIM: 10, PALETTE: 9,
+      BYTECODE: 9, POLY_CINEMATIC: 9, UNKNOWN: 1
+
+  Cross-port comparison via the `bin/` layout (without needing
+  AWVM_Tools registration) is now a one-liner for any future
+  research script.
+
+  ## Re-running the cross-port sweep with depack
+
+  With the depacker in place, the corrected cross-port stat is:
+
+      Total Atari ST resources scanned: 131
+        Match Amiga 1991:                120  (91.6%)
+        Match DOS 1992:                   94  (71.8%)
+        Match Amiga but NOT DOS:          26  (the 9+8+9 triplet)
+        Match neither (Atari-ST-unique): 11  (was 1 before depack)
+
+  Earlier "1 unique" count was over uncompressed-only entries; the
+  full sweep finds **10 more unique POLY_ANIM resources** (0x43-
+  0x49, 0x53, 0x90, 0x91) plus the already-known `0x15 BYTECODE`.
+
+  The 10 unique POLY_ANIM is a SURPRISE — AW POLY_ANIM are
+  platform-independent 4bpp bitmaps, so two 68k SKUs sharing the
+  same display format might be expected to share them. Per
+  research/20, this implies per-platform artist re-paints or
+  palette-intent differences for a subset of rooms. Worth a
+  side-by-side rendering to identify the visual content
+  divergence (would be a separate research note).
