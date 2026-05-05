@@ -278,34 +278,58 @@ comparison) is now fully covered.
 
 ## Genealogy implications
 
-The byte-level evidence places each port on a 3-tier proximity scale
-to the original Eric Chahi 1991 amiga release:
+The byte-level evidence places each port on a multi-arrow lineage
+descending from Eric Chahi's 1991 master. Where the cross-port
+md5 sweep confirms a directional inheritance, the arrow is solid;
+the parallel-sibling relationships are tilde-connected.
 
 ```
-                     1991 amiga  ─────────────  Atari ST 1991
-                                               (~identical content)
-                          │
-                          │  per-stage triplet rebuild
-                          ▼
-                     1992 dos  ───────────────  cartridge_1992
-                                                (Amiga + 1992 DOS triplets
-                                                 propagated via the same
-                                                 toolchain)
-                                              │
-                                              │  pure inheritance
-                                              ▼
-                                          GBA 2004
-                                                (Foxy port reuses
-                                                 cartridge bytecode)
+                Chahi 1991 master  ~~~~~~~~~~~  Atari ST 1991
+                (Amiga 1991)                    (sibling SKU; 120/131
+                     │                           resources byte-match
+                     │                           Amiga; 0 DOS-derived)
+                     ▼
+            Delphine 1992 internal source
+                  (lost — only inferred;
+                   91% opcode similarity
+                   between DOS and cart)
+                     │
+        ┌────────────┴───────────────┐
+        ▼                            ▼
+   DOS 1992                    cartridge_1992
+   (Morais @ Delphine)         (Heineman @ Interplay)
+        │                            │
+        │ data-fork                  │ verbatim bytecode reuse
+        │ hand-off                   ▼
+        ▼                       Genesis-EU 1993
+   Mac 1993                          │
+   (MacPlay)                         │ light refactor
+                                     │ (~92% structural)
+                                     ▼
+                                  GBA 2004
+                                  (Foxy / Magic Pockets)
 
-  Mac 1993:    keeps PALETTE + early POLY_CINEMATIC; rebuilds rest
-  3DO ~1994:   keeps NOTHING; full rebuild
+
+  3DO ~1994:   clean rebuild — zero byte-overlap with any port.
+               The "outgroup" of the entire lineage tree.
 ```
 
-The Mac and 3DO ports are clean "outgroup" branches: their resource
-sets cannot be derived from the cartridge lineage by any patching
-workflow. Mac is partial (some assets survived); 3DO is total
-(everything was reauthored).
+Each arrow is grounded in a specific cross-port md5 finding:
+
+| Arrow | Evidence |
+|---|---|
+| Chahi → Amiga | (definitional — Eric Chahi authored the 1991 Amiga release) |
+| Chahi → Atari ST | 120/131 Atari resources match Amiga; 0 match DOS-only. Origin classification: **Chahi 1991 sibling** (this report) |
+| Delphine 1992 → DOS | 117 byte-match Amiga ↔ DOS; 27 differ in 9+9+9 per-stage triplet (research/13) |
+| Delphine 1992 → cartridge | 91% opcode-only similarity DOS ↔ cartridge_1992 (research/08); same editorial decisions, different teams |
+| DOS → Mac | 10/10 Mac-DOS shared md5s are DOS-only-rebuilds. Origin classification: **DOS-derived** (this report) |
+| cartridge → Genesis-EU | byte-identical LAKE bytecode SNES-EU ↔ Genesis-EU (research/05) |
+| cartridge → GBA | 92% structural similarity cartridge ↔ GBA, gates 1+2 preserved (research/05+08) |
+
+The Mac and 3DO ports are "outgroup" branches: their resource sets
+cannot be derived from the *Amiga* 1991 master by any patching
+workflow (Mac via DOS; 3DO independently). 3DO is total rebuild
+(zero overlap); Mac is partial preservation of DOS's rebuilds.
 
 ## Reproducing
 
