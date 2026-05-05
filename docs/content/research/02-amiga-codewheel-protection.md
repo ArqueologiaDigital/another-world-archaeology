@@ -106,6 +106,40 @@ project memory.
   finding below. 3DO / Mac / Apple IIgs await their respective
   parsers.
 
+## Presskit also patched the user-facing prompt (2026-05-05)
+
+Diffing the two Amiga `another` executables (presskit 2014 vs
+archive-org 2020 CC0) shows **50 bytes differ in 8 ranges**, all
+clustered at offset 0x3414..0x343d — a single embedded text
+string the executable prints as the codewheel-check prompt:
+
+      archive (codewheel intact, 2020):
+        "SELECT SYMBOLS CORRESPONDING TO\r THE POSITION\r ON THE CODE WHEEL"
+
+      presskit (codewheel stripped, 2014):
+        "SELECT 3 SYMBOLS THEN PRESS OK                                  "
+        (padded to original byte width)
+
+The cracker patched **both layers**:
+
+1. **Bytecode-level**: the `0x68 → 0x17` opcode swaps in
+   `resource-0x15.bin` neuter the codewheel comparison
+   (research/02's main finding).
+2. **User-facing-string-level**: the prompt string in the
+   executable's text segment is replaced from "look up symbols
+   on the codewheel" to "press OK after picking any 3 symbols",
+   so the user knows the check is bypassed and they don't need
+   to consult a codewheel insert.
+
+The two patches are complementary: the bytecode patch makes any
+input pass the check; the prompt patch tells the player they
+don't need to bother matching symbols. Outside `0x3400..0x343d`
+the two `another` executables are byte-identical.
+
+This is consistent with a polished community release rather than
+a hasty crack — the cracker took care to update the user-facing
+text to reflect the modified behaviour.
+
 ## Atari ST 1991: codewheel-check absent (2026-05-05)
 
 The full Atari ST cross-port resource sweep (issue #0004,
