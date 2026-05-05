@@ -684,5 +684,45 @@ genealogy axis:
     - PRISON cart label canonicalization (issue #0091 closed).
     - PASSCODE TRIVIAL_RET unification (issue #0081 Cat 4).
     - Helper-suffix simplification (13 helpers).
+    - LAKE: 21 identical-arm `;@if BRANCH` blocks collapsed.
+    - 7 identical-arm chunk consolidations (full 3-arm + tank).
+    - 4 twin-arm consolidations (where 2/3 arms match, 3rd differs).
 
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
+
+## State as of 2026-05-05 (post-cleanup; lineage classification automated)
+
+After the cross-port resource genealogy round wrapped, two more
+subsystems landed:
+
+- **`tools/canonicalize_inline_labels.py` bug fix (issue #0072)**.
+  Cascading-skip duplicate-label bug fixed via fixpoint iteration
+  + post-rename invariant check. Tool not currently used by
+  active build pipelines, so fix is preventive — bug-as-filed
+  resolved.
+
+- **Per-port lineage classification automated**
+  (`tools/cross_release_md5_index.py`). New section in the
+  auto-generated cross-port report classifies each non-reference
+  port by whether its resources match `amiga` and/or `dos` at
+  the same index, then infers a lineage hint:
+
+      atari-st-1991: 94 both / 26 amiga-only / 0 dos-only / 11 unique
+                     → Chahi 1991 sibling
+      macintosh-1993:  0 both /  0 amiga-only / 10 dos-only / 26 unique
+                     → DOS-derived
+
+  Future ports added to the cross-release index (via extractor
+  manifest's `resources[]` array) will be auto-classified on
+  next regeneration.
+
+- **`research/20` genealogy diagram refined** with a multi-arrow
+  tree rooted at the (lost) Delphine 1992 internal source
+  forking into parallel DOS + cartridge children. Each arrow has
+  named cross-port evidence; the diagram is the single source of
+  truth, kept in sync with the byte-level findings.
+
+Issues closed this round: `#0072`. Issues advanced: `#0009`,
+`#0004`, `#0003` (all via the cross-port sweep).
+
+verify_stage 29/29 + verify_unified 27/27.
