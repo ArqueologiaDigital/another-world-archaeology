@@ -4,15 +4,13 @@
 //   #/research               → docs/content/research/README.md
 //   #/research/<slug>        → docs/content/research/<slug>.md
 //   #/open-questions[/<slug>]
-//   #/sessions               → list of sessions
-//   #/sessions/<id>          → rendered transcript
 
 (function () {
   function emptyState() {
     return (
       `<h1>Run <code>make docs</code></h1>` +
       `<p>The data file <code>docs/data/all.js</code> is missing. It is generated ` +
-      `from <code>sessions/*.jsonl</code> and <code>docs/content/**/*.md</code> ` +
+      `from <code>docs/content/**/*.md</code> ` +
       `by <code>tools/gen_docs_data.py</code>.</p>` +
       `<p>From the repo root:</p>` +
       `<pre><code>make docs</code></pre>` +
@@ -35,19 +33,6 @@
 
     const raw = (location.hash || "#/").slice(2);
     const path = raw.replace(/\/$/, "");
-
-    // Sessions
-    if (path === "sessions") {
-      main.innerHTML = SessionViewer.renderIndex(window.AWA.sessions || []);
-      return;
-    }
-    const sessionMatch = path.match(/^sessions\/(.+)$/);
-    if (sessionMatch) {
-      const id = sessionMatch[1];
-      const records = (window.AWA.sessionData || {})[id];
-      main.innerHTML = SessionViewer.render(records, id);
-      return;
-    }
 
     // Content pages — try the path as-is, then fall back to <path>/README.
     const contentKey = path === "" ? "README" : path;

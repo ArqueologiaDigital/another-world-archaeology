@@ -53,7 +53,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `fold_body_rename_round_7.py` | Phase 4 / Round 7: 29 more FOLD_BODY routines named from body shape. |
 | `fold_body_rename_round_8.py` | Phase 4 / Round 8: 13 more FOLD_BODY routines named from body shape. |
 | `fold_body_rename_round_9.py` | Phase 4 / Round 9: 24 more FOLD_BODY routines named from body shape. |
-| `gen_docs_data.py` | Generate docs/data/all.js from sessions/*.jsonl and docs/content/**/*.md. |
+| `gen_docs_data.py` | Generate docs/data/all.js from docs/content/**/*.md and issues/*.md. |
 | `issues.py` | Issue tracker CLI for the Another World archaeology project. |
 | `list_unnamed_setup_targets.py` | List `LABEL_HHHH` placeholder routines that are setup-targets, |
 | `localize_single_use_equs.py` | For each `_unified/<STAGE>.asm.in`, find EQU declarations whose |
