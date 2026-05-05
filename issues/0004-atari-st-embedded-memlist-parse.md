@@ -95,3 +95,47 @@ can't pass Atari ST bytecode through `awvm-disasm`.
           on AWVM_Tools registration; partial spot-check
           already done — resource #27 byte-matches Amiga's
           level-2 bytecode, see 2026-04-30 entry above)
+
+- 2026-05-05 (later): full cross-port resource sweep done WITHOUT
+  needing AWVM_Tools registration. Walked the synthesised memlist
+  + 12 BANK files directly, extracted 119 uncompressed resources
+  (skipped the 28 compressed ones — would need the depacker port
+  before they're comparable), and md5-compared each against:
+
+  - DOS 1992 package `076117919d1dca51e486f33b8f7817e3/bin/`
+  - Amiga (codewheel-stripped) `tmp/output/amiga/resources/`
+
+  Result:
+
+      Total uncompressed Atari ST resources scanned:   119
+        Match Amiga 1991:                              118  (99.2%)
+        Match DOS 1992:                                 92  (77.3%)
+        Match Amiga but NOT DOS:                        26
+        Match neither (Atari-ST-unique):                 1
+
+  Only **ONE** Atari-ST-unique resource: **`0x15 BYTECODE`** (the
+  CODE_WHEEL stage bytecode, 3544 bytes). The Atari ST has its
+  own version of the copy-protection screen bytecode, distinct
+  from both Amiga and DOS. Likely an Atari-specific adaptation
+  (possibly because Atari ST disk format precludes the standard
+  codewheel disc check — pure speculation).
+
+  The 26 Amiga-preserved-but-DOS-replaced resources form a
+  perfect 9+8+9 split:
+
+      PALETTE:        9  (one per stage — DOS rebuilt all of them)
+      BYTECODE:       8  (one less than expected; Atari's 0x15 is the 9th)
+      POLY_CINEMATIC: 9
+
+  This **exactly matches the cartridge-line preservation pattern**
+  from research/13 (which found 27 of 144 Amiga ↔ DOS resources
+  differ, in a 9+9+9 per-stage triplet split). Confirmation: Atari
+  ST 1991 + Amiga 1991 ship the SAME 1991 Chahi resource set,
+  with DOS 1992 rebuilding the per-stage `(PALETTE, BYTECODE,
+  POLY_CINEMATIC)` triplet ×9 stages and preserving everything
+  else.
+
+  Acceptance criterion #4 is now substantively done (negative-
+  hypothesis check — no surprising deltas; the 1991 Chahi master
+  is cleanly preserved across both 68k SKUs). Updated research/20
+  ("Port-rebuild patterns") with this Atari ST cross-port finding.

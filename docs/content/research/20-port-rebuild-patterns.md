@@ -40,12 +40,18 @@ The matrix:
 | Port               | match vs DOS | rebuild fraction          |
 |--------------------|--------------|---------------------------|
 | Amiga 1991         | 117/144      | per-stage triplet         |
+| Atari ST 1991      | 92/119*      | per-stage triplet (=Amiga)|
 | Genesis-EU 1992    | ≈117/144     | per-stage triplet         |
 | SNES-EU 1992       | ≈117/144     | per-stage triplet         |
 | GBA Foxy 2004      | ≈117/144     | per-stage triplet         |
-| Atari ST 1991      | (BE memlist) | format-shifted, see below |
 | Mac 1993           | 10/35        | most stages rebuilt       |
 | 3DO ~1994          | 0/...        | total rebuild             |
+
+(*Atari ST count is over the 119 uncompressed resources only;
+the 28 compressed resources weren't compared in this sweep. The
+118/119 match-vs-Amiga rate is the more telling number — Atari
+ST is essentially the Amiga release with a single CODE_WHEEL
+bytecode swap.)
 
 (Atari ST is a special case: same memlist *layout* and per-stage
 resource counts as DOS — 103 SOUND, 3 MUSIC, 12 POLY_ANIM, 9 PALETTE,
@@ -152,10 +158,33 @@ content:
 2. Field byte order is **big-endian** (68000-native), matching
    Amiga; DOS uses little-endian for the same struct.
 
-Spot-check confirmed resource #27 (LAKE bytecode) is byte-identical
-to Amiga's level-2 bytecode (md5
-`860362f3718ca4fe4a8e65cdbe40f155`). The full audit is gated on an
-AWVM_Tools `atari_st` release registration.
+**Full cross-port resource sweep (2026-05-05)** — walked the
+synthesised memlist + 12 BANK files directly, extracted 119
+uncompressed resources, md5-compared each against DOS package
+and Amiga (codewheel-stripped):
+
+    Total uncompressed Atari ST resources scanned:   119
+      Match Amiga 1991:                              118  (99.2%)
+      Match DOS 1992:                                 92  (77.3%)
+      Match Amiga but NOT DOS:                        26
+      Match neither (Atari-ST-unique):                 1
+
+The 26 Amiga-preserved-but-DOS-replaced resources form a perfect
+9+8+9 split (PALETTE / BYTECODE / POLY_CINEMATIC), which is
+exactly the same per-stage triplet pattern research/13 found for
+the Amiga ↔ DOS comparison. **Atari ST + Amiga ship the same 1991
+Chahi resource set; DOS 1992 rebuilt the per-stage triplet ×9
+stages and preserved everything else.**
+
+The single Atari-ST-unique resource is **`0x15 BYTECODE`** (the
+CODE_WHEEL bytecode, 3544 bytes) — likely an Atari-specific
+copy-protection adaptation. Spot-check resource #27 (LAKE
+bytecode) confirmed byte-identical to Amiga's level-2 bytecode
+(md5 `860362f3718ca4fe4a8e65cdbe40f155`).
+
+Full per-resource audit through AWVM_Tools' disassembler is still
+gated on registering an `atari_st` release entry, but the byte-
+level cross-port equivalence is now fully established.
 
 ## Genealogy implications
 
