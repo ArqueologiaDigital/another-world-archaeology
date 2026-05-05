@@ -326,6 +326,14 @@ def main() -> None:
     # Second pass: build rename maps with conflict detection.
     # Track what each branch is renaming AWAY (set of source names) and
     # renaming TO (set of target names).
+    #
+    # Iterate to fixpoint: bug #0072 is that the conflict-2 check
+    # (`new not in renaming_away`) assumes the rename of `new` will
+    # succeed. But that other rename may itself be skipped later
+    # (conflict-1, or recursive conflict-2). When it gets skipped,
+    # `new` ends up still present in the source after all renames
+    # apply, creating a duplicate-definition error. Fix: drop
+    # skipped sources from `renaming_away` and re-evaluate.
     a_renaming_away: set[str] = set()
     b_renaming_away: set[str] = set()
     for branch, old, _new, _ in proposed:
@@ -334,62 +342,65 @@ def main() -> None:
         else:
             b_renaming_away.add(old)
 
-    a_rename_targets_used: set[str] = set()
-    b_rename_targets_used: set[str] = set()
-    for branch, old, new, _ in proposed:
-        rename_map = a_rename if branch == a_branch else b_rename
-        all_labels = a_all if branch == a_branch else b_all
-        renaming_away = a_renaming_away if branch == a_branch else b_renaming_away
-        targets_used = a_rename_targets_used if branch == a_branch else b_rename_targets_used
+    while True:
+        a_rename = {}
+        b_rename = {}
+        a_rename_targets_used = set()
+        b_rename_targets_used = set()
+        skipped_dup_target = 0
+        fresh_names = 0
+        skipped_sources_a: set[str] = set()
+        skipped_sources_b: set[str] = set()
 
-        # Conflict 1: another rename in this branch targets the same name.
-        if new in targets_used:
-            skipped_dup_target += 1
-            continue
+        for branch, old, new, _ in proposed:
+            rename_map = a_rename if branch == a_branch else b_rename
+            all_labels = a_all if branch == a_branch else b_all
+            renaming_away = a_renaming_away if branch == a_branch else b_renaming_away
+            targets_used = a_rename_targets_used if branch == a_branch else b_rename_targets_used
+            skipped_sources = skipped_sources_a if branch == a_branch else skipped_sources_b
 
-        # Conflict 2: target name exists in this branch AND that label is
-        # NOT being renamed away.
-        # (If it IS being renamed away by another pair, no conflict — the
-        # cumulative regex pass resolves it.)
-        if new in all_labels and new not in renaming_away:
-            # The canonical name `new` is taken in this branch by an
-            # unrelated label. We can rescue this case ONLY if there's
-            # a *counterpart* synonym pair that renames that conflicting
-            # label away in the OTHER branch (i.e., another pair has
-            # canonical=`new` from the other side, telling us where the
-            # third party should land).
-            other_branch = a_branch if branch == b_branch else b_branch
-            other = next((s for b2, _, n, s in proposed
-                          if b2 == other_branch and n == new), None)
-            if other is None:
-                # No counterpart pair exists — this is likely a *false*
-                # synonym surfaced by difflib's structural alignment
-                # (e.g., a jmp instruction was paired across branches
-                # whose target labels are at DIFFERENT byte offsets,
-                # but happen to look identical after `<L>` normalization).
-                # Skipping is strictly better than fabricating a fresh
-                # hybrid name: a fresh name introduces a NEW divergence
-                # in the unified output (one branch has the hybrid, the
-                # other doesn't), whereas skipping leaves the original
-                # divergence which the unifier can already handle.
+            # Conflict 1: another rename in this branch targets the same name.
+            if new in targets_used:
                 skipped_dup_target += 1
+                skipped_sources.add(old)
                 continue
-            # Otherwise: rename BOTH branches to a fresh combined name.
-            fresh = f"LBL_{min(other, old)[6:]}_{max(other, old)[6:]}"
-            if fresh in (a_all | b_all):
-                fresh = f"UNIFIED_{fresh}"
-            # Add both renames
-            other_rename = a_rename if other_branch == a_branch else b_rename
-            other_targets = a_rename_targets_used if other_branch == a_branch else b_rename_targets_used
-            other_rename[other] = fresh
-            other_targets.add(fresh)
-            rename_map[old] = fresh
-            targets_used.add(fresh)
-            fresh_names += 1
-            continue
 
-        rename_map[old] = new
-        targets_used.add(new)
+            # Conflict 2: target name exists in this branch AND that label is
+            # NOT being renamed away.
+            if new in all_labels and new not in renaming_away:
+                other_branch = a_branch if branch == b_branch else b_branch
+                other = next((s for b2, _, n, s in proposed
+                              if b2 == other_branch and n == new), None)
+                if other is None:
+                    skipped_dup_target += 1
+                    skipped_sources.add(old)
+                    continue
+                fresh = f"LBL_{min(other, old)[6:]}_{max(other, old)[6:]}"
+                if fresh in (a_all | b_all):
+                    fresh = f"UNIFIED_{fresh}"
+                other_rename = a_rename if other_branch == a_branch else b_rename
+                other_targets = a_rename_targets_used if other_branch == a_branch else b_rename_targets_used
+                other_rename[other] = fresh
+                other_targets.add(fresh)
+                rename_map[old] = fresh
+                targets_used.add(fresh)
+                fresh_names += 1
+                continue
+
+            rename_map[old] = new
+            targets_used.add(new)
+
+        # If any sources were skipped, drop them from renaming_away
+        # so the next iteration sees the up-to-date "what survives"
+        # set. Repeat until fixpoint (no new skips).
+        new_a_renaming_away = a_renaming_away - skipped_sources_a
+        new_b_renaming_away = b_renaming_away - skipped_sources_b
+        if (new_a_renaming_away == a_renaming_away
+                and new_b_renaming_away == b_renaming_away):
+            # Stable.
+            break
+        a_renaming_away = new_a_renaming_away
+        b_renaming_away = new_b_renaming_away
 
     print(f"  skipped {skipped_self} pairs where labels are already identical")
     print(f"  skipped {skipped_dup_target} pairs due to duplicate-target conflict")
@@ -400,6 +411,26 @@ def main() -> None:
     # Apply
     a_out = apply_rename(a_text, a_rename)
     b_out = apply_rename(b_text, b_rename)
+
+    # Post-rename invariant check: each branch's output must have
+    # NO duplicate `LABEL_xxxx:` definitions. If a duplicate slips
+    # through (because the cascading-skip fixpoint missed something),
+    # this catches it loudly instead of silently corrupting the
+    # downstream byte-match. See bug #0072.
+    LABEL_DEF_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):", re.MULTILINE)
+    for label_branch, label_text in [(a_branch, a_out), (b_branch, b_out)]:
+        seen: dict[str, int] = {}
+        for m in LABEL_DEF_RE.finditer(label_text):
+            seen[m.group(1)] = seen.get(m.group(1), 0) + 1
+        dups = [n for n, k in seen.items() if k > 1]
+        if dups:
+            sys.exit(
+                f"FATAL: post-rename invariant violated in {label_branch} "
+                f"output — duplicate label definitions: {sorted(dups)[:5]}"
+                f" (cascading-skip fixpoint failed; please file a "
+                f"reproducer against tools/canonicalize_inline_labels.py)"
+            )
+
     outputs[a_branch].parent.mkdir(parents=True, exist_ok=True)
     outputs[a_branch].write_text(a_out)
     outputs[b_branch].write_text(b_out)
