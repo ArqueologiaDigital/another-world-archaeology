@@ -159,32 +159,62 @@ content:
    Amiga; DOS uses little-endian for the same struct.
 
 **Full cross-port resource sweep (2026-05-05)** — walked the
-synthesised memlist + 12 BANK files directly, extracted 119
-uncompressed resources, md5-compared each against DOS package
-and Amiga (codewheel-stripped):
+synthesised memlist + 12 BANK files directly. Initially compared
+only the 119 uncompressed resources, then **extended to all 131
+resources after porting the AW VM unpacker to Python**
+(`tools/aw_unpacker.py`, validated against DOS PALETTE 0x14 +
+DOS POLY_ANIM 0x43 — byte-identical to AWVM_Tools' Rust
+`awvm::unpacker::unpack` output).
 
-    Total uncompressed Atari ST resources scanned:   119
-      Match Amiga 1991:                              118  (99.2%)
-      Match DOS 1992:                                 92  (77.3%)
-      Match Amiga but NOT DOS:                        26
-      Match neither (Atari-ST-unique):                 1
+    Total Atari ST resources scanned (uncompressed + depacked): 131
+      Match Amiga 1991:                                          120  (91.6%)
+      Match DOS 1992:                                             94  (71.8%)
+      Match Amiga but NOT DOS:                                    26
+      Match DOS but NOT Amiga:                                     0
+      Match neither (Atari-ST-unique):                            11
 
 The 26 Amiga-preserved-but-DOS-replaced resources form a perfect
 9+8+9 split (PALETTE / BYTECODE / POLY_CINEMATIC), which is
 exactly the same per-stage triplet pattern research/13 found for
-the Amiga ↔ DOS comparison. **Atari ST + Amiga ship the same 1991
-Chahi resource set; DOS 1992 rebuilt the per-stage triplet ×9
-stages and preserved everything else.**
+the Amiga ↔ DOS comparison. **Atari ST + Amiga ship the same
+core 1991 Chahi resource set; DOS 1992 rebuilt the per-stage
+triplet ×9 stages and preserved everything else.**
 
-The single Atari-ST-unique resource is **`0x15 BYTECODE`** (the
-CODE_WHEEL bytecode, 3544 bytes) — likely an Atari-specific
-copy-protection adaptation. Spot-check resource #27 (LAKE
-bytecode) confirmed byte-identical to Amiga's level-2 bytecode
-(md5 `860362f3718ca4fe4a8e65cdbe40f155`).
+**The 11 Atari-ST-unique resources** break down as:
 
-Full per-resource audit through AWVM_Tools' disassembler is still
-gated on registering an `atari_st` release entry, but the byte-
-level cross-port equivalence is now fully established.
+  - **10 POLY_ANIM** (background bitmaps): 0x43, 0x44, 0x45, 0x46,
+    0x47, 0x48, 0x49, 0x53, 0x90, 0x91. All 32000 bytes
+    uncompressed (320×200 4bpp). Atari ST ships **different
+    background art** for those rooms — not just re-encoded; the
+    pixel-index bitmaps themselves differ from both Amiga 1991
+    and DOS 1992.
+  - **1 BYTECODE**: 0x15 (the CODE_WHEEL stage, 3544 bytes).
+    Differs from Amiga in only 7 bytes, all at the codewheel-
+    check sites — see research/02 + issue #0092 for the open
+    question on whether this is a deliberate Atari-specific
+    authoring choice or a cracked-release artefact.
+
+The 10 unique POLY_ANIM is a surprise. AW's POLY_ANIM resources
+are platform-independent 4bpp bitmaps; one might expect them to
+be byte-identical between two 68k SKUs that share the same
+display word-size. The divergence implies one of:
+
+  - **Per-platform artist re-paints** for a subset of room
+    backgrounds (different visual mood for Atari vs Amiga).
+  - **Different palette intent** that required pre-quantising
+    the bitmap differently per port.
+  - **Compression-asymmetric originals** that were re-encoded
+    with slight artist tweaks during port-out.
+
+Without a side-by-side rendering to compare visual content
+(gated on a POLY_ANIM viewer), the precise nature of the
+divergence is currently unknown — but the byte-level fact is
+solid. 10 of 12 Atari ST POLY_ANIM resources differ from both
+Amiga and DOS, so this is **not** a uniform "DOS rebuilt
+everything" pattern; it's an Atari-vs-Amiga 1991 divergence.
+
+Acceptance criterion #4 of issue #0004 (cross-port md5
+comparison) is now fully covered.
 
 ## Genealogy implications
 
