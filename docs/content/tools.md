@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**110 tools.**
+**111 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -58,6 +58,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `list_unnamed_setup_targets.py` | List `LABEL_HHHH` placeholder routines that are setup-targets, |
 | `localize_single_use_equs.py` | For each `_unified/<STAGE>.asm.in`, find EQU declarations whose |
 | `match_arms.py` | Match named routines from one arm to numeric labels in another arm |
+| `migrate_hero_xy_aliases.py` | One-shot migration: introduce HERO_X / HERO_Y aliases for vars |
 | `migrate_raw_to_enc.py` | Rewrite `;@raw=…` annotations as `;@enc=…` (or as explicit |
 | `migrate_video_type1_default.py` | One-shot migration: drop the now-default `type=1, ` prefix from |
 | `migrate_video_zoom_default.py` | One-shot migration: drop the now-default `, zoom=0x40` suffix from |
