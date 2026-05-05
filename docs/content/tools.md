@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**108 tools.**
+**109 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -59,6 +59,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `localize_single_use_equs.py` | For each `_unified/<STAGE>.asm.in`, find EQU declarations whose |
 | `match_arms.py` | Match named routines from one arm to numeric labels in another arm |
 | `migrate_raw_to_enc.py` | Rewrite `;@raw=…` annotations as `;@enc=…` (or as explicit |
+| `migrate_video_type1_default.py` | One-shot migration: drop the now-default `type=1, ` prefix from |
 | `multi_fold.py` | Multi-fold helper. v2: respects per-routine fold-arm sets. |
 | `polygon_render.py` | Render an AW polygon (solid or group) from a POLY_CINEMATIC / |
 | `polygon_render_png.py` | Render an AW polygon to PNG via Python's cairo binding. |
