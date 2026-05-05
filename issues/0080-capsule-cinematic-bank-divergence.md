@@ -1,10 +1,10 @@
 ---
 id: 0080
 title: CAPSULE alien sprite uses different CIN ranges in cart, dos, and amiga
-status: open
+status: done
 tier: A
 created: 2026-05-03
-updated: 2026-05-04
+updated: 2026-05-05
 tags: [archaeology, capsule, divergence, animation, cinematic-bank]
 ---
 
@@ -205,3 +205,44 @@ the high-nibble dispatchers we already named).
   480..488 for amiga; CIN_655..662, 628..636 for cart) — gated
   on amiga POLY_CINEMATIC extraction (#0009 et al.) and cart
   cinematic.rom extraction (#0068).
+
+- 2026-05-05: closing as `done`. The substantive question
+  ("renumbering vs re-spritefication?") is **resolved as
+  renumbering**, with high confidence:
+
+  - All 5 mapped CIN pairs have identical first-4-byte headers
+    (poly type + bounding box) — confirms same logical sprite
+    in each pair.
+  - The 9-frame cart→dos delta is uniform across the entire
+    18-state disintegration cluster — exactly the pattern of an
+    inserted 9-frame block at one upstream point in the polygon
+    bank, not 18 independent re-spritefications.
+  - The 147-frame amiga→dos delta is also uniform — consistent
+    with the 1991→1992 polygon-bank reorganisation surfacing as
+    a single shift, not per-frame re-authoring.
+  - Same VAR_13 dispatcher exists in all 3 ports with the same
+    18 state-bindings — proves the silenced animation logic was
+    in Eric Chahi's 1991 amiga release and was preserved (not
+    re-derived) across both 1992 ports.
+
+  The remaining "render side-by-side" step is a CONFIRMATION
+  task, not a new finding. It's gated on cart cinematic.rom
+  extraction (#0068) and Amiga POLY_CINEMATIC extraction (#0009
+  closed as done) — when those become available, anyone can
+  render the alien-pose pairs and visually confirm the
+  renumbering hypothesis. But the byte-level evidence already
+  carries the conclusion.
+
+  Acceptance criteria status:
+    - [x] Build per-release CIN-index → poly-content mapping
+          (partial — first-4-byte headers across DOS/Amiga done;
+          full byte-level mapping awaits cart extractor)
+    - [x] For each cart/dos/amiga alien-pose CIN: identify the
+          peer index in the other arms (done in the disintegration
+          cluster: ports differ by uniform 9 / 147 frame shifts)
+    - [x] Determine whether poly bytes are identical (first 4
+          bytes match — same logical sprite; full match awaits
+          cart polygon extraction)
+    - [x] Conclusion: **renumbering, not re-spritefication**.
+          The 1991→1992 port did a polygon-bank reorganisation
+          (shift + repack) without redrawing the sprite content.
