@@ -606,3 +606,83 @@ regular pulse purely visual, no double-damage at close range),
 (cart label rename complete).
 
 verify_stage 29/29 + verify_unified 27/27 maintained throughout.
+
+## State as of 2026-05-05 (cross-port resource genealogy round)
+
+Substantial archaeology + research progress on the resource-byte
+genealogy axis:
+
+- **Issue #0043** closed `done` — full trace of the gun-shot
+  collision pipeline in PRISON.asm; the regular pulse's per-frame
+  routine `LABEL_42C2` only renders, never collides. All actor
+  damage flows through the tap-pulse pipeline. No double-damage
+  at close range; the regular pulse's −10 energy cost is paying
+  purely for the audiovisual layer (sound, muzzle flash, longer
+  trail). Updated research/01.
+
+- **Issue #0051** closed `done` — DOS-vs-cartridge bytecode
+  divergence resolved: the issue's "same author" framing was
+  wrong (DOS = Morais @ Delphine, cartridge = Heineman @
+  Interplay). Two parallel ports of a shared 1992 Delphine
+  internal source; 91% opcode-only similarity (research/08). New
+  finding section in `docs/content/genealogy.md`.
+
+- **Issue #0009** advanced — Mac data fork format decoded.
+  `FILE<NNNN>.data` filenames are decimal-encoded AW resource ids
+  (FILE0020 = decimal 20 = hex 0x14). 36 resources; 7 PALETTE +
+  3 POLY_CINEMATIC byte-match DOS verbatim, all BYTECODE +
+  POLY_ANIM rebuilt. FILE0146 (=0x92) is Mac-exclusive 640×480
+  GIF87a splash.
+
+- **Issue #0004** advanced — Atari ST extractor now writes
+  `memlist.bin` (synthesised from offset 0x7EF2 in `START.PRG`) +
+  per-resource `bin/` layout (after porting AW VM unpacker to
+  Python in `tools/aw_unpacker.py`). 131/131 valid memlist
+  entries depacked end-to-end. Cross-port sweep: **120/131
+  byte-match Amiga 1991** (91.6%). 10 unique POLY_ANIM + 1
+  unique BYTECODE (CODE_WHEEL).
+
+- **Issue #0092** opened — 7-byte diff in CODE_WHEEL bytecode
+  between Atari ST and codewheel-intact Amiga sits exactly at
+  the codewheel-check sites identified by research/02. Open
+  question: deliberate Atari authoring (different protection
+  regime via START.PRG) or cracked-release dump?
+
+- **Issue #0003** advanced — full 3DO cross-port md5 sweep:
+  **zero byte-overlap** with any other port. 3DO is a complete
+  rebuild — SOUND replaced with AIFF, cinematics replaced with
+  pre-rendered streamed video, etc. Acceptance criterion #4
+  resolved (negatively).
+
+- **Research/20** (new) — "Port-rebuild patterns" synthesises
+  the cross-port byte-level findings from #0003, #0004, #0009.
+  Documents three distinct rebuild patterns and their
+  proximity-scale to Eric Chahi's 1991 Amiga master:
+    - Cartridge-line preservation (Amiga, Atari ST, DOS,
+      cartridge_1992, GBA): per-stage triplet rebuild
+    - Mac 1993 selective preservation
+    - 3DO ~1994 total rebuild
+
+- **Tools added**:
+    - `tools/aw_unpacker.py` — Python port of AW VM resource
+      decompressor; validated against AWVM_Tools' Rust reference.
+    - `tools/strip_chunk_suffixes.py` — bulk label-suffix
+      stripper for unified chunks (used in earlier round).
+    - `tools/strip_unreferenced_labels.py` — preventive dead-
+      label regression check.
+
+- **Cross-release md5 index** now covers 5 releases (was 4 at
+  start of session). DOS / msdos / amiga / atari-st-1991 /
+  macintosh-1993 all populated. Pairwise overlap matrix shows
+  Chahi 1991 dual SKU (amiga ↔ atari-st-1991) at 114 shared
+  md5s — highest cross-port count after the same-release pair.
+
+- **Source-reconstruction commits** (sibling repo):
+    - 5 cleanup-pass commits stripping gratuitous label
+      suffixes across 217+ chunk files (~3000 line changes,
+      verify clean throughout).
+    - PRISON cart label canonicalization (issue #0091 closed).
+    - PASSCODE TRIVIAL_RET unification (issue #0081 Cat 4).
+    - Helper-suffix simplification (13 helpers).
+
+verify_stage 29/29 + verify_unified 27/27 maintained throughout.
