@@ -102,8 +102,65 @@ project memory.
   codewheel check (it's the per-release `CODEWHEEL_CHECK=on/off`
   flag value); cartridge ports (SNES-EU, Genesis-EU, GBA Foxy)
   don't carry it (cartridges had no manual / codewheel insert).
-  Atari ST 1991 awaits its extractor (issue #0004); 3DO / Mac /
-  Apple IIgs await their respective parsers.
+  Atari ST 1991 — see "Atari ST does not carry the codewheel"
+  finding below. 3DO / Mac / Apple IIgs await their respective
+  parsers.
+
+## Atari ST 1991: codewheel-check absent (2026-05-05)
+
+The full Atari ST cross-port resource sweep (issue #0004,
+research/20) revealed exactly **one Atari-ST-unique resource**:
+`0x15 BYTECODE` (the CODE_WHEEL stage bytecode, 3544 bytes — same
+length as Amiga's). Byte-diffing Atari ST against the codewheel-
+intact Amiga (`tmp/output/amiga/resources/resource-0x15.bin`):
+
+      Atari ST: 3544 bytes
+      Amiga:    3544 bytes
+      Diff:     7 single-byte changes in 2 clusters
+      Coverage: 0.2%
+
+Diff offsets:
+
+      0x00B5  atari=0x19  amiga=0x0E
+      0x00B7  atari=0x47  amiga=0x00
+      0x0A01  atari=0x17  amiga=0x68
+      0x0A07  atari=0x17  amiga=0x68
+      0x0A0D  atari=0x17  amiga=0x68
+      0x0A13  atari=0x17  amiga=0x68
+      0x0A16  atari=0xD5  amiga=0x68
+
+These offsets sit **exactly inside the codewheel-check region**
+this finding identified above. The 0x00B5..0x00B7 cluster matches
+the "two-byte diff at the start of the level" (gate dispatch)
+location; the 0x0A01..0x0A16 cluster is inside `0x9fc..0xa88`
+(the conditional-jump cluster) and uses the SAME `0x68 → 0x17`
+opcode swap the presskit's codewheel-strip patch uses.
+
+So the Atari ST 1991 release ships with the codewheel-check
+**already neutralised** at the bytecode level, in a way that
+resembles the 2014 presskit cracker patch.
+
+Two interpretations:
+
+1. **Different protection regime at release**. The Atari ST port
+   used a *disk-format* protection scheme (custom-formatted
+   sectors, common on Atari ST commercial games of the era)
+   handled in `START.PRG` running natively on 68k *before* the
+   AW VM bytecode is loaded. The bytecode-level codewheel check
+   was therefore unnecessary, and shipping without it is
+   plausible for Delphine's Atari ST build.
+
+2. **Cracked-release dump**. The Atari ST extraction we have was
+   sourced from atarimania.com (PASTI .stx) — Pasti preserves
+   protection-track sectors but a Pasti image of an *already-
+   cracked* disc would carry the cracker's bytecode patch.
+
+Distinguishing these requires comparing against a known-pristine
+Atari ST dump (issue tracking the question filed as `#0092`).
+
+For the current finding's purposes, the byte-level diff is
+documented here as a hard cross-port observation; the
+"why" remains an open question.
 
 ## Reproducing
 
