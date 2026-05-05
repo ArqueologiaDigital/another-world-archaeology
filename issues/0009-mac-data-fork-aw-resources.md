@@ -1,7 +1,7 @@
 ---
 id: 0009
 title: Identify AW VM resource format inside Mac data-fork FILE0020..FILE0146 files
-status: open
+status: done
 tier: A
 created: 2026-04-30
 updated: 2026-05-05
@@ -160,3 +160,22 @@ big-endian table at offset 0x20.
         splash/title/credits graphic, not used by the AW VM
         runtime. Consistent with the Mac UI tradition of giving
         each game a high-res title/promo image.
+
+- 2026-05-05: closing as `done`. Substantive Mac data-fork
+  questions are all answered:
+    - Format decoded (decimal-encoded resource ids in filenames)
+    - 36 resources catalogued with type inferred via cross-port
+      md5 match
+    - Mac→DOS lineage established (10 verbatim shares are all
+      DOS-rebuild-origin, none from Amiga; documented in
+      research/20)
+    - FILE0146 identified as Mac-exclusive 640×480 GIF
+    - mac-classic extractor enhanced to emit `resources[]`
+      array (commit `2a1bbc3`); appears in cross-release md5
+      index automatically.
+
+  The remaining "register `mac` release in AWVM_Tools" item is
+  a future tooling enhancement (gated on owner approval per
+  CLAUDE.md), not a research blocker. Closing #0009 itself; if
+  the AWVM_Tools registration becomes available, a separate
+  issue can track that work.
