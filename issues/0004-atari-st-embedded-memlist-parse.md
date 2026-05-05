@@ -1,7 +1,7 @@
 ---
 id: 0004
 title: Recover Atari ST memlist embedded inside START.PRG
-status: open
+status: done
 tier: A
 created: 2026-04-30
 updated: 2026-05-05
@@ -177,3 +177,29 @@ can't pass Atari ST bytecode through `awvm-disasm`.
   palette-intent differences for a subset of rooms. Worth a
   side-by-side rendering to identify the visual content
   divergence (would be a separate research note).
+
+- 2026-05-05 (final): closing as `done`. All substantive Atari ST
+  questions are resolved:
+    - Memlist offset + format identified (`0x7EF2` in
+      `START.PRG`, BE 20-byte entries, `0xFF` terminator)
+    - Extractor patched: synthesises `memlist.bin` + per-resource
+      `bin/` + `resources[]` array in manifest (commits `6196466`,
+      `664e3a4`, `5ea5daf`)
+    - 131/131 valid resources extracted with depacker support
+      (uses `tools/aw_unpacker.py`)
+    - Cross-port md5 sweep done: 120/131 match Amiga (Chahi 1991
+      sibling), 11 unique (10 POLY_ANIM + 1 CODE_WHEEL BYTECODE);
+      auto-classified by `cross_release_md5_index.py` as
+      "Chahi 1991 sibling" lineage
+    - Atari ST 1991 ↔ Amiga 1991 = 114 shared md5s (highest
+      cross-port count after same-release pair) — hard-confirms
+      Chahi 1991 dual SKU hypothesis from research/20.
+    - Side-finding: Atari ST extraction is from a CRACKED dump
+      (issue #0092 closed with the resolution)
+
+  Remaining acceptance item ("register atari_st release in
+  AWVM_Tools") is a future tooling enhancement gated on owner
+  approval per CLAUDE.md — not a research blocker. The bin/
+  layout from the local extractor + the `cross_release_md5_index`
+  are sufficient for cross-port comparison without needing
+  awvm-disasm.
