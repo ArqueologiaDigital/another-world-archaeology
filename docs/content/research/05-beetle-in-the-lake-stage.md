@@ -389,6 +389,40 @@ This is decisive lineage data:
   reused verbatim. Heineman's 1993 Genesis-EU port did **not**
   re-derive bytecode from his earlier DOS port (which has its own
   hash `3e95437f…`); it built on the SNES-EU bytecode.
+
+  **String-layer divergence (2026-05-05)**: while the bytecode is
+  byte-identical, `str_data.rom` is NOT — md5 `6e4f0bcf…` for
+  SNES-EU vs `82f1a37c…` for Genesis-EU. The Genesis port adapted
+  user-facing text for the platform:
+
+      SNES-EU                      Genesis-EU
+      "SURE ?"                     "SUR ?"   (likely ASCII width-fit)
+      "PRESS BUTTON OR RETURN     "PRESS BUTTON TO CONTINUE
+       TO CONTINUE"                PRESS START FOR CODE ENTRY"
+      "INVALID PASSWORD !"        "PASSWORD INVALID!"
+      "INSERT DISK ?"             "INSERT OTHER DISK"
+      "Delphine Software           (no credit string)
+       By Eric Chahi"
+      —                            "    B C D F G H
+                                    J K L R T X"
+                                    (codewheel symbol-table)
+
+  The Genesis-EU `str_data.rom` adds Genesis-controller-specific
+  button labels ("Start"), a French `ANNULER` (CANCEL) string, and
+  the codewheel-letter table (despite cartridges shipping without
+  a codewheel manual — these strings are unused decor). The SNES-EU
+  carries an `Eric Chahi / Delphine Software` credit that Genesis-EU
+  drops.
+
+  `anotherworld_chargen.rom` (the in-game font ROM) is byte-
+  identical across all three cartridges (SNES-EU, Genesis-EU, GBA);
+  `str_index.rom` matches SNES-EU = GBA but differs from
+  Genesis-EU.
+
+  **Refinement**: the SNES-EU↔Genesis-EU lineage is "byte-identical
+  bytecode + adapted string layer", not full byte-identity. The
+  bytecode reuse is verbatim; the strings were touched up for the
+  Genesis release.
 - **DOS 1992** = its own Heineman build, distinct from the SNES
   build despite sharing the gates 1+2 editorial choices.
 - **GBA 2004 (Foxy)** = a separate later branch with modified
