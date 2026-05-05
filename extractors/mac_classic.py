@@ -102,6 +102,41 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
         else:
             rsrc_walked += 1
 
+    # Build a `resources[]` array for the AW VM data-fork files
+    # (`FILE<NNNN>.data`). The Mac data fork uses decimal-encoded
+    # AW resource ids (per research/20: `FILE0020` = decimal 20 =
+    # hex 0x14). Type isn't directly recorded in the file; we leave
+    # it as None and let cross_release_md5_index.py aggregate by
+    # md5 to infer the type from the matching DOS resource (same
+    # md5 → same type).
+    import hashlib as _hashlib
+    import re as _re
+    resources_metadata: list[dict] = []
+    file_re = _re.compile(r"FILE(\d+)\.data$")
+    # Pick the v1.0_1.02 build's data-fork as the canonical source —
+    # all three Mac builds (v1.0, v1.0.2, v1.0.3) ship byte-identical
+    # FILE000<NN>.data, so any one is fine, but pinning to v1.0_1.02
+    # makes the choice deterministic.
+    for data_path in sorted(contents_dir.glob("*_Data_FILE*.data")):
+        m = file_re.search(data_path.name)
+        if not m:
+            continue
+        # Two variants — `..._1.0_Data_FILE0020.data`,
+        # `..._1.0.2_Data_FILE0020.data`, `..._1.0.3_Data_FILE0020.data`.
+        # Pin to the v1.0_1.02 path used in research/20.
+        if "1.0_1.02_Data" not in data_path.name:
+            continue
+        index = int(m.group(1))
+        raw = data_path.read_bytes()
+        resources_metadata.append({
+            "index": index,
+            "filename": data_path.name,
+            "type": None,        # inferred via cross-port md5 match
+            "type_id": None,
+            "size": len(raw),
+            "md5": _hashlib.md5(raw).hexdigest(),
+        })
+
     # Build manifest
     files = sorted(p.relative_to(work_dir).as_posix()
                    for p in work_dir.rglob("*") if p.is_file())
@@ -117,5 +152,9 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
         "per_resource_count": per_resource_count,
         "files": files,
     }
+    if resources_metadata:
+        manifest["resources"] = sorted(
+            resources_metadata, key=lambda r: r["index"]
+        )
     (work_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return manifest
