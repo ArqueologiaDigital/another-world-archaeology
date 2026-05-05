@@ -222,6 +222,43 @@ known-pristine Atari ST dump from a different source is still
 needed (issue #0092 closed with this resolution; a future
 acquisition would re-confirm).
 
+## Cross-platform UI architecture for the codewheel prompt
+
+The way each port renders the codewheel prompt itself splits along
+clean platform lines:
+
+- **Amiga / Atari ST 1991** (small loader executable + AW VM
+  bytecode loaded after): the codewheel prompt is **ASCII text
+  embedded in the executable's data segment** (offset 0x3414 in
+  Amiga `another`; mirror at the same logical position in Atari
+  ST `START.PRG`). The loader prints the prompt directly via
+  native OS calls, accepts user input, validates against a hard-
+  coded answer table, then loads the bytecode if the codewheel
+  matches. Amiga + Atari ST share this architecture; Atari ST's
+  prompt string is byte-identical to Amiga's.
+
+- **DOS 1992 / Mac 1993** (full AW VM is the application): the
+  codewheel prompt is **rendered as a graphical poly-screen via
+  the AW VM bytecode** (resource `0x15-BYTECODE`'s entry). No
+  ASCII codewheel text appears in any executable on these
+  platforms. The VM displays the codewheel screen using the
+  same polygon-rendering pipeline as in-game cinematics, then
+  collects user input via the AW VM's input layer. Verified by
+  `strings`-grepping `another.exe` (DOS) and the Estr_*.bin
+  resource-fork strings (Mac) — neither contains "SYMBOLS",
+  "CODEWHEEL", or related prompt fragments.
+
+- **Cartridge ports (SNES-EU, Genesis-EU, GBA Foxy)**: no
+  codewheel screen at all. Cartridges had no manual / codewheel
+  insert in the box, so the protection step was simply removed
+  from the cartridge bytecode (`CODEWHEEL_CHECK=off` in the
+  source-reconstruction flags).
+
+This is consistent with the per-platform "what is the
+application?" model: small-loader-plus-bytecode platforms do the
+codewheel prompt natively; full-VM platforms route everything
+through the VM.
+
 ## Reproducing
 
 ```bash
