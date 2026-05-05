@@ -1,10 +1,10 @@
 ---
 id: 0076
 title: Investigate LAKE's dead-code preload of music 0x89 + 3 sound instruments
-status: open
+status: done
 tier: A
 created: 2026-05-03
-updated: 2026-05-04
+updated: 2026-05-05
 tags: [lake, music, dead-code, archaeology]
 ---
 
@@ -218,3 +218,27 @@ cover format-specific extraction work).
    dead code)" — exactly the case research/11 found by hand.
    The asset-side cross-validation table in research/19 records
    the result: 1 MUSIC dead-only across the dos_1992 port.
+
+## Closing log
+
+- 2026-05-05: closing as `done`. Action items 1, 2, and 4 are
+  fully complete (renderer built + validated, cross-port
+  preservation verified, dead-code-flag mode shipped). Action
+  item 3 (compare 0x89 against the released soundtrack album)
+  inherently requires external/human research — listening to
+  Eric Serra's AW soundtrack album and other reference audio
+  to identify the track. Not autonomously achievable; not a
+  research blocker either. The substantive archaeology
+  question — "is music 0x89 dead-code, and what is it?" — is
+  answered:
+    - 26.5 second 4-pattern composition
+    - Preserved verbatim across all 4 ports (1991→2004 lineage)
+    - Genuine 1991-era cut content from the original Chahi
+      Amiga release
+    - Audible at `tmp/rendered_audio/lake_dead_music_0x89.wav`
+      for any future human listener with access to the
+      soundtrack album for comparison.
+
+  Closing here; if a human listener does the soundtrack-
+  comparison check later, they can reopen or file a new finding
+  with the result.
