@@ -223,6 +223,23 @@ the Amiga ↔ DOS comparison. **Atari ST + Amiga ship the same
 core 1991 Chahi resource set; DOS 1992 rebuilt the per-stage
 triplet ×9 stages and preserved everything else.**
 
+**Atari ST is a sibling of Amiga, not a descendant of DOS** —
+classifying each of the 131 Atari resources by which port(s)
+it matches at the same index:
+
+      matches BOTH amiga + dos:     94  (survived 1991→1992 unchanged)
+      matches amiga only, NOT dos:  26  (per-stage triplet that DOS rebuilt;
+                                          Atari ST kept the 1991 versions)
+      matches dos only, NOT amiga:   0  (no DOS-rebuilt resources leaked
+                                          into Atari)
+      matches neither:              11  (Atari-ST-unique)
+
+The "matches dos only" column being **zero** is the smoking gun:
+Atari ST has NO resource that descends from a DOS rebuild but
+not the original Amiga. This rules out any "DOS → Atari" lineage
+arrow and confirms Atari + Amiga are parallel siblings of the
+1991 Chahi master.
+
 **The 11 Atari-ST-unique resources** break down as:
 
   - **10 POLY_ANIM** (background bitmaps): 0x43, 0x44, 0x45, 0x46,
