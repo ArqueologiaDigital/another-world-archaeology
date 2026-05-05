@@ -283,12 +283,86 @@ def extract(release_meta, archive_dir: Path, work_dir: Path) -> dict:
         written.append(memlist_path)
         memlist_synthesised = True
 
+    # Extract per-resource bytes into bin/0x<HH>-<TYPE>.bin (matching
+    # the DOS package layout). Compressed entries are depacked via
+    # the AW VM unpacker (port of AnotherWorld_VMTools' Rust
+    # `awvm::unpacker::unpack`); see tools/aw_unpacker.py for the
+    # reference port + validation.
+    bin_dir = work_dir / "bin"
+    resources_extracted = 0
+    if memlist_synthesised:
+        # Late-bind the unpacker so the extractor still works if
+        # the archaeology repo isn't on sys.path.
+        try:
+            import sys as _sys
+            _archeo = Path(__file__).resolve().parent.parent
+            _sys.path.insert(0, str(_archeo))
+            from tools.aw_unpacker import unpack as _aw_unpack  # noqa
+        except Exception:
+            _aw_unpack = None  # depack unavailable; extract uncompressed only
+
+        TYPE_NAMES = {
+            0: "SOUND",
+            1: "MUSIC",
+            2: "POLY_ANIM",
+            3: "PALETTE",
+            4: "BYTECODE",
+            5: "POLY_CINEMATIC",
+            6: "UNKNOWN",
+        }
+
+        # Open all bank files (across both disks)
+        banks: dict[int, bytes] = {}
+        for disk in ["another_world_disk_1", "another_world_disk_2"]:
+            disk_dir = work_dir / disk
+            if not disk_dir.is_dir():
+                continue
+            for f in disk_dir.iterdir():
+                if f.name.startswith("BANK") and len(f.name) == 6:
+                    try:
+                        bid = int(f.name[4:6], 16)
+                    except ValueError:
+                        continue
+                    if bid not in banks:
+                        banks[bid] = f.read_bytes()
+
+        bin_dir.mkdir(parents=True, exist_ok=True)
+        ENTRY_SIZE = 20
+        for i in range(len(memlist_bytes) // ENTRY_SIZE):
+            e = memlist_bytes[i * ENTRY_SIZE : (i + 1) * ENTRY_SIZE]
+            if e[0] == 0xFF:
+                break
+            rtype = e[1]
+            bankId = e[7]
+            bankOffset = struct.unpack(">I", e[8:12])[0]
+            packedSize = struct.unpack(">H", e[14:16])[0]
+            size = struct.unpack(">H", e[18:20])[0]
+            if size == 0 or packedSize == 0 or bankId not in banks:
+                continue
+            bank = banks[bankId]
+            if bankOffset + packedSize > len(bank):
+                continue
+            raw = bank[bankOffset : bankOffset + packedSize]
+            if packedSize != size:
+                if _aw_unpack is None:
+                    continue  # skip compressed when depacker unavailable
+                unpacked = _aw_unpack(raw)
+                if unpacked is None:
+                    continue
+                raw = unpacked
+            type_label = TYPE_NAMES.get(rtype, f"TYPE_{rtype:02X}")
+            out_path = bin_dir / f"0x{i:x}-{type_label}.bin"
+            out_path.write_bytes(raw)
+            written.append(out_path)
+            resources_extracted += 1
+
     rel_files = sorted(p.relative_to(work_dir).as_posix() for p in written)
     manifest = {
         "format": "atari-st-pasti",
         "resource_count": len(rel_files),
         "files": rel_files,
         "memlist_synthesised": memlist_synthesised,
+        "resources_extracted_to_bin": resources_extracted,
     }
     if memlist_synthesised:
         manifest["memlist_source"] = "AUTO/START.PRG offset 0x7EF2 (big-endian, 20-byte entries)"
