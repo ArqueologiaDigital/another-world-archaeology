@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**103 tools.**
+**108 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -15,6 +15,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `auto_fold_rename.py` | Improved auto-fold renamer — catches more patterns and 2-arm folds. |
 | `aw_music_to_wav.py` | Render an Another World MUSIC resource to WAV. |
 | `aw_sound_to_wav.py` | Render a single Another World SOUND resource to a WAV file. |
+| `aw_unpacker.py` | Decompressor for packed Another World resources. |
 | `awvm_preprocess.py` | Preprocessor for AW VM .asm.in source files with conditional blocks. |
 | `batch_render_cut_polys.py` | Batch-render every offset in cut_polygons_amiga_only.json (or |
 | `build_channel_map.py` | Extract a per-stage map of `setup channel=NN, address=…` opcodes |
@@ -28,8 +29,10 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `canonicalize_labels.py` | Canonicalize synonym labels across N branches' .asm files. |
 | `categorize_raw_residue.py` | Categorise the surviving `;@raw=` annotations in the unified |
 | `collapse_empty_arms.py` | Collapse empty `;@if`/`;@elif`/`;@else`/`;@endif` arms. |
+| `collapse_identical_branch_arms.py` | Collapse `;@if BRANCH` blocks where every arm has identical content. |
 | `compress_fill_padding.py` | Compress trailing runs of 'db 0xFF, ...' into FILL(n, 0xFF) macros. |
 | `consolidate_common_vars.py` | Phase 1b: replace inline var-alias EQUs in per-branch and unified |
+| `consolidate_identical_arm_chunks.py` | Consolidate arm-prefixed chunk files that have byte-identical content. |
 | `cross_port_liveness_audit.py` | Cross-port liveness audit for previously-claimed cut content. |
 | `cross_port_polygon_diff.py` | Cross-port polygon-byte diff for a single stage. |
 | `cross_port_used_polygon_diff.py` | Cross-port USED-polygon diff for a single stage. |
@@ -81,12 +84,14 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `simulate_gun_budget.py` | Illustrate the gun-energy quota mechanics from research finding #01. |
 | `split_asm_chapter.py` | Helper to split a chapter out of a unified .asm.in into a .inc file. |
 | `standardize_cinematic_frame_suffix.py` | Standardize CINEMATIC frame-index suffixes to bare `_N`. |
+| `strip_chunk_suffixes.py` | Strip gratuitous __<ARM>__POST_<NAME> suffixes from labels in |
 | `strip_redundant_raw.py` | Strip redundant ;@raw= comments from .asm files. |
 | `strip_redundant_raw_annotations.py` | Strip `;@raw=` annotations whose presence does not change the |
 | `strip_redundant_raw_chunks.py` | Strip chunks with broader keeper set. |
 | `strip_redundant_raw_unified.py` | Strip redundant ;@raw= from unified .asm.in/.inc files. |
 | `strip_redundant_raw_unified_chunks.py` | Strip redundant `;@raw=` annotations from per-arm chunks |
 | `strip_redundant_raw_unified_shared.py` | Strip redundant `;@raw=` annotations from shared unified chunks. |
+| `strip_unreferenced_labels.py` | Strip unreferenced LABEL_<HEX> definitions from unified chunk files. |
 | `strip_unused_equs.py` | Strip unused EQU declarations from .asm files. |
 | `strip_unused_equs_all_chunks.py` | Strip unused EQUs from ALL chunks under `_unified/<stage>/`, |
 | `strip_unused_equs_unified.py` | Strip unused EQU declarations from unified stage chunks. |
