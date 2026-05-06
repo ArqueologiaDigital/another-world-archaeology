@@ -6,8 +6,35 @@ include-comment that currently describes it in the parent
 `.asm.in`, and decisions taken about regrouping when the chunk's
 contents and its name no longer match.
 
-This is a living document — sections fill in as each stage's audit
-completes.
+## Status (2026-05-06)
+
+Audit substantively complete across all 9 stages. Summary:
+
+| Stage | Shared chunks | Deep-read | Regroupings applied |
+|---|---:|---:|---|
+| LAKE | 70 | ~40 of 70 deep-read | R1+R2, R3, R4, R5, R6, R7, R8, R9 (9 commits) |
+| INTRO | 19 | 19/19 | 2 comments sharpened |
+| PRISON | 13 | 13/13 (label-deep + spot-checks) | 2 comments sharpened |
+| CAVES | 10 | spot-checks; 1 comment sharpened | 1 comment sharpened |
+| CAPSULE | 4 | 4/4 with BIRD finding | 1 comment sharpened |
+| TANK | 6 | 6/6 (small, label-deep) | none — all coherent |
+| ENDING | 7 | 7/7 | RE1 split (1 → 3 files) |
+| CODE_WHEEL | 1 | 1/1 (small) | none |
+| PASSCODE | 1 | 1/1 (small) | none |
+
+Round-trip property preserved throughout: `verify_stage 29/29` +
+`verify_unified 27/27` after every commit.
+
+Cross-cutting findings flagged for follow-up research:
+- CAPSULE has a BIRD subsystem (`INIT_BIRD_AI_VARS`, cart/dos
+  only) — Lester rides a bird to escape the alien city, with
+  HERO_X / HERO_Y temporarily reused for the bird's position.
+- PRISON's nested-include pattern (`post_DRAW_CIN_168/240`) is
+  the precedent we adopted for LAKE's `lake/beast_ai/` subdir.
+- LAKE structure now has 2 subdirs (`lake/beast_ai/`,
+  `lake/scatter_dots/`) and a `_dead_var_reset_block.inc` for
+  unreachable preserved bytecode — a model the other stages can
+  follow if/when their own restructuring becomes necessary.
 
 ## Method
 
