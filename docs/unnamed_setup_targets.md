@@ -113,8 +113,8 @@ call FILL_AND_DRAW_CIN_24_28
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_SUB_VAR50_BY_14.inc:29`.
 
 ```
-jl [0x01], 0x91, LABEL_7F4D
-jg [0x01], 0xB8, LABEL_7F4D
+jl [HERO_X], 0x91, LABEL_7F4D
+jg [HERO_X], 0xB8, LABEL_7F4D
 je [HERO_POS_JUMP_DOWN], 0x00, LABEL_7F4D
 ```
 
@@ -123,8 +123,8 @@ je [HERO_POS_JUMP_DOWN], 0x00, LABEL_7F4D
 Defined at `src/levels/_unified/prison/dos__post_INLINE_SUB_VAR50_BY_14.inc:29`.
 
 ```
-jl [0x01], 0x91, LABEL_801F
-jg [0x01], 0xB8, LABEL_801F
+jl [HERO_X], 0x91, LABEL_801F
+jg [HERO_X], 0xB8, LABEL_801F
 je [HERO_POS_UP_DOWN], 0x00, LABEL_801F
 ```
 
@@ -133,8 +133,8 @@ je [HERO_POS_UP_DOWN], 0x00, LABEL_801F
 Defined at `src/levels/_unified/prison/cart__post_INLINE_SUB_VAR50_BY_14.inc:29`.
 
 ```
-jl [0x01], 0x91, LABEL_814E
-jg [0x01], 0xB8, LABEL_814E
+jl [HERO_X], 0x91, LABEL_814E
+jg [HERO_X], 0xB8, LABEL_814E
 je [HERO_POS_UP_DOWN], 0x00, LABEL_814E
 ```
 
@@ -143,9 +143,9 @@ je [HERO_POS_UP_DOWN], 0x00, LABEL_814E
 Defined at `src/levels/_unified/prison/cart__post_ACCUMULATE_HASH_VAR37_38_X3.inc:284`.
 
 ```
-video type=1, offset=CINEMATIC_319, x=53, y=141
-video type=1, offset=CINEMATIC_319, x=153, y=141
-video type=1, offset=CINEMATIC_319, x=208, y=141
+video offset=CINEMATIC_319, x=53, y=141
+video offset=CINEMATIC_319, x=153, y=141
+video offset=CINEMATIC_319, x=208, y=141
 ```
 
 ### `0x01` — `LABEL_0C2F`
@@ -154,8 +154,8 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SET_VARE9_TO_8.inc:14`.
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_326, x=160, y=100
-video type=1, offset=CINEMATIC_327, x=192, y=65
+video offset=CINEMATIC_326, x=160, y=100
+video offset=CINEMATIC_327, x=192, y=65
 ```
 
 ### `0x01` — `LABEL_0C4F`
@@ -164,8 +164,8 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VARE9_TO_8.inc:14`
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_326, x=160, y=100
-video type=1, offset=CINEMATIC_327, x=192, y=65
+video offset=CINEMATIC_326, x=160, y=100
+video offset=CINEMATIC_327, x=192, y=65
 ```
 
 ### `0x01` — `LABEL_0CB7`
@@ -174,8 +174,8 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SET_VARE9_TO_8.inc:14`.
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_326, x=160, y=100
-video type=1, offset=CINEMATIC_327, x=192, y=65
+video offset=CINEMATIC_326, x=160, y=100
+video offset=CINEMATIC_327, x=192, y=65
 ```
 
 ### `0x01` — `LABEL_1D4F`
@@ -244,7 +244,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_090_TO_104_3F_AT_8C2
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7C92
 ```
 
@@ -254,7 +254,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_090_TO_104_3F_AT_8C2
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7C99
 ```
 
@@ -264,7 +264,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_090_TO_104_3F_AT_8C208
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7D56
 ```
 
@@ -284,7 +284,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_090_TO_104_3F_AT_8C208
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7D5D
 ```
 
@@ -294,7 +294,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_090_TO_104_3F_AT_8C208
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7D64
 ```
 
@@ -314,7 +314,7 @@ Defined at `src/levels/_unified/prison/cart__post_RESET_HERO_POS_UP_DOWN.inc:127
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7E7B
 ```
 
@@ -334,7 +334,7 @@ Defined at `src/levels/_unified/prison/cart__post_RESET_HERO_POS_UP_DOWN.inc:139
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7E82
 ```
 
@@ -344,7 +344,7 @@ Defined at `src/levels/_unified/prison/cart__post_RESET_HERO_POS_UP_DOWN.inc:146
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7E89
 ```
 
@@ -413,7 +413,7 @@ call COPY_HASH_AND_SPLIT_VAR38_3F_3E
 Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_040.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_113, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_113, x=160, y=[0x19]
 play id=0x005B, freq=0x05, vol=0x0A, channel=0x02
 break
 ```
@@ -423,7 +423,7 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_040.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_113, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_113, x=160, y=[0x19]
 play id=0x005B, freq=0x05, vol=0x0A, channel=0x02
 break
 ```
@@ -433,7 +433,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_113, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_113, x=160, y=[0x19]
 play id=0x005B, freq=0x05, vol=0x0A, channel=0x02
 break
 ```
@@ -445,7 +445,7 @@ Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_144B_C55279EA.inc:84`
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_014, x=[0x24], y=[0x25]
 ```
 
 ### `0x02` — `LABEL_1D60`
@@ -455,7 +455,7 @@ Defined at `src/levels/_unified/prison/amiga__post_FOLD_BODY_144B_C55279EA.inc:8
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_014, x=[0x24], y=[0x25]
 ```
 
 ### `0x02` — `LABEL_1DFA`
@@ -465,7 +465,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:84
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_014, x=[0x24], y=[0x25]
 ```
 
 ### `0x02` — `LABEL_4EDA`
@@ -473,9 +473,9 @@ video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INIT_VARS_16_17.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_656, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_656, x=[0x1a], y=[0x1b]
 jg [0x16], 0x01, LABEL_4EED
-video type=1, offset=CINEMATIC_682, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_682, x=[0x1a], y=[0x1b]
 ```
 
 ### `0x02` — `LABEL_4F23`
@@ -504,7 +504,7 @@ Defined at `src/levels/_unified/prison/cart__post_INIT_VARS_16_17.inc:115`.
 
 ```
 jg [0x15], 0x16, LABEL_4FD9
-video type=1, offset=CINEMATIC_665, x=160, y=100
+video offset=CINEMATIC_665, x=160, y=100
 jmp LABEL_501E
 ```
 
@@ -534,8 +534,8 @@ Defined at `src/levels/_unified/prison/cart__post_ACCUMULATE_HASH_VAR37_38_X3.in
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_318, x=225, y=50
-video type=1, offset=CINEMATIC_318, x=278, y=50, zoom=0x40
+video offset=CINEMATIC_318, x=225, y=50
+video offset=CINEMATIC_318, x=278, y=50
 ```
 
 ### `0x03` — `LABEL_0E1A`
@@ -543,7 +543,7 @@ video type=1, offset=CINEMATIC_318, x=278, y=50, zoom=0x40
 Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_040.inc:79`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_107, x=160, y=[0x19]
 play id=0x005B, freq=0x07, vol=0x0A, channel=0x03
 break
 ```
@@ -553,7 +553,7 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_040.inc:79`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_107, x=160, y=[0x19]
 play id=0x005B, freq=0x07, vol=0x0A, channel=0x03
 break
 ```
@@ -563,7 +563,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:79`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_107, x=160, y=[0x19]
 play id=0x005B, freq=0x07, vol=0x0A, channel=0x03
 break
 ```
@@ -575,7 +575,7 @@ Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_144B_C55279EA.inc:165
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_004, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_004, x=[0x24], y=[0x25]
 ```
 
 ### `0x03` — `LABEL_1E33`
@@ -585,7 +585,7 @@ Defined at `src/levels/_unified/prison/amiga__post_FOLD_BODY_144B_C55279EA.inc:1
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_004, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_004, x=[0x24], y=[0x25]
 ```
 
 ### `0x03` — `LABEL_1ECD`
@@ -595,7 +595,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:16
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_004, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_004, x=[0x24], y=[0x25]
 ```
 
 ### `0x03` — `LABEL_4D31`
@@ -603,9 +603,9 @@ video type=1, offset=CINEMATIC_004, x=[0x24], y=[0x25], zoom=0x40
 Defined at `src/levels/_unified/prison/amiga__post_INIT_VARS_16_17.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_656, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_656, x=[0x1a], y=[0x1b]
 jg [0x16], 0x01, LABEL_4D44
-video type=1, offset=CINEMATIC_682, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_682, x=[0x1a], y=[0x1b]
 ```
 
 ### `0x03` — `LABEL_4DDA`
@@ -613,9 +613,9 @@ video type=1, offset=CINEMATIC_682, x=[0x1a], y=[0x1b], zoom=0x40
 Defined at `src/levels/_unified/prison/dos__post_INIT_VARS_16_17.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_656, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_656, x=[0x1a], y=[0x1b]
 jg [0x16], 0x01, LABEL_4DED
-video type=1, offset=CINEMATIC_682, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_682, x=[0x1a], y=[0x1b]
 ```
 
 ### `0x03` — `LABEL_4EDA`
@@ -623,9 +623,9 @@ video type=1, offset=CINEMATIC_682, x=[0x1a], y=[0x1b], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INIT_VARS_16_17.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_656, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_656, x=[0x1a], y=[0x1b]
 jg [0x16], 0x01, LABEL_4EED
-video type=1, offset=CINEMATIC_682, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_682, x=[0x1a], y=[0x1b]
 ```
 
 ### `0x04` — `LABEL_09E4`
@@ -663,9 +663,9 @@ je [RANDOM_SEED], 0x00, LABEL_0B03
 Defined at `src/levels/_unified/prison/dos__post_INLINE_SET_VARE6_TO_50.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_457, x=27, y=153
+video offset=CINEMATIC_457, x=27, y=153
 break
-video type=1, offset=CINEMATIC_457, x=25, y=158
+video offset=CINEMATIC_457, x=25, y=158
 ```
 
 ### `0x04` — `LABEL_0BA8`
@@ -673,9 +673,9 @@ video type=1, offset=CINEMATIC_457, x=25, y=158
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VARE6_TO_50.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_457, x=27, y=153
+video offset=CINEMATIC_457, x=27, y=153
 break
-video type=1, offset=CINEMATIC_457, x=25, y=158
+video offset=CINEMATIC_457, x=25, y=158
 ```
 
 ### `0x04` — `LABEL_0C10`
@@ -683,9 +683,9 @@ video type=1, offset=CINEMATIC_457, x=25, y=158
 Defined at `src/levels/_unified/prison/cart__post_INLINE_SET_VARE6_TO_50.inc:25`.
 
 ```
-video type=1, offset=CINEMATIC_457, x=27, y=153
+video offset=CINEMATIC_457, x=27, y=153
 break
-video type=1, offset=CINEMATIC_457, x=25, y=158
+video offset=CINEMATIC_457, x=25, y=158
 ```
 
 ### `0x04` — `LABEL_1D58`
@@ -695,7 +695,7 @@ Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_144B_C55279EA.inc:84`
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_014, x=[0x24], y=[0x25]
 ```
 
 ### `0x04` — `LABEL_1D60`
@@ -705,7 +705,7 @@ Defined at `src/levels/_unified/prison/amiga__post_FOLD_BODY_144B_C55279EA.inc:8
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_014, x=[0x24], y=[0x25]
 ```
 
 ### `0x04` — `LABEL_1DFA`
@@ -715,7 +715,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:84
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_014, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_014, x=[0x24], y=[0x25]
 ```
 
 ### `0x05` — `LABEL_09F1`
@@ -744,7 +744,7 @@ Defined at `src/levels/_unified/prison/cart__post_ACCUMULATE_HASH_VAR37_38_X3.in
 
 ```
 mov [0xF8], 0x0000
-call DRAW_CIN_315_PROGRESSIVE__CART__POST_ACCUMULATE_HASH_VAR37_38_X3
+call DRAW_CIN_315_PROGRESSIVE
 mov [0xF8], 0x0000
 ```
 
@@ -783,9 +783,9 @@ jne [0xF8], 0x00, LABEL_1DEA
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_104B_22B91458.inc:182`.
 
 ```
-video type=1, offset=CINEMATIC_624, x=160, y=100
+video offset=CINEMATIC_624, x=160, y=100
 break
-video type=1, offset=CINEMATIC_625, x=160, y=100
+video offset=CINEMATIC_625, x=160, y=100
 ```
 
 ### `0x08` — `LABEL_4D9C`
@@ -793,9 +793,9 @@ video type=1, offset=CINEMATIC_625, x=160, y=100
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_104B_22B91458.inc:194`.
 
 ```
-video type=1, offset=CINEMATIC_628, x=160, y=100
+video offset=CINEMATIC_628, x=160, y=100
 break
-video type=1, offset=CINEMATIC_627, x=160, y=100
+video offset=CINEMATIC_627, x=160, y=100
 ```
 
 ### `0x0A` — `LABEL_0567`
@@ -825,7 +825,7 @@ Defined at `src/levels/_unified/prison/dos__post_DERIVE_VAR12_11_10_FROM_VAR9.in
 ```
 je [0x49], 0x7FFF, LABEL_12F2
 jge [0x49], 0x4000, LABEL_12F2
-mov [0x07], [0x48]
+mov [BUDDY_X], [0x48]
 ```
 
 ### `0x10` — `LABEL_12E0`
@@ -835,7 +835,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DERIVE_VAR12_11_10_FROM_VAR9.
 ```
 je [0x49], 0x7FFF, LABEL_12FA
 jge [0x49], 0x4000, LABEL_12FA
-mov [0x07], [0x48]
+mov [BUDDY_X], [0x48]
 ```
 
 ### `0x10` — `LABEL_136A`
@@ -845,7 +845,7 @@ Defined at `src/levels/_unified/prison/cart__post_DERIVE_VAR12_11_10_FROM_VAR9.i
 ```
 je [0x49], 0x7FFF, LABEL_1384
 jge [0x49], 0x4000, LABEL_1384
-mov [0x07], [0x48]
+mov [BUDDY_X], [0x48]
 ```
 
 ### `0x11` — `LABEL_1FA0`
@@ -854,7 +854,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:1`
 
 ```
 call LABEL_6201
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -863,9 +863,9 @@ break
 Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_039.inc:226`.
 
 ```
-mov [0x01], 0x0091
-add [0x02], 0x0014
-video type=1, offset=CINEMATIC_415, x=[0x01], y=[0x02], zoom=0x40
+mov [HERO_X], 0x0091
+add [HERO_Y], 0x0014
+video offset=CINEMATIC_415, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_04BB`
@@ -873,9 +873,9 @@ video type=1, offset=CINEMATIC_415, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_039.inc:273`.
 
 ```
-mov [0x01], 0x0091
-add [0x02], 0x0014
-video type=1, offset=CINEMATIC_415, x=[0x01], y=[0x02], zoom=0x40
+mov [HERO_X], 0x0091
+add [HERO_Y], 0x0014
+video offset=CINEMATIC_415, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_0501`
@@ -883,9 +883,9 @@ video type=1, offset=CINEMATIC_415, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_039.inc:230`.
 
 ```
-mov [0x01], 0x0091
-add [0x02], 0x0014
-video type=1, offset=CINEMATIC_415, x=[0x01], y=[0x02], zoom=0x40
+mov [HERO_X], 0x0091
+add [HERO_Y], 0x0014
+video offset=CINEMATIC_415, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_055F`
@@ -893,9 +893,9 @@ video type=1, offset=CINEMATIC_415, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_039.inc:263`.
 
 ```
-mov [0x01], 0x0041
-add [0x02], 0x0016
-video type=1, offset=CINEMATIC_414, x=[0x01], y=[0x02], zoom=0x40
+mov [HERO_X], 0x0041
+add [HERO_Y], 0x0016
+video offset=CINEMATIC_414, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_0607`
@@ -903,9 +903,9 @@ video type=1, offset=CINEMATIC_414, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_039.inc:321`.
 
 ```
-sub [0x02], 0x0009
-video type=1, offset=CINEMATIC_422, x=[0x01], y=[0x02], zoom=0x40
-sub [0x01], 0x0001
+sub [HERO_Y], 0x0009
+video offset=CINEMATIC_422, x=[HERO_X], y=[HERO_Y]
+sub [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_0ED0`
@@ -913,9 +913,9 @@ sub [0x01], 0x0001
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:97`.
 
 ```
-video type=1, offset=CINEMATIC_119, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_119, x=160, y=[0x19]
 break
-video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_120, x=160, y=[0x19]
 ```
 
 ### `0x14` — `LABEL_0EF0`
@@ -923,9 +923,9 @@ video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
 Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_132_TO_133_2F_AT_BB9185F0.inc:1`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_134, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_134, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_0F58`
@@ -933,9 +933,9 @@ add [0x01], 0x0002
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:150`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_134, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_134, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_0F7F`
@@ -943,9 +943,9 @@ add [0x01], 0x0002
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:165`.
 
 ```
-sub [0x01], 0x0003
-video type=1, offset=CINEMATIC_280, x=[0x01], y=[0x02], zoom=0x40
-sub [0x01], 0x0002
+sub [HERO_X], 0x0003
+video offset=CINEMATIC_280, x=[HERO_X], y=[HERO_Y]
+sub [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_0F9B`
@@ -953,9 +953,9 @@ sub [0x01], 0x0002
 Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_284_BLOCK_95B.inc:8`.
 
 ```
-video type=1, offset=CINEMATIC_298, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_298, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_299, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_299, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_0FBB`
@@ -963,9 +963,9 @@ video type=1, offset=CINEMATIC_299, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_284_BLOCK_95B.inc:8`.
 
 ```
-video type=1, offset=CINEMATIC_298, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_298, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_299, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_299, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_1023`
@@ -973,9 +973,9 @@ video type=1, offset=CINEMATIC_299, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:229`.
 
 ```
-video type=1, offset=CINEMATIC_298, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_298, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_299, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_299, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_103E`
@@ -983,9 +983,9 @@ video type=1, offset=CINEMATIC_299, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:241`.
 
 ```
-video type=1, offset=CINEMATIC_146, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_146, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_147, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_147, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_75D8`
@@ -1024,8 +1024,8 @@ Defined at `src/levels/_unified/prison/amiga__post_COPY_VAR52_TO_VAR02_KILL_CHAN
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_7E12`
@@ -1034,8 +1034,8 @@ Defined at `src/levels/_unified/prison/amiga__post_COPY_VAR52_TO_VAR02_KILL_CHAN
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x51]
-add [0x02], 0x001E
+mov [HERO_Y], [0x51]
+add [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_7EBA`
@@ -1044,8 +1044,8 @@ Defined at `src/levels/_unified/prison/dos__post_COPY_VAR52_TO_VAR02_KILL_CHANNE
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_7EDD`
@@ -1054,8 +1054,8 @@ Defined at `src/levels/_unified/prison/dos__post_COPY_VAR52_TO_VAR02_KILL_CHANNE
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x51]
-add [0x02], 0x001E
+mov [HERO_Y], [0x51]
+add [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_7FE9`
@@ -1064,8 +1064,8 @@ Defined at `src/levels/_unified/prison/cart__post_COPY_VAR52_TO_VAR02_KILL_CHANN
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_800C`
@@ -1074,8 +1074,8 @@ Defined at `src/levels/_unified/prison/cart__post_COPY_VAR52_TO_VAR02_KILL_CHANN
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x51]
-add [0x02], 0x001E
+mov [HERO_Y], [0x51]
+add [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_8E2B`
@@ -1123,9 +1123,9 @@ call LABEL_6E78
 Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN555_STEP_RIGHT3.inc:98`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_568, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_568, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_908D`
@@ -1134,7 +1134,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN555_STEP_RIGHT3.inc:1
 
 ```
 setup channel=0x15, address=LABEL_903C
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_9095:
 ```
 
@@ -1173,8 +1173,8 @@ call LABEL_6CAE
 Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN555_STEP_RIGHT3.inc:187`.
 
 ```
-video type=1, offset=CINEMATIC_568, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_568, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_914B
 ```
 
@@ -1184,7 +1184,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN555_STEP_RIGHT3.inc:1
 
 ```
 setup channel=0x15, address=LABEL_9126
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_917B:
 ```
 
@@ -1223,9 +1223,9 @@ call LABEL_6DB1
 Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN555_STEP_RIGHT3.inc:138`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_568, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_568, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_92A2`
@@ -1244,7 +1244,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN555_STEP_RIGHT3.inc:151
 
 ```
 setup channel=0x15, address=LABEL_926A
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_92C3:
 ```
 
@@ -1254,7 +1254,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_BREAK_035.inc:33`.
 
 ```
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_087, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_087, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 ```
 
@@ -1263,8 +1263,8 @@ break
 Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN555_STEP_RIGHT3.inc:227`.
 
 ```
-video type=1, offset=CINEMATIC_568, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_568, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_9379
 ```
 
@@ -1274,7 +1274,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN555_STEP_RIGHT3.inc:239
 
 ```
 setup channel=0x15, address=LABEL_9354
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_93A9:
 ```
 
@@ -1284,7 +1284,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_BREAK_035.inc:117`.
 
 ```
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_034, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_034, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 ```
 
@@ -1293,9 +1293,9 @@ break
 Defined at `src/levels/_unified/prison/cart__post_DRAW_CIN555_STEP_RIGHT3.inc:138`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_568, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_568, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_9421`
@@ -1304,7 +1304,7 @@ Defined at `src/levels/_unified/prison/cart__post_DRAW_CIN555_STEP_RIGHT3.inc:15
 
 ```
 setup channel=0x15, address=LABEL_93D0
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_9429:
 ```
 
@@ -1333,8 +1333,8 @@ jne [0x0A], 0x00, LABEL_9487
 Defined at `src/levels/_unified/prison/cart__post_DRAW_CIN555_STEP_RIGHT3.inc:227`.
 
 ```
-video type=1, offset=CINEMATIC_568, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_568, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_94DF
 ```
 
@@ -1354,7 +1354,7 @@ Defined at `src/levels/_unified/prison/cart__post_DRAW_CIN555_STEP_RIGHT3.inc:23
 
 ```
 setup channel=0x15, address=LABEL_94BA
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_950F:
 ```
 
@@ -1365,7 +1365,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_BREAK_035.inc:33`.
 ```
 je [HERO_POS_MASK], 0x09, LABEL_9638
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_048, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_048, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_9594`
@@ -1394,8 +1394,8 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_BREAK_035.inc:74`.
 
 ```
 je [HERO_POS_MASK], 0x09, LABEL_96B8
-sub [0x01], 0x0005
-sub [0x01], 0x0007
+sub [HERO_X], 0x0005
+sub [HERO_X], 0x0007
 ```
 
 ### `0x14` — `LABEL_95E1`
@@ -1435,7 +1435,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_BREAK_035.inc:123`.
 ```
 je [HERO_POS_MASK], 0x0A, LABEL_9519
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_003, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_003, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_967F`
@@ -1445,7 +1445,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_BREAK_035.inc:33`.
 ```
 je [HERO_POS_MASK], 0x09, LABEL_97A4
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_048, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_048, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_96B8`
@@ -1454,8 +1454,8 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_BREAK_035.inc:164`.
 
 ```
 je [HERO_POS_MASK], 0x0A, LABEL_9599
-add [0x01], 0x0005
-add [0x01], 0x0007
+add [HERO_X], 0x0005
+add [HERO_X], 0x0007
 ```
 
 ### `0x14` — `LABEL_9716`
@@ -1464,7 +1464,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_BREAK_035.inc:82`.
 
 ```
 je [HERO_POS_MASK], 0x09, LABEL_983B
-video type=0, offset=COMMON_VIDEO_053, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_053, x=[HERO_X], y=[HERO_Y], zoom=0x40
 setup channel=0x15, address=KILL_CHANNEL_LANDING
 ```
 
@@ -1495,7 +1495,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_BREAK_035.inc:125`.
 ```
 je [HERO_POS_MASK], 0x0A, LABEL_967F
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_003, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_003, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_97F2`
@@ -1515,7 +1515,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_BREAK_035.inc:174`.
 ```
 je [HERO_POS_MASK], 0x0A, LABEL_9716
 setup channel=0x15, address=KILL_CHANNEL_LANDING
-video type=0, offset=COMMON_VIDEO_008, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_008, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_9865`
@@ -1623,7 +1623,7 @@ jne [0x0A], 0x00, LABEL_9BEF
 Defined at `src/levels/_unified/prison/amiga__post_DECREMENT_VAR08_BY_D.inc:375`.
 
 ```
-je [0x0A], [0x0C], KILL_CHANNEL_LANDING__PRISON_INLINE_SETTERS_AND_INIT_002
+je [0x0A], [0x0C], KILL_CHANNEL_LANDING_002
 jg [0x0A], [0x0C], LABEL_6A44
 LABEL_6A31:
 ```
@@ -1633,7 +1633,7 @@ LABEL_6A31:
 Defined at `src/levels/_unified/prison/dos__post_DECREMENT_VAR08_BY_D.inc:418`.
 
 ```
-je [0x0A], [0x0C], KILL_CHANNEL_LANDING__PRISON_INLINE_SETTERS_AND_INIT_002
+je [0x0A], [0x0C], KILL_CHANNEL_LANDING_002
 jg [0x0A], [0x0C], LABEL_6AF1
 LABEL_6ADE:
 ```
@@ -1643,7 +1643,7 @@ LABEL_6ADE:
 Defined at `src/levels/_unified/prison/cart__post_DECREMENT_VAR08_BY_D.inc:418`.
 
 ```
-je [0x0A], [0x0C], KILL_CHANNEL_LANDING__PRISON_INLINE_SETTERS_AND_INIT_002
+je [0x0A], [0x0C], KILL_CHANNEL_LANDING_002
 jg [0x0A], [0x0C], LABEL_6BF4
 LABEL_6BE1:
 ```
@@ -1685,7 +1685,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN555_STEP_RIGHT3.inc:7
 ```
 break
 je [0x63], 0x05, LABEL_903C
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_9126`
@@ -1695,7 +1695,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN555_STEP_RIGHT3.inc:1
 ```
 break
 je [0x63], 0x06, LABEL_9126
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_926A`
@@ -1705,7 +1705,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN555_STEP_RIGHT3.inc:116
 ```
 break
 je [0x63], 0x05, LABEL_926A
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_9354`
@@ -1715,7 +1715,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN555_STEP_RIGHT3.inc:205
 ```
 break
 je [0x63], 0x06, LABEL_9354
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_93D0`
@@ -1725,7 +1725,7 @@ Defined at `src/levels/_unified/prison/cart__post_DRAW_CIN555_STEP_RIGHT3.inc:11
 ```
 break
 je [0x63], 0x05, LABEL_93D0
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_94BA`
@@ -1735,7 +1735,7 @@ Defined at `src/levels/_unified/prison/cart__post_DRAW_CIN555_STEP_RIGHT3.inc:20
 ```
 break
 je [0x63], 0x06, LABEL_94BA
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x16` — `LABEL_0D28`
@@ -1744,7 +1744,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SET_VARE9_TO_8.inc:130`.
 
 ```
 break
-jg [0x01], 0x41, LABEL_0D28
+jg [HERO_X], 0x41, LABEL_0D28
 setup channel=0x25, address=KILL_CHANNEL_LANDING
 ```
 
@@ -1754,7 +1754,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VARE9_TO_8.inc:130
 
 ```
 break
-jg [0x01], 0x41, LABEL_0D48
+jg [HERO_X], 0x41, LABEL_0D48
 setup channel=0x25, address=KILL_CHANNEL_LANDING
 ```
 
@@ -1764,7 +1764,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SET_VARE9_TO_8.inc:130`
 
 ```
 break
-jg [0x01], 0x41, LABEL_0DB0
+jg [HERO_X], 0x41, LABEL_0DB0
 setup channel=0x25, address=KILL_CHANNEL_LANDING
 ```
 
@@ -1893,8 +1893,8 @@ mov [0x22], [0xA1]
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VAR16_TO_0.inc:10`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -1904,7 +1904,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_090_TO_104_3F_AT_8C208
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 call LABEL_7D56
 ```
 
@@ -1913,8 +1913,8 @@ call LABEL_7D56
 Defined at `src/levels/_unified/prison/dos__post_COPY_PAGE0_TO_3_AND_VAR66_TO_VAR65.inc:4`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -1923,8 +1923,8 @@ break
 Defined at `src/levels/_unified/prison/dos__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -1933,8 +1933,8 @@ break
 Defined at `src/levels/_unified/prison/cart__post_COPY_PAGE0_TO_3_AND_VAR66_TO_VAR65.inc:4`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -1943,8 +1943,8 @@ break
 Defined at `src/levels/_unified/prison/cart__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -1954,8 +1954,8 @@ Defined at `src/levels/_unified/prison/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc
 
 ```
 call LABEL_8789
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x21` — `LABEL_1426`
@@ -1964,8 +1964,8 @@ Defined at `src/levels/_unified/prison/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_8680
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x21` — `LABEL_14B0`
@@ -1974,8 +1974,8 @@ Defined at `src/levels/_unified/prison/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_88DA
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x22` — `LABEL_141E`
@@ -1984,8 +1984,8 @@ Defined at `src/levels/_unified/prison/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc
 
 ```
 call LABEL_8789
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x22` — `LABEL_1426`
@@ -1994,8 +1994,8 @@ Defined at `src/levels/_unified/prison/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_8680
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x22` — `LABEL_14B0`
@@ -2004,8 +2004,8 @@ Defined at `src/levels/_unified/prison/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_88DA
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x22` — `LABEL_1BBC`
@@ -2043,9 +2043,9 @@ LABEL_1C66:
 Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_628_TO_625_4F_AT_2F47D6D0.inc:8`.
 
 ```
-mov [0x07], 0x0118
-mov [0x08], 0x00B6
-video type=1, offset=CINEMATIC_633, x=[0x07], y=[0x08], zoom=0x40
+mov [BUDDY_X], 0x0118
+mov [BUDDY_Y], 0x00B6
+video offset=CINEMATIC_633, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x22` — `LABEL_4CB9`
@@ -2053,8 +2053,8 @@ video type=1, offset=CINEMATIC_633, x=[0x07], y=[0x08], zoom=0x40
 Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_628_TO_625_4F_AT_2F47D6D0.inc:8`.
 
 ```
-mov [0x07], 0x0118
-mov [0x08], 0x00B6
+mov [BUDDY_X], 0x0118
+mov [BUDDY_Y], 0x00B6
 mov [PAUSE_SLICES], 0x0007
 ```
 
@@ -2063,8 +2063,8 @@ mov [PAUSE_SLICES], 0x0007
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_104B_22B91458.inc:211`.
 
 ```
-mov [0x07], 0x0118
-mov [0x08], 0x00B6
+mov [BUDDY_X], 0x0118
+mov [BUDDY_Y], 0x00B6
 mov [PAUSE_SLICES], 0x0007
 ```
 
@@ -2073,8 +2073,8 @@ mov [PAUSE_SLICES], 0x0007
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_104B_22B91458.inc:221`.
 
 ```
-video type=1, offset=CINEMATIC_229, x=[0x07], y=[0x08], zoom=0x40
-video type=1, offset=CINEMATIC_632, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_229, x=[BUDDY_X], y=[BUDDY_Y]
+video offset=CINEMATIC_632, x=[BUDDY_X], y=[BUDDY_Y]
 LABEL_4DD9:
 ```
 
@@ -2085,7 +2085,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_137_138_BLOCK.inc:56`.
 ```
 call LABEL_2AFF
 jne [0x10], [HACK_VAR_67], LABEL_103E
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_10D5`
@@ -2094,7 +2094,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_137_138_BLOCK.inc:50
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_105E
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -2125,7 +2125,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:333`.
 ```
 call LABEL_2BA1
 jne [0x10], [HACK_VAR_67], LABEL_10C6
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_1199`
@@ -2133,7 +2133,7 @@ video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:368`.
 
 ```
-video type=1, offset=CINEMATIC_365, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_365, x=[BUDDY_X], y=[BUDDY_Y]
 call LABEL_2BA1
 break
 ```
@@ -2174,7 +2174,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:1`.
 
 ```
 call LABEL_62AE
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -2184,7 +2184,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:1`
 
 ```
 call LABEL_6201
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -2194,7 +2194,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:22`.
 
 ```
 call LABEL_570E
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 break
 ```
 
@@ -2204,7 +2204,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:22
 
 ```
 call LABEL_5661
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 break
 ```
 
@@ -2215,7 +2215,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:43`.
 ```
 mov [0x29], 0x0002
 call LABEL_570E
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x23` — `LABEL_1FF8`
@@ -2225,7 +2225,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:43
 ```
 mov [0x29], 0x0002
 call LABEL_5661
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x23` — `LABEL_2038`
@@ -2235,7 +2235,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:75`.
 ```
 call LABEL_570E
 mov [0x0E], 0x0005
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x23` — `LABEL_203A`
@@ -2244,7 +2244,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:30
 
 ```
 call LABEL_63B1
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -2255,7 +2255,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:75
 ```
 call LABEL_5661
 mov [0x0E], 0x0005
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x23` — `LABEL_2066`
@@ -2264,7 +2264,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:32
 
 ```
 call LABEL_5811
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 break
 ```
 
@@ -2275,7 +2275,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:34
 ```
 mov [0x29], 0x0002
 call LABEL_5811
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x23` — `LABEL_20DA`
@@ -2285,7 +2285,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:38
 ```
 call LABEL_5811
 mov [0x0E], 0x0005
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x23` — `LABEL_2150`
@@ -2344,7 +2344,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:22
 
 ```
 call LABEL_61E0
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -2363,7 +2363,7 @@ call LABEL_582F
 Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:255`.
 
 ```
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 mov [0x0D], 0x0001
 mov [0x0E], 0x0003
 ```
@@ -2373,7 +2373,7 @@ mov [0x0E], 0x0003
 Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:255`.
 
 ```
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 mov [0x0D], 0x0001
 mov [0x0E], 0x0003
 ```
@@ -2394,7 +2394,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:53
 
 ```
 call LABEL_6390
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -2403,7 +2403,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:560`.
 
 ```
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 mov [0x0D], 0x0001
 mov [0x0E], 0x0003
 ```
@@ -2413,9 +2413,9 @@ mov [0x0E], 0x0003
 Defined at `src/levels/_unified/prison/amiga__post_FILL_AND_DRAW_CIN_24_28.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_596, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_596, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_597, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_597, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_4B6A`
@@ -2423,9 +2423,9 @@ video type=1, offset=CINEMATIC_597, x=[0x07], y=[0x08], zoom=0x40
 Defined at `src/levels/_unified/prison/dos__post_FILL_AND_DRAW_CIN_24_28.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_596, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_596, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_597, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_597, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_4C64`
@@ -2434,7 +2434,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_104B_22B91458.inc:93
 
 ```
 song id=0x0BBD, delay=0x0000, pos=0x00
-video type=1, offset=CINEMATIC_596, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_596, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -2444,8 +2444,8 @@ Defined at `src/levels/_unified/prison/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc
 
 ```
 call LABEL_13F5
-mov [0x68], [0x07]
-mov [0x69], [0x08]
+mov [0x68], [BUDDY_X]
+mov [0x69], [BUDDY_Y]
 ```
 
 ### `0x24` — `LABEL_1449`
@@ -2454,8 +2454,8 @@ Defined at `src/levels/_unified/prison/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_13FD
-mov [0x68], [0x07]
-mov [0x69], [0x08]
+mov [0x68], [BUDDY_X]
+mov [0x69], [BUDDY_Y]
 ```
 
 ### `0x24` — `LABEL_14D3`
@@ -2464,8 +2464,8 @@ Defined at `src/levels/_unified/prison/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_1487
-mov [0x68], [0x07]
-mov [0x69], [0x08]
+mov [0x68], [BUDDY_X]
+mov [0x69], [BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_10B5`
@@ -2475,7 +2475,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_137_138_BLOCK.inc:56`.
 ```
 call LABEL_2AFF
 jne [0x10], [HACK_VAR_67], LABEL_103E
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_10D5`
@@ -2484,7 +2484,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_137_138_BLOCK.inc:50
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_105E
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -2515,7 +2515,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:333`.
 ```
 call LABEL_2BA1
 jne [0x10], [HACK_VAR_67], LABEL_10C6
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_1199`
@@ -2523,7 +2523,7 @@ video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:368`.
 
 ```
-video type=1, offset=CINEMATIC_365, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_365, x=[BUDDY_X], y=[BUDDY_Y]
 call LABEL_2BA1
 break
 ```
@@ -2594,8 +2594,8 @@ Defined at `src/levels/_unified/prison/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc
 
 ```
 call LABEL_13F5
-mov [0x70], [0x07]
-mov [0x71], [0x08]
+mov [0x70], [BUDDY_X]
+mov [0x71], [BUDDY_Y]
 ```
 
 ### `0x26` — `LABEL_1484`
@@ -2604,8 +2604,8 @@ Defined at `src/levels/_unified/prison/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_13FD
-mov [0x70], [0x07]
-mov [0x71], [0x08]
+mov [0x70], [BUDDY_X]
+mov [0x71], [BUDDY_Y]
 ```
 
 ### `0x26` — `LABEL_150E`
@@ -2614,8 +2614,8 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_393_AT_VAR07_08.inc:
 
 ```
 break
-video type=1, offset=CINEMATIC_391, x=[0x07], y=[0x08], zoom=0x40
-video type=1, offset=CINEMATIC_392, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_391, x=[BUDDY_X], y=[BUDDY_Y]
+video offset=CINEMATIC_392, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_10B5`
@@ -2625,7 +2625,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_137_138_BLOCK.inc:56`.
 ```
 call LABEL_2AFF
 jne [0x10], [HACK_VAR_67], LABEL_103E
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_10D5`
@@ -2634,7 +2634,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_137_138_BLOCK.inc:50
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_105E
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -2665,7 +2665,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:333`.
 ```
 call LABEL_2BA1
 jne [0x10], [HACK_VAR_67], LABEL_10C6
-video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_376, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_1199`
@@ -2673,7 +2673,7 @@ video type=1, offset=CINEMATIC_376, x=[0x07], y=[0x08], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:368`.
 
 ```
-video type=1, offset=CINEMATIC_365, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_365, x=[BUDDY_X], y=[BUDDY_Y]
 call LABEL_2BA1
 break
 ```
@@ -2704,8 +2704,8 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VAR29_TO_5.inc:88`
 
 ```
 break
-video type=1, offset=CINEMATIC_391, x=[0x07], y=[0x08], zoom=0x40
-video type=1, offset=CINEMATIC_392, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_391, x=[BUDDY_X], y=[BUDDY_Y]
+video offset=CINEMATIC_392, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_25A5`
@@ -2744,8 +2744,8 @@ Defined at `src/levels/_unified/prison/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc
 
 ```
 call LABEL_13F5
-mov [0x78], [0x07]
-mov [0x79], [0x08]
+mov [0x78], [BUDDY_X]
+mov [0x79], [BUDDY_Y]
 ```
 
 ### `0x28` — `LABEL_14BF`
@@ -2754,8 +2754,8 @@ Defined at `src/levels/_unified/prison/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_13FD
-mov [0x78], [0x07]
-mov [0x79], [0x08]
+mov [0x78], [BUDDY_X]
+mov [0x79], [BUDDY_Y]
 ```
 
 ### `0x28` — `LABEL_1549`
@@ -2764,8 +2764,8 @@ Defined at `src/levels/_unified/prison/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_1487
-mov [0x78], [0x07]
-mov [0x79], [0x08]
+mov [0x78], [BUDDY_X]
+mov [0x79], [BUDDY_Y]
 ```
 
 ### `0x29` — `LABEL_2B14`
@@ -2805,7 +2805,7 @@ Defined at `src/levels/_unified/prison/amiga__post_FOLD_BODY_58B_A2D4469A.inc:15
 ```
 break
 je [0x87], 0xF060, LABEL_2BFA
-video type=1, offset=CINEMATIC_277, x=[0x84], y=[0x85], zoom=0x40
+video offset=CINEMATIC_277, x=[0x84], y=[0x85]
 ```
 
 ### `0x2A` — `LABEL_2C38`
@@ -2815,7 +2815,7 @@ Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_58B_A2D4469A.inc:160`
 ```
 break
 je [0x87], 0xF060, LABEL_2C38
-video type=1, offset=CINEMATIC_277, x=[0x84], y=[0x85], zoom=0x40
+video offset=CINEMATIC_277, x=[0x84], y=[0x85]
 ```
 
 ### `0x2A` — `LABEL_2C83`
@@ -2845,7 +2845,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_58B_A2D4469A.inc:160
 ```
 break
 je [0x87], 0xF060, LABEL_2CDA
-video type=1, offset=CINEMATIC_277, x=[0x84], y=[0x85], zoom=0x40
+video offset=CINEMATIC_277, x=[0x84], y=[0x85]
 ```
 
 ### `0x2A` — `LABEL_2D63`
@@ -2954,8 +2954,8 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SUB_VAR22_BY_23.inc:6`
 
 ```
 call LABEL_34FE
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x31` — `LABEL_3384`
@@ -2964,8 +2964,8 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_3560
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x31` — `LABEL_3466`
@@ -2974,8 +2974,8 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_3642
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x31` — `LABEL_34CE`
@@ -3014,8 +3014,8 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SUB_VAR22_BY_23.inc:6`
 
 ```
 call LABEL_34FE
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x32` — `LABEL_3384`
@@ -3024,8 +3024,8 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_3560
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x32` — `LABEL_3466`
@@ -3034,8 +3034,8 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_3642
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x32` — `LABEL_34CE`
@@ -3074,8 +3074,8 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SUB_VAR22_BY_23.inc:6`
 
 ```
 call LABEL_34FE
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x33` — `LABEL_3384`
@@ -3084,8 +3084,8 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_3560
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x33` — `LABEL_3466`
@@ -3094,8 +3094,8 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_3642
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_361, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_361, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x34` — `LABEL_0DC2`
@@ -3133,8 +3133,8 @@ mov [0xF8], [HACK_VAR_67]
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_SUB_VAR50_BY_14.inc:6`.
 
 ```
-jl [0x01], 0x91, LABEL_7F09
-jg [0x01], 0xB8, LABEL_7F09
+jl [HERO_X], 0x91, LABEL_7F09
+jg [HERO_X], 0xB8, LABEL_7F09
 jge [0x04], 0x4000, LABEL_7F09
 ```
 
@@ -3143,8 +3143,8 @@ jge [0x04], 0x4000, LABEL_7F09
 Defined at `src/levels/_unified/prison/dos__post_INLINE_SUB_VAR50_BY_14.inc:6`.
 
 ```
-jl [0x01], 0x91, LABEL_7FDB
-jg [0x01], 0xB8, LABEL_7FDB
+jl [HERO_X], 0x91, LABEL_7FDB
+jg [HERO_X], 0xB8, LABEL_7FDB
 jge [0x04], 0x4000, LABEL_7FDB
 ```
 
@@ -3153,8 +3153,8 @@ jge [0x04], 0x4000, LABEL_7FDB
 Defined at `src/levels/_unified/prison/cart__post_INLINE_SUB_VAR50_BY_14.inc:6`.
 
 ```
-jl [0x01], 0x91, LABEL_810A
-jg [0x01], 0xB8, LABEL_810A
+jl [HERO_X], 0x91, LABEL_810A
+jg [HERO_X], 0xB8, LABEL_810A
 jge [0x04], 0x4000, LABEL_810A
 ```
 
@@ -3164,7 +3164,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_039.inc:9`.
 
 ```
 break
-jl [0x01], 0xF0, LABEL_018D
+jl [HERO_X], 0xF0, LABEL_018D
 fill page=0xFF, color=0x00
 ```
 
@@ -3174,7 +3174,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_039.inc:9`.
 
 ```
 break
-jl [0x01], 0xF0, LABEL_01AF
+jl [HERO_X], 0xF0, LABEL_01AF
 fill page=0xFF, color=0x00
 ```
 
@@ -3184,7 +3184,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_039.inc:9`.
 
 ```
 break
-jl [0x01], 0xF0, LABEL_021D
+jl [HERO_X], 0xF0, LABEL_021D
 fill page=0xFF, color=0x00
 ```
 
@@ -3193,7 +3193,7 @@ fill page=0xFF, color=0x00
 Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_040.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_113, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_113, x=160, y=[0x19]
 play id=0x005B, freq=0x05, vol=0x0A, channel=0x02
 break
 ```
@@ -3203,7 +3203,7 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_040.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_113, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_113, x=160, y=[0x19]
 play id=0x005B, freq=0x05, vol=0x0A, channel=0x02
 break
 ```
@@ -3213,7 +3213,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_113, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_113, x=160, y=[0x19]
 play id=0x005B, freq=0x05, vol=0x0A, channel=0x02
 break
 ```
@@ -3283,7 +3283,7 @@ jg [0x06], 0x00, LABEL_854D
 Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_040.inc:79`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_107, x=160, y=[0x19]
 play id=0x005B, freq=0x07, vol=0x0A, channel=0x03
 break
 ```
@@ -3293,7 +3293,7 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_040.inc:79`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_107, x=160, y=[0x19]
 play id=0x005B, freq=0x07, vol=0x0A, channel=0x03
 break
 ```
@@ -3303,7 +3303,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:79`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_107, x=160, y=[0x19]
 play id=0x005B, freq=0x07, vol=0x0A, channel=0x03
 break
 ```
@@ -3313,9 +3313,9 @@ break
 Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_040.inc:97`.
 
 ```
-video type=1, offset=CINEMATIC_119, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_119, x=160, y=[0x19]
 break
-video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_120, x=160, y=[0x19]
 ```
 
 ### `0x37` — `LABEL_0E68`
@@ -3323,9 +3323,9 @@ video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_040.inc:97`.
 
 ```
-video type=1, offset=CINEMATIC_119, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_119, x=160, y=[0x19]
 break
-video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_120, x=160, y=[0x19]
 ```
 
 ### `0x37` — `LABEL_0ED0`
@@ -3333,9 +3333,9 @@ video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:97`.
 
 ```
-video type=1, offset=CINEMATIC_119, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_119, x=160, y=[0x19]
 break
-video type=1, offset=CINEMATIC_120, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_120, x=160, y=[0x19]
 ```
 
 ### `0x38` — `LABEL_0875`
@@ -3373,7 +3373,7 @@ setup channel=0x39, address=LABEL_091E
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:118`.
 
 ```
-video type=1, offset=CINEMATIC_154, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_154, x=160, y=[0x19]
 play id=0x0058, freq=0x14, vol=0x20, channel=0x01
 break
 ```
@@ -3383,7 +3383,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:136`.
 
 ```
-video type=1, offset=CINEMATIC_149, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_149, x=160, y=[0x19]
 play id=0x0058, freq=0x0C, vol=0x18, channel=0x01
 break
 ```
@@ -3453,7 +3453,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:127`.
 
 ```
-video type=1, offset=CINEMATIC_151, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_151, x=160, y=[0x19]
 play id=0x0058, freq=0x0F, vol=0x10, channel=0x00
 break
 ```
@@ -3463,7 +3463,7 @@ break
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:143`.
 
 ```
-video type=1, offset=CINEMATIC_132, x=160, y=[0x19], zoom=0x40
+video offset=CINEMATIC_132, x=160, y=[0x19]
 play id=0x0058, freq=0x14, vol=0x1C, channel=0x00
 break
 ```
@@ -3505,7 +3505,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SET_VARE9_TO_8.inc:137`.
 ```
 break
 mov [0xAF], 0x0000
-je [0xB0], 0x00, KILL_CHANNEL_LANDING__PRISON_INLINE_SETTERS_AND_INIT_001
+je [0xB0], 0x00, KILL_CHANNEL_LANDING_001
 ```
 
 ### `0x3A` — `LABEL_0D58`
@@ -3515,7 +3515,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VARE9_TO_8.inc:137
 ```
 break
 mov [0xAF], 0x0000
-je [0xB0], 0x00, KILL_CHANNEL_LANDING__PRISON_INLINE_SETTERS_AND_INIT_001
+je [0xB0], 0x00, KILL_CHANNEL_LANDING_001
 ```
 
 ### `0x3A` — `LABEL_0DC0`
@@ -3525,7 +3525,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SET_VARE9_TO_8.inc:137`
 ```
 break
 mov [0xAF], 0x0000
-je [0xB0], 0x00, KILL_CHANNEL_LANDING__PRISON_INLINE_SETTERS_AND_INIT_001
+je [0xB0], 0x00, KILL_CHANNEL_LANDING_001
 ```
 
 ### `0x3B` — `LABEL_0CC7`
@@ -3534,7 +3534,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_SET_VARE9_TO_8.inc:96`.
 
 ```
 break
-jg [0x01], 0xBE, LABEL_0CC7
+jg [HERO_X], 0xBE, LABEL_0CC7
 mov [0xF8], [0x6A]
 ```
 
@@ -3554,7 +3554,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_SET_VARE9_TO_8.inc:96`.
 
 ```
 break
-jg [0x01], 0xBE, LABEL_0D4F
+jg [HERO_X], 0xBE, LABEL_0D4F
 mov [0xF8], [0x6A]
 ```
 
@@ -3765,7 +3765,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DECREMENT_VAR10_BY_1.inc:1`.
 ```
 call LABEL_47BD
 call LABEL_7E8A
-jl [0x01], 0x0150, LABEL_8740
+jl [HERO_X], 0x0150, LABEL_8740
 ```
 
 ### `0x3F` — `LABEL_8824`
@@ -3775,7 +3775,7 @@ Defined at `src/levels/_unified/prison/dos__post_DECREMENT_VAR10_BY_1.inc:1`.
 ```
 call LABEL_485E
 call LABEL_7F55
-jl [0x01], 0x0146, LABEL_8856
+jl [HERO_X], 0x0146, LABEL_8856
 ```
 
 ### `0x3F` — `LABEL_897B`
@@ -3867,9 +3867,9 @@ fill page=0xFF, color=0x00
 Defined at `src/levels/_unified/prison/cart__post_DERIVE_VAR12_11_10_FROM_VAR9.inc:62`.
 
 ```
-jl [0x08], [0x25], LABEL_12FD
+jl [BUDDY_Y], [0x25], LABEL_12FD
 add [0x25], 0x0014
-jg [0x08], [0x25], LABEL_12FD
+jg [BUDDY_Y], [0x25], LABEL_12FD
 ```
 
 ### `0x00` — `LABEL_142A`
@@ -3878,7 +3878,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_E7_E9_E8.inc:217`.
 
 ```
 break
-jl [0x01], 0xB4, LABEL_142A
+jl [HERO_X], 0xB4, LABEL_142A
 or [0x74], 0x4000
 ```
 
@@ -3888,7 +3888,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E9_E8.inc:216`.
 
 ```
 break
-jl [0x01], 0xB4, LABEL_148F
+jl [HERO_X], 0xB4, LABEL_148F
 or [0x74], 0x4000
 ```
 
@@ -3978,8 +3978,8 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_1E.inc:298
 
 ```
 setPalette 0x11
-jl [0x01], 0xAE, LABEL_2038
-jg [0x01], 0xE1, LABEL_2038
+jl [HERO_X], 0xAE, LABEL_2038
+jg [HERO_X], 0xE1, LABEL_2038
 ```
 
 ### `0x01` — `LABEL_21B1`
@@ -3988,8 +3988,8 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE6_TO_1E.inc:298`
 
 ```
 setPalette 0x11
-jl [0x01], 0xAE, LABEL_21C3
-jg [0x01], 0xE1, LABEL_21C3
+jl [HERO_X], 0xAE, LABEL_21C3
+jg [HERO_X], 0xE1, LABEL_21C3
 ```
 
 ### `0x01` — `LABEL_21EA`
@@ -3998,8 +3998,8 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VARE6_TO_1E.inc:298`.
 
 ```
 setPalette 0x11
-jl [0x01], 0xAE, LABEL_21FC
-jg [0x01], 0xE1, LABEL_21FC
+jl [HERO_X], 0xAE, LABEL_21FC
+jg [HERO_X], 0xE1, LABEL_21FC
 ```
 
 ### `0x01` — `LABEL_2F29`
@@ -4007,9 +4007,9 @@ jg [0x01], 0xE1, LABEL_21FC
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:156`.
 
 ```
-video type=1, offset=CINEMATIC_534, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_534, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_534, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_534, x=160, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_2F51`
@@ -4017,9 +4017,9 @@ video type=1, offset=CINEMATIC_534, x=160, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:173`.
 
 ```
-video type=1, offset=CINEMATIC_534, x=157, y=54
+video offset=CINEMATIC_534, x=157, y=54
 break
-video type=1, offset=CINEMATIC_534, x=157, y=54
+video offset=CINEMATIC_534, x=157, y=54
 ```
 
 ### `0x01` — `LABEL_2F73`
@@ -4027,9 +4027,9 @@ video type=1, offset=CINEMATIC_534, x=157, y=54
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:190`.
 
 ```
-video type=1, offset=CINEMATIC_534, x=140, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_534, x=140, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_534, x=140, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_534, x=140, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_3136`
@@ -4037,9 +4037,9 @@ video type=1, offset=CINEMATIC_534, x=140, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:173`.
 
 ```
-video type=1, offset=CINEMATIC_556, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_556, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_556, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_556, x=160, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_3152`
@@ -4047,9 +4047,9 @@ video type=1, offset=CINEMATIC_556, x=160, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:168`.
 
 ```
-video type=1, offset=CINEMATIC_555, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_555, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_555, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_555, x=160, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_315E`
@@ -4067,9 +4067,9 @@ jmp LABEL_3169
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:185`.
 
 ```
-video type=1, offset=CINEMATIC_555, x=157, y=54
+video offset=CINEMATIC_555, x=157, y=54
 break
-video type=1, offset=CINEMATIC_555, x=157, y=54
+video offset=CINEMATIC_555, x=157, y=54
 ```
 
 ### `0x01` — `LABEL_3180`
@@ -4077,9 +4077,9 @@ video type=1, offset=CINEMATIC_555, x=157, y=54
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:207`.
 
 ```
-video type=1, offset=CINEMATIC_556, x=140, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_556, x=140, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_556, x=140, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_556, x=140, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_319C`
@@ -4087,9 +4087,9 @@ video type=1, offset=CINEMATIC_556, x=140, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:202`.
 
 ```
-video type=1, offset=CINEMATIC_555, x=140, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_555, x=140, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_555, x=140, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_555, x=140, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_32A8`
@@ -4097,8 +4097,8 @@ video type=1, offset=CINEMATIC_555, x=140, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:288`.
 
 ```
-video type=1, offset=CINEMATIC_301, x=56, y=100
-video type=1, offset=CINEMATIC_302, x=58, y=103
+video offset=CINEMATIC_301, x=56, y=100
+video offset=CINEMATIC_302, x=58, y=103
 break
 ```
 
@@ -4137,9 +4137,9 @@ and [0xF8], 0x0001
 Defined at `src/levels/_unified/caves/cart__post_COPY_VARF8_TO_VAR00.inc:235`.
 
 ```
-video type=1, offset=CINEMATIC_459, x=179, y=31
-video type=1, offset=CINEMATIC_459, x=179, y=62
-video type=1, offset=CINEMATIC_459, x=179, y=93
+video offset=CINEMATIC_459, x=179, y=31
+video offset=CINEMATIC_459, x=179, y=62
+video offset=CINEMATIC_459, x=179, y=93
 ```
 
 ### `0x02` — `LABEL_0644`
@@ -4147,8 +4147,8 @@ video type=1, offset=CINEMATIC_459, x=179, y=93
 Defined at `src/levels/_unified/caves/cart__post_COPY_VARF8_TO_VAR00.inc:244`.
 
 ```
-video type=1, offset=CINEMATIC_627, x=2, y=186
-video type=1, offset=CINEMATIC_627, x=2, y=195
+video offset=CINEMATIC_627, x=2, y=186
+video offset=CINEMATIC_627, x=2, y=195
 break
 ```
 
@@ -4157,7 +4157,7 @@ break
 Defined at `src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:55`.
 
 ```
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 play id=0x005B, freq=0x12, vol=0x3F, channel=0x00
 play id=0x005B, freq=0x12, vol=0x3F, channel=0x01
 ```
@@ -4167,8 +4167,8 @@ play id=0x005B, freq=0x12, vol=0x3F, channel=0x01
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_E8.inc:29`.
 
 ```
-video type=1, offset=CINEMATIC_615, x=2, y=186
-video type=1, offset=CINEMATIC_615, x=2, y=195
+video offset=CINEMATIC_615, x=2, y=186
+video offset=CINEMATIC_615, x=2, y=195
 break
 ```
 
@@ -4178,7 +4178,7 @@ Defined at `src/levels/_unified/passcode/dos__post_SUM_HASH_VARS_TO_VAR_37.inc:4
 
 ```
 db 0x11
-ANIMATE_CURSOR_TRANSITION__DOS__POST_SUM_HASH_VARS_TO_VAR_37:
+ANIMATE_CURSOR_TRANSITION:
 mov [0x07], [0x25]
 ```
 
@@ -4187,8 +4187,8 @@ mov [0x07], [0x25]
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E8.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_636, x=2, y=186
-video type=1, offset=CINEMATIC_636, x=2, y=195
+video offset=CINEMATIC_636, x=2, y=186
+video offset=CINEMATIC_636, x=2, y=195
 break
 ```
 
@@ -4347,9 +4347,9 @@ call SETUP_HASH_AND_DERIVE_BUCKETS
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:335`.
 
 ```
-video type=1, offset=CINEMATIC_304, x=[0xee], y=100, zoom=0x40
+video offset=CINEMATIC_304, x=[0xee], y=100
 break
-video type=1, offset=CINEMATIC_305, x=[0xee], y=100, zoom=0x40
+video offset=CINEMATIC_305, x=[0xee], y=100
 ```
 
 ### `0x04` — `LABEL_332B`
@@ -4387,8 +4387,8 @@ call SETUP_HASH_AND_DERIVE_BUCKETS
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:279`.
 
 ```
-video type=1, offset=CINEMATIC_397, x=104, y=49
-video type=1, offset=CINEMATIC_397, x=234, y=49
+video offset=CINEMATIC_397, x=104, y=49
+video offset=CINEMATIC_397, x=234, y=49
 break
 ```
 
@@ -4397,8 +4397,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:279`.
 
 ```
-video type=1, offset=CINEMATIC_418, x=104, y=49
-video type=1, offset=CINEMATIC_418, x=234, y=49
+video offset=CINEMATIC_418, x=104, y=49
+video offset=CINEMATIC_418, x=234, y=49
 break
 ```
 
@@ -4407,8 +4407,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:305`.
 
 ```
-video type=1, offset=CINEMATIC_418, x=104, y=49
-video type=1, offset=CINEMATIC_418, x=234, y=49
+video offset=CINEMATIC_418, x=104, y=49
+video offset=CINEMATIC_418, x=234, y=49
 break
 ```
 
@@ -4428,7 +4428,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_E8_E8_PLUS3.in
 
 ```
 break
-video type=1, offset=CINEMATIC_239, x=160, y=100
+video offset=CINEMATIC_239, x=160, y=100
 break
 ```
 
@@ -4438,7 +4438,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:
 
 ```
 break
-video type=1, offset=CINEMATIC_257, x=160, y=100
+video offset=CINEMATIC_257, x=160, y=100
 break
 ```
 
@@ -4447,9 +4447,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6D_71_70.inc:296`.
 
 ```
-video type=1, offset=CINEMATIC_266, x=160, y=100
-video type=1, offset=CINEMATIC_267, x=164, y=100
-video type=1, offset=CINEMATIC_268, x=168, y=100
+video offset=CINEMATIC_266, x=160, y=100
+video offset=CINEMATIC_267, x=164, y=100
+video offset=CINEMATIC_268, x=168, y=100
 ```
 
 ### `0x05` — `LABEL_10ED`
@@ -4457,9 +4457,9 @@ video type=1, offset=CINEMATIC_268, x=168, y=100
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_249, x=160, y=100
-video type=1, offset=CINEMATIC_250, x=164, y=100
-video type=1, offset=CINEMATIC_251, x=168, y=100
+video offset=CINEMATIC_249, x=160, y=100
+video offset=CINEMATIC_250, x=164, y=100
+video offset=CINEMATIC_251, x=168, y=100
 ```
 
 ### `0x05` — `LABEL_110E`
@@ -4467,9 +4467,9 @@ video type=1, offset=CINEMATIC_251, x=168, y=100
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_267, x=160, y=100
-video type=1, offset=CINEMATIC_268, x=164, y=100
-video type=1, offset=CINEMATIC_269, x=168, y=100
+video offset=CINEMATIC_267, x=160, y=100
+video offset=CINEMATIC_268, x=164, y=100
+video offset=CINEMATIC_269, x=168, y=100
 ```
 
 ### `0x05` — `LABEL_11F9`
@@ -4479,7 +4479,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_2.inc:83`.
 ```
 selectVideoPage 0x00
 play id=0x0057, freq=0x19, vol=0x10, channel=0x03
-video type=1, offset=CINEMATIC_191, x=[0xe6], y=[0xe7], zoom=0x40
+video offset=CINEMATIC_191, x=[0xe6], y=[0xe7]
 ```
 
 ### `0x05` — `LABEL_139C`
@@ -4507,8 +4507,8 @@ setup channel=0x34, address=LABEL_1450
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:276`.
 
 ```
-video type=1, offset=CINEMATIC_280, x=56, y=100
-video type=1, offset=CINEMATIC_281, x=58, y=103
+video offset=CINEMATIC_280, x=56, y=100
+video offset=CINEMATIC_281, x=58, y=103
 break
 ```
 
@@ -4517,8 +4517,8 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:304`.
 
 ```
-video type=1, offset=CINEMATIC_286, x=130, y=100
-video type=1, offset=CINEMATIC_287, x=230, y=100
+video offset=CINEMATIC_286, x=130, y=100
+video offset=CINEMATIC_287, x=230, y=100
 break
 ```
 
@@ -4527,8 +4527,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:293`.
 
 ```
-video type=1, offset=CINEMATIC_300, x=56, y=100
-video type=1, offset=CINEMATIC_301, x=58, y=103
+video offset=CINEMATIC_300, x=56, y=100
+video offset=CINEMATIC_301, x=58, y=103
 break
 ```
 
@@ -4537,8 +4537,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:288`.
 
 ```
-video type=1, offset=CINEMATIC_301, x=56, y=100
-video type=1, offset=CINEMATIC_302, x=58, y=103
+video offset=CINEMATIC_301, x=56, y=100
+video offset=CINEMATIC_302, x=58, y=103
 break
 ```
 
@@ -4547,8 +4547,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:321`.
 
 ```
-video type=1, offset=CINEMATIC_306, x=130, y=100
-video type=1, offset=CINEMATIC_307, x=230, y=100
+video offset=CINEMATIC_306, x=130, y=100
+video offset=CINEMATIC_307, x=230, y=100
 break
 ```
 
@@ -4557,7 +4557,7 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_COMPUTE_VAR26_AS_VAR21_MINUS_VAR22.inc:42`.
 
 ```
-mov [0x21], [0x07]
+mov [0x21], [BUDDY_X]
 jge [0x2B], 0x1000, INCREMENT_VAR21_BY_F
 sub [0x21], 0x000F
 ```
@@ -4569,7 +4569,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE8_TO_2F.inc:29`
 ```
 setup channel=0x06, address=INIT_VARS_EB_EC_ED
 selectVideoPage 0x03
-video type=1, offset=CINEMATIC_800, x=160, y=100
+video offset=CINEMATIC_800, x=160, y=100
 ```
 
 ### `0x05` — `LABEL_3742`
@@ -4579,7 +4579,7 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE8_TO_2F.inc:29`.
 ```
 setup channel=0x06, address=INIT_VARS_EB_EC_ED
 selectVideoPage 0x03
-video type=1, offset=CINEMATIC_815, x=160, y=100
+video offset=CINEMATIC_815, x=160, y=100
 ```
 
 ### `0x05` — `LABEL_375E`
@@ -4589,7 +4589,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VARE8_TO_2F.inc:29`.
 ```
 setup channel=0x06, address=INIT_VARS_EB_EC_ED
 selectVideoPage 0x03
-video type=1, offset=CINEMATIC_824, x=160, y=100
+video offset=CINEMATIC_824, x=160, y=100
 ```
 
 ### `0x05` — `LABEL_3778`
@@ -4599,7 +4599,7 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE8_TO_2F.inc:51`.
 ```
 mov [0x6B], 0x0001
 song id=0x0BC7, delay=0x0000, pos=0x00
-DELAY_LOOP_VAR6B__CART__POST_INLINE_SET_VARE8_TO_2F:
+DELAY_LOOP_VAR6B:
 ```
 
 ### `0x05` — `LABEL_C90A`
@@ -4658,7 +4658,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_3.inc:127`
 
 ```
 break
-jl [0x01], 0xE4, LABEL_0507
+jl [HERO_X], 0xE4, LABEL_0507
 bankSwitch 5;  Tank in the Battle Arena
 ```
 
@@ -4677,9 +4677,9 @@ mov [0x2A], 0x0017
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6D_71_70.inc:296`.
 
 ```
-video type=1, offset=CINEMATIC_266, x=160, y=100
-video type=1, offset=CINEMATIC_267, x=164, y=100
-video type=1, offset=CINEMATIC_268, x=168, y=100
+video offset=CINEMATIC_266, x=160, y=100
+video offset=CINEMATIC_267, x=164, y=100
+video offset=CINEMATIC_268, x=168, y=100
 ```
 
 ### `0x06` — `LABEL_10ED`
@@ -4687,9 +4687,9 @@ video type=1, offset=CINEMATIC_268, x=168, y=100
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_249, x=160, y=100
-video type=1, offset=CINEMATIC_250, x=164, y=100
-video type=1, offset=CINEMATIC_251, x=168, y=100
+video offset=CINEMATIC_249, x=160, y=100
+video offset=CINEMATIC_250, x=164, y=100
+video offset=CINEMATIC_251, x=168, y=100
 ```
 
 ### `0x06` — `LABEL_110E`
@@ -4697,9 +4697,9 @@ video type=1, offset=CINEMATIC_251, x=168, y=100
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_267, x=160, y=100
-video type=1, offset=CINEMATIC_268, x=164, y=100
-video type=1, offset=CINEMATIC_269, x=168, y=100
+video offset=CINEMATIC_267, x=160, y=100
+video offset=CINEMATIC_268, x=164, y=100
+video offset=CINEMATIC_269, x=168, y=100
 ```
 
 ### `0x06` — `LABEL_30DC`
@@ -4747,9 +4747,9 @@ add [0xEE], [0x3E]
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:353`.
 
 ```
-video type=1, offset=CINEMATIC_304, x=[0xee], y=89, zoom=0x40
+video offset=CINEMATIC_304, x=[0xee], y=89
 break
-video type=1, offset=CINEMATIC_305, x=[0xee], y=89, zoom=0x40
+video offset=CINEMATIC_305, x=[0xee], y=89
 ```
 
 ### `0x06` — `LABEL_3351`
@@ -4797,9 +4797,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6D_71_70.inc:296`.
 
 ```
-video type=1, offset=CINEMATIC_266, x=160, y=100
-video type=1, offset=CINEMATIC_267, x=164, y=100
-video type=1, offset=CINEMATIC_268, x=168, y=100
+video offset=CINEMATIC_266, x=160, y=100
+video offset=CINEMATIC_267, x=164, y=100
+video offset=CINEMATIC_268, x=168, y=100
 ```
 
 ### `0x07` — `LABEL_10ED`
@@ -4807,9 +4807,9 @@ video type=1, offset=CINEMATIC_268, x=168, y=100
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_249, x=160, y=100
-video type=1, offset=CINEMATIC_250, x=164, y=100
-video type=1, offset=CINEMATIC_251, x=168, y=100
+video offset=CINEMATIC_249, x=160, y=100
+video offset=CINEMATIC_250, x=164, y=100
+video offset=CINEMATIC_251, x=168, y=100
 ```
 
 ### `0x07` — `LABEL_110E`
@@ -4817,9 +4817,9 @@ video type=1, offset=CINEMATIC_251, x=168, y=100
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_267, x=160, y=100
-video type=1, offset=CINEMATIC_268, x=164, y=100
-video type=1, offset=CINEMATIC_269, x=168, y=100
+video offset=CINEMATIC_267, x=160, y=100
+video offset=CINEMATIC_268, x=164, y=100
+video offset=CINEMATIC_269, x=168, y=100
 ```
 
 ### `0x07` — `LABEL_309E`
@@ -4827,8 +4827,8 @@ video type=1, offset=CINEMATIC_269, x=168, y=100
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:290`.
 
 ```
-video type=1, offset=CINEMATIC_280, x=56, y=110
-video type=1, offset=CINEMATIC_281, x=58, y=115
+video offset=CINEMATIC_280, x=56, y=110
+video offset=CINEMATIC_281, x=58, y=115
 break
 ```
 
@@ -4837,8 +4837,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:307`.
 
 ```
-video type=1, offset=CINEMATIC_300, x=56, y=110
-video type=1, offset=CINEMATIC_301, x=58, y=115
+video offset=CINEMATIC_300, x=56, y=110
+video offset=CINEMATIC_301, x=58, y=115
 break
 ```
 
@@ -4847,8 +4847,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:302`.
 
 ```
-video type=1, offset=CINEMATIC_301, x=56, y=110
-video type=1, offset=CINEMATIC_302, x=58, y=115
+video offset=CINEMATIC_301, x=56, y=110
+video offset=CINEMATIC_302, x=58, y=115
 break
 ```
 
@@ -4947,9 +4947,9 @@ je [0x21], 0x00, LABEL_CC9C
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6D_71_70.inc:296`.
 
 ```
-video type=1, offset=CINEMATIC_266, x=160, y=100
-video type=1, offset=CINEMATIC_267, x=164, y=100
-video type=1, offset=CINEMATIC_268, x=168, y=100
+video offset=CINEMATIC_266, x=160, y=100
+video offset=CINEMATIC_267, x=164, y=100
+video offset=CINEMATIC_268, x=168, y=100
 ```
 
 ### `0x08` — `LABEL_10ED`
@@ -4957,9 +4957,9 @@ video type=1, offset=CINEMATIC_268, x=168, y=100
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_249, x=160, y=100
-video type=1, offset=CINEMATIC_250, x=164, y=100
-video type=1, offset=CINEMATIC_251, x=168, y=100
+video offset=CINEMATIC_249, x=160, y=100
+video offset=CINEMATIC_250, x=164, y=100
+video offset=CINEMATIC_251, x=168, y=100
 ```
 
 ### `0x08` — `LABEL_110E`
@@ -4967,9 +4967,9 @@ video type=1, offset=CINEMATIC_251, x=168, y=100
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_267, x=160, y=100
-video type=1, offset=CINEMATIC_268, x=164, y=100
-video type=1, offset=CINEMATIC_269, x=168, y=100
+video offset=CINEMATIC_267, x=160, y=100
+video offset=CINEMATIC_268, x=164, y=100
+video offset=CINEMATIC_269, x=168, y=100
 ```
 
 ### `0x08` — `LABEL_3778`
@@ -4979,7 +4979,7 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE8_TO_2F.inc:51`.
 ```
 mov [0x6B], 0x0001
 song id=0x0BC7, delay=0x0000, pos=0x00
-DELAY_LOOP_VAR6B__CART__POST_INLINE_SET_VARE8_TO_2F:
+DELAY_LOOP_VAR6B:
 ```
 
 ### `0x0F` — `LABEL_DD5E`
@@ -4987,7 +4987,7 @@ DELAY_LOOP_VAR6B__CART__POST_INLINE_SET_VARE8_TO_2F:
 Defined at `src/levels/_unified/caves/amiga__post_DEDUP_CAVES_5B_036.inc:146`.
 
 ```
-video type=1, offset=CINEMATIC_504, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_504, x=[0x1a], y=[0x1b]
 play id=0x006D, freq=0x14, vol=0x20, channel=0x00
 break
 ```
@@ -4997,7 +4997,7 @@ break
 Defined at `src/levels/_unified/caves/dos__post_DEDUP_CAVES_5B_036.inc:154`.
 
 ```
-video type=1, offset=CINEMATIC_525, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_525, x=[0x1a], y=[0x1b]
 play id=0x006D, freq=0x14, vol=0x20, channel=0x00
 break
 ```
@@ -5007,7 +5007,7 @@ break
 Defined at `src/levels/_unified/caves/cart__post_DEDUP_CAVES_5B_036.inc:154`.
 
 ```
-video type=1, offset=CINEMATIC_526, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_526, x=[0x1a], y=[0x1b]
 play id=0x006D, freq=0x14, vol=0x20, channel=0x00
 break
 ```
@@ -5087,8 +5087,8 @@ selectVideoPage 0x01
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:74`.
 
 ```
-video type=1, offset=CINEMATIC_250, x=[0x01], y=[0x02], zoom=0x40
-video type=1, offset=CINEMATIC_251, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_250, x=[HERO_X], y=[HERO_Y]
+video offset=CINEMATIC_251, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -5097,9 +5097,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:45`.
 
 ```
-video type=1, offset=CINEMATIC_238, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_238, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_237, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_237, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_079A`
@@ -5107,9 +5107,9 @@ video type=1, offset=CINEMATIC_237, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:45`.
 
 ```
-video type=1, offset=CINEMATIC_256, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_256, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_255, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_255, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_07C8`
@@ -5117,8 +5117,8 @@ video type=1, offset=CINEMATIC_255, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_233, x=[0x01], y=[0x02], zoom=0x40
-video type=1, offset=CINEMATIC_234, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_233, x=[HERO_X], y=[HERO_Y]
+video offset=CINEMATIC_234, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -5127,8 +5127,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_251, x=[0x01], y=[0x02], zoom=0x40
-video type=1, offset=CINEMATIC_252, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_251, x=[HERO_X], y=[HERO_Y]
+video offset=CINEMATIC_252, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -5137,7 +5137,7 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_E7_E9_E8.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_198, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_198, x=[HERO_X], y=[HERO_Y]
 play id=0x0075, freq=0x15, vol=0x40, channel=0x00
 play id=0x007A, freq=0x14, vol=0x40, channel=0x03
 ```
@@ -5187,7 +5187,7 @@ mov [0x29], 0x0014
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAREF_TO_5.inc:16`.
 
 ```
-mov [0x01], 0x013B
+mov [HERO_X], 0x013B
 or [0x04], 0x4000
 mov [0xB7], 0x0001
 ```
@@ -5197,7 +5197,7 @@ mov [0xB7], 0x0001
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAREF_TO_5.inc:16`.
 
 ```
-mov [0x01], 0x013B
+mov [HERO_X], 0x013B
 or [0x04], 0x4000
 mov [0xB7], 0x0001
 ```
@@ -5207,7 +5207,7 @@ mov [0xB7], 0x0001
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VAREF_TO_5.inc:16`.
 
 ```
-mov [0x01], 0x013B
+mov [HERO_X], 0x013B
 or [0x04], 0x4000
 mov [0xB7], 0x0001
 ```
@@ -5217,9 +5217,9 @@ mov [0xB7], 0x0001
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAR6A_TO_2F.inc:29`.
 
 ```
-add [0x02], 0x0019
+add [HERO_Y], 0x0019
 or [0x04], 0x4000
-video type=1, offset=CINEMATIC_000, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_000, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_1BEE`
@@ -5237,9 +5237,9 @@ DRAW_CIN_182_AT_187_101_LOOP:
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VAR6A_TO_2F.inc:29`.
 
 ```
-add [0x02], 0x0019
+add [HERO_Y], 0x0019
 or [0x04], 0x4000
-video type=1, offset=CINEMATIC_000, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_000, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_2349`
@@ -5287,8 +5287,8 @@ mov [0x63], 0x0003
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:813`.
 
 ```
-mov [0x08], [0x51]
-add [0x08], 0x001E
+mov [BUDDY_Y], [0x51]
+add [BUDDY_Y], 0x001E
 call LABEL_6426
 ```
 
@@ -5307,7 +5307,7 @@ call STATE_VAR12_BIG_DISPATCH
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAR7C_TO_0001_040.inc:15`.
 
 ```
-video type=1, offset=CINEMATIC_604, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_604, x=[HERO_X], y=[HERO_Y]
 or [0x04], 0x4000
 break
 ```
@@ -5317,7 +5317,7 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAR7C_TO_0001_040.inc:15`.
 
 ```
-video type=1, offset=CINEMATIC_616, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_616, x=[HERO_X], y=[HERO_Y]
 call LABEL_2B98
 or [0x04], 0x4000
 ```
@@ -5327,7 +5327,7 @@ or [0x04], 0x4000
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VAR7C_TO_0001_040.inc:15`.
 
 ```
-video type=1, offset=CINEMATIC_625, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_625, x=[HERO_X], y=[HERO_Y]
 call LABEL_2BCB
 or [0x04], 0x4000
 ```
@@ -5338,7 +5338,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:15`.
 
 ```
 mov [0x63], 0x0001
-video type=1, offset=CINEMATIC_795, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_795, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -5348,7 +5348,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:15`.
 
 ```
 mov [0x63], 0x0001
-video type=1, offset=CINEMATIC_810, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_810, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -5358,7 +5358,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:15`.
 
 ```
 mov [0x63], 0x0001
-video type=1, offset=CINEMATIC_819, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_819, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -5367,9 +5367,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:173`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_124, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_124, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_48B4`
@@ -5389,7 +5389,7 @@ Defined at `src/levels/_unified/prison/cart__post_TRIVIAL_RET.inc:1`.
 ```
 je [0x0F], 0x00, LABEL_4968
 mov [0x2A], 0x002A
-je [0x28], [0x01], LABEL_4968
+je [0x28], [HERO_X], LABEL_4968
 ```
 
 ### `0x14` — `LABEL_4973`
@@ -5397,9 +5397,9 @@ je [0x28], [0x01], LABEL_4968
 Defined at `src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:264`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_107, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_108, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_108, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_4A5B`
@@ -5407,9 +5407,9 @@ video type=1, offset=CINEMATIC_108, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:203`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_124, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_124, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_4A82`
@@ -5417,9 +5417,9 @@ add [0x01], 0x0002
 Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:218`.
 
 ```
-sub [0x01], 0x0003
-video type=1, offset=CINEMATIC_094, x=[0x01], y=[0x02], zoom=0x40
-sub [0x01], 0x0002
+sub [HERO_X], 0x0003
+video offset=CINEMATIC_094, x=[HERO_X], y=[HERO_Y]
+sub [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_4B26`
@@ -5427,9 +5427,9 @@ sub [0x01], 0x0002
 Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:282`.
 
 ```
-video type=1, offset=CINEMATIC_127, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_127, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_128, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_128, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_4B41`
@@ -5447,9 +5447,9 @@ add [0x21], [RANDOM_SEED]
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:203`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_124, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_124, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_4BC5`
@@ -5457,9 +5457,9 @@ add [0x01], 0x0002
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:218`.
 
 ```
-sub [0x01], 0x0003
-video type=1, offset=CINEMATIC_094, x=[0x01], y=[0x02], zoom=0x40
-sub [0x01], 0x0002
+sub [HERO_X], 0x0003
+video offset=CINEMATIC_094, x=[HERO_X], y=[HERO_Y]
+sub [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_4C69`
@@ -5467,9 +5467,9 @@ sub [0x01], 0x0002
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:282`.
 
 ```
-video type=1, offset=CINEMATIC_127, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_127, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_128, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_128, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_4C84`
@@ -5477,9 +5477,9 @@ video type=1, offset=CINEMATIC_128, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:294`.
 
 ```
-video type=1, offset=CINEMATIC_107, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_107, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_108, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_108, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_7782`
@@ -5548,8 +5548,8 @@ Defined at `src/levels/_unified/caves/dos__post_ADD_VAR11_TO_VAR34.inc:144`.
 
 ```
 mov [0x2D], [0x35]
-mov [0x2E], [0x01]
-mov [0x2F], [0x02]
+mov [0x2E], [HERO_X]
+mov [0x2F], [HERO_Y]
 ```
 
 ### `0x14` — `LABEL_7C1F`
@@ -5578,8 +5578,8 @@ Defined at `src/levels/_unified/caves/amiga__post_COPY_VAR52_TO_VAR02_KILL_CHANN
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_9E41`
@@ -5588,8 +5588,8 @@ Defined at `src/levels/_unified/caves/amiga__post_COPY_VAR52_TO_VAR02_KILL_CHANN
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x51]
-add [0x02], 0x001E
+mov [HERO_Y], [0x51]
+add [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_A0F3`
@@ -5598,8 +5598,8 @@ Defined at `src/levels/_unified/caves/cart__post_COPY_VAR52_TO_VAR02_KILL_CHANNE
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_A116`
@@ -5608,8 +5608,8 @@ Defined at `src/levels/_unified/caves/cart__post_COPY_VAR52_TO_VAR02_KILL_CHANNE
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x51]
-add [0x02], 0x001E
+mov [HERO_Y], [0x51]
+add [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_A17C`
@@ -5618,8 +5618,8 @@ Defined at `src/levels/_unified/caves/dos__post_COPY_VAR52_TO_VAR02_KILL_CHANNEL
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_A19F`
@@ -5628,8 +5628,8 @@ Defined at `src/levels/_unified/caves/dos__post_COPY_VAR52_TO_VAR02_KILL_CHANNEL
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x51]
-add [0x02], 0x001E
+mov [HERO_Y], [0x51]
+add [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_DBA5`
@@ -5667,7 +5667,7 @@ and [HERO_POS_MASK], 0x00F7
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAR63_TO_6.inc:207`.
 
 ```
-video type=0, offset=COMMON_VIDEO_022, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_022, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 je [HERO_ACTION_POS_MASK], 0x05, LABEL_E173
 ```
@@ -5697,9 +5697,9 @@ call LABEL_98E9
 Defined at `src/levels/_unified/caves/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:112`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_170, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_170, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_E6AE`
@@ -5708,7 +5708,7 @@ Defined at `src/levels/_unified/caves/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:125
 
 ```
 setup channel=0x15, address=LABEL_E65D
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_E6B6:
 ```
 
@@ -5717,9 +5717,9 @@ LABEL_E6B6:
 Defined at `src/levels/_unified/caves/dos__post_WALK_RIGHT_DRAW_CV142_MULTISTEP.inc:84`.
 
 ```
-video type=0, offset=COMMON_VIDEO_146, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_146, x=[HERO_X], y=[HERO_Y], zoom=0x40
 jne [HERO_ACTION_POS_MASK], 0x05, LABEL_E655
-add [0x01], 0x0002
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_E794`
@@ -5728,7 +5728,7 @@ Defined at `src/levels/_unified/caves/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:213
 
 ```
 setup channel=0x15, address=LABEL_E747
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_E79C:
 ```
 
@@ -5737,7 +5737,7 @@ LABEL_E79C:
 Defined at `src/levels/_unified/caves/dos__post_STEP_LEFT4_DRAW_CV140_LEFT4.inc:21`.
 
 ```
-video type=0, offset=COMMON_VIDEO_141, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_141, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 je [HERO_ACTION_POS_MASK], 0x05, LABEL_E706
 ```
@@ -5757,7 +5757,7 @@ mov [0x2A], 0x0020
 Defined at `src/levels/_unified/caves/cart__post_STEP_LEFT4_DRAW_CV140_LEFT4.inc:21`.
 
 ```
-video type=0, offset=COMMON_VIDEO_141, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_141, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 je [HERO_ACTION_POS_MASK], 0x05, LABEL_E78F
 ```
@@ -5768,7 +5768,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_BREAK_041.inc:10`.
 
 ```
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_087, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_087, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 ```
 
@@ -5789,7 +5789,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_BREAK_041.inc:70`.
 ```
 call SET_VAR04_TO_0024
 setup channel=0x15, address=KILL_CHANNEL_LANDING
-video type=0, offset=COMMON_VIDEO_092, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_092, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_EA2E`
@@ -5808,7 +5808,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_BREAK_041.inc:120`.
 
 ```
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_034, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_034, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 ```
 
@@ -5819,7 +5819,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_BREAK_041.inc:180`.
 ```
 call SET_VAR04_TO_0034
 setup channel=0x15, address=KILL_CHANNEL_LANDING
-video type=0, offset=COMMON_VIDEO_039, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_039, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_EB39`
@@ -5877,9 +5877,9 @@ jne [0x0A], 0x00, LABEL_ED81
 Defined at `src/levels/_unified/caves/dos__post_DRAW_CV352_STEP_RIGHT3.inc:155`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_170, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_170, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_ED07`
@@ -5888,7 +5888,7 @@ Defined at `src/levels/_unified/caves/dos__post_DRAW_CV352_STEP_RIGHT3.inc:168`.
 
 ```
 setup channel=0x15, address=LABEL_ECB6
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_ED0F:
 ```
 
@@ -5907,9 +5907,9 @@ jne [0x0A], 0x00, LABEL_ECF1
 Defined at `src/levels/_unified/caves/cart__post_DRAW_CV352_STEP_RIGHT3.inc:155`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_170, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_170, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_ED90`
@@ -5918,7 +5918,7 @@ Defined at `src/levels/_unified/caves/cart__post_DRAW_CV352_STEP_RIGHT3.inc:168`
 
 ```
 setup channel=0x15, address=LABEL_ED3F
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_ED98:
 ```
 
@@ -5927,8 +5927,8 @@ LABEL_ED98:
 Defined at `src/levels/_unified/caves/dos__post_DRAW_CV352_STEP_RIGHT3.inc:244`.
 
 ```
-video type=1, offset=CINEMATIC_170, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_170, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_EDC5
 ```
 
@@ -5938,7 +5938,7 @@ Defined at `src/levels/_unified/caves/dos__post_DRAW_CV352_STEP_RIGHT3.inc:256`.
 
 ```
 setup channel=0x15, address=LABEL_EDA0
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_EDF5:
 ```
 
@@ -5957,8 +5957,8 @@ jne [0x0A], 0x00, LABEL_EDC6
 Defined at `src/levels/_unified/caves/cart__post_DRAW_CV352_STEP_RIGHT3.inc:244`.
 
 ```
-video type=1, offset=CINEMATIC_170, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_170, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_EE4E
 ```
 
@@ -5968,7 +5968,7 @@ Defined at `src/levels/_unified/caves/cart__post_DRAW_CV352_STEP_RIGHT3.inc:256`
 
 ```
 setup channel=0x15, address=LABEL_EE29
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_EE7E:
 ```
 
@@ -5999,7 +5999,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_BREAK_041.inc:14`.
 ```
 mov [0x63], 0x0064
 je [HERO_POS_MASK], 0x09, LABEL_F0CE
-video type=0, offset=COMMON_VIDEO_048, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_048, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_EFE3`
@@ -6009,7 +6009,7 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_BREAK_041.inc:14`.
 ```
 mov [0x63], 0x0064
 je [HERO_POS_MASK], 0x09, LABEL_F157
-video type=0, offset=COMMON_VIDEO_048, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_048, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_F021`
@@ -6039,7 +6039,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_BREAK_041.inc:127`.
 ```
 mov [0x63], 0x0064
 je [HERO_POS_MASK], 0x0A, LABEL_EF5A
-video type=0, offset=COMMON_VIDEO_003, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_003, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_F157`
@@ -6049,7 +6049,7 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_BREAK_041.inc:127`.
 ```
 mov [0x63], 0x0064
 je [HERO_POS_MASK], 0x0A, LABEL_EFE3
-video type=0, offset=COMMON_VIDEO_003, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_003, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_F195`
@@ -6187,9 +6187,9 @@ jmp LABEL_12A9
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E9_E8.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_192, x=[0xe6], y=[0x02], zoom=0x40
+video offset=CINEMATIC_192, x=[0xe6], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_193, x=[0xe6], y=[0x02], zoom=0x40
+video offset=CINEMATIC_193, x=[0xe6], y=[HERO_Y]
 ```
 
 ### `0x15` — `LABEL_23FC`
@@ -6197,9 +6197,9 @@ video type=1, offset=CINEMATIC_193, x=[0xe6], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_68_69_6B.inc:169`.
 
 ```
-video type=1, offset=CINEMATIC_643, x=198, y=43
+video offset=CINEMATIC_643, x=198, y=43
 break
-video type=1, offset=CINEMATIC_643, x=198, y=44
+video offset=CINEMATIC_643, x=198, y=44
 ```
 
 ### `0x15` — `LABEL_2587`
@@ -6217,9 +6217,9 @@ jge [0x11], 0x2000, LABEL_2597
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_68_69_6B.inc:169`.
 
 ```
-video type=1, offset=CINEMATIC_664, x=198, y=43
+video offset=CINEMATIC_664, x=198, y=43
 break
-video type=1, offset=CINEMATIC_664, x=198, y=44
+video offset=CINEMATIC_664, x=198, y=44
 ```
 
 ### `0x15` — `LABEL_2643`
@@ -6257,9 +6257,9 @@ setup channel=0x01, address=LABEL_317A
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:39`.
 
 ```
-video type=1, offset=CINEMATIC_857, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_857, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_858, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_858, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x15` — `LABEL_3863`
@@ -6268,7 +6268,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:67`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_471, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_471, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6278,7 +6278,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:143`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_469, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_469, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0014
 ```
 
@@ -6288,7 +6288,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:161`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_493, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_493, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x000A
 ```
 
@@ -6308,7 +6308,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:197`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_453, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_453, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6318,7 +6318,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:213`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_533, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_533, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6348,7 +6348,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:247`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_451, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_451, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0019
 ```
 
@@ -6358,7 +6358,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:72`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_493, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_493, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6368,7 +6368,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:72`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_492, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_492, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6378,7 +6378,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:265`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_525, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_525, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6388,7 +6388,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:299`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_474, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_474, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x000A
 ```
 
@@ -6398,7 +6398,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:148`.
 
 ```
 mov [0x63], 0x0068
-video type=1, offset=CINEMATIC_491, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_491, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0014
 ```
 
@@ -6408,7 +6408,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:315`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_472, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_472, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0014
 ```
 
@@ -6418,7 +6418,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:148`.
 
 ```
 mov [0x63], 0x0068
-video type=1, offset=CINEMATIC_490, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_490, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0014
 ```
 
@@ -6428,7 +6428,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:166`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_515, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_515, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x000A
 ```
 
@@ -6438,7 +6438,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:166`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_514, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_514, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x000A
 ```
 
@@ -6448,7 +6448,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:182`.
 
 ```
 mov [0x63], 0x0067
-video type=1, offset=CINEMATIC_513, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_513, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0014
 ```
 
@@ -6458,7 +6458,7 @@ Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_37B_9FD2CEA6.inc:21`.
 
 ```
 break
-video type=1, offset=CINEMATIC_422, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_422, x=[HERO_X], y=[HERO_Y]
 jmp LABEL_3BA9
 ```
 
@@ -6468,7 +6468,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:202`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_475, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_475, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6488,7 +6488,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:218`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_555, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_555, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6498,7 +6498,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:218`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_554, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_554, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6508,7 +6508,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:252`.
 
 ```
 mov [0x63], 0x0068
-video type=1, offset=CINEMATIC_473, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_473, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0019
 ```
 
@@ -6518,7 +6518,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:252`.
 
 ```
 mov [0x63], 0x0068
-video type=1, offset=CINEMATIC_472, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_472, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0019
 ```
 
@@ -6528,7 +6528,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:270`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_547, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_547, x=[HERO_X], y=[HERO_Y]
 mov [0x19], 0x0000
 ```
 
@@ -6538,7 +6538,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN473_AT_X21_Y27_ZOOM_4
 
 ```
 jne [0x13], 0x83, LABEL_3CC6
-video type=1, offset=CINEMATIC_470, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_470, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -6548,7 +6548,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:304`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_496, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_496, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x000A
 ```
 
@@ -6558,7 +6558,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:304`.
 
 ```
 mov [0x63], 0x0064
-video type=1, offset=CINEMATIC_495, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_495, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x000A
 ```
 
@@ -6568,7 +6568,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:320`.
 
 ```
 mov [0x63], 0x0067
-video type=1, offset=CINEMATIC_494, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_494, x=[HERO_X], y=[HERO_Y]
 mov [0x2A], 0x0014
 ```
 
@@ -6578,7 +6578,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN473_AT_X21_Y27_ZOOM_40.
 
 ```
 jne [0x13], 0x88, LABEL_3D64
-video type=1, offset=CINEMATIC_465, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_465, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -6619,7 +6619,7 @@ Defined at `src/levels/_unified/caves/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:90`
 ```
 break
 je [0x63], 0x05, LABEL_E65D
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_E747`
@@ -6629,7 +6629,7 @@ Defined at `src/levels/_unified/caves/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:179
 ```
 break
 je [0x63], 0x06, LABEL_E747
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_ECB6`
@@ -6639,7 +6639,7 @@ Defined at `src/levels/_unified/caves/dos__post_DRAW_CV352_STEP_RIGHT3.inc:133`.
 ```
 break
 je [0x63], 0x05, LABEL_ECB6
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_ED3F`
@@ -6649,7 +6649,7 @@ Defined at `src/levels/_unified/caves/cart__post_DRAW_CV352_STEP_RIGHT3.inc:133`
 ```
 break
 je [0x63], 0x05, LABEL_ED3F
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_EDA0`
@@ -6659,7 +6659,7 @@ Defined at `src/levels/_unified/caves/dos__post_DRAW_CV352_STEP_RIGHT3.inc:222`.
 ```
 break
 je [0x63], 0x06, LABEL_EDA0
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_EE29`
@@ -6669,7 +6669,7 @@ Defined at `src/levels/_unified/caves/cart__post_DRAW_CV352_STEP_RIGHT3.inc:222`
 ```
 break
 je [0x63], 0x06, LABEL_EE29
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x16` — `LABEL_23B2`
@@ -6677,8 +6677,8 @@ add [0x01], 0x0003
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_68_69_6B.inc:143`.
 
 ```
-sub [0x02], 0x0002
-video type=1, offset=CINEMATIC_658, x=[0x01], y=[0x02], zoom=0x40
+sub [HERO_Y], 0x0002
+video offset=CINEMATIC_658, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -6687,8 +6687,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_68_69_6B.inc:143`.
 
 ```
-sub [0x02], 0x0002
-video type=1, offset=CINEMATIC_669, x=[0x01], y=[0x02], zoom=0x40
+sub [HERO_Y], 0x0002
+video offset=CINEMATIC_669, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -6707,8 +6707,8 @@ call STATE_VAR12_BIG_DISPATCH
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_68_69_6B.inc:143`.
 
 ```
-sub [0x02], 0x0002
-video type=1, offset=CINEMATIC_679, x=[0x01], y=[0x02], zoom=0x40
+sub [HERO_Y], 0x0002
+video offset=CINEMATIC_679, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -6717,8 +6717,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_68_69_6B.inc:153`.
 
 ```
-add [0x02], 0x0004
-video type=1, offset=CINEMATIC_664, x=[0x01], y=[0x02], zoom=0x40
+add [HERO_Y], 0x0004
+video offset=CINEMATIC_664, x=[HERO_X], y=[HERO_Y]
 call LABEL_278B
 ```
 
@@ -6727,9 +6727,9 @@ call LABEL_278B
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:39`.
 
 ```
-video type=1, offset=CINEMATIC_857, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_857, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_858, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_858, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3A26`
@@ -6757,9 +6757,9 @@ setup channel=0x14, address=DRAW_CIN_280_TO_281_2F_AT_75ED3E60
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:354`.
 
 ```
-video type=1, offset=CINEMATIC_480, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_480, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_481, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_481, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3C0E`
@@ -6777,9 +6777,9 @@ mov [0x13], 0xFFFF
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6B.inc:471`.
 
 ```
-video type=1, offset=CINEMATIC_514, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_514, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_515, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_515, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3DB6`
@@ -6787,9 +6787,9 @@ video type=1, offset=CINEMATIC_515, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:359`.
 
 ```
-video type=1, offset=CINEMATIC_502, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_502, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_503, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_503, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3DCC`
@@ -6797,9 +6797,9 @@ video type=1, offset=CINEMATIC_503, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:359`.
 
 ```
-video type=1, offset=CINEMATIC_501, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_501, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_502, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_502, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3E21`
@@ -6808,7 +6808,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_499.inc:34`.
 
 ```
 jne [0x13], 0x73, LABEL_3E2D
-video type=1, offset=CINEMATIC_493, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_493, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -6817,9 +6817,9 @@ ret
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:399`.
 
 ```
-video type=1, offset=CINEMATIC_479, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_479, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_480, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_480, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3EEC`
@@ -6827,9 +6827,9 @@ video type=1, offset=CINEMATIC_480, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_6C_6B.inc:476`.
 
 ```
-video type=1, offset=CINEMATIC_536, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_536, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_537, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_537, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_3F02`
@@ -6837,9 +6837,9 @@ video type=1, offset=CINEMATIC_537, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_6C_6B.inc:476`.
 
 ```
-video type=1, offset=CINEMATIC_535, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_535, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_536, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_536, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x16` — `LABEL_DF3B`
@@ -6917,9 +6917,9 @@ LABEL_752D:
 Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_041.inc:468`.
 
 ```
-video type=0, offset=COMMON_VIDEO_269, x=[0x01], y=[0x02], zoom=0x40
-jne [0x0A], 0x00, DRAW_CV_270__AMIGA__POST_INLINE_KILL_041
-video type=0, offset=COMMON_VIDEO_271, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_269, x=[HERO_X], y=[HERO_Y], zoom=0x40
+jne [0x0A], 0x00, DRAW_CV_270
+video type=0, offset=COMMON_VIDEO_271, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x18` — `LABEL_710A`
@@ -6949,7 +6949,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc
 ```
 break
 break
-video type=1, offset=CINEMATIC_230, x=[0xed], y=[0xee], zoom=0x40
+video offset=CINEMATIC_230, x=[0xed], y=[0xee]
 ```
 
 ### `0x19` — `LABEL_0885`
@@ -6959,7 +6959,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_E8_E8_PLUS3.in
 ```
 break
 break
-video type=1, offset=CINEMATIC_213, x=[0xed], y=[0xee], zoom=0x40
+video offset=CINEMATIC_213, x=[0xed], y=[0xee]
 ```
 
 ### `0x19` — `LABEL_08A6`
@@ -6969,7 +6969,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:
 ```
 break
 break
-video type=1, offset=CINEMATIC_231, x=[0xed], y=[0xee], zoom=0x40
+video offset=CINEMATIC_231, x=[0xed], y=[0xee]
 ```
 
 ### `0x1A` — `LABEL_9DFA`
@@ -6978,7 +6978,7 @@ Defined at `src/levels/_unified/caves/dos__post_DECREMENT_VAR08_BY_D.inc:743`.
 
 ```
 jne [0x05], 0x03, LABEL_9E06
-video type=0, offset=COMMON_VIDEO_341, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_341, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ret
 ```
 
@@ -6987,8 +6987,8 @@ ret
 Defined at `src/levels/_unified/caves/amiga__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -6997,8 +6997,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_COPY_PAGE0_TO_3_AND_VAR66_TO_VAR65.inc:4`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -7007,8 +7007,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -7017,8 +7017,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_COPY_PAGE0_TO_3_AND_VAR66_TO_VAR65.inc:4`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -7027,8 +7027,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -7037,7 +7037,7 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:227`.
 
 ```
-video type=1, offset=CINEMATIC_241, x=[0x6c], y=[0x6d], zoom=0x40
+video offset=CINEMATIC_241, x=[0x6c], y=[0x6d]
 LABEL_08FF:
 break
 ```
@@ -7047,7 +7047,7 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_E7_E8_E8_PLUS3.inc:226`.
 
 ```
-video type=1, offset=CINEMATIC_224, x=[0x6c], y=[0x6d], zoom=0x40
+video offset=CINEMATIC_224, x=[0x6c], y=[0x6d]
 LABEL_0958:
 break
 ```
@@ -7129,7 +7129,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VAR7C_TO_0001_040.inc
 ```
 db 0x11
 LABEL_2BA8:
-video type=1, offset=CINEMATIC_625, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_625, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x22` — `LABEL_2D9D`
@@ -7138,7 +7138,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VAR09_TO_7_VAR08_FROM_VAR22
 
 ```
 jl [0x09], 0x0B, SHARED_RET
-video type=1, offset=CINEMATIC_645, x=[0x07], y=[0x08], zoom=[0x20]	;@enc=alt
+video offset=CINEMATIC_645, x=[0x07], y=[0x08], zoom=[0x20]	;@enc=alt
 sub [0x07], 0x001E
 ```
 
@@ -7217,8 +7217,8 @@ LABEL_04C4:
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__AMIGA__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_697, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_697, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7238,7 +7238,7 @@ Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_
 
 ```
 break
-video type=1, offset=CINEMATIC_660, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_660, x=[0x07], y=[0x08]
 jmp LABEL_2E85
 ```
 
@@ -7248,7 +7248,7 @@ Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_
 
 ```
 jne [0x09], 0x00, LABEL_285F
-video type=1, offset=CINEMATIC_722, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_722, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7257,8 +7257,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__CART__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_709, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_709, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7267,8 +7267,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__DOS__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_718, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_718, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7277,7 +7277,7 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:84`.
 
 ```
-video type=1, offset=CINEMATIC_674, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_674, x=[0x07], y=[0x08]
 mov [0x6C], [0x07]
 mov [0x6D], [0x08]
 ```
@@ -7287,7 +7287,7 @@ mov [0x6D], [0x08]
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:84`.
 
 ```
-video type=1, offset=CINEMATIC_684, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_684, x=[0x07], y=[0x08]
 mov [0x6C], [0x07]
 mov [0x6D], [0x08]
 ```
@@ -7298,7 +7298,7 @@ Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.
 
 ```
 break
-video type=1, offset=CINEMATIC_681, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_681, x=[0x07], y=[0x08]
 jmp LABEL_30A8
 ```
 
@@ -7308,7 +7308,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:351`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_49FB
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7317,9 +7317,9 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_FILL_AND_DRAW_CIN_24_28.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_596, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_596, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_597, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_597, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_4C44`
@@ -7328,7 +7328,7 @@ Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:387`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4BC9
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7337,9 +7337,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:419`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_080, x=[0x07], y=[0x08]
 break
-video type=1, offset=CINEMATIC_081, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_081, x=[0x07], y=[0x08]
 ```
 
 ### `0x23` — `LABEL_4D87`
@@ -7348,7 +7348,7 @@ Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:387`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4D0C
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7357,9 +7357,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:419`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_080, x=[0x07], y=[0x08]
 break
-video type=1, offset=CINEMATIC_081, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_081, x=[0x07], y=[0x08]
 ```
 
 ### `0x24` — `LABEL_2872`
@@ -7487,8 +7487,8 @@ mov [0x69], [0x08]
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:61`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__AMIGA__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_691, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_691, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7498,7 +7498,7 @@ Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_
 
 ```
 jne [0x09], 0x00, LABEL_285F
-video type=1, offset=CINEMATIC_722, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_722, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7507,8 +7507,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:61`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__CART__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_703, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_703, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7528,7 +7528,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:351`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_49FB
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7537,9 +7537,9 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_FILL_AND_DRAW_CIN_24_28.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_596, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_596, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_597, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_597, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_4C44`
@@ -7548,7 +7548,7 @@ Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:387`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4BC9
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7557,9 +7557,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:419`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_080, x=[0x07], y=[0x08]
 break
-video type=1, offset=CINEMATIC_081, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_081, x=[0x07], y=[0x08]
 ```
 
 ### `0x25` — `LABEL_4D87`
@@ -7568,7 +7568,7 @@ Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:387`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4D0C
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7577,9 +7577,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:419`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_080, x=[0x07], y=[0x08]
 break
-video type=1, offset=CINEMATIC_081, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_081, x=[0x07], y=[0x08]
 ```
 
 ### `0x26` — `LABEL_2880`
@@ -7608,7 +7608,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:14
 
 ```
 call LABEL_5811
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 break
 ```
 
@@ -7707,7 +7707,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_0E_29.inc:160`.
 ```
 break
 call LABEL_173C
-video type=1, offset=CINEMATIC_184, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_184, x=[0x78], y=[0x79]
 ```
 
 ### `0x27` — `LABEL_1748`
@@ -7717,7 +7717,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_SET_VAR29_TO_5.inc:137
 ```
 db 0x11
 LABEL_1749:
-video type=1, offset=CINEMATIC_397, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_397, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_179D`
@@ -7736,7 +7736,7 @@ Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_
 
 ```
 jne [0x09], 0x00, LABEL_285F
-video type=1, offset=CINEMATIC_722, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_722, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7746,7 +7746,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:351`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_49FB
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7755,9 +7755,9 @@ break
 Defined at `src/levels/_unified/prison/amiga__post_FILL_AND_DRAW_CIN_24_28.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_596, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_596, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_597, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_597, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_4C44`
@@ -7766,7 +7766,7 @@ Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:387`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4BC9
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7775,9 +7775,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:419`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_080, x=[0x07], y=[0x08]
 break
-video type=1, offset=CINEMATIC_081, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_081, x=[0x07], y=[0x08]
 ```
 
 ### `0x27` — `LABEL_4D87`
@@ -7786,7 +7786,7 @@ Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:387`.
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4D0C
-video type=1, offset=CINEMATIC_091, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_091, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7795,9 +7795,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:419`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_080, x=[0x07], y=[0x08]
 break
-video type=1, offset=CINEMATIC_081, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_081, x=[0x07], y=[0x08]
 ```
 
 ### `0x27` — `LABEL_534D`
@@ -7826,7 +7826,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_241.inc:368`.
 
 ```
 call DRAW_SPRITE_CIN_236_239_BY_VAR09
-video type=0, offset=COMMON_VIDEO_120, x=[0x07], y=[0x08], zoom=0x40
+video type=0, offset=COMMON_VIDEO_120, x=[BUDDY_X], y=[BUDDY_Y], zoom=0x40
 call DRAW_CIN_240_IF_VAR09_EQ_1
 ```
 
@@ -7895,8 +7895,8 @@ mov [0x79], [0x08]
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__AMIGA__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_697, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_697, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7905,8 +7905,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__CART__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_709, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_709, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7915,8 +7915,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__DOS__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_718, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_718, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7955,8 +7955,8 @@ call LABEL_2F60
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__AMIGA__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_697, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_697, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7965,8 +7965,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__CART__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_709, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_709, x=[0x07], y=[0x08]
 break
 ```
 
@@ -7975,8 +7975,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__DOS__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_718, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_718, x=[0x07], y=[0x08]
 break
 ```
 
@@ -8015,8 +8015,8 @@ call LABEL_2F60
 Defined at `src/levels/_unified/caves/amiga__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__AMIGA__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_697, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_697, x=[0x07], y=[0x08]
 break
 ```
 
@@ -8025,8 +8025,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__CART__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_709, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_709, x=[0x07], y=[0x08]
 break
 ```
 
@@ -8035,8 +8035,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_RESET_VAR09_AND_INCR_VAR08_BY_2.inc:35`.
 
 ```
-jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN__DOS__POST_RESET_VAR09_AND_INCR_VAR08_BY_2
-video type=1, offset=CINEMATIC_718, x=[0x07], y=[0x08], zoom=0x40
+jne [0x09], 0x00, DISPATCH_VAR09_OR_KILL_CHAN
+video offset=CINEMATIC_718, x=[0x07], y=[0x08]
 break
 ```
 
@@ -8137,7 +8137,7 @@ Defined at `src/levels/_unified/prison/dos__post_DEDUP_PRISON_5B_017.inc:1`.
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
 call DRAW_SPRITE_CIN_164_167_BY_VAR09
-video type=0, offset=COMMON_VIDEO_244, x=[0x07], y=[0x08], zoom=0x40
+video type=0, offset=COMMON_VIDEO_244, x=[BUDDY_X], y=[BUDDY_Y], zoom=0x40
 ```
 
 ### `0x31` — `LABEL_5FFA`
@@ -8167,7 +8167,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 ```
 call LABEL_634D
 sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_076, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_076, x=[0x07], y=[0x08]
 ```
 
 ### `0x31` — `LABEL_6232`
@@ -8197,7 +8197,7 @@ Defined at `src/levels/_unified/prison/dos__post_DEDUP_PRISON_5B_017.inc:1`.
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
 call DRAW_SPRITE_CIN_164_167_BY_VAR09
-video type=0, offset=COMMON_VIDEO_244, x=[0x07], y=[0x08], zoom=0x40
+video type=0, offset=COMMON_VIDEO_244, x=[BUDDY_X], y=[BUDDY_Y], zoom=0x40
 ```
 
 ### `0x32` — `LABEL_5FFA`
@@ -8227,7 +8227,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 ```
 call LABEL_634D
 sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_076, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_076, x=[0x07], y=[0x08]
 ```
 
 ### `0x32` — `LABEL_6232`
@@ -8257,7 +8257,7 @@ Defined at `src/levels/_unified/prison/dos__post_DEDUP_PRISON_5B_017.inc:1`.
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
 call DRAW_SPRITE_CIN_164_167_BY_VAR09
-video type=0, offset=COMMON_VIDEO_244, x=[0x07], y=[0x08], zoom=0x40
+video type=0, offset=COMMON_VIDEO_244, x=[BUDDY_X], y=[BUDDY_Y], zoom=0x40
 ```
 
 ### `0x33` — `LABEL_606E`
@@ -8277,7 +8277,7 @@ Defined at `src/levels/_unified/caves/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 ```
 call LABEL_634D
 sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_076, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_076, x=[0x07], y=[0x08]
 ```
 
 ### `0x33` — `LABEL_70AF`
@@ -8286,7 +8286,7 @@ Defined at `src/levels/_unified/caves/amiga__post_COMPUTE_VAR22_AS_VAR40_MINUS_2
 
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
-video type=1, offset=CINEMATIC_033, x=5, y=[0x22], zoom=0x40
+video offset=CINEMATIC_033, x=5, y=[0x22]
 break
 ```
 
@@ -8297,7 +8297,7 @@ Defined at `src/levels/_unified/caves/cart__post_COMPUTE_VAR22_AS_VAR40_MINUS_28
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
 call LABEL_00A7
-video type=1, offset=CINEMATIC_033, x=5, y=[0x22], zoom=0x40
+video offset=CINEMATIC_033, x=5, y=[0x22]
 ```
 
 ### `0x33` — `LABEL_73C9`
@@ -8306,7 +8306,7 @@ Defined at `src/levels/_unified/caves/dos__post_COMPUTE_VAR22_AS_VAR40_MINUS_28.
 
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
-video type=1, offset=CINEMATIC_033, x=5, y=[0x22], zoom=0x40
+video offset=CINEMATIC_033, x=5, y=[0x22]
 break
 ```
 
@@ -8315,9 +8315,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_0E_29.inc:63`.
 
 ```
-video type=1, offset=CINEMATIC_179, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_179, x=[0x78], y=[0x79]
 break
-video type=1, offset=CINEMATIC_180, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_180, x=[0x78], y=[0x79]
 ```
 
 ### `0x34` — `LABEL_1480`
@@ -8325,7 +8325,7 @@ video type=1, offset=CINEMATIC_180, x=[0x78], y=[0x79], zoom=0x40
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_0E_29.inc:82`.
 
 ```
-video type=1, offset=CINEMATIC_142, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_142, x=[0x78], y=[0x79]
 and [0x04], 0x3FFF
 setup channel=0x27, address=LABEL_14DE
 ```
@@ -8335,9 +8335,9 @@ setup channel=0x27, address=LABEL_14DE
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_0E_29.inc:63`.
 
 ```
-video type=1, offset=CINEMATIC_179, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_179, x=[0x78], y=[0x79]
 break
-video type=1, offset=CINEMATIC_180, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_180, x=[0x78], y=[0x79]
 ```
 
 ### `0x34` — `LABEL_15E5`
@@ -8345,7 +8345,7 @@ video type=1, offset=CINEMATIC_180, x=[0x78], y=[0x79], zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_0E_29.inc:82`.
 
 ```
-video type=1, offset=CINEMATIC_142, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_142, x=[0x78], y=[0x79]
 and [0x04], 0x3FFF
 setup channel=0x27, address=LABEL_1649
 ```
@@ -8357,7 +8357,7 @@ Defined at `src/levels/_unified/tank/cart__post_INIT_VARS_50_NEG40_51_32.inc:76`
 ```
 db 0x11
 HANG_DRAW_CIN_089:
-video type=1, offset=CINEMATIC_089, x=[0x0f], y=[0x10], zoom=0x40
+video offset=CINEMATIC_089, x=[0x0f], y=[0x10]
 ```
 
 ### `0x34` — `LABEL_1610`
@@ -8365,9 +8365,9 @@ video type=1, offset=CINEMATIC_089, x=[0x0f], y=[0x10], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_0E_29.inc:63`.
 
 ```
-video type=1, offset=CINEMATIC_179, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_179, x=[0x78], y=[0x79]
 break
-video type=1, offset=CINEMATIC_180, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_180, x=[0x78], y=[0x79]
 ```
 
 ### `0x34` — `LABEL_1640`
@@ -8375,7 +8375,7 @@ video type=1, offset=CINEMATIC_180, x=[0x78], y=[0x79], zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_0E_29.inc:82`.
 
 ```
-video type=1, offset=CINEMATIC_142, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_142, x=[0x78], y=[0x79]
 and [0x04], 0x3FFF
 setup channel=0x27, address=LABEL_169E
 ```
@@ -8385,7 +8385,7 @@ setup channel=0x27, address=LABEL_169E
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_0E_29.inc:218`.
 
 ```
-video type=1, offset=CINEMATIC_187, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_187, x=[0x78], y=[0x79]
 mov [PAUSE_SLICES], 0x0008
 break
 ```
@@ -8395,7 +8395,7 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_0E_29.inc:217`.
 
 ```
-video type=1, offset=CINEMATIC_187, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_187, x=[0x78], y=[0x79]
 mov [PAUSE_SLICES], 0x0008
 break
 ```
@@ -8436,7 +8436,7 @@ Defined at `src/levels/_unified/caves/amiga__post_COMPUTE_VAR22_AS_VAR40_MINUS_2
 
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
-video type=1, offset=CINEMATIC_033, x=315, y=[0x22], zoom=0x40
+video offset=CINEMATIC_033, x=315, y=[0x22]
 break
 ```
 
@@ -8456,7 +8456,7 @@ Defined at `src/levels/_unified/caves/dos__post_COMPUTE_VAR22_AS_VAR40_MINUS_28.
 
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
-video type=1, offset=CINEMATIC_033, x=315, y=[0x22], zoom=0x40
+video offset=CINEMATIC_033, x=315, y=[0x22]
 break
 ```
 
@@ -8465,9 +8465,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:153`.
 
 ```
-video type=1, offset=CINEMATIC_403, x=169, y=94
+video offset=CINEMATIC_403, x=169, y=94
 break
-video type=1, offset=CINEMATIC_404, x=169, y=94
+video offset=CINEMATIC_404, x=169, y=94
 ```
 
 ### `0x34` — `LABEL_CB57`
@@ -8485,9 +8485,9 @@ call DRAW_CIN_SEQ_402_402_402_AT_CAED
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:153`.
 
 ```
-video type=1, offset=CINEMATIC_424, x=169, y=94
+video offset=CINEMATIC_424, x=169, y=94
 break
-video type=1, offset=CINEMATIC_425, x=169, y=94
+video offset=CINEMATIC_425, x=169, y=94
 ```
 
 ### `0x34` — `LABEL_CF7F`
@@ -8495,9 +8495,9 @@ video type=1, offset=CINEMATIC_425, x=169, y=94
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:179`.
 
 ```
-video type=1, offset=CINEMATIC_424, x=169, y=94
+video offset=CINEMATIC_424, x=169, y=94
 break
-video type=1, offset=CINEMATIC_425, x=169, y=94
+video offset=CINEMATIC_425, x=169, y=94
 ```
 
 ### `0x34` — `LABEL_CFFD`
@@ -8586,7 +8586,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN489_AT_X21_Y27_ZOOM_40.
 
 ```
 jne [0x13], 0x83, LABEL_3E85
-video type=1, offset=CINEMATIC_470, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_470, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -8645,7 +8645,7 @@ killChannel
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAR01_TO_E.inc:19`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe7]
 break
 setPalette 0x0D
 ```
@@ -8665,7 +8665,7 @@ LABEL_1C78:
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAR01_TO_E.inc:19`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe7]
 break
 setPalette 0x0D
 ```
@@ -8675,7 +8675,7 @@ setPalette 0x0D
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAR01_TO_E.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe8]
 break
 play id=0x0052, freq=0x14, vol=0x40, channel=0x02
 ```
@@ -8685,7 +8685,7 @@ play id=0x0052, freq=0x14, vol=0x40, channel=0x02
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VAR01_TO_E.inc:19`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe7]
 break
 setPalette 0x0D
 ```
@@ -8697,7 +8697,7 @@ Defined at `src/levels/_unified/prison/amiga__post_FOLD_BODY_144B_C55279EA.inc:1
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_004, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_004, x=[0x24], y=[0x25]
 ```
 
 ### `0x36` — `LABEL_1E39`
@@ -8706,7 +8706,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:11
 
 ```
 call INCREMENT_VAR27_AND_DISPATCH
-video type=1, offset=CINEMATIC_016, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_016, x=[0x24], y=[0x25]
 break
 ```
 
@@ -8716,7 +8716,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:22`.
 
 ```
 call LABEL_570E
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 break
 ```
 
@@ -8725,9 +8725,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VARE6_TO_1E.inc:156`.
 
 ```
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_280, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_284, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_279, x=65506, y=114
+video offset=CINEMATIC_280, x=65506, y=114
+video offset=CINEMATIC_284, x=65506, y=114
 ```
 
 ### `0x36` — `LABEL_27B9`
@@ -8736,8 +8736,8 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_EB_EC_ED.inc:38`.
 
 ```
 break
-jg [0x01], 0xA7, LABEL_27B9
-jl [0x02], 0xAA, LABEL_27B9
+jg [HERO_X], 0xA7, LABEL_27B9
+jl [HERO_Y], 0xAA, LABEL_27B9
 ```
 
 ### `0x36` — `LABEL_2955`
@@ -8746,8 +8746,8 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_EB_EC_ED.inc:50`.
 
 ```
 break
-jg [0x01], 0xA7, LABEL_2955
-jl [0x02], 0xAA, LABEL_2955
+jg [HERO_X], 0xA7, LABEL_2955
+jl [HERO_Y], 0xAA, LABEL_2955
 ```
 
 ### `0x36` — `LABEL_298E`
@@ -8756,8 +8756,8 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_EB_EC_ED.inc:50`.
 
 ```
 break
-jg [0x01], 0xA7, LABEL_298E
-jl [0x02], 0xAA, LABEL_298E
+jg [HERO_X], 0xA7, LABEL_298E
+jl [HERO_Y], 0xAA, LABEL_298E
 ```
 
 ### `0x36` — `LABEL_324A`
@@ -8825,7 +8825,7 @@ jl [0x74], 0x4000, LABEL_4B74
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:477`.
 
 ```
-video type=1, offset=CINEMATIC_572, x=160, y=100
+video offset=CINEMATIC_572, x=160, y=100
 break
 jne [0x6C], 0x03E8, LABEL_C5ED
 ```
@@ -8835,7 +8835,7 @@ jne [0x6C], 0x03E8, LABEL_C5ED
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:503`.
 
 ```
-video type=1, offset=CINEMATIC_582, x=160, y=100
+video offset=CINEMATIC_582, x=160, y=100
 break
 jne [0x6C], 0x03E8, LABEL_CA62
 ```
@@ -8845,7 +8845,7 @@ jne [0x6C], 0x03E8, LABEL_CA62
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:502`.
 
 ```
-video type=1, offset=CINEMATIC_593, x=160, y=100
+video offset=CINEMATIC_593, x=160, y=100
 break
 jne [0x6C], 0x03E8, LABEL_CA7D
 ```
@@ -8915,9 +8915,9 @@ add [0xF8], 0x0001
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:462`.
 
 ```
-video type=1, offset=CINEMATIC_380, x=46, y=65
-video type=1, offset=CINEMATIC_631, x=268, y=18, zoom=0x40
-video type=1, offset=CINEMATIC_632, x=177, y=18
+video offset=CINEMATIC_380, x=46, y=65
+video offset=CINEMATIC_631, x=268, y=18
+video offset=CINEMATIC_632, x=177, y=18
 ```
 
 ### `0x37` — `LABEL_CA44`
@@ -8925,9 +8925,9 @@ video type=1, offset=CINEMATIC_632, x=177, y=18
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:488`.
 
 ```
-video type=1, offset=CINEMATIC_400, x=46, y=65
-video type=1, offset=CINEMATIC_644, x=268, y=18, zoom=0x40
-video type=1, offset=CINEMATIC_404, x=177, y=18
+video offset=CINEMATIC_400, x=46, y=65
+video offset=CINEMATIC_644, x=268, y=18
+video offset=CINEMATIC_404, x=177, y=18
 ```
 
 ### `0x37` — `LABEL_CA5F`
@@ -8935,9 +8935,9 @@ video type=1, offset=CINEMATIC_404, x=177, y=18
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:487`.
 
 ```
-video type=1, offset=CINEMATIC_401, x=46, y=65
-video type=1, offset=CINEMATIC_653, x=268, y=18, zoom=0x40
-video type=1, offset=CINEMATIC_654, x=177, y=18
+video offset=CINEMATIC_401, x=46, y=65
+video offset=CINEMATIC_653, x=268, y=18
+video offset=CINEMATIC_654, x=177, y=18
 ```
 
 ### `0x38` — `LABEL_0507`
@@ -8946,7 +8946,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_3.inc:127`
 
 ```
 break
-jl [0x01], 0xE4, LABEL_0507
+jl [HERO_X], 0xE4, LABEL_0507
 bankSwitch 5;  Tank in the Battle Arena
 ```
 
@@ -8967,7 +8967,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAREF_TO_5.inc:79`.
 ```
 je [0xB6], 0x00, KILL_CHAN_AT_0161
 jne [HACK_VAR_67], [0xB6], KILL_CHAN_AT_0161
-jl [0x01], 0x0148, LABEL_18A1
+jl [HERO_X], 0x0148, LABEL_18A1
 ```
 
 ### `0x38` — `LABEL_1A04`
@@ -8977,7 +8977,7 @@ Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAREF_TO_5.inc:84`.
 ```
 je [0xB6], 0x00, KILL_CHAN_AT_01FB
 jne [HACK_VAR_67], [0xB6], KILL_CHAN_AT_01FB
-jl [0x01], 0x0148, LABEL_1A24
+jl [HERO_X], 0x0148, LABEL_1A24
 ```
 
 ### `0x38` — `LABEL_1A45`
@@ -8993,8 +8993,8 @@ db 0x11
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_1E.inc:91`.
 
 ```
-video type=1, offset=CINEMATIC_261, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_262, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_261, x=65506, y=114
+video offset=CINEMATIC_262, x=65506, y=114
 break
 ```
 
@@ -9003,8 +9003,8 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE6_TO_1E.inc:91`.
 
 ```
-video type=1, offset=CINEMATIC_278, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_278, x=65506, y=114
+video offset=CINEMATIC_279, x=65506, y=114
 break
 ```
 
@@ -9013,8 +9013,8 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VARE6_TO_1E.inc:91`.
 
 ```
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_280, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_279, x=65506, y=114
+video offset=CINEMATIC_280, x=65506, y=114
 break
 ```
 
@@ -9023,9 +9023,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_1E.inc:251`.
 
 ```
-video type=1, offset=CINEMATIC_261, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_262, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_268, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_261, x=65506, y=114
+video offset=CINEMATIC_262, x=65506, y=114
+video offset=CINEMATIC_268, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_210D`
@@ -9033,9 +9033,9 @@ video type=1, offset=CINEMATIC_268, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE6_TO_1E.inc:251`.
 
 ```
-video type=1, offset=CINEMATIC_278, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_285, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_278, x=65506, y=114
+video offset=CINEMATIC_279, x=65506, y=114
+video offset=CINEMATIC_285, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_2146`
@@ -9043,9 +9043,9 @@ video type=1, offset=CINEMATIC_285, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VARE6_TO_1E.inc:251`.
 
 ```
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_280, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_286, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_279, x=65506, y=114
+video offset=CINEMATIC_280, x=65506, y=114
+video offset=CINEMATIC_286, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_234D`
@@ -9063,9 +9063,9 @@ call LABEL_23AC
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_68_69_6B.inc:100`.
 
 ```
-jg [0x02], 0x46, LABEL_2505
-jl [0x01], 0xC2, LABEL_2505
-jg [0x01], 0xD0, LABEL_24FB
+jg [HERO_Y], 0x46, LABEL_2505
+jl [HERO_X], 0xC2, LABEL_2505
+jg [HERO_X], 0xD0, LABEL_24FB
 ```
 
 ### `0x38` — `LABEL_2511`
@@ -9073,9 +9073,9 @@ jg [0x01], 0xD0, LABEL_24FB
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_68_69_6B.inc:100`.
 
 ```
-jg [0x02], 0x46, LABEL_253E
-jl [0x01], 0xC2, LABEL_253E
-jg [0x01], 0xD0, LABEL_2534
+jg [HERO_Y], 0x46, LABEL_253E
+jl [HERO_X], 0xC2, LABEL_253E
+jg [HERO_X], 0xD0, LABEL_2534
 ```
 
 ### `0x38` — `LABEL_26EE`
@@ -9083,9 +9083,9 @@ jg [0x01], 0xD0, LABEL_2534
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_68_69_6B.inc:417`.
 
 ```
-video type=1, offset=CINEMATIC_438, x=[0x01], y=[0x1a], zoom=0x40
+video offset=CINEMATIC_438, x=[HERO_X], y=[0x1a]
 break
-video type=1, offset=CINEMATIC_439, x=[0x01], y=[0x1a], zoom=0x40
+video offset=CINEMATIC_439, x=[HERO_X], y=[0x1a]
 ```
 
 ### `0x38` — `LABEL_2879`
@@ -9093,9 +9093,9 @@ video type=1, offset=CINEMATIC_439, x=[0x01], y=[0x1a], zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_68_69_6B.inc:427`.
 
 ```
-video type=1, offset=CINEMATIC_460, x=[0x01], y=[0x1a], zoom=0x40
+video offset=CINEMATIC_460, x=[HERO_X], y=[0x1a]
 break
-video type=1, offset=CINEMATIC_461, x=[0x01], y=[0x1a], zoom=0x40
+video offset=CINEMATIC_461, x=[HERO_X], y=[0x1a]
 ```
 
 ### `0x38` — `LABEL_28B2`
@@ -9113,7 +9113,7 @@ jne [0x2F], 0x00, DISPATCH_VAR2F_STATE
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VAR01_TO_E.inc:19`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe7]
 break
 setPalette 0x0D
 ```
@@ -9133,7 +9133,7 @@ LABEL_1C78:
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAR01_TO_E.inc:19`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe7]
 break
 setPalette 0x0D
 ```
@@ -9143,7 +9143,7 @@ setPalette 0x0D
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VAR01_TO_E.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe8]
 break
 play id=0x0052, freq=0x14, vol=0x40, channel=0x02
 ```
@@ -9153,7 +9153,7 @@ play id=0x0052, freq=0x14, vol=0x40, channel=0x02
 Defined at `src/levels/_unified/caves/dos__post_INLINE_SET_VAR01_TO_E.inc:19`.
 
 ```
-video type=1, offset=CINEMATIC_008, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_008, x=160, y=[0xe7]
 break
 setPalette 0x0D
 ```
@@ -9165,7 +9165,7 @@ Defined at `src/levels/_unified/prison/amiga__post_FOLD_BODY_144B_C55279EA.inc:1
 ```
 call INCREMENT_VAR27_AND_DISPATCH
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_004, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_004, x=[0x24], y=[0x25]
 ```
 
 ### `0x39` — `LABEL_276B`
@@ -9174,8 +9174,8 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_EB_EC_ED.inc:10`.
 
 ```
 break
-jl [0x01], 0x7A, LABEL_276B
-jg [0x01], 0xA1, LABEL_276B
+jl [HERO_X], 0x7A, LABEL_276B
+jg [HERO_X], 0xA1, LABEL_276B
 ```
 
 ### `0x39` — `LABEL_278C`
@@ -9184,8 +9184,8 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_EB_EC_ED.inc:21`.
 
 ```
 break
-jl [0x02], 0x46, LABEL_278C
-mov [0x02], 0x006E
+jl [HERO_Y], 0x46, LABEL_278C
+mov [HERO_Y], 0x006E
 ```
 
 ### `0x39` — `LABEL_279B`
@@ -9194,8 +9194,8 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_EB_EC_ED.inc:29`.
 
 ```
 break
-jl [0x02], 0x64, LABEL_279B
-mov [0x02], 0x0094
+jl [HERO_Y], 0x64, LABEL_279B
+mov [HERO_Y], 0x0094
 ```
 
 ### `0x39` — `LABEL_28F6`
@@ -9214,8 +9214,8 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_EB_EC_ED.inc:27`.
 
 ```
 break
-jl [0x02], 0x46, LABEL_2928
-mov [0x02], 0x006E
+jl [HERO_Y], 0x46, LABEL_2928
+mov [HERO_Y], 0x006E
 ```
 
 ### `0x39` — `LABEL_292F`
@@ -9224,8 +9224,8 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_EB_EC_ED.inc:10`.
 
 ```
 break
-jl [0x01], 0xA1, LABEL_2941
-jl [0x02], 0x96, LABEL_2941
+jl [HERO_X], 0xA1, LABEL_2941
+jl [HERO_Y], 0x96, LABEL_2941
 ```
 
 ### `0x39` — `LABEL_2937`
@@ -9234,8 +9234,8 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_EB_EC_ED.inc:35`.
 
 ```
 break
-jl [0x02], 0x64, LABEL_2937
-mov [0x02], 0x0094
+jl [HERO_Y], 0x64, LABEL_2937
+mov [HERO_Y], 0x0094
 ```
 
 ### `0x39` — `LABEL_2961`
@@ -9244,8 +9244,8 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_EB_EC_ED.inc:27`.
 
 ```
 break
-jl [0x02], 0x46, LABEL_2961
-mov [0x02], 0x006E
+jl [HERO_Y], 0x46, LABEL_2961
+mov [HERO_Y], 0x006E
 ```
 
 ### `0x39` — `LABEL_2970`
@@ -9303,9 +9303,9 @@ jl [0xF0], 0x32, LABEL_4A04
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_1E.inc:204`.
 
 ```
-video type=1, offset=CINEMATIC_261, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_262, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_267, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_261, x=65506, y=114
+video offset=CINEMATIC_262, x=65506, y=114
+video offset=CINEMATIC_267, x=65506, y=114
 ```
 
 ### `0x3A` — `LABEL_2069`
@@ -9313,9 +9313,9 @@ video type=1, offset=CINEMATIC_267, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE6_TO_1E.inc:204`.
 
 ```
-video type=1, offset=CINEMATIC_278, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_284, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_278, x=65506, y=114
+video offset=CINEMATIC_279, x=65506, y=114
+video offset=CINEMATIC_284, x=65506, y=114
 ```
 
 ### `0x3A` — `LABEL_20A2`
@@ -9373,9 +9373,9 @@ and [0xF8], 0x0001
 Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_3.inc:114`.
 
 ```
-video type=1, offset=CINEMATIC_437, x=109, y=188
-video type=1, offset=CINEMATIC_338, x=32, y=141
-video type=1, offset=CINEMATIC_412, x=78, y=110
+video offset=CINEMATIC_437, x=109, y=188
+video offset=CINEMATIC_338, x=32, y=141
+video offset=CINEMATIC_412, x=78, y=110
 ```
 
 ### `0x3B` — `LABEL_04F8`
@@ -9383,8 +9383,8 @@ video type=1, offset=CINEMATIC_412, x=78, y=110
 Defined at `src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:472`.
 
 ```
-video type=1, offset=CINEMATIC_153, x=[0x6f], y=[0x6c], zoom=[0x6a]
-video type=1, offset=CINEMATIC_154, x=[0x6f], y=[0x6c], zoom=[0x6a]
+video offset=CINEMATIC_153, x=[0x6f], y=[0x6c], zoom=[0x6a]
+video offset=CINEMATIC_154, x=[0x6f], y=[0x6c], zoom=[0x6a]
 break
 ```
 
@@ -9393,9 +9393,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_ADD_VAR11_TO_VAR34.inc:136`.
 
 ```
-video type=1, offset=CINEMATIC_212, x=160, y=19
+video offset=CINEMATIC_212, x=160, y=19
 break
-jl [0x02], 0x64, LABEL_783B
+jl [HERO_Y], 0x64, LABEL_783B
 ```
 
 ### `0x3B` — `LABEL_7B10`
@@ -9403,9 +9403,9 @@ jl [0x02], 0x64, LABEL_783B
 Defined at `src/levels/_unified/caves/cart__post_ADD_VAR11_TO_VAR34.inc:145`.
 
 ```
-video type=1, offset=CINEMATIC_229, x=160, y=19
+video offset=CINEMATIC_229, x=160, y=19
 break
-jl [0x02], 0x64, LABEL_7B10
+jl [HERO_Y], 0x64, LABEL_7B10
 ```
 
 ### `0x3B` — `LABEL_7B96`
@@ -9413,7 +9413,7 @@ jl [0x02], 0x64, LABEL_7B10
 Defined at `src/levels/_unified/caves/dos__post_ADD_VAR11_TO_VAR34.inc:137`.
 
 ```
-video type=1, offset=CINEMATIC_229, x=160, y=19
+video offset=CINEMATIC_229, x=160, y=19
 call LABEL_2BCB
 break
 ```
@@ -9424,7 +9424,7 @@ Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:193`.
 
 ```
 jg [0x49], 0x0100, LABEL_C32C
-video type=1, offset=CINEMATIC_592, x=160, y=100
+video offset=CINEMATIC_592, x=160, y=100
 break
 ```
 
@@ -9434,7 +9434,7 @@ Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:206`.
 
 ```
 jg [0x49], 0x0100, LABEL_C388
-video type=1, offset=CINEMATIC_628, x=160, y=100
+video offset=CINEMATIC_628, x=160, y=100
 break
 ```
 
@@ -9443,9 +9443,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:218`.
 
 ```
-video type=1, offset=CINEMATIC_630, x=160, y=100
-jl [0x02], 0x96, LABEL_C374
-jl [0x01], 0x9B, LABEL_C374
+video offset=CINEMATIC_630, x=160, y=100
+jl [HERO_Y], 0x96, LABEL_C374
+jl [HERO_X], 0x9B, LABEL_C374
 ```
 
 ### `0x3B` — `LABEL_C391`
@@ -9453,9 +9453,9 @@ jl [0x01], 0x9B, LABEL_C374
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:240`.
 
 ```
-jg [0x02], 0x78, LABEL_C3B8
-jg [0x01], 0x82, LABEL_C3AD
-video type=1, offset=CINEMATIC_380, x=97, y=32
+jg [HERO_Y], 0x78, LABEL_C3B8
+jg [HERO_X], 0x82, LABEL_C3AD
+video offset=CINEMATIC_380, x=97, y=32
 ```
 
 ### `0x3B` — `LABEL_C3C1`
@@ -9463,9 +9463,9 @@ video type=1, offset=CINEMATIC_380, x=97, y=32
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:262`.
 
 ```
-video type=1, offset=CINEMATIC_378, x=153, y=108
-video type=1, offset=CINEMATIC_379, x=192, y=140
-jg [0x02], 0x96, LABEL_C3DF
+video offset=CINEMATIC_378, x=153, y=108
+video offset=CINEMATIC_379, x=192, y=140
+jg [HERO_Y], 0x96, LABEL_C3DF
 ```
 
 ### `0x3B` — `LABEL_C3F4`
@@ -9473,9 +9473,9 @@ jg [0x02], 0x96, LABEL_C3DF
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:283`.
 
 ```
-jg [0x01], 0x46, LABEL_C405
-video type=1, offset=CINEMATIC_380, x=29, y=142
-video type=1, offset=CINEMATIC_380, x=39, y=123
+jg [HERO_X], 0x46, LABEL_C405
+video offset=CINEMATIC_380, x=29, y=142
+video offset=CINEMATIC_380, x=39, y=123
 ```
 
 ### `0x3B` — `LABEL_C433`
@@ -9483,9 +9483,9 @@ video type=1, offset=CINEMATIC_380, x=39, y=123
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:308`.
 
 ```
-video type=1, offset=CINEMATIC_580, x=85, y=105
-video type=1, offset=CINEMATIC_382, x=102, y=99
-video type=1, offset=CINEMATIC_382, x=94, y=88
+video offset=CINEMATIC_580, x=85, y=105
+video offset=CINEMATIC_382, x=102, y=99
+video offset=CINEMATIC_382, x=94, y=88
 ```
 
 ### `0x3B` — `LABEL_C497`
@@ -9493,9 +9493,9 @@ video type=1, offset=CINEMATIC_382, x=94, y=88
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:342`.
 
 ```
-video type=1, offset=CINEMATIC_381, x=22, y=124
-video type=1, offset=CINEMATIC_383, x=98, y=107
-video type=1, offset=CINEMATIC_580, x=117, y=74
+video offset=CINEMATIC_381, x=22, y=124
+video offset=CINEMATIC_383, x=98, y=107
+video offset=CINEMATIC_580, x=117, y=74
 ```
 
 ### `0x3B` — `LABEL_C4D5`
@@ -9503,9 +9503,9 @@ video type=1, offset=CINEMATIC_580, x=117, y=74
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:362`.
 
 ```
-video type=1, offset=CINEMATIC_437, x=286, y=27, zoom=0x40
-video type=1, offset=CINEMATIC_709, x=66, y=143
-jg [0x02], 0x78, LABEL_C51A
+video offset=CINEMATIC_437, x=286, y=27
+video offset=CINEMATIC_709, x=66, y=143
+jg [HERO_Y], 0x78, LABEL_C51A
 ```
 
 ### `0x3B` — `LABEL_C51F`
@@ -9513,9 +9513,9 @@ jg [0x02], 0x78, LABEL_C51A
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:389`.
 
 ```
-jl [0x02], 0x64, LABEL_C557
-jg [0x01], 0x5F, LABEL_C532
-video type=1, offset=CINEMATIC_378, x=65, y=107
+jl [HERO_Y], 0x64, LABEL_C557
+jg [HERO_X], 0x5F, LABEL_C532
+video offset=CINEMATIC_378, x=65, y=107
 ```
 
 ### `0x3B` — `LABEL_C560`
@@ -9523,9 +9523,9 @@ video type=1, offset=CINEMATIC_378, x=65, y=107
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:419`.
 
 ```
-jg [0x02], 0x78, LABEL_C5A0
-jg [0x01], 0xD1, LABEL_C581
-jl [0x01], 0x69, LABEL_C5B5
+jg [HERO_Y], 0x78, LABEL_C5A0
+jg [HERO_X], 0xD1, LABEL_C581
+jl [HERO_X], 0x69, LABEL_C5B5
 ```
 
 ### `0x3B` — `LABEL_C5BA`
@@ -9533,9 +9533,9 @@ jl [0x01], 0x69, LABEL_C5B5
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:452`.
 
 ```
-video type=1, offset=CINEMATIC_587, x=223, y=114
-video type=1, offset=CINEMATIC_384, x=160, y=110
-video type=1, offset=CINEMATIC_384, x=62, y=123
+video offset=CINEMATIC_587, x=223, y=114
+video offset=CINEMATIC_384, x=160, y=110
+video offset=CINEMATIC_384, x=62, y=123
 ```
 
 ### `0x3B` — `LABEL_C726`
@@ -9543,8 +9543,8 @@ video type=1, offset=CINEMATIC_384, x=62, y=123
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:580`.
 
 ```
-video type=1, offset=CINEMATIC_437, x=104, y=43
-video type=1, offset=CINEMATIC_437, x=201, y=45
+video offset=CINEMATIC_437, x=104, y=43
+video offset=CINEMATIC_437, x=201, y=45
 break
 ```
 
@@ -9553,9 +9553,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:586`.
 
 ```
-video type=1, offset=CINEMATIC_437, x=104, y=40
-video type=1, offset=CINEMATIC_437, x=149, y=32
-video type=1, offset=CINEMATIC_437, x=194, y=41
+video offset=CINEMATIC_437, x=104, y=40
+video offset=CINEMATIC_437, x=149, y=32
+video offset=CINEMATIC_437, x=194, y=41
 ```
 
 ### `0x3B` — `LABEL_C751`
@@ -9564,7 +9564,7 @@ Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:194`.
 
 ```
 jg [0x49], 0x0100, LABEL_C760
-video type=1, offset=CINEMATIC_603, x=160, y=100
+video offset=CINEMATIC_603, x=160, y=100
 break
 ```
 
@@ -9574,7 +9574,7 @@ Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:207`.
 
 ```
 jg [0x49], 0x0100, LABEL_C7BC
-video type=1, offset=CINEMATIC_641, x=160, y=100
+video offset=CINEMATIC_641, x=160, y=100
 break
 ```
 
@@ -9584,7 +9584,7 @@ Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:194`.
 
 ```
 jg [0x49], 0x0100, LABEL_C77F
-video type=1, offset=CINEMATIC_613, x=160, y=100
+video offset=CINEMATIC_613, x=160, y=100
 break
 ```
 
@@ -9594,7 +9594,7 @@ Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:207`.
 
 ```
 jg [0x49], 0x0100, LABEL_C7DB
-video type=1, offset=CINEMATIC_650, x=160, y=100
+video offset=CINEMATIC_650, x=160, y=100
 break
 ```
 
@@ -9603,9 +9603,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:219`.
 
 ```
-video type=1, offset=CINEMATIC_643, x=160, y=100
-jl [0x02], 0x96, LABEL_C7A8
-jl [0x01], 0x9B, LABEL_C7A8
+video offset=CINEMATIC_643, x=160, y=100
+jl [HERO_Y], 0x96, LABEL_C7A8
+jl [HERO_X], 0x9B, LABEL_C7A8
 ```
 
 ### `0x3B` — `LABEL_C7B3`
@@ -9613,9 +9613,9 @@ jl [0x01], 0x9B, LABEL_C7A8
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:219`.
 
 ```
-video type=1, offset=CINEMATIC_652, x=160, y=100
-jl [0x02], 0x96, LABEL_C7C7
-jl [0x01], 0x9B, LABEL_C7C7
+video offset=CINEMATIC_652, x=160, y=100
+jl [HERO_Y], 0x96, LABEL_C7C7
+jl [HERO_X], 0x9B, LABEL_C7C7
 ```
 
 ### `0x3B` — `LABEL_C7C5`
@@ -9623,9 +9623,9 @@ jl [0x01], 0x9B, LABEL_C7C7
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:241`.
 
 ```
-jg [0x02], 0x78, LABEL_C7EC
-jg [0x01], 0x82, LABEL_C7E1
-video type=1, offset=CINEMATIC_400, x=97, y=32
+jg [HERO_Y], 0x78, LABEL_C7EC
+jg [HERO_X], 0x82, LABEL_C7E1
+video offset=CINEMATIC_400, x=97, y=32
 ```
 
 ### `0x3B` — `LABEL_C7E4`
@@ -9633,9 +9633,9 @@ video type=1, offset=CINEMATIC_400, x=97, y=32
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:241`.
 
 ```
-jg [0x02], 0x78, LABEL_C80B
-jg [0x01], 0x82, LABEL_C800
-video type=1, offset=CINEMATIC_401, x=97, y=32
+jg [HERO_Y], 0x78, LABEL_C80B
+jg [HERO_X], 0x82, LABEL_C800
+video offset=CINEMATIC_401, x=97, y=32
 ```
 
 ### `0x3B` — `LABEL_C7F5`
@@ -9643,9 +9643,9 @@ video type=1, offset=CINEMATIC_401, x=97, y=32
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:263`.
 
 ```
-video type=1, offset=CINEMATIC_398, x=153, y=108
-video type=1, offset=CINEMATIC_399, x=192, y=140
-jg [0x02], 0x96, LABEL_C817
+video offset=CINEMATIC_398, x=153, y=108
+video offset=CINEMATIC_399, x=192, y=140
+jg [HERO_Y], 0x96, LABEL_C817
 ```
 
 ### `0x3B` — `LABEL_C814`
@@ -9653,9 +9653,9 @@ jg [0x02], 0x96, LABEL_C817
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:263`.
 
 ```
-video type=1, offset=CINEMATIC_399, x=153, y=108
-video type=1, offset=CINEMATIC_400, x=192, y=140
-jg [0x02], 0x96, LABEL_C832
+video offset=CINEMATIC_399, x=153, y=108
+video offset=CINEMATIC_400, x=192, y=140
+jg [HERO_Y], 0x96, LABEL_C832
 ```
 
 ### `0x3B` — `LABEL_C82C`
@@ -9663,9 +9663,9 @@ jg [0x02], 0x96, LABEL_C832
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:285`.
 
 ```
-jg [0x01], 0x46, LABEL_C83D
-video type=1, offset=CINEMATIC_400, x=29, y=142
-video type=1, offset=CINEMATIC_400, x=39, y=123
+jg [HERO_X], 0x46, LABEL_C83D
+video offset=CINEMATIC_400, x=29, y=142
+video offset=CINEMATIC_400, x=39, y=123
 ```
 
 ### `0x3B` — `LABEL_C847`
@@ -9673,9 +9673,9 @@ video type=1, offset=CINEMATIC_400, x=39, y=123
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:284`.
 
 ```
-jg [0x01], 0x46, LABEL_C858
-video type=1, offset=CINEMATIC_401, x=29, y=142
-video type=1, offset=CINEMATIC_401, x=39, y=123
+jg [HERO_X], 0x46, LABEL_C858
+video offset=CINEMATIC_401, x=29, y=142
+video offset=CINEMATIC_401, x=39, y=123
 ```
 
 ### `0x3B` — `LABEL_C86B`
@@ -9683,9 +9683,9 @@ video type=1, offset=CINEMATIC_401, x=39, y=123
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:310`.
 
 ```
-video type=1, offset=CINEMATIC_590, x=85, y=105
-jl [0x01], 0xD7, LABEL_C87B
-jl [0x02], 0x55, LABEL_C8DF
+video offset=CINEMATIC_590, x=85, y=105
+jl [HERO_X], 0xD7, LABEL_C87B
+jl [HERO_Y], 0x55, LABEL_C8DF
 ```
 
 ### `0x3B` — `LABEL_C886`
@@ -9693,9 +9693,9 @@ jl [0x02], 0x55, LABEL_C8DF
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:309`.
 
 ```
-video type=1, offset=CINEMATIC_601, x=85, y=105
-jl [0x01], 0xD7, LABEL_C896
-jl [0x02], 0x55, LABEL_C8FA
+video offset=CINEMATIC_601, x=85, y=105
+jl [HERO_X], 0xD7, LABEL_C896
+jl [HERO_Y], 0x55, LABEL_C8FA
 ```
 
 ### `0x3B` — `LABEL_C8ED`
@@ -9704,7 +9704,7 @@ Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:355`.
 
 ```
 je [0xB0], 0x03, LABEL_C8F9
-jg [0x01], 0x6A, LABEL_C905
+jg [HERO_X], 0x6A, LABEL_C905
 LABEL_C8F9:
 ```
 
@@ -9714,7 +9714,7 @@ Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:354`.
 
 ```
 je [0xB0], 0x03, LABEL_C914
-jg [0x01], 0x6A, LABEL_C920
+jg [HERO_X], 0x6A, LABEL_C920
 LABEL_C914:
 ```
 
@@ -9723,9 +9723,9 @@ LABEL_C914:
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:388`.
 
 ```
-video type=1, offset=CINEMATIC_459, x=286, y=27, zoom=0x40
-video type=1, offset=CINEMATIC_721, x=66, y=143
-jg [0x02], 0x78, LABEL_C98F
+video offset=CINEMATIC_459, x=286, y=27
+video offset=CINEMATIC_721, x=66, y=143
+jg [HERO_Y], 0x78, LABEL_C98F
 ```
 
 ### `0x3B` — `LABEL_C965`
@@ -9733,9 +9733,9 @@ jg [0x02], 0x78, LABEL_C98F
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:387`.
 
 ```
-video type=1, offset=CINEMATIC_458, x=286, y=27, zoom=0x40
-video type=1, offset=CINEMATIC_730, x=66, y=143
-jg [0x02], 0x78, LABEL_C9AA
+video offset=CINEMATIC_458, x=286, y=27
+video offset=CINEMATIC_730, x=66, y=143
+jg [HERO_Y], 0x78, LABEL_C9AA
 ```
 
 ### `0x3B` — `LABEL_C994`
@@ -9743,9 +9743,9 @@ jg [0x02], 0x78, LABEL_C9AA
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:415`.
 
 ```
-jl [0x02], 0x64, LABEL_C9CC
-jg [0x01], 0x5F, LABEL_C9A7
-video type=1, offset=CINEMATIC_398, x=65, y=107
+jl [HERO_Y], 0x64, LABEL_C9CC
+jg [HERO_X], 0x5F, LABEL_C9A7
+video offset=CINEMATIC_398, x=65, y=107
 ```
 
 ### `0x3B` — `LABEL_C9AF`
@@ -9753,9 +9753,9 @@ video type=1, offset=CINEMATIC_398, x=65, y=107
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:414`.
 
 ```
-jl [0x02], 0x64, LABEL_C9E7
-jg [0x01], 0x5F, LABEL_C9C2
-video type=1, offset=CINEMATIC_399, x=65, y=107
+jl [HERO_Y], 0x64, LABEL_C9E7
+jg [HERO_X], 0x5F, LABEL_C9C2
+video offset=CINEMATIC_399, x=65, y=107
 ```
 
 ### `0x3B` — `LABEL_C9D5`
@@ -9763,9 +9763,9 @@ video type=1, offset=CINEMATIC_399, x=65, y=107
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:445`.
 
 ```
-jg [0x02], 0x78, LABEL_CA15
-jg [0x01], 0xD1, LABEL_C9F6
-jl [0x01], 0x69, LABEL_CA2A
+jg [HERO_Y], 0x78, LABEL_CA15
+jg [HERO_X], 0xD1, LABEL_C9F6
+jl [HERO_X], 0x69, LABEL_CA2A
 ```
 
 ### `0x3B` — `LABEL_C9F0`
@@ -9773,9 +9773,9 @@ jl [0x01], 0x69, LABEL_CA2A
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:444`.
 
 ```
-jg [0x02], 0x78, LABEL_CA30
-jg [0x01], 0xD1, LABEL_CA11
-jl [0x01], 0x69, LABEL_CA45
+jg [HERO_Y], 0x78, LABEL_CA30
+jg [HERO_X], 0xD1, LABEL_CA11
+jl [HERO_X], 0x69, LABEL_CA45
 ```
 
 ### `0x3B` — `LABEL_CA2F`
@@ -9783,9 +9783,9 @@ jl [0x01], 0x69, LABEL_CA45
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:478`.
 
 ```
-video type=1, offset=CINEMATIC_598, x=223, y=114
-video type=1, offset=CINEMATIC_405, x=160, y=110
-video type=1, offset=CINEMATIC_405, x=62, y=123
+video offset=CINEMATIC_598, x=223, y=114
+video offset=CINEMATIC_405, x=160, y=110
+video offset=CINEMATIC_405, x=62, y=123
 ```
 
 ### `0x3B` — `LABEL_CA4A`
@@ -9793,9 +9793,9 @@ video type=1, offset=CINEMATIC_405, x=62, y=123
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:477`.
 
 ```
-video type=1, offset=CINEMATIC_608, x=223, y=114
-video type=1, offset=CINEMATIC_405, x=160, y=110
-video type=1, offset=CINEMATIC_405, x=62, y=123
+video offset=CINEMATIC_608, x=223, y=114
+video offset=CINEMATIC_405, x=160, y=110
+video offset=CINEMATIC_405, x=62, y=123
 ```
 
 ### `0x3B` — `LABEL_CBB1`
@@ -9803,8 +9803,8 @@ video type=1, offset=CINEMATIC_405, x=62, y=123
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:611`.
 
 ```
-video type=1, offset=CINEMATIC_459, x=104, y=43
-video type=1, offset=CINEMATIC_459, x=201, y=45
+video offset=CINEMATIC_459, x=104, y=43
+video offset=CINEMATIC_459, x=201, y=45
 break
 ```
 
@@ -9813,9 +9813,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:617`.
 
 ```
-video type=1, offset=CINEMATIC_459, x=104, y=40
-video type=1, offset=CINEMATIC_459, x=149, y=32
-video type=1, offset=CINEMATIC_459, x=194, y=41
+video offset=CINEMATIC_459, x=104, y=40
+video offset=CINEMATIC_459, x=149, y=32
+video offset=CINEMATIC_459, x=194, y=41
 ```
 
 ### `0x3B` — `LABEL_CBC6`
@@ -9823,8 +9823,8 @@ video type=1, offset=CINEMATIC_459, x=194, y=41
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:609`.
 
 ```
-video type=1, offset=CINEMATIC_458, x=104, y=43
-video type=1, offset=CINEMATIC_458, x=201, y=45
+video offset=CINEMATIC_458, x=104, y=43
+video offset=CINEMATIC_458, x=201, y=45
 break
 ```
 
@@ -9833,9 +9833,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:615`.
 
 ```
-video type=1, offset=CINEMATIC_458, x=104, y=40
-video type=1, offset=CINEMATIC_458, x=149, y=32
-video type=1, offset=CINEMATIC_458, x=194, y=41
+video offset=CINEMATIC_458, x=104, y=40
+video offset=CINEMATIC_458, x=149, y=32
+video offset=CINEMATIC_458, x=194, y=41
 ```
 
 ### `0x3B` — `LABEL_CC68`
@@ -9843,9 +9843,9 @@ video type=1, offset=CINEMATIC_458, x=194, y=41
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:335`.
 
 ```
-video type=1, offset=CINEMATIC_338, x=114, y=140
-video type=1, offset=CINEMATIC_276, x=91, y=146
-video type=1, offset=CINEMATIC_338, x=242, y=145
+video offset=CINEMATIC_338, x=114, y=140
+video offset=CINEMATIC_276, x=91, y=146
+video offset=CINEMATIC_338, x=242, y=145
 ```
 
 ### `0x3B` — `LABEL_CC79`
@@ -9853,9 +9853,9 @@ video type=1, offset=CINEMATIC_338, x=242, y=145
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:344`.
 
 ```
-video type=1, offset=CINEMATIC_338, x=181, y=144
-video type=1, offset=CINEMATIC_276, x=121, y=203, zoom=0x40
-video type=1, offset=CINEMATIC_338, x=262, y=145, zoom=0x40
+video offset=CINEMATIC_338, x=181, y=144
+video offset=CINEMATIC_276, x=121, y=203, zoom=0x40
+video offset=CINEMATIC_338, x=262, y=145
 ```
 
 ### `0x3B` — `LABEL_CC9B`
@@ -9863,8 +9863,8 @@ video type=1, offset=CINEMATIC_338, x=262, y=145, zoom=0x40
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:358`.
 
 ```
-video type=1, offset=CINEMATIC_276, x=99, y=160
-video type=1, offset=CINEMATIC_277, x=192, y=168
+video offset=CINEMATIC_276, x=99, y=160
+video offset=CINEMATIC_277, x=192, y=168
 break
 ```
 
@@ -9873,9 +9873,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:366`.
 
 ```
-jg [0x02], 0x65, LABEL_CCC2
-video type=1, offset=CINEMATIC_389, x=112, y=69
-video type=1, offset=CINEMATIC_277, x=37, y=31
+jg [HERO_Y], 0x65, LABEL_CCC2
+video offset=CINEMATIC_389, x=112, y=69
+video offset=CINEMATIC_277, x=37, y=31
 ```
 
 ### `0x3B` — `LABEL_CCCF`
@@ -9883,9 +9883,9 @@ video type=1, offset=CINEMATIC_277, x=37, y=31
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:385`.
 
 ```
-jg [0x02], 0x78, LABEL_CCE1
-video type=1, offset=CINEMATIC_389, x=226, y=87
-video type=1, offset=CINEMATIC_389, x=150, y=27
+jg [HERO_Y], 0x78, LABEL_CCE1
+video offset=CINEMATIC_389, x=226, y=87
+video offset=CINEMATIC_389, x=150, y=27
 ```
 
 ### `0x3B` — `LABEL_CCE5`
@@ -9893,9 +9893,9 @@ video type=1, offset=CINEMATIC_389, x=150, y=27
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:395`.
 
 ```
-video type=1, offset=CINEMATIC_412, x=184, y=143
-video type=1, offset=CINEMATIC_412, x=278, y=150, zoom=0x40
-video type=1, offset=CINEMATIC_412, x=80, y=147
+video offset=CINEMATIC_412, x=184, y=143
+video offset=CINEMATIC_412, x=278, y=150
+video offset=CINEMATIC_412, x=80, y=147
 ```
 
 ### `0x3B` — `LABEL_CCF7`
@@ -9903,8 +9903,8 @@ video type=1, offset=CINEMATIC_412, x=80, y=147
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:404`.
 
 ```
-video type=1, offset=CINEMATIC_412, x=79, y=119
-video type=1, offset=CINEMATIC_412, x=279, y=117, zoom=0x40
+video offset=CINEMATIC_412, x=79, y=119
+video offset=CINEMATIC_412, x=279, y=117
 break
 ```
 
@@ -9913,9 +9913,9 @@ break
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:412`.
 
 ```
-video type=1, offset=CINEMATIC_412, x=230, y=151
-video type=1, offset=CINEMATIC_412, x=270, y=183, zoom=0x40
-video type=1, offset=CINEMATIC_412, x=77, y=168
+video offset=CINEMATIC_412, x=230, y=151
+video offset=CINEMATIC_412, x=270, y=183
+video offset=CINEMATIC_412, x=77, y=168
 ```
 
 ### `0x3B` — `LABEL_CD25`
@@ -9943,9 +9943,9 @@ and [0xF8], 0x0020
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:336`.
 
 ```
-video type=1, offset=CINEMATIC_359, x=114, y=140
-video type=1, offset=CINEMATIC_297, x=91, y=146
-video type=1, offset=CINEMATIC_359, x=242, y=145
+video offset=CINEMATIC_359, x=114, y=140
+video offset=CINEMATIC_297, x=91, y=146
+video offset=CINEMATIC_359, x=242, y=145
 ```
 
 ### `0x3B` — `LABEL_D125`
@@ -9953,9 +9953,9 @@ video type=1, offset=CINEMATIC_359, x=242, y=145
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:345`.
 
 ```
-video type=1, offset=CINEMATIC_359, x=181, y=144
-video type=1, offset=CINEMATIC_297, x=121, y=203, zoom=0x40
-video type=1, offset=CINEMATIC_359, x=262, y=145, zoom=0x40
+video offset=CINEMATIC_359, x=181, y=144
+video offset=CINEMATIC_297, x=121, y=203, zoom=0x40
+video offset=CINEMATIC_359, x=262, y=145
 ```
 
 ### `0x3B` — `LABEL_D13D`
@@ -9963,9 +9963,9 @@ video type=1, offset=CINEMATIC_359, x=262, y=145, zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:362`.
 
 ```
-video type=1, offset=CINEMATIC_321, x=114, y=140
-video type=1, offset=CINEMATIC_296, x=91, y=146
-video type=1, offset=CINEMATIC_321, x=242, y=145
+video offset=CINEMATIC_321, x=114, y=140
+video offset=CINEMATIC_296, x=91, y=146
+video offset=CINEMATIC_321, x=242, y=145
 ```
 
 ### `0x3B` — `LABEL_D147`
@@ -9973,8 +9973,8 @@ video type=1, offset=CINEMATIC_321, x=242, y=145
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:359`.
 
 ```
-video type=1, offset=CINEMATIC_297, x=99, y=160
-video type=1, offset=CINEMATIC_298, x=192, y=168
+video offset=CINEMATIC_297, x=99, y=160
+video offset=CINEMATIC_298, x=192, y=168
 break
 ```
 
@@ -9983,9 +9983,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:367`.
 
 ```
-jg [0x02], 0x65, LABEL_D16E
-video type=1, offset=CINEMATIC_410, x=112, y=69
-video type=1, offset=CINEMATIC_298, x=37, y=31
+jg [HERO_Y], 0x65, LABEL_D16E
+video offset=CINEMATIC_410, x=112, y=69
+video offset=CINEMATIC_298, x=37, y=31
 ```
 
 ### `0x3B` — `LABEL_D15E`
@@ -9993,9 +9993,9 @@ video type=1, offset=CINEMATIC_298, x=37, y=31
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:376`.
 
 ```
-video type=1, offset=CINEMATIC_321, x=181, y=144
-video type=1, offset=CINEMATIC_296, x=121, y=203, zoom=0x40
-video type=1, offset=CINEMATIC_321, x=262, y=145, zoom=0x40
+video offset=CINEMATIC_321, x=181, y=144
+video offset=CINEMATIC_296, x=121, y=203, zoom=0x40
+video offset=CINEMATIC_321, x=262, y=145
 ```
 
 ### `0x3B` — `LABEL_D17B`
@@ -10003,9 +10003,9 @@ video type=1, offset=CINEMATIC_321, x=262, y=145, zoom=0x40
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:386`.
 
 ```
-jg [0x02], 0x78, LABEL_D18D
-video type=1, offset=CINEMATIC_410, x=226, y=87
-video type=1, offset=CINEMATIC_410, x=150, y=27
+jg [HERO_Y], 0x78, LABEL_D18D
+video offset=CINEMATIC_410, x=226, y=87
+video offset=CINEMATIC_410, x=150, y=27
 ```
 
 ### `0x3B` — `LABEL_D180`
@@ -10013,9 +10013,9 @@ video type=1, offset=CINEMATIC_410, x=150, y=27
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:390`.
 
 ```
-video type=1, offset=CINEMATIC_296, x=99, y=160
-video type=1, offset=CINEMATIC_297, x=193, y=168
-jl [0x02], 0x8F, LABEL_D192
+video offset=CINEMATIC_296, x=99, y=160
+video offset=CINEMATIC_297, x=193, y=168
+jl [HERO_Y], 0x8F, LABEL_D192
 ```
 
 ### `0x3B` — `LABEL_D191`
@@ -10023,9 +10023,9 @@ jl [0x02], 0x8F, LABEL_D192
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:396`.
 
 ```
-video type=1, offset=CINEMATIC_433, x=184, y=143
-video type=1, offset=CINEMATIC_433, x=278, y=150, zoom=0x40
-video type=1, offset=CINEMATIC_433, x=80, y=147
+video offset=CINEMATIC_433, x=184, y=143
+video offset=CINEMATIC_433, x=278, y=150
+video offset=CINEMATIC_433, x=80, y=147
 ```
 
 ### `0x3B` — `LABEL_D197`
@@ -10033,9 +10033,9 @@ video type=1, offset=CINEMATIC_433, x=80, y=147
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:402`.
 
 ```
-jg [0x02], 0x65, LABEL_D1B1
-video type=1, offset=CINEMATIC_410, x=112, y=69
-video type=1, offset=CINEMATIC_297, x=37, y=31
+jg [HERO_Y], 0x65, LABEL_D1B1
+video offset=CINEMATIC_410, x=112, y=69
+video offset=CINEMATIC_297, x=37, y=31
 ```
 
 ### `0x3B` — `LABEL_D1A3`
@@ -10043,8 +10043,8 @@ video type=1, offset=CINEMATIC_297, x=37, y=31
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:405`.
 
 ```
-video type=1, offset=CINEMATIC_433, x=79, y=119
-video type=1, offset=CINEMATIC_433, x=279, y=117, zoom=0x40
+video offset=CINEMATIC_433, x=79, y=119
+video offset=CINEMATIC_433, x=279, y=117
 break
 ```
 
@@ -10053,9 +10053,9 @@ break
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:413`.
 
 ```
-video type=1, offset=CINEMATIC_433, x=230, y=151
-video type=1, offset=CINEMATIC_433, x=270, y=183, zoom=0x40
-video type=1, offset=CINEMATIC_433, x=77, y=168
+video offset=CINEMATIC_433, x=230, y=151
+video offset=CINEMATIC_433, x=270, y=183
+video offset=CINEMATIC_433, x=77, y=168
 ```
 
 ### `0x3B` — `LABEL_D1B5`
@@ -10063,9 +10063,9 @@ video type=1, offset=CINEMATIC_433, x=77, y=168
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:414`.
 
 ```
-video type=1, offset=CINEMATIC_320, x=160, y=100
-jg [0x01], 0x1C, LABEL_D1C5
-video type=1, offset=CINEMATIC_321, x=65535, y=92, zoom=0x40
+video offset=CINEMATIC_320, x=160, y=100
+jg [HERO_X], 0x1C, LABEL_D1C5
+video offset=CINEMATIC_321, x=65535, y=92
 ```
 
 ### `0x3B` — `LABEL_D1CA`
@@ -10073,8 +10073,8 @@ video type=1, offset=CINEMATIC_321, x=65535, y=92, zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:425`.
 
 ```
-jg [0x02], 0x78, LABEL_D1EA
-video type=1, offset=CINEMATIC_410, x=150, y=27
+jg [HERO_Y], 0x78, LABEL_D1EA
+video offset=CINEMATIC_410, x=150, y=27
 mov [0x46], 0x00C8
 ```
 
@@ -10083,9 +10083,9 @@ mov [0x46], 0x00C8
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:430`.
 
 ```
-video type=1, offset=CINEMATIC_297, x=46, y=139
+video offset=CINEMATIC_297, x=46, y=139
 mov [0x42], 0xF060
-jl [0x01], 0x35, LABEL_D1E3
+jl [HERO_X], 0x35, LABEL_D1E3
 ```
 
 ### `0x3B` — `LABEL_D1E8`
@@ -10103,9 +10103,9 @@ and [0xF8], 0x0020
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:453`.
 
 ```
-video type=1, offset=CINEMATIC_433, x=184, y=143
-video type=1, offset=CINEMATIC_433, x=278, y=150, zoom=0x40
-video type=1, offset=CINEMATIC_433, x=80, y=147
+video offset=CINEMATIC_433, x=184, y=143
+video offset=CINEMATIC_433, x=278, y=150
+video offset=CINEMATIC_433, x=80, y=147
 ```
 
 ### `0x3B` — `LABEL_D228`
@@ -10113,8 +10113,8 @@ video type=1, offset=CINEMATIC_433, x=80, y=147
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:462`.
 
 ```
-video type=1, offset=CINEMATIC_433, x=79, y=119
-video type=1, offset=CINEMATIC_433, x=279, y=117, zoom=0x40
+video offset=CINEMATIC_433, x=79, y=119
+video offset=CINEMATIC_433, x=279, y=117
 break
 ```
 
@@ -10123,9 +10123,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:470`.
 
 ```
-video type=1, offset=CINEMATIC_433, x=230, y=151
-video type=1, offset=CINEMATIC_433, x=270, y=183, zoom=0x40
-video type=1, offset=CINEMATIC_433, x=77, y=168
+video offset=CINEMATIC_433, x=230, y=151
+video offset=CINEMATIC_433, x=270, y=183
+video offset=CINEMATIC_433, x=77, y=168
 ```
 
 ### `0x3B` — `LABEL_D256`
@@ -10133,9 +10133,9 @@ video type=1, offset=CINEMATIC_433, x=77, y=168
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:487`.
 
 ```
-video type=1, offset=CINEMATIC_296, x=46, y=139
+video offset=CINEMATIC_296, x=46, y=139
 mov [0x42], 0xF060
-jl [0x01], 0x35, LABEL_D268
+jl [HERO_X], 0x35, LABEL_D268
 ```
 
 ### `0x3B` — `LABEL_D26D`
@@ -10173,8 +10173,8 @@ selectVideoPage 0xFF
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:88`.
 
 ```
-jle [0x13], 0x01, DRAW_CIN_483__CART__POST_FOLD_BODY_37B_9FD2CEA6
-video type=1, offset=CINEMATIC_484, x=[0x21], y=[0x27], zoom=0x40
+jle [0x13], 0x01, DRAW_CIN_483
+video offset=CINEMATIC_484, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -10264,7 +10264,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_499.inc:34`.
 
 ```
 jne [0x13], 0x73, LABEL_3E2D
-video type=1, offset=CINEMATIC_493, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_493, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -10294,7 +10294,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:301
 
 ```
 jne [0x13], 0x82, LABEL_3F73
-video type=1, offset=CINEMATIC_471, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_471, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -10344,7 +10344,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:316
 
 ```
 jne [0x13], 0x85, LABEL_3F97
-video type=1, offset=CINEMATIC_468, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_468, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -10374,7 +10374,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:321
 
 ```
 jne [0x13], 0x86, LABEL_3FA3
-video type=1, offset=CINEMATIC_467, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_467, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -10394,7 +10394,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:326
 
 ```
 jne [0x13], 0x87, LABEL_3FAF
-video type=1, offset=CINEMATIC_466, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_466, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -10574,7 +10574,7 @@ Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:571`.
 
 ```
 break
-jl [0x02], 0x7E, LABEL_C70E
+jl [HERO_Y], 0x7E, LABEL_C70E
 deleteChannels first=0x14, last=0x16
 ```
 
@@ -10584,7 +10584,7 @@ Defined at `src/levels/_unified/caves/amiga__post_SET_VAR22_TO_00B8.inc:593`.
 
 ```
 break
-jl [0x02], 0x55, LABEL_C742
+jl [HERO_Y], 0x55, LABEL_C742
 deleteChannels first=0x14, last=0x16
 ```
 
@@ -10594,8 +10594,8 @@ Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:600`.
 
 ```
 break
-jl [0x01], 0x42, LABEL_CB8C
-jg [0x01], 0x010A, LABEL_CB8C
+jl [HERO_X], 0x42, LABEL_CB8C
+jg [HERO_X], 0x010A, LABEL_CB8C
 ```
 
 ### `0x3E` — `LABEL_CBA1`
@@ -10604,8 +10604,8 @@ Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:598`.
 
 ```
 break
-jl [0x01], 0x42, LABEL_CBA1
-jg [0x01], 0x010A, LABEL_CBA1
+jl [HERO_X], 0x42, LABEL_CBA1
+jg [HERO_X], 0x010A, LABEL_CBA1
 ```
 
 ### `0x3E` — `LABEL_CBCD`
@@ -10614,8 +10614,8 @@ Defined at `src/levels/_unified/caves/cart__post_SET_VAR22_TO_00B8.inc:624`.
 
 ```
 break
-jg [0x01], 0xDF, LABEL_CBCD
-jl [0x02], 0x55, LABEL_CBCD
+jg [HERO_X], 0xDF, LABEL_CBCD
+jl [HERO_Y], 0x55, LABEL_CBCD
 ```
 
 ### `0x3E` — `LABEL_CBE2`
@@ -10624,8 +10624,8 @@ Defined at `src/levels/_unified/caves/dos__post_SET_VAR22_TO_00B8.inc:622`.
 
 ```
 break
-jg [0x01], 0xDF, LABEL_CBE2
-jl [0x02], 0x55, LABEL_CBE2
+jg [HERO_X], 0xDF, LABEL_CBE2
+jl [HERO_Y], 0x55, LABEL_CBE2
 ```
 
 ### `0x3E` — `LABEL_CBF2`
@@ -10634,8 +10634,8 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:293`.
 
 ```
 break
-jl [0x02], 0x8C, LABEL_CBF2
-add [0x01], 0x000A
+jl [HERO_Y], 0x8C, LABEL_CBF2
+add [HERO_X], 0x000A
 ```
 
 ### `0x3E` — `LABEL_D098`
@@ -10644,8 +10644,8 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:293`.
 
 ```
 break
-jl [0x02], 0x8C, LABEL_D098
-add [0x01], 0x000A
+jl [HERO_Y], 0x8C, LABEL_D098
+add [HERO_X], 0x000A
 ```
 
 ### `0x3E` — `LABEL_D0C1`
@@ -10654,8 +10654,8 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:319`.
 
 ```
 break
-jl [0x02], 0x8C, LABEL_D0C1
-add [0x01], 0x000A
+jl [HERO_Y], 0x8C, LABEL_D0C1
+add [HERO_X], 0x000A
 ```
 
 ### `0x3F` — `LABEL_016F`
@@ -10837,9 +10837,9 @@ mov [0xF8], [HERO_POS_UP_DOWN]
 Defined at `src/levels/_unified/tank/amiga__post_ALTERNATE_VAR06_VAR04_TIMING.inc:43`.
 
 ```
-video type=1, offset=CINEMATIC_169, x=[0x0a], y=100, zoom=0x40
+video offset=CINEMATIC_169, x=[0x0a], y=100
 break
-video type=1, offset=CINEMATIC_169, x=[0x0a], y=100, zoom=0x40
+video offset=CINEMATIC_169, x=[0x0a], y=100
 ```
 
 ### `0x02` — `LABEL_1BDA`
@@ -10897,7 +10897,7 @@ selectVideoPage 0x00
 Defined at `src/levels/_unified/prison/dos__post_INLINE_SET_VARE9_TO_8.inc:60`.
 
 ```
-video type=1, offset=CINEMATIC_322, x=160, y=100
+video offset=CINEMATIC_322, x=160, y=100
 selectVideoPage 0xFF
 break
 ```
@@ -10939,7 +10939,7 @@ Defined at `src/levels/_unified/tank/amiga__post_COPY_VAR62_TO_VAR5F.inc:296`.
 ```
 call LABEL_17CF
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_012, x=160, y=100
+video offset=CINEMATIC_012, x=160, y=100
 ```
 
 ### `0x09` — `LABEL_0E2F`
@@ -10949,7 +10949,7 @@ Defined at `src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:399`.
 ```
 call LABEL_1D17
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_012, x=160, y=100
+video offset=CINEMATIC_012, x=160, y=100
 ```
 
 ### `0x09` — `LABEL_0E32`
@@ -10958,8 +10958,8 @@ Defined at `src/levels/_unified/tank/cart__post_COPY_VAR62_TO_VAR5F.inc:398`.
 
 ```
 break
-video type=1, offset=CINEMATIC_000, x=152, y=5
-video type=1, offset=CINEMATIC_001, x=242, y=65535, zoom=0x40
+video offset=CINEMATIC_000, x=152, y=5
+video offset=CINEMATIC_001, x=242, y=65535
 ```
 
 ### `0x0A` — `LABEL_0101`
@@ -10967,9 +10967,9 @@ video type=1, offset=CINEMATIC_001, x=242, y=65535, zoom=0x40
 Defined at `src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:28`.
 
 ```
-video type=1, offset=CINEMATIC_100, x=81, y=131
+video offset=CINEMATIC_100, x=81, y=131
 break
-video type=1, offset=CINEMATIC_100, x=96, y=121
+video offset=CINEMATIC_100, x=96, y=121
 ```
 
 ### `0x0A` — `LABEL_0113`
@@ -10977,14 +10977,14 @@ video type=1, offset=CINEMATIC_100, x=96, y=121
 Defined at `src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:28`.
 
 ```
-video type=1, offset=CINEMATIC_087, x=81, y=131
+video offset=CINEMATIC_087, x=81, y=131
 break
-video type=1, offset=CINEMATIC_087, x=96, y=121
+video offset=CINEMATIC_087, x=96, y=121
 ```
 
 ### `0x0A` — `LABEL_0114`
 
-Defined at `src/levels/_unified/ending/amiga__post_DRAW_CIN_58_ANIM_LOOP.inc:1`.
+Defined at `src/levels/_unified/ending/post_DRAW_CIN_58_ANIM_LOOP.inc:1`.
 
 ```
 db 0x11
@@ -10995,9 +10995,9 @@ db 0x11
 Defined at `src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:39`.
 
 ```
-video type=1, offset=CINEMATIC_275, x=152, y=101
+video offset=CINEMATIC_275, x=152, y=101
 break
-video type=1, offset=CINEMATIC_275, x=143, y=136
+video offset=CINEMATIC_275, x=143, y=136
 ```
 
 ### `0x0A` — `LABEL_013D`
@@ -11005,9 +11005,9 @@ video type=1, offset=CINEMATIC_275, x=143, y=136
 Defined at `src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:115`.
 
 ```
-video type=1, offset=CINEMATIC_229, x=81, y=131
+video offset=CINEMATIC_229, x=81, y=131
 break
-video type=1, offset=CINEMATIC_229, x=96, y=121
+video offset=CINEMATIC_229, x=96, y=121
 ```
 
 ### `0x0A` — `LABEL_141E`
@@ -11016,8 +11016,8 @@ Defined at `src/levels/_unified/prison/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc
 
 ```
 call LABEL_8789
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 ```
 
 ### `0x0A` — `LABEL_1838`
@@ -11042,7 +11042,7 @@ setup channel=0x16, address=LABEL_19BE
 
 ### `0x0B` — `LABEL_0114`
 
-Defined at `src/levels/_unified/ending/amiga__post_DRAW_CIN_58_ANIM_LOOP.inc:1`.
+Defined at `src/levels/_unified/ending/post_DRAW_CIN_58_ANIM_LOOP.inc:1`.
 
 ```
 db 0x11
@@ -11053,9 +11053,9 @@ db 0x11
 Defined at `src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:39`.
 
 ```
-video type=1, offset=CINEMATIC_275, x=152, y=101
+video offset=CINEMATIC_275, x=152, y=101
 break
-video type=1, offset=CINEMATIC_275, x=143, y=136
+video offset=CINEMATIC_275, x=143, y=136
 ```
 
 ### `0x14` — `LABEL_03ED`
@@ -11454,8 +11454,8 @@ Defined at `src/levels/_unified/tank/amiga__post_COPY_VAR62_TO_VAR5F.inc:377`.
 
 ```
 break
-video type=1, offset=CINEMATIC_135, x=152, y=5
-video type=1, offset=CINEMATIC_066, x=242, y=65535, zoom=0x40
+video offset=CINEMATIC_135, x=152, y=5
+video offset=CINEMATIC_066, x=242, y=65535
 ```
 
 ### `0x26` — `LABEL_0E32`
@@ -11464,8 +11464,8 @@ Defined at `src/levels/_unified/tank/cart__post_COPY_VAR62_TO_VAR5F.inc:398`.
 
 ```
 break
-video type=1, offset=CINEMATIC_000, x=152, y=5
-video type=1, offset=CINEMATIC_001, x=242, y=65535, zoom=0x40
+video offset=CINEMATIC_000, x=152, y=5
+video offset=CINEMATIC_001, x=242, y=65535
 ```
 
 ### `0x26` — `LABEL_0F1E`
@@ -11474,8 +11474,8 @@ Defined at `src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:480`.
 
 ```
 break
-video type=1, offset=CINEMATIC_187, x=152, y=5
-video type=1, offset=CINEMATIC_068, x=242, y=65535, zoom=0x40
+video offset=CINEMATIC_187, x=152, y=5
+video offset=CINEMATIC_068, x=242, y=65535
 ```
 
 ### `0x28` — `LABEL_050E`
@@ -11553,8 +11553,8 @@ play id=0x008C, freq=0x14, vol=0x3F, channel=0x02
 Defined at `src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:472`.
 
 ```
-video type=1, offset=CINEMATIC_153, x=[0x6f], y=[0x6c], zoom=[0x6a]
-video type=1, offset=CINEMATIC_154, x=[0x6f], y=[0x6c], zoom=[0x6a]
+video offset=CINEMATIC_153, x=[0x6f], y=[0x6c], zoom=[0x6a]
+video offset=CINEMATIC_154, x=[0x6f], y=[0x6c], zoom=[0x6a]
 break
 ```
 
@@ -11573,8 +11573,8 @@ mov [0x2A], 0x0017
 Defined at `src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:7`.
 
 ```
-video type=1, offset=CINEMATIC_144, x=160, y=100
-video type=1, offset=CINEMATIC_145, x=160, y=100
+video offset=CINEMATIC_144, x=160, y=100
+video offset=CINEMATIC_145, x=160, y=100
 break
 ```
 
@@ -11583,8 +11583,8 @@ break
 Defined at `src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:7`.
 
 ```
-video type=1, offset=CINEMATIC_120, x=160, y=100
-video type=1, offset=CINEMATIC_121, x=160, y=100
+video offset=CINEMATIC_120, x=160, y=100
+video offset=CINEMATIC_121, x=160, y=100
 break
 ```
 
@@ -11593,9 +11593,9 @@ break
 Defined at `src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:30`.
 
 ```
-video type=1, offset=CINEMATIC_150, x=110, y=150
+video offset=CINEMATIC_150, x=110, y=150
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_151, x=160, y=100
+video offset=CINEMATIC_151, x=160, y=100
 ```
 
 ### `0x34` — `LABEL_064D`
@@ -11603,9 +11603,9 @@ video type=1, offset=CINEMATIC_151, x=160, y=100
 Defined at `src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:40`.
 
 ```
-video type=1, offset=CINEMATIC_150, x=155, y=151
+video offset=CINEMATIC_150, x=155, y=151
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_152, x=160, y=100
+video offset=CINEMATIC_152, x=160, y=100
 ```
 
 ### `0x34` — `LABEL_0660`
@@ -11613,9 +11613,9 @@ video type=1, offset=CINEMATIC_152, x=160, y=100
 Defined at `src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:30`.
 
 ```
-video type=1, offset=CINEMATIC_126, x=110, y=150
+video offset=CINEMATIC_126, x=110, y=150
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_127, x=160, y=100
+video offset=CINEMATIC_127, x=160, y=100
 ```
 
 ### `0x34` — `LABEL_0675`
@@ -11623,9 +11623,9 @@ video type=1, offset=CINEMATIC_127, x=160, y=100
 Defined at `src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:40`.
 
 ```
-video type=1, offset=CINEMATIC_126, x=155, y=151
+video offset=CINEMATIC_126, x=155, y=151
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_128, x=160, y=100
+video offset=CINEMATIC_128, x=160, y=100
 ```
 
 ### `0x35` — `LABEL_066A`
@@ -11641,7 +11641,7 @@ db 0x11
 Defined at `src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:55`.
 
 ```
-video type=1, offset=CINEMATIC_106, x=160, y=100
+video offset=CINEMATIC_106, x=160, y=100
 play id=0x005B, freq=0x12, vol=0x3F, channel=0x00
 play id=0x005B, freq=0x12, vol=0x3F, channel=0x01
 ```
@@ -11651,9 +11651,9 @@ play id=0x005B, freq=0x12, vol=0x3F, channel=0x01
 Defined at `src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:248`.
 
 ```
-video type=1, offset=CINEMATIC_184, x=160, y=100
+video offset=CINEMATIC_184, x=160, y=100
 break
-video type=1, offset=CINEMATIC_185, x=160, y=100
+video offset=CINEMATIC_185, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_033A`
@@ -11661,9 +11661,9 @@ video type=1, offset=CINEMATIC_185, x=160, y=100
 Defined at `src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:248`.
 
 ```
-video type=1, offset=CINEMATIC_236, x=160, y=100
+video offset=CINEMATIC_236, x=160, y=100
 break
-video type=1, offset=CINEMATIC_237, x=160, y=100
+video offset=CINEMATIC_237, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_036A`
@@ -11671,9 +11671,9 @@ video type=1, offset=CINEMATIC_237, x=160, y=100
 Defined at `src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:336`.
 
 ```
-video type=1, offset=CINEMATIC_080, x=160, y=100
+video offset=CINEMATIC_080, x=160, y=100
 break
-video type=1, offset=CINEMATIC_081, x=160, y=100
+video offset=CINEMATIC_081, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_043E`
@@ -11681,8 +11681,8 @@ video type=1, offset=CINEMATIC_081, x=160, y=100
 Defined at `src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:408`.
 
 ```
-video type=1, offset=CINEMATIC_230, x=160, y=100
-video type=1, offset=CINEMATIC_231, x=160, y=100
+video offset=CINEMATIC_230, x=160, y=100
+video offset=CINEMATIC_231, x=160, y=100
 break
 ```
 
@@ -11701,8 +11701,8 @@ setup channel=0x3C, address=LABEL_069F
 Defined at `src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:352`.
 
 ```
-video type=1, offset=CINEMATIC_245, x=160, y=100
-video type=1, offset=CINEMATIC_246, x=160, y=100
+video offset=CINEMATIC_245, x=160, y=100
+video offset=CINEMATIC_246, x=160, y=100
 break
 ```
 
@@ -11721,7 +11721,7 @@ break
 Defined at `src/levels/_unified/tank/amiga__post_SUM_HASH_VARS_TO_VAR_64.inc:34`.
 
 ```
-video type=1, offset=CINEMATIC_036, x=6, y=126
+video offset=CINEMATIC_036, x=6, y=126
 setup channel=0x01, address=LABEL_001B
 setup channel=0x3C, address=BLITTER_LOOP_COPY_PAGE_03
 ```
@@ -11751,7 +11751,7 @@ break
 Defined at `src/levels/_unified/tank/dos__post_INIT_TANK_DRIVE_VARS.inc:12`.
 
 ```
-video type=1, offset=CINEMATIC_038, x=6, y=126
+video offset=CINEMATIC_038, x=6, y=126
 setup channel=0x01, address=LABEL_001F
 setup channel=0x3C, address=BLITTER_LOOP_COPY_PAGE_03
 ```
@@ -11761,7 +11761,7 @@ setup channel=0x3C, address=BLITTER_LOOP_COPY_PAGE_03
 Defined at `src/levels/_unified/tank/amiga__post_COPY_VAR62_TO_VAR5F.inc:546`.
 
 ```
-video type=1, offset=CINEMATIC_125, x=391, y=103, zoom=0x40
+video offset=CINEMATIC_125, x=391, y=103
 play id=0x008E, freq=0x19, vol=0x40, channel=0x00
 break
 ```
@@ -11771,7 +11771,7 @@ break
 Defined at `src/levels/_unified/tank/cart__post_COPY_VAR62_TO_VAR5F.inc:568`.
 
 ```
-video type=1, offset=CINEMATIC_028, x=391, y=103, zoom=0x40
+video offset=CINEMATIC_028, x=391, y=103
 play id=0x008E, freq=0x19, vol=0x40, channel=0x00
 break
 ```
@@ -11781,7 +11781,7 @@ break
 Defined at `src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:650`.
 
 ```
-video type=1, offset=CINEMATIC_177, x=391, y=103, zoom=0x40
+video offset=CINEMATIC_177, x=391, y=103
 play id=0x008E, freq=0x19, vol=0x40, channel=0x00
 break
 ```
@@ -12001,7 +12001,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.
 ```
 selectVideoPage 0x00
 setPalette 0x0C
-video type=1, offset=CINEMATIC_386, x=160, y=100
+video offset=CINEMATIC_386, x=160, y=100
 ```
 
 ### `0x01` — `LABEL_07A6`
@@ -12010,7 +12010,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_14.inc:20`
 
 ```
 je [0xBA], 0x01, INLINE_SET_VARE6_TO_28
-jg [0x01], 0x64, INLINE_SET_VARE6_TO_28
+jg [HERO_X], 0x64, INLINE_SET_VARE6_TO_28
 mov [0xBA], 0x0001
 ```
 
@@ -12020,7 +12020,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE6_TO_14.inc:20
 
 ```
 je [0xBA], 0x01, INLINE_SET_VARE6_TO_28
-jg [0x01], 0x64, INLINE_SET_VARE6_TO_28
+jg [HERO_X], 0x64, INLINE_SET_VARE6_TO_28
 mov [0xBA], 0x0001
 ```
 
@@ -12041,7 +12041,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:1
 ```
 selectVideoPage 0x00
 setPalette 0x0C
-video type=1, offset=CINEMATIC_201, x=160, y=100
+video offset=CINEMATIC_201, x=160, y=100
 ```
 
 ### `0x01` — `LABEL_16A7`
@@ -12051,7 +12051,7 @@ Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_0E_29.inc:152`.
 ```
 break
 call LABEL_173C
-video type=1, offset=CINEMATIC_185, x=[0x78], y=[0x79], zoom=0x40
+video offset=CINEMATIC_185, x=[0x78], y=[0x79]
 ```
 
 ### `0x01` — `LABEL_16F2`
@@ -12061,7 +12061,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:
 ```
 selectVideoPage 0x00
 setPalette 0x0C
-video type=1, offset=CINEMATIC_202, x=160, y=100
+video offset=CINEMATIC_202, x=160, y=100
 ```
 
 ### `0x01` — `LABEL_1FD3`
@@ -12069,9 +12069,9 @@ video type=1, offset=CINEMATIC_202, x=160, y=100
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:516`.
 
 ```
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 ```
 
 ### `0x01` — `LABEL_1FFB`
@@ -12090,7 +12090,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:963`
 
 ```
 break
-video type=1, offset=CINEMATIC_426, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_426, x=[BUDDY_X], y=[BUDDY_Y]
 djnz [0x29], LABEL_289B
 ```
 
@@ -12100,7 +12100,7 @@ Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:17`.
 
 ```
 break
-jg [0x01], 0x64, LABEL_28C1
+jg [HERO_X], 0x64, LABEL_28C1
 jl [0x7B], 0x4000, LABEL_28C1
 ```
 
@@ -12130,7 +12130,7 @@ Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:17`.
 
 ```
 break
-jg [0x01], 0x64, LABEL_2A38
+jg [HERO_X], 0x64, LABEL_2A38
 jl [0x7B], 0x4000, LABEL_2A38
 ```
 
@@ -12228,8 +12228,8 @@ Defined at `src/levels/_unified/caves/cart__post_DECREMENT_VAR08_BY_D.inc:621`.
 
 ```
 call LABEL_9A74
-video type=0, offset=COMMON_VIDEO_032, x=[0x01], y=[0x02], zoom=0x40
-jne [0x0A], 0x00, GUARDED_DRAW_CV_159__CART__POST_DECREMENT_VAR08_BY_D
+video type=0, offset=COMMON_VIDEO_032, x=[HERO_X], y=[HERO_Y], zoom=0x40
+jne [0x0A], 0x00, GUARDED_DRAW_CV_159
 ```
 
 ### `0x02` — `LABEL_0683`
@@ -12277,7 +12277,7 @@ mov [0xE7], 0x0028
 Defined at `src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:269`.
 
 ```
-video type=1, offset=CINEMATIC_172, x=35, y=31
+video offset=CINEMATIC_172, x=35, y=31
 selectVideoPage 0xFF
 mov [0x71], 0x0001
 ```
@@ -12297,9 +12297,9 @@ selectVideoPage 0x00
 Defined at `src/levels/_unified/capsule/dos__post_TWEEN_VARE8_DOWN_8_STEPS.inc:89`.
 
 ```
-video type=1, offset=CINEMATIC_093, x=242, y=103
+video offset=CINEMATIC_093, x=242, y=103
 break
-video type=1, offset=CINEMATIC_093, x=216, y=98
+video offset=CINEMATIC_093, x=216, y=98
 ```
 
 ### `0x02` — `LABEL_1DC1`
@@ -12307,9 +12307,9 @@ video type=1, offset=CINEMATIC_093, x=216, y=98
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:47`.
 
 ```
-video type=1, offset=CINEMATIC_375, x=72, y=143
+video offset=CINEMATIC_375, x=72, y=143
 play id=0x0057, freq=0x14, vol=0x10, channel=0x00
-video type=1, offset=CINEMATIC_372, x=93, y=90
+video offset=CINEMATIC_372, x=93, y=90
 ```
 
 ### `0x02` — `LABEL_1DD0`
@@ -12317,9 +12317,9 @@ video type=1, offset=CINEMATIC_372, x=93, y=90
 Defined at `src/levels/_unified/capsule/cart__post_TWEEN_VARE8_DOWN_8_STEPS.inc:89`.
 
 ```
-video type=1, offset=CINEMATIC_094, x=242, y=103
+video offset=CINEMATIC_094, x=242, y=103
 break
-video type=1, offset=CINEMATIC_094, x=216, y=98
+video offset=CINEMATIC_094, x=216, y=98
 ```
 
 ### `0x02` — `LABEL_1ED5`
@@ -12327,9 +12327,9 @@ video type=1, offset=CINEMATIC_094, x=216, y=98
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:47`.
 
 ```
-video type=1, offset=CINEMATIC_378, x=72, y=143
+video offset=CINEMATIC_378, x=72, y=143
 play id=0x0057, freq=0x14, vol=0x10, channel=0x00
-video type=1, offset=CINEMATIC_375, x=93, y=90
+video offset=CINEMATIC_375, x=93, y=90
 ```
 
 ### `0x03` — `LABEL_0429`
@@ -12338,7 +12338,7 @@ Defined at `src/levels/_unified/code_wheel/amiga__post_PAL_FADE_UP_9_TO_F.inc:19
 
 ```
 jne [0x05], 0x09, LABEL_0434
-video type=1, offset=CINEMATIC_007, x=[0x2d], y=[0x2e], zoom=0x40
+video offset=CINEMATIC_007, x=[0x2d], y=[0x2e]
 LABEL_0434:
 ```
 
@@ -12347,7 +12347,7 @@ LABEL_0434:
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_0E_29.inc:22`.
 
 ```
-video type=1, offset=CINEMATIC_298, x=111, y=133
+video offset=CINEMATIC_298, x=111, y=133
 play id=0x0052, freq=0x1E, vol=0x40, channel=0x00
 break
 ```
@@ -12369,7 +12369,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_0E_29.inc:100`.
 ```
 mov [0xE6], 0x0014
 mov [0xE7], 0x0028
-video type=1, offset=CINEMATIC_565, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_565, x=160, y=[0xe6]
 ```
 
 ### `0x03` — `LABEL_0C7B`
@@ -12397,7 +12397,7 @@ add [0xE6], [RANDOM_SEED]
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:63`.
 
 ```
-video type=1, offset=CINEMATIC_029, x=213, y=149
+video offset=CINEMATIC_029, x=213, y=149
 play id=0x0075, freq=0x12, vol=0x18, channel=0x03
 break
 ```
@@ -12415,7 +12415,7 @@ db 0x11
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:63`.
 
 ```
-video type=1, offset=CINEMATIC_378, x=213, y=149
+video offset=CINEMATIC_378, x=213, y=149
 play id=0x0075, freq=0x12, vol=0x18, channel=0x03
 break
 ```
@@ -12445,9 +12445,9 @@ db 0x11
 Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:268`.
 
 ```
-jl [0x01], 0x78, LABEL_06B2
-jg [0x01], 0xB4, LABEL_06B2
-jg [0x01], 0xA5, LABEL_06A4
+jl [HERO_X], 0x78, LABEL_06B2
+jg [HERO_X], 0xB4, LABEL_06B2
+jg [HERO_X], 0xA5, LABEL_06A4
 ```
 
 ### `0x04` — `LABEL_0A97`
@@ -12475,9 +12475,9 @@ setPalette 0x03
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7.inc:36`.
 
 ```
-video type=1, offset=CINEMATIC_598, x=[0xe6], y=[0xe7], zoom=0x40
+video offset=CINEMATIC_598, x=[0xe6], y=[0xe7]
 break
-jl [0x01], 0xB4, LABEL_0B4D
+jl [HERO_X], 0xB4, LABEL_0B4D
 ```
 
 ### `0x04` — `LABEL_0DED`
@@ -12485,7 +12485,7 @@ jl [0x01], 0xB4, LABEL_0B4D
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_029, x=216, y=149
+video offset=CINEMATIC_029, x=216, y=149
 play id=0x0057, freq=0x14, vol=0x10, channel=0x00
 break
 ```
@@ -12495,9 +12495,9 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_03_01.inc:245`.
 
 ```
-video type=1, offset=CINEMATIC_314, x=160, y=100
+video offset=CINEMATIC_314, x=160, y=100
 break
-video type=1, offset=CINEMATIC_314, x=160, y=100
+video offset=CINEMATIC_314, x=160, y=100
 ```
 
 ### `0x04` — `LABEL_1087`
@@ -12505,9 +12505,9 @@ video type=1, offset=CINEMATIC_314, x=160, y=100
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_03_01.inc:245`.
 
 ```
-video type=1, offset=CINEMATIC_315, x=160, y=100
+video offset=CINEMATIC_315, x=160, y=100
 break
-video type=1, offset=CINEMATIC_315, x=160, y=100
+video offset=CINEMATIC_315, x=160, y=100
 ```
 
 ### `0x04` — `LABEL_12E0`
@@ -12517,7 +12517,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DERIVE_VAR12_11_10_FROM_VAR9.
 ```
 je [0x49], 0x7FFF, LABEL_12FA
 jge [0x49], 0x4000, LABEL_12FA
-mov [0x07], [0x48]
+mov [BUDDY_X], [0x48]
 ```
 
 ### `0x04` — `LABEL_1639`
@@ -12535,9 +12535,9 @@ jg [0x39], 0x01, LABEL_1654
 Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:175`.
 
 ```
-jl [0x01], 0x78, LABEL_176E
-jg [0x01], 0xB4, LABEL_176E
-jg [0x01], 0xA5, LABEL_1760
+jl [HERO_X], 0x78, LABEL_176E
+jg [HERO_X], 0xB4, LABEL_176E
+jg [HERO_X], 0xA5, LABEL_1760
 ```
 
 ### `0x04` — `LABEL_1A72`
@@ -12557,7 +12557,7 @@ Defined at `src/levels/_unified/capsule/dos__post_SET_VAR01_TO_6E_KILL_CHANNEL.i
 ```
 break
 mov [0xE7], 0x0064
-video type=1, offset=CINEMATIC_051, x=[0xe6], y=[0xe9], zoom=[0xe8]
+video offset=CINEMATIC_051, x=[0xe6], y=[0xe9], zoom=[0xe8]
 ```
 
 ### `0x04` — `LABEL_1D9B`
@@ -12565,7 +12565,7 @@ video type=1, offset=CINEMATIC_051, x=[0xe6], y=[0xe9], zoom=[0xe8]
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_375, x=216, y=149
+video offset=CINEMATIC_375, x=216, y=149
 play id=0x0057, freq=0x14, vol=0x10, channel=0x00
 break
 ```
@@ -12575,7 +12575,7 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:32`.
 
 ```
-video type=1, offset=CINEMATIC_378, x=216, y=149
+video offset=CINEMATIC_378, x=216, y=149
 play id=0x0057, freq=0x14, vol=0x10, channel=0x00
 break
 ```
@@ -12606,7 +12606,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_3
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_428, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_428, x=[HERO_X], y=[HERO_Y]
 selectVideoPage 0xFF
 ```
 
@@ -12616,7 +12616,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_499.inc:24`.
 
 ```
 jne [0x13], 0x71, LABEL_3E15
-video type=1, offset=CINEMATIC_495, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_495, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -12626,7 +12626,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:250`
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_484, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_484, x=[HERO_X], y=[HERO_Y]
 selectVideoPage 0xFF
 ```
 
@@ -12675,8 +12675,8 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_0E_29.inc:120`.
 
 ```
-video type=1, offset=CINEMATIC_524, x=160, y=100
-jg [0x01], 0x96, LABEL_05D3
+video offset=CINEMATIC_524, x=160, y=100
+jg [HERO_X], 0x96, LABEL_05D3
 play id=0x005F, freq=0x0A, vol=0x40, channel=0x02
 ```
 
@@ -12685,7 +12685,7 @@ play id=0x005F, freq=0x0A, vol=0x40, channel=0x02
 Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:350`.
 
 ```
-video type=1, offset=CINEMATIC_407, x=[0xea], y=157, zoom=0x40
+video offset=CINEMATIC_407, x=[0xea], y=157
 play id=0x0052, freq=0x1C, vol=0x40, channel=0x01
 break
 ```
@@ -12705,7 +12705,7 @@ add [0x68], 0x0001
 Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:257`.
 
 ```
-video type=1, offset=CINEMATIC_229, x=[0xea], y=157, zoom=0x40
+video offset=CINEMATIC_229, x=[0xea], y=157
 play id=0x0052, freq=0x1C, vol=0x40, channel=0x01
 break
 ```
@@ -12715,7 +12715,7 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:257`.
 
 ```
-video type=1, offset=CINEMATIC_230, x=[0xea], y=157, zoom=0x40
+video offset=CINEMATIC_230, x=[0xea], y=157
 play id=0x0052, freq=0x1C, vol=0x40, channel=0x01
 break
 ```
@@ -12806,7 +12806,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_0E_29.inc:116`.
 
 ```
 break
-jg [0x01], 0x012C, LABEL_053B
+jg [HERO_X], 0x012C, LABEL_053B
 play id=0x0057, freq=0x14, vol=0x40, channel=0x02
 ```
 
@@ -12825,7 +12825,7 @@ mov [0x2A], 0x0006
 Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:361`.
 
 ```
-video type=1, offset=CINEMATIC_407, x=[0xeb], y=157, zoom=0x40
+video offset=CINEMATIC_407, x=[0xeb], y=157
 play id=0x0052, freq=0x18, vol=0x40, channel=0x00
 break
 ```
@@ -12835,9 +12835,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:110`.
 
 ```
-video type=1, offset=CINEMATIC_036, x=160, y=100
+video offset=CINEMATIC_036, x=160, y=100
 break
-video type=1, offset=CINEMATIC_050, x=160, y=100
+video offset=CINEMATIC_050, x=160, y=100
 ```
 
 ### `0x06` — `LABEL_173D`
@@ -12845,7 +12845,7 @@ video type=1, offset=CINEMATIC_050, x=160, y=100
 Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:268`.
 
 ```
-video type=1, offset=CINEMATIC_229, x=[0xeb], y=157, zoom=0x40
+video offset=CINEMATIC_229, x=[0xeb], y=157
 play id=0x0052, freq=0x18, vol=0x40, channel=0x00
 break
 ```
@@ -12855,7 +12855,7 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:268`.
 
 ```
-video type=1, offset=CINEMATIC_230, x=[0xeb], y=157, zoom=0x40
+video offset=CINEMATIC_230, x=[0xeb], y=157
 play id=0x0052, freq=0x18, vol=0x40, channel=0x00
 break
 ```
@@ -12865,9 +12865,9 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:118`.
 
 ```
-video type=1, offset=CINEMATIC_382, x=160, y=100
+video offset=CINEMATIC_382, x=160, y=100
 break
-video type=1, offset=CINEMATIC_396, x=160, y=100
+video offset=CINEMATIC_396, x=160, y=100
 ```
 
 ### `0x06` — `LABEL_1F92`
@@ -12875,9 +12875,9 @@ video type=1, offset=CINEMATIC_396, x=160, y=100
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:118`.
 
 ```
-video type=1, offset=CINEMATIC_385, x=160, y=100
+video offset=CINEMATIC_385, x=160, y=100
 break
-video type=1, offset=CINEMATIC_399, x=160, y=100
+video offset=CINEMATIC_399, x=160, y=100
 ```
 
 ### `0x07` — `LABEL_130E`
@@ -12885,9 +12885,9 @@ video type=1, offset=CINEMATIC_399, x=160, y=100
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E9_E8.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_192, x=[0xe6], y=[0x02], zoom=0x40
+video offset=CINEMATIC_192, x=[0xe6], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_193, x=[0xe6], y=[0x02], zoom=0x40
+video offset=CINEMATIC_193, x=[0xe6], y=[HERO_Y]
 ```
 
 ### `0x07` — `LABEL_2500`
@@ -12915,9 +12915,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VAR04_TO_0024.inc:188`.
 
 ```
-video type=1, offset=CINEMATIC_324, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_324, x=[0x1a], y=[0x1b]
 break
-video type=1, offset=CINEMATIC_325, x=[0x1a], y=[0x1b], zoom=0x40
+video offset=CINEMATIC_325, x=[0x1a], y=[0x1b]
 ```
 
 ### `0x10` — `LABEL_2E58`
@@ -12937,7 +12937,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DERIVE_VAR12_11_10_FROM_VAR9.
 ```
 je [0x49], 0x7FFF, LABEL_4414
 jge [0x49], 0x4000, LABEL_4414
-mov [0x07], [0x48]
+mov [BUDDY_X], [0x48]
 ```
 
 ### `0x10` — `LABEL_441E`
@@ -12947,7 +12947,7 @@ Defined at `src/levels/_unified/prison/dos__post_DECREMENT_VAR22.inc:100`.
 ```
 db 0x11
 PROJECT_POS_BY_VAR04_OR_807B:
-mov [0x21], [0x01]
+mov [0x21], [HERO_X]
 ```
 
 ### `0x14` — `LABEL_08D9`
@@ -12963,7 +12963,7 @@ db 0x11
 Defined at `src/levels/_unified/prison/amiga__post_DERIVE_VAR12_11_10_FROM_VAR9.inc:203`.
 
 ```
-jl [0x07], 0x0150, LABEL_13CA
+jl [BUDDY_X], 0x0150, LABEL_13CA
 mov [0x2C], [0x10]
 add [0x10], 0x0001
 ```
@@ -12973,8 +12973,8 @@ add [0x10], 0x0001
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAREC_TO_AF.inc:107`.
 
 ```
-mov [0x01], 0x00D8
-mov [0x02], 0x00A3
+mov [HERO_X], 0x00D8
+mov [HERO_Y], 0x00A3
 mov [0x32], 0x0001
 ```
 
@@ -12983,8 +12983,8 @@ mov [0x32], 0x0001
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAREC_TO_AF.inc:107`.
 
 ```
-mov [0x01], 0x00D8
-mov [0x02], 0x00A3
+mov [HERO_X], 0x00D8
+mov [HERO_Y], 0x00A3
 mov [0x32], 0x0001
 ```
 
@@ -13003,7 +13003,7 @@ jne [0x2F], 0x00, DISPATCH_VAR2F_STATE
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE8_TO_F.inc:146`.
 
 ```
-video type=1, offset=CINEMATIC_409, x=160, y=100
+video offset=CINEMATIC_409, x=160, y=100
 play id=0x006B, freq=0x0A, vol=0x40, channel=0x01
 break
 ```
@@ -13015,7 +13015,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE8_TO_F.inc:362`
 ```
 je [0xB6], 0x00, KILL_CHAN_AT_1471
 jne [HACK_VAR_67], [0xB6], KILL_CHAN_AT_1471
-jl [0x01], 0x0148, LABEL_2824
+jl [HERO_X], 0x0148, LABEL_2824
 ```
 
 ### `0x14` — `LABEL_297B`
@@ -13025,7 +13025,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE8_TO_F.inc:371
 ```
 je [0xB6], 0x00, KILL_CHAN_AT_157F
 jne [HACK_VAR_67], [0xB6], KILL_CHAN_AT_157F
-jl [0x01], 0x0148, LABEL_299B
+jl [HERO_X], 0x0148, LABEL_299B
 ```
 
 ### `0x14` — `LABEL_2A64`
@@ -13033,9 +13033,9 @@ jl [0x01], 0x0148, LABEL_299B
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:403`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_260, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_260, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_2A8B`
@@ -13043,9 +13043,9 @@ add [0x01], 0x0002
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:418`.
 
 ```
-sub [0x01], 0x0003
-video type=1, offset=CINEMATIC_230, x=[0x01], y=[0x02], zoom=0x40
-sub [0x01], 0x0002
+sub [HERO_X], 0x0003
+video offset=CINEMATIC_230, x=[HERO_X], y=[HERO_Y]
+sub [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_2B2F`
@@ -13063,9 +13063,9 @@ add [0x85], 0x0001
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:494`.
 
 ```
-video type=1, offset=CINEMATIC_243, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_243, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_244, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_244, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_393D`
@@ -13073,9 +13073,9 @@ video type=1, offset=CINEMATIC_244, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAR29_TO_8.inc:21`.
 
 ```
-video type=1, offset=CINEMATIC_285, x=191, y=73
+video offset=CINEMATIC_285, x=191, y=73
 break
-video type=1, offset=CINEMATIC_286, x=219, y=70
+video offset=CINEMATIC_286, x=219, y=70
 ```
 
 ### `0x14` — `LABEL_39A6`
@@ -13083,9 +13083,9 @@ video type=1, offset=CINEMATIC_286, x=219, y=70
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAR29_TO_8.inc:21`.
 
 ```
-video type=1, offset=CINEMATIC_286, x=191, y=73
+video offset=CINEMATIC_286, x=191, y=73
 break
-video type=1, offset=CINEMATIC_287, x=219, y=70
+video offset=CINEMATIC_287, x=219, y=70
 ```
 
 ### `0x14` — `LABEL_3FCE`
@@ -13093,9 +13093,9 @@ video type=1, offset=CINEMATIC_287, x=219, y=70
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE6_TO_F.inc:413`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_176, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_176, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_3FF5`
@@ -13103,9 +13103,9 @@ add [0x01], 0x0002
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE6_TO_F.inc:428`.
 
 ```
-sub [0x01], 0x0003
-video type=1, offset=CINEMATIC_146, x=[0x01], y=[0x02], zoom=0x40
-sub [0x01], 0x0002
+sub [HERO_X], 0x0003
+video offset=CINEMATIC_146, x=[HERO_X], y=[HERO_Y]
+sub [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_4002`
@@ -13113,9 +13113,9 @@ sub [0x01], 0x0002
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:412`.
 
 ```
-add [0x01], 0x0003
-video type=1, offset=CINEMATIC_175, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0002
+add [HERO_X], 0x0003
+video offset=CINEMATIC_175, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0002
 ```
 
 ### `0x14` — `LABEL_4029`
@@ -13133,9 +13133,9 @@ jne [0x1D], 0x14, LABEL_4034
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE6_TO_F.inc:492`.
 
 ```
-video type=1, offset=CINEMATIC_179, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_179, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_180, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_180, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_40B4`
@@ -13163,9 +13163,9 @@ ret
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:503`.
 
 ```
-video type=1, offset=CINEMATIC_158, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_158, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_159, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_159, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x14` — `LABEL_5913`
@@ -13184,8 +13184,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_ADD_VAR11_TO_VAR34.inc:133`.
 
 ```
 mov [0x2D], [0x35]
-mov [0x2E], [0x01]
-mov [0x2F], [0x02]
+mov [0x2E], [HERO_X]
+mov [0x2F], [HERO_Y]
 ```
 
 ### `0x14` — `LABEL_5AA2`
@@ -13234,7 +13234,7 @@ Defined at `src/levels/_unified/caves/cart__post_DECREMENT_VAR22.inc:4`.
 
 ```
 jne [0x27], 0x03, LABEL_7202
-video type=1, offset=CINEMATIC_152, x=[0x21], y=[0x26], zoom=0x40
+video offset=CINEMATIC_152, x=[0x21], y=[0x26]
 sub [0x22], 0x0001
 ```
 
@@ -13264,8 +13264,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_COPY_VAR52_TO_VAR02_KILL_CHA
 
 ```
 mov [0x63], 0x0064
-mov [0x02], [0x52]
-sub [0x02], 0x001E
+mov [HERO_Y], [0x52]
+sub [HERO_Y], 0x001E
 ```
 
 ### `0x14` — `LABEL_7E4F`
@@ -13313,9 +13313,9 @@ call LABEL_7969
 Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:112`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_114, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_114, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_92B8`
@@ -13324,7 +13324,7 @@ Defined at `src/levels/_unified/caves/amiga__post_DECREMENT_VAR08_BY_D.inc:1`.
 
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
-video type=1, offset=CINEMATIC_060, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_060, x=[0x07], y=[0x08]
 call LABEL_9292
 ```
 
@@ -13333,9 +13333,9 @@ call LABEL_9292
 Defined at `src/levels/_unified/capsule/cart__post_DECREMENT_VAR08_BY_D.inc:557`.
 
 ```
-video type=0, offset=COMMON_VIDEO_028, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_028, x=[HERO_X], y=[HERO_Y], zoom=0x40
 play id=0x0060, freq=0x14, vol=0x20, channel=0x01
-jne [0x0A], 0x00, GUARDED_DRAW_CV_159__CART__POST_DECREMENT_VAR08_BY_D
+jne [0x0A], 0x00, GUARDED_DRAW_CV_159
 ```
 
 ### `0x14` — `LABEL_939E`
@@ -13344,7 +13344,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:2
 
 ```
 setup channel=0x15, address=LABEL_9351
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_93A6:
 ```
 
@@ -13355,7 +13355,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:2
 ```
 call SET_VAR04_TO_0020
 mov [0x2A], 0x0020
-sub [0x01], 0x0001
+sub [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_94F9`
@@ -13364,7 +13364,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:3
 
 ```
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_087, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_087, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 ```
 
@@ -13375,7 +13375,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:3
 ```
 call SET_VAR04_TO_0024
 setup channel=0x15, address=KILL_CHANNEL_LANDING
-video type=0, offset=COMMON_VIDEO_092, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_092, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_965B`
@@ -13384,7 +13384,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:4
 
 ```
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_034, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_034, x=[HERO_X], y=[HERO_Y], zoom=0x40
 break
 ```
 
@@ -13394,7 +13394,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_BREAK_035.inc:82`.
 
 ```
 je [HERO_POS_MASK], 0x09, LABEL_983B
-video type=0, offset=COMMON_VIDEO_053, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_053, x=[HERO_X], y=[HERO_Y], zoom=0x40
 setup channel=0x15, address=KILL_CHANNEL_LANDING
 ```
 
@@ -13444,7 +13444,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_BREAK_036.inc:45`.
 
 ```
 break
-video type=1, offset=CINEMATIC_556, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_556, x=[HERO_X], y=[HERO_Y]
 je [HERO_ACTION_POS_MASK], 0x84, LABEL_9862
 ```
 
@@ -13493,8 +13493,8 @@ jne [0x0A], 0x00, LABEL_9979
 Defined at `src/levels/_unified/capsule/dos__post_RESET_HERO_ACTION_KEEP_POS_4LSB.inc:10`.
 
 ```
-mov [0x01], 0x003C
-mov [0x02], 0x001D
+mov [HERO_X], 0x003C
+mov [HERO_Y], 0x001D
 mov [0x32], 0x0001
 ```
 
@@ -13503,8 +13503,8 @@ mov [0x32], 0x0001
 Defined at `src/levels/_unified/capsule/cart__post_RESET_HERO_ACTION_KEEP_POS_4LSB.inc:10`.
 
 ```
-mov [0x01], 0x003C
-mov [0x02], 0x001D
+mov [HERO_X], 0x003C
+mov [HERO_Y], 0x001D
 mov [0x32], 0x0001
 ```
 
@@ -13553,9 +13553,9 @@ call LABEL_9329
 Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:152`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_327, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_327, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_BEE8`
@@ -13564,7 +13564,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:165
 
 ```
 setup channel=0x15, address=LABEL_BE97
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_BEF0:
 ```
 
@@ -13573,9 +13573,9 @@ LABEL_BEF0:
 Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:152`.
 
 ```
-sub [0x01], 0x0004
-video type=1, offset=CINEMATIC_328, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+sub [HERO_X], 0x0004
+video offset=CINEMATIC_328, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_BFAE`
@@ -13583,8 +13583,8 @@ add [0x01], 0x0001
 Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:241`.
 
 ```
-video type=1, offset=CINEMATIC_327, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_327, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_BFA6
 ```
 
@@ -13594,7 +13594,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:16
 
 ```
 setup channel=0x15, address=LABEL_BF7B
-sub [0x01], 0x0004
+sub [HERO_X], 0x0004
 LABEL_BFD4:
 ```
 
@@ -13604,7 +13604,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:253
 
 ```
 setup channel=0x15, address=LABEL_BF81
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_BFD6:
 ```
 
@@ -13615,7 +13615,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:314
 ```
 call SET_VAR04_TO_0020
 mov [0x2A], 0x0020
-sub [0x01], 0x0001
+sub [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_C092`
@@ -13623,8 +13623,8 @@ sub [0x01], 0x0001
 Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:241`.
 
 ```
-video type=1, offset=CINEMATIC_328, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0003
+video offset=CINEMATIC_328, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0003
 je [HERO_POS_MASK], 0x00, LABEL_C08A
 ```
 
@@ -13634,7 +13634,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:25
 
 ```
 setup channel=0x15, address=LABEL_C065
-add [0x01], 0x0004
+add [HERO_X], 0x0004
 LABEL_C0BA:
 ```
 
@@ -13645,7 +13645,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:372
 ```
 je [HERO_POS_MASK], 0x09, LABEL_C29D
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_048, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_048, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_C167`
@@ -13655,7 +13655,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:31
 ```
 call SET_VAR04_TO_0020
 mov [0x2A], 0x0020
-sub [0x01], 0x0001
+sub [HERO_X], 0x0001
 ```
 
 ### `0x14` — `LABEL_C1F0`
@@ -13675,7 +13675,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:37
 ```
 je [HERO_POS_MASK], 0x09, LABEL_C381
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_048, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_048, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_C29D`
@@ -13685,7 +13685,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:485
 ```
 je [HERO_POS_MASK], 0x0A, LABEL_C129
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_003, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_003, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_C2D4`
@@ -13715,7 +13715,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:48
 ```
 je [HERO_POS_MASK], 0x0A, LABEL_C20D
 mov [0x63], 0x0064
-video type=0, offset=COMMON_VIDEO_003, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_003, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x14` — `LABEL_C411`
@@ -13833,9 +13833,9 @@ jne [0x0A], 0x00, LABEL_C6B1
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:442`.
 
 ```
-video type=1, offset=CINEMATIC_246, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_246, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_247, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_247, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x15` — `LABEL_4030`
@@ -13853,9 +13853,9 @@ selectVideoPage 0xFF
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:451`.
 
 ```
-video type=1, offset=CINEMATIC_161, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_161, x=[HERO_X], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_162, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_162, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x15` — `LABEL_6051`
@@ -13863,8 +13863,8 @@ video type=1, offset=CINEMATIC_162, x=[0x01], y=[0x02], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_FOLD_BODY_37B_9FD2CEA6.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_703, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+video offset=CINEMATIC_703, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 break
 ```
 
@@ -13873,8 +13873,8 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:1`.
 
 ```
-video type=1, offset=CINEMATIC_706, x=[0x01], y=[0x02], zoom=0x40
-add [0x01], 0x0001
+video offset=CINEMATIC_706, x=[HERO_X], y=[HERO_Y]
+add [HERO_X], 0x0001
 break
 ```
 
@@ -13915,7 +13915,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DRAW_CV352_STEP_RIGHT3.inc:9
 ```
 break
 je [0x63], 0x05, LABEL_9267
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_9351`
@@ -13923,9 +13923,9 @@ sub [0x01], 0x0003
 Defined at `src/levels/_unified/capsule/dos__post_DECREMENT_VAR08_BY_D.inc:577`.
 
 ```
-video type=0, offset=COMMON_VIDEO_034, x=[0x01], y=[0x02], zoom=0x40
-jne [0x0A], 0x00, GUARDED_DRAW_CV_159__DOS__POST_DECREMENT_VAR08_BY_D
-video type=0, offset=COMMON_VIDEO_035, x=[0x01], y=[0x02], zoom=0x40
+video type=0, offset=COMMON_VIDEO_034, x=[HERO_X], y=[HERO_Y], zoom=0x40
+jne [0x0A], 0x00, GUARDED_DRAW_CV_159
+video type=0, offset=COMMON_VIDEO_035, x=[HERO_X], y=[HERO_Y], zoom=0x40
 ```
 
 ### `0x15` — `LABEL_BE97`
@@ -13935,7 +13935,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:130
 ```
 break
 je [0x63], 0x05, LABEL_BE97
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_BF7B`
@@ -13945,7 +13945,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:13
 ```
 break
 je [0x63], 0x05, LABEL_BF7B
-sub [0x01], 0x0003
+sub [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_BF81`
@@ -13955,7 +13955,7 @@ Defined at `src/levels/_unified/capsule/dos__post_DRAW_CV352_STEP_RIGHT3.inc:219
 ```
 break
 je [0x63], 0x06, LABEL_BF81
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x15` — `LABEL_C065`
@@ -13965,7 +13965,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV352_STEP_RIGHT3.inc:21
 ```
 break
 je [0x63], 0x06, LABEL_C065
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 ```
 
 ### `0x16` — `LABEL_0826`
@@ -13983,7 +13983,7 @@ jne [HERO_ACTION], 0x00, LABEL_0826
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAREC_TO_AF.inc:48`.
 
 ```
-video type=1, offset=CINEMATIC_185, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_185, x=[HERO_X], y=[HERO_Y]
 break
 je [HERO_ACTION], 0x01, LABEL_14EC
 ```
@@ -13993,7 +13993,7 @@ je [HERO_ACTION], 0x01, LABEL_14EC
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAREC_TO_AF.inc:48`.
 
 ```
-video type=1, offset=CINEMATIC_186, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_186, x=[HERO_X], y=[HERO_Y]
 break
 je [HERO_ACTION], 0x01, LABEL_15FA
 ```
@@ -14003,9 +14003,9 @@ je [HERO_ACTION], 0x01, LABEL_15FA
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:278`.
 
 ```
-video type=1, offset=CINEMATIC_282, x=[0x01], y=100, zoom=0x40
+video offset=CINEMATIC_282, x=[HERO_X], y=100
 break
-video type=1, offset=CINEMATIC_283, x=[0x01], y=103, zoom=0x40
+video offset=CINEMATIC_283, x=[HERO_X], y=103
 ```
 
 ### `0x16` — `LABEL_3E2E`
@@ -14014,7 +14014,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:176
 
 ```
 jne [0x13], 0x85, LABEL_3E3A
-video type=1, offset=CINEMATIC_468, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_468, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -14023,9 +14023,9 @@ ret
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:264`.
 
 ```
-video type=1, offset=CINEMATIC_039, x=[0x01], y=100, zoom=0x40
+video offset=CINEMATIC_039, x=[HERO_X], y=100
 break
-video type=1, offset=CINEMATIC_040, x=[0x01], y=103, zoom=0x40
+video offset=CINEMATIC_040, x=[HERO_X], y=103
 ```
 
 ### `0x16` — `LABEL_8B45`
@@ -14043,8 +14043,8 @@ jne [HERO_POS_LEFT_RIGHT], 0xFFFF, LABEL_8B70
 Defined at `src/levels/_unified/capsule/dos__post_RESET_HERO_ACTION_KEEP_POS_4LSB.inc:1`.
 
 ```
-mov [0x21], [0x01]
-mov [0x22], [0x02]
+mov [0x21], [HERO_X]
+mov [0x22], [HERO_Y]
 call LABEL_9F00
 ```
 
@@ -14053,8 +14053,8 @@ call LABEL_9F00
 Defined at `src/levels/_unified/capsule/cart__post_RESET_HERO_ACTION_KEEP_POS_4LSB.inc:1`.
 
 ```
-mov [0x21], [0x01]
-mov [0x22], [0x02]
+mov [0x21], [HERO_X]
+mov [0x22], [HERO_Y]
 call LABEL_9F44
 ```
 
@@ -14154,7 +14154,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DEDUP_PRISON_5B_006.inc:16`.
 
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
-add [0x08], 0x0001
+add [BUDDY_Y], 0x0001
 call DRAW_SPRITE_CIN_164_167_BY_VAR09
 ```
 
@@ -14163,8 +14163,8 @@ call DRAW_SPRITE_CIN_164_167_BY_VAR09
 Defined at `src/levels/_unified/prison/dos__post_INLINE_DRAW_CV_266_030.inc:144`.
 
 ```
-video type=1, offset=CINEMATIC_334, x=[0x07], y=[0x08], zoom=0x40
-mov [0xF5], [0x07]
+video offset=CINEMATIC_334, x=[BUDDY_X], y=[BUDDY_Y]
+mov [0xF5], [BUDDY_X]
 jg [0x13], [0x30], DRAW_CIN_169_IF_VAR09_EQ_1
 ```
 
@@ -14193,9 +14193,9 @@ LABEL_67D1:
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:308`.
 
 ```
-jl [0x01], 0x14, LABEL_201D
-jg [0x01], 0x93, LABEL_201D
-video type=1, offset=CINEMATIC_337, x=61, y=100
+jl [HERO_X], 0x14, LABEL_201D
+jg [HERO_X], 0x93, LABEL_201D
+video offset=CINEMATIC_337, x=61, y=100
 ```
 
 ### `0x19` — `LABEL_2121`
@@ -14203,9 +14203,9 @@ video type=1, offset=CINEMATIC_337, x=61, y=100
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:308`.
 
 ```
-jl [0x01], 0x14, LABEL_2131
-jg [0x01], 0x93, LABEL_2131
-video type=1, offset=CINEMATIC_338, x=61, y=100
+jl [HERO_X], 0x14, LABEL_2131
+jg [HERO_X], 0x93, LABEL_2131
+video offset=CINEMATIC_338, x=61, y=100
 ```
 
 ### `0x1A` — `LABEL_7E0E`
@@ -14213,8 +14213,8 @@ video type=1, offset=CINEMATIC_338, x=61, y=100
 Defined at `src/levels/_unified/capsule/amiga__post_DECREMENT_VAR08_BY_D.inc:1008`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -14223,8 +14223,8 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -14233,8 +14233,8 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_COPY_PAGE0_TO_3_AND_VAR66_TO_VAR65.inc:4`.
 
 ```
-jg [0x02], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -14254,7 +14254,7 @@ Defined at `src/levels/_unified/prison/amiga__post_INLINE_BREAK_037.inc:59`.
 
 ```
 jne [0x0F], 0x00, LABEL_980A
-add [0x01], 0x0003
+add [HERO_X], 0x0003
 call HANDLE_HORIZ_VAR01_VS_VAR28
 ```
 
@@ -14263,8 +14263,8 @@ call HANDLE_HORIZ_VAR01_VS_VAR28
 Defined at `src/levels/_unified/capsule/cart__post_COPY_VAR51_TO_VAR02_KILL_CHANNEL.inc:1`.
 
 ```
-jg [0x02], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
-add [0x02], 0x0001
+jg [HERO_Y], [0x52], COPY_VAR52_TO_VAR02_KILL_CHANNEL
+add [HERO_Y], 0x0001
 break
 ```
 
@@ -14274,7 +14274,7 @@ Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:8`.
 
 ```
 break
-jg [0x01], 0x78, LABEL_28A8
+jg [HERO_X], 0x78, LABEL_28A8
 call LABEL_5423
 ```
 
@@ -14284,7 +14284,7 @@ Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:8`.
 
 ```
 break
-jg [0x01], 0x78, LABEL_2A1F
+jg [HERO_X], 0x78, LABEL_2A1F
 call LABEL_53FF
 ```
 
@@ -14313,9 +14313,9 @@ LABEL_67D1:
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:516`.
 
 ```
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 ```
 
 ### `0x22` — `LABEL_2FB5`
@@ -14323,8 +14323,8 @@ video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/capsule/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc:1`.
 
 ```
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 mov [0x10], [0x6A]
 ```
 
@@ -14333,8 +14333,8 @@ mov [0x10], [0x6A]
 Defined at `src/levels/_unified/capsule/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc:1`.
 
 ```
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 mov [0x10], [0x6A]
 ```
 
@@ -14343,8 +14343,8 @@ mov [0x10], [0x6A]
 Defined at `src/levels/_unified/capsule/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.inc:1`.
 
 ```
-mov [0x07], [0x68]
-mov [0x08], [0x69]
+mov [BUDDY_X], [0x68]
+mov [BUDDY_Y], [0x69]
 mov [0x10], [0x6A]
 ```
 
@@ -14393,9 +14393,9 @@ jmp LABEL_01CB
 Defined at `src/levels/_unified/capsule/dos__entry.inc:1858`.
 
 ```
-add [0x07], 0x0002
+add [BUDDY_X], 0x0002
 jmp LABEL_01E8
-add [0x08], 0x0004
+add [BUDDY_Y], 0x0004
 ```
 
 ### `0x23` — `LABEL_020C`
@@ -14413,9 +14413,9 @@ LABEL_0213:
 Defined at `src/levels/_unified/capsule/cart__entry.inc:1886`.
 
 ```
-add [0x07], 0x0002
+add [BUDDY_X], 0x0002
 jmp LABEL_0255
-add [0x08], 0x0004
+add [BUDDY_Y], 0x0004
 ```
 
 ### `0x23` — `LABEL_02D1`
@@ -14433,8 +14433,8 @@ djnz [0x01], LABEL_02D1
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_03_01.inc:359`.
 
 ```
-mov [0x07], 0x0113
-video type=1, offset=CINEMATIC_118, x=[0x07], y=50, zoom=0x40
+mov [BUDDY_X], 0x0113
+video offset=CINEMATIC_118, x=[BUDDY_X], y=50
 break
 ```
 
@@ -14445,7 +14445,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_03_01.inc:396`.
 ```
 break
 jl [0x70], 0x012C, LABEL_1120
-mov [0x07], 0x008C
+mov [BUDDY_X], 0x008C
 ```
 
 ### `0x23` — `LABEL_1199`
@@ -14453,7 +14453,7 @@ mov [0x07], 0x008C
 Defined at `src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:368`.
 
 ```
-video type=1, offset=CINEMATIC_365, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_365, x=[BUDDY_X], y=[BUDDY_Y]
 call LABEL_2BA1
 break
 ```
@@ -14465,7 +14465,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_03_01.inc:391`.
 ```
 break
 jl [0x70], 0x012C, LABEL_1201
-mov [0x07], 0x008C
+mov [BUDDY_X], 0x008C
 ```
 
 ### `0x23` — `LABEL_133E`
@@ -14475,7 +14475,7 @@ Defined at `src/levels/_unified/prison/cart__post_DERIVE_VAR12_11_10_FROM_VAR9.i
 ```
 jne [0x09], 0x03, LABEL_1353
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_537, x=[0x26], y=[0x08], zoom=0x40
+video offset=CINEMATIC_537, x=[0x26], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_142B`
@@ -14484,8 +14484,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAR29_TO_4.inc:128
 
 ```
 or [0x11], 0x0200
-video type=1, offset=CINEMATIC_135, x=[0x07], y=[0x08], zoom=0x40
-add [0x08], 0x000C
+video offset=CINEMATIC_135, x=[BUDDY_X], y=[BUDDY_Y]
+add [BUDDY_Y], 0x000C
 ```
 
 ### `0x23` — `LABEL_2968`
@@ -14494,8 +14494,8 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:12
 
 ```
 call LABEL_683F
-mov [0x21], [0x07]
-mov [0x27], [0x08]
+mov [0x21], [BUDDY_X]
+mov [0x27], [BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_2C4D`
@@ -14504,7 +14504,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_3
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_2BD2
-video type=1, offset=CINEMATIC_227, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_227, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -14513,9 +14513,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:606`.
 
 ```
-video type=1, offset=CINEMATIC_216, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_216, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_217, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_217, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_355A`
@@ -14584,7 +14584,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:596`
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4170
-video type=1, offset=CINEMATIC_226, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_226, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -14603,9 +14603,9 @@ db 0x11
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:628`.
 
 ```
-video type=1, offset=CINEMATIC_215, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_215, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_216, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_216, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x23` — `LABEL_4B06`
@@ -14664,7 +14664,7 @@ Defined at `src/levels/_unified/capsule/cart__post_DRAW_CV275_AT_X07_Y08.inc:161
 
 ```
 call LABEL_80D5
-sub [0x07], 0x0008
+sub [BUDDY_X], 0x0008
 break
 ```
 
@@ -14694,8 +14694,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.
 
 ```
 call LABEL_2F8C
-mov [0x68], [0x07]
-mov [0x69], [0x08]
+mov [0x68], [BUDDY_X]
+mov [0x69], [BUDDY_Y]
 ```
 
 ### `0x24` — `LABEL_4581`
@@ -14704,8 +14704,8 @@ Defined at `src/levels/_unified/capsule/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_4538
-mov [0x68], [0x07]
-mov [0x69], [0x08]
+mov [0x68], [BUDDY_X]
+mov [0x69], [BUDDY_Y]
 ```
 
 ### `0x24` — `LABEL_45A5`
@@ -14714,8 +14714,8 @@ Defined at `src/levels/_unified/capsule/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_455C
-mov [0x68], [0x07]
-mov [0x69], [0x08]
+mov [0x68], [BUDDY_X]
+mov [0x69], [BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_0128`
@@ -14783,7 +14783,7 @@ LABEL_12A3:
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAR29_TO_4.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_134, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_134, x=[BUDDY_X], y=[BUDDY_Y]
 break
 mov [0x12], 0x0038
 ```
@@ -14794,7 +14794,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_3
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_2BD2
-video type=1, offset=CINEMATIC_227, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_227, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -14803,9 +14803,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:606`.
 
 ```
-video type=1, offset=CINEMATIC_216, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_216, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_217, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_217, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_355A`
@@ -14834,7 +14834,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:596`
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4170
-video type=1, offset=CINEMATIC_226, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_226, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -14853,9 +14853,9 @@ db 0x11
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:628`.
 
 ```
-video type=1, offset=CINEMATIC_215, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_215, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_216, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_216, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x25` — `LABEL_4AC4`
@@ -14944,8 +14944,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.
 
 ```
 call LABEL_2F8C
-mov [0x70], [0x07]
-mov [0x71], [0x08]
+mov [0x70], [BUDDY_X]
+mov [0x71], [BUDDY_Y]
 ```
 
 ### `0x26` — `LABEL_45BC`
@@ -14954,8 +14954,8 @@ Defined at `src/levels/_unified/capsule/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_4538
-mov [0x70], [0x07]
-mov [0x71], [0x08]
+mov [0x70], [BUDDY_X]
+mov [0x71], [BUDDY_Y]
 ```
 
 ### `0x26` — `LABEL_45E0`
@@ -14964,8 +14964,8 @@ Defined at `src/levels/_unified/capsule/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_455C
-mov [0x70], [0x07]
-mov [0x71], [0x08]
+mov [0x70], [BUDDY_X]
+mov [0x71], [BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_02D2`
@@ -15005,7 +15005,7 @@ Defined at `src/levels/_unified/prison/dos__post_INLINE_KILL_039.inc:127`.
 ```
 break
 add [SCROLL_Y], 0x0002
-video type=1, offset=CINEMATIC_260, x=160, y=100, zoom=[0xe7]
+video offset=CINEMATIC_260, x=160, y=100, zoom=[0xe7]
 ```
 
 ### `0x27` — `LABEL_0DE4`
@@ -15013,7 +15013,7 @@ video type=1, offset=CINEMATIC_260, x=160, y=100, zoom=[0xe7]
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_03_01.inc:77`.
 
 ```
-mov [0x07], 0x000F
+mov [BUDDY_X], 0x000F
 or [0x12], 0x2000
 call GUARDED_DRAW_CV_304_305
 ```
@@ -15023,7 +15023,7 @@ call GUARDED_DRAW_CV_304_305
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_03_01.inc:77`.
 
 ```
-mov [0x07], 0x000F
+mov [BUDDY_X], 0x000F
 or [0x12], 0x2000
 call GUARDED_DRAW_CV_304_305
 ```
@@ -15034,7 +15034,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_3
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_2BD2
-video type=1, offset=CINEMATIC_227, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_227, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -15043,9 +15043,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:606`.
 
 ```
-video type=1, offset=CINEMATIC_216, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_216, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_217, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_217, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_3518`
@@ -15074,7 +15074,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:596`
 
 ```
 jne [0x10], [HACK_VAR_67], LABEL_4170
-video type=1, offset=CINEMATIC_226, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_226, x=[BUDDY_X], y=[BUDDY_Y]
 break
 ```
 
@@ -15093,9 +15093,9 @@ db 0x11
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARE6_TO_F.inc:628`.
 
 ```
-video type=1, offset=CINEMATIC_215, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_215, x=[BUDDY_X], y=[BUDDY_Y]
 break
-video type=1, offset=CINEMATIC_216, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_216, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x27` — `LABEL_4A84`
@@ -15124,7 +15124,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:366`.
 
 ```
 break
-video type=1, offset=CINEMATIC_092, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_092, x=[0x07], y=[0x08]
 break
 ```
 
@@ -15203,9 +15203,9 @@ call STATE_VAR12_BIG_DISPATCH
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:516`.
 
 ```
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 ```
 
 ### `0x28` — `LABEL_304B`
@@ -15214,8 +15214,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.
 
 ```
 call LABEL_2F8C
-mov [0x78], [0x07]
-mov [0x79], [0x08]
+mov [0x78], [BUDDY_X]
+mov [0x79], [BUDDY_Y]
 ```
 
 ### `0x28` — `LABEL_45F7`
@@ -15224,8 +15224,8 @@ Defined at `src/levels/_unified/capsule/cart__post_SPLIT_VAR09_BITS_INTO_VAR0D.i
 
 ```
 call LABEL_4538
-mov [0x78], [0x07]
-mov [0x79], [0x08]
+mov [0x78], [BUDDY_X]
+mov [0x79], [BUDDY_Y]
 ```
 
 ### `0x28` — `LABEL_461B`
@@ -15234,8 +15234,8 @@ Defined at `src/levels/_unified/capsule/dos__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 call LABEL_455C
-mov [0x78], [0x07]
-mov [0x79], [0x08]
+mov [0x78], [BUDDY_X]
+mov [0x79], [BUDDY_Y]
 ```
 
 ### `0x2A` — `LABEL_1FD3`
@@ -15243,9 +15243,9 @@ mov [0x79], [0x08]
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:516`.
 
 ```
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 ```
 
 ### `0x2C` — `LABEL_116D`
@@ -15253,7 +15253,7 @@ video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VAREF_TO_A0.inc:101`.
 
 ```
-video type=1, offset=CINEMATIC_016, x=[0xe6], y=[0xe7], zoom=0x40
+video offset=CINEMATIC_016, x=[0xe6], y=[0xe7]
 play id=0x006C, freq=0x14, vol=0x18, channel=0x01
 break
 ```
@@ -15263,9 +15263,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:516`.
 
 ```
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 break
-video type=1, offset=CINEMATIC_329, x=160, y=[0xe6], zoom=0x40
+video offset=CINEMATIC_329, x=160, y=[0xe6]
 ```
 
 ### `0x2C` — `LABEL_22F4`
@@ -15284,7 +15284,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:72
 
 ```
 call LABEL_244E
-video type=1, offset=CINEMATIC_210, x=[0x21], y=[0x08], zoom=0x40
+video offset=CINEMATIC_210, x=[0x21], y=[BUDDY_Y]
 break
 ```
 
@@ -15334,7 +15334,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DEDUP_PRISON_5B_006.inc:16`.
 
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
-add [0x08], 0x0001
+add [BUDDY_Y], 0x0001
 call DRAW_SPRITE_CIN_164_167_BY_VAR09
 ```
 
@@ -15343,8 +15343,8 @@ call DRAW_SPRITE_CIN_164_167_BY_VAR09
 Defined at `src/levels/_unified/prison/dos__post_INLINE_DRAW_CV_266_030.inc:144`.
 
 ```
-video type=1, offset=CINEMATIC_334, x=[0x07], y=[0x08], zoom=0x40
-mov [0xF5], [0x07]
+video offset=CINEMATIC_334, x=[BUDDY_X], y=[BUDDY_Y]
+mov [0xF5], [BUDDY_X]
 jg [0x13], [0x30], DRAW_CIN_169_IF_VAR09_EQ_1
 ```
 
@@ -15384,8 +15384,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SUB_VAR22_BY_23.inc:6
 
 ```
 call LABEL_41D4
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_212, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_212, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x31` — `LABEL_41A4`
@@ -15404,8 +15404,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SUB_VAR22_BY_23.inc:6`
 
 ```
 call LABEL_590A
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_251, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_251, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x31` — `LABEL_570A`
@@ -15414,8 +15414,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_591A
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_250, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_250, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x31` — `LABEL_58DA`
@@ -15434,7 +15434,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_DRAW_CV_216_028.inc:162
 
 ```
 call LABEL_566B
-sub [0x07], 0x0003
+sub [BUDDY_X], 0x0003
 break
 ```
 
@@ -15444,8 +15444,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SUB_VAR22_BY_23.inc:6
 
 ```
 call LABEL_41D4
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_212, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_212, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x32` — `LABEL_41A4`
@@ -15464,8 +15464,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SUB_VAR22_BY_23.inc:6`
 
 ```
 call LABEL_590A
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_251, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_251, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x32` — `LABEL_570A`
@@ -15474,8 +15474,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_591A
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_250, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_250, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x32` — `LABEL_58DA`
@@ -15494,7 +15494,7 @@ Defined at `src/levels/_unified/prison/cart__post_INLINE_DRAW_CV_216_028.inc:162
 
 ```
 call LABEL_566B
-sub [0x07], 0x0003
+sub [BUDDY_X], 0x0003
 break
 ```
 
@@ -15504,8 +15504,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SUB_VAR22_BY_23.inc:6
 
 ```
 call LABEL_41D4
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_212, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_212, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x33` — `LABEL_5240`
@@ -15514,7 +15514,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_COMPUTE_VAR22_AS_VAR40_MINUS
 
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
-video type=1, offset=CINEMATIC_098, x=5, y=[0x22], zoom=0x40
+video offset=CINEMATIC_098, x=5, y=[0x22]
 break
 ```
 
@@ -15524,8 +15524,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SUB_VAR22_BY_23.inc:6`
 
 ```
 call LABEL_590A
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_251, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_251, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x33` — `LABEL_570A`
@@ -15534,8 +15534,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SUB_VAR22_BY_23.inc:6`.
 
 ```
 call LABEL_591A
-sub [0x08], 0x000A
-video type=1, offset=CINEMATIC_250, x=[0x07], y=[0x08], zoom=0x40
+sub [BUDDY_Y], 0x000A
+video offset=CINEMATIC_250, x=[BUDDY_X], y=[BUDDY_Y]
 ```
 
 ### `0x33` — `LABEL_69B2`
@@ -15544,7 +15544,7 @@ Defined at `src/levels/_unified/prison/cart__post_DECREMENT_VAR08_BY_D.inc:207`.
 
 ```
 call LABEL_5F0C
-add [0x07], 0x0008
+add [BUDDY_X], 0x0008
 break
 ```
 
@@ -15555,7 +15555,7 @@ Defined at `src/levels/_unified/capsule/cart__post_COMPUTE_VAR22_AS_VAR40_MINUS_
 ```
 call COMPUTE_VAR22_AS_VAR40_MINUS_28
 call LABEL_00F7
-video type=1, offset=CINEMATIC_064, x=5, y=[0x22], zoom=0x40
+video offset=CINEMATIC_064, x=5, y=[0x22]
 ```
 
 ### `0x34` — `LABEL_00BC`
@@ -15564,7 +15564,7 @@ Defined at `src/levels/_unified/capsule/dos__entry.inc:1746`.
 
 ```
 break
-jl [0x01], 0x0122, LABEL_00CD
+jl [HERO_X], 0x0122, LABEL_00CD
 call LABEL_5423
 ```
 
@@ -15574,7 +15574,7 @@ Defined at `src/levels/_unified/passcode/amiga__entry.inc:230`.
 
 ```
 db 0x11
-COPY_PROTECTION_VAR_BC_C6__AMIGA__ENTRY:
+COPY_PROTECTION_VAR_BC_C6:
 and [0xBC], 0x0010
 ```
 
@@ -15583,9 +15583,9 @@ and [0xBC], 0x0010
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VAREF_TO_A0.inc:81`.
 
 ```
-video type=1, offset=CINEMATIC_015, x=179, y=100
+video offset=CINEMATIC_015, x=179, y=100
 break
-video type=1, offset=CINEMATIC_015, x=179, y=100
+video offset=CINEMATIC_015, x=179, y=100
 ```
 
 ### `0x34` — `LABEL_11C6`
@@ -15593,7 +15593,7 @@ video type=1, offset=CINEMATIC_015, x=179, y=100
 Defined at `src/levels/_unified/capsule/amiga__post_INIT_VARS_E6_E7_1.inc:8`.
 
 ```
-video type=1, offset=CINEMATIC_014, x=239, y=102
+video offset=CINEMATIC_014, x=239, y=102
 mov [0xEB], 0x00C8
 mov [0xEC], 0x0061
 ```
@@ -15604,8 +15604,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:196`
 
 ```
 break
-jg [0x02], 0xA6, LABEL_1F1D
-video type=1, offset=CINEMATIC_499, x=65, y=131
+jg [HERO_Y], 0xA6, LABEL_1F1D
+video offset=CINEMATIC_499, x=65, y=131
 ```
 
 ### `0x34` — `LABEL_2031`
@@ -15614,8 +15614,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:196
 
 ```
 break
-jg [0x02], 0xA6, LABEL_2031
-video type=1, offset=CINEMATIC_502, x=65, y=131
+jg [HERO_Y], 0xA6, LABEL_2031
+video offset=CINEMATIC_502, x=65, y=131
 ```
 
 ### `0x34` — `LABEL_22C7`
@@ -15624,7 +15624,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_E6_68_69_6B.inc:39`.
 
 ```
 break
-video type=1, offset=CINEMATIC_313, x=[0x68], y=[0x69], zoom=0x40
+video offset=CINEMATIC_313, x=[0x68], y=[0x69]
 djnz [0xE6], LABEL_22C7
 ```
 
@@ -15644,7 +15644,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:45
 
 ```
 jne [HACK_VAR_67], [0x10], SHARED_RET
-video type=1, offset=CINEMATIC_191, x=[0x21], y=[0x22], zoom=0x40
+video offset=CINEMATIC_191, x=[0x21], y=[0x22]
 ret
 ```
 
@@ -15654,7 +15654,7 @@ Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_68_69_6B.inc:39`.
 
 ```
 break
-video type=1, offset=CINEMATIC_334, x=[0x68], y=[0x69], zoom=0x40
+video offset=CINEMATIC_334, x=[0x68], y=[0x69]
 djnz [0xE6], LABEL_248B
 ```
 
@@ -15664,7 +15664,7 @@ Defined at `src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:963`
 
 ```
 break
-video type=1, offset=CINEMATIC_426, x=[0x07], y=[0x08], zoom=0x40
+video offset=CINEMATIC_426, x=[BUDDY_X], y=[BUDDY_Y]
 djnz [0x29], LABEL_289B
 ```
 
@@ -15684,8 +15684,8 @@ Defined at `src/levels/_unified/caves/amiga__post_SPLIT_VAR09_BITS_INTO_VAR0D.in
 
 ```
 jne [HACK_VAR_67], [0x10], JUMP_TO_LABEL_532D
-call COMPUTE_OFFSET_PLUS21_MINUS22__AMIGA__POST_SPLIT_VAR09_BITS_INTO_VAR0D
-video type=1, offset=CINEMATIC_070, x=[0x21], y=[0x22], zoom=0x40
+call COMPUTE_OFFSET_PLUS21_MINUS22
+video offset=CINEMATIC_070, x=[0x21], y=[0x22]
 ```
 
 ### `0x34` — `LABEL_69E6`
@@ -15694,7 +15694,7 @@ Defined at `src/levels/_unified/prison/dos__post_DECREMENT_VAR08_BY_D.inc:323`.
 
 ```
 call LABEL_61BC
-add [0x07], 0x0003
+add [BUDDY_X], 0x0003
 break
 ```
 
@@ -15723,9 +15723,9 @@ mov [0x21], 0x00B6
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_0E_29.inc:75`.
 
 ```
-video type=1, offset=CINEMATIC_323, x=[0xe8], y=[0xe9], zoom=0x40
+video offset=CINEMATIC_323, x=[0xe8], y=[0xe9]
 break
-video type=1, offset=CINEMATIC_324, x=[0xe8], y=[0xe9], zoom=0x40
+video offset=CINEMATIC_324, x=[0xe8], y=[0xe9]
 ```
 
 ### `0x35` — `LABEL_10B1`
@@ -15733,7 +15733,7 @@ video type=1, offset=CINEMATIC_324, x=[0xe8], y=[0xe9], zoom=0x40
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VAREF_TO_A0.inc:28`.
 
 ```
-video type=1, offset=CINEMATIC_058, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_058, x=[0xe9], y=[0xea]
 play id=0x008D, freq=0x14, vol=0x40, channel=0x00
 break
 ```
@@ -15743,7 +15743,7 @@ break
 Defined at `src/levels/_unified/prison/dos__post_DERIVE_VAR12_11_10_FROM_VAR9.inc:75`.
 
 ```
-mov [0x26], [0x07]
+mov [0x26], [BUDDY_X]
 jne [0x10], 0x01, LABEL_1278
 call LABEL_1294
 ```
@@ -15753,9 +15753,9 @@ call LABEL_1294
 Defined at `src/levels/_unified/capsule/amiga__post_INIT_VARS_E6_E7_1.inc:91`.
 
 ```
-video type=1, offset=CINEMATIC_009, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_BUDDY_PULLS_LESTER_4, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_010, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_BUDDY_PULLS_LESTER_5, x=[0xe9], y=[0xea]
 ```
 
 ### `0x35` — `LABEL_2096`
@@ -15763,9 +15763,9 @@ video type=1, offset=CINEMATIC_010, x=[0xe9], y=[0xea], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:354`.
 
 ```
-jg [0x01], 0x32, LABEL_20A8
-mov [0x01], 0xFFE2
-mov [0x02], 0x005A
+jg [HERO_X], 0x32, LABEL_20A8
+mov [HERO_X], 0xFFE2
+mov [HERO_Y], 0x005A
 ```
 
 ### `0x35` — `LABEL_21AA`
@@ -15773,9 +15773,9 @@ mov [0x02], 0x005A
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:354`.
 
 ```
-jg [0x01], 0x32, LABEL_21BC
-mov [0x01], 0xFFE2
-mov [0x02], 0x005A
+jg [HERO_X], 0x32, LABEL_21BC
+mov [HERO_X], 0xFFE2
+mov [HERO_Y], 0x005A
 ```
 
 ### `0x35` — `LABEL_2238`
@@ -15783,7 +15783,7 @@ mov [0x02], 0x005A
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAREF_TO_A0.inc:28`.
 
 ```
-video type=1, offset=CINEMATIC_404, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_404, x=[0xe9], y=[0xea]
 play id=0x008D, freq=0x14, vol=0x40, channel=0x00
 break
 ```
@@ -15793,7 +15793,7 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAREF_TO_A0.inc:28`.
 
 ```
-video type=1, offset=CINEMATIC_408, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_408, x=[0xe9], y=[0xea]
 play id=0x008D, freq=0x14, vol=0x40, channel=0x00
 break
 ```
@@ -15813,9 +15813,9 @@ LABEL_23FC:
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_E6_E7_1.inc:94`.
 
 ```
-video type=1, offset=CINEMATIC_355, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_355, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_356, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_356, x=[0xe9], y=[0xea]
 ```
 
 ### `0x35` — `LABEL_2547`
@@ -15823,7 +15823,7 @@ video type=1, offset=CINEMATIC_356, x=[0xe9], y=[0xea], zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7_1.inc:92`.
 
 ```
-video type=1, offset=CINEMATIC_359, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_359, x=[0xe9], y=[0xea]
 break
 HANG_DRAW_CIN_358:
 ```
@@ -15833,9 +15833,9 @@ HANG_DRAW_CIN_358:
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7_1.inc:101`.
 
 ```
-video type=1, offset=CINEMATIC_356, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_356, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_357, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_357, x=[0xe9], y=[0xea]
 ```
 
 ### `0x35` — `LABEL_83FA`
@@ -15864,7 +15864,7 @@ Defined at `src/levels/_unified/caves/amiga__post_INLINE_SET_VARE6_TO_3.inc:14`.
 
 ```
 break
-video type=1, offset=CINEMATIC_550, x=123, y=172
+video offset=CINEMATIC_550, x=123, y=172
 djnz [0xE6], LABEL_03C7
 ```
 
@@ -15873,9 +15873,9 @@ djnz [0xE6], LABEL_03C7
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_0E_29.inc:87`.
 
 ```
-video type=1, offset=CINEMATIC_326, x=[0xea], y=[0xeb], zoom=0x40
+video offset=CINEMATIC_326, x=[0xea], y=[0xeb]
 break
-video type=1, offset=CINEMATIC_327, x=[0xea], y=[0xeb], zoom=0x40
+video offset=CINEMATIC_327, x=[0xea], y=[0xeb]
 ```
 
 ### `0x36` — `LABEL_09FB`
@@ -15883,7 +15883,7 @@ video type=1, offset=CINEMATIC_327, x=[0xea], y=[0xeb], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_PLAY_FX_56_CH3_SET_VAREE_F.inc:51`.
 
 ```
-video type=1, offset=CINEMATIC_573, x=125, y=65508, zoom=0x40
+video offset=CINEMATIC_573, x=125, y=65508
 play id=0x0052, freq=0x1E, vol=0x40, channel=0x00
 break
 ```
@@ -15901,7 +15901,7 @@ db 0x11
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:86`.
 
 ```
-video type=1, offset=CINEMATIC_033, x=160, y=100, zoom=[0x50]	;@enc=alt
+video offset=CINEMATIC_033, x=160, y=100, zoom=[0x50]	;@enc=alt
 play id=0x0075, freq=0x0C, vol=0x10, channel=0x03
 break
 ```
@@ -15911,8 +15911,8 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:98`.
 
 ```
-video type=1, offset=CINEMATIC_048, x=160, y=100
-video type=1, offset=CINEMATIC_033, x=160, y=100, zoom=[0x43]	;@enc=alt
+video offset=CINEMATIC_048, x=160, y=100
+video offset=CINEMATIC_033, x=160, y=100, zoom=[0x43]	;@enc=alt
 play id=0x0052, freq=0x1E, vol=0x40, channel=0x03
 ```
 
@@ -15921,9 +15921,9 @@ play id=0x0052, freq=0x1E, vol=0x40, channel=0x03
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VAREF_TO_A0.inc:65`.
 
 ```
-video type=1, offset=CINEMATIC_051, x=2, y=103
+video offset=CINEMATIC_051, x=2, y=103
 break
-video type=1, offset=CINEMATIC_052, x=2, y=103
+video offset=CINEMATIC_052, x=2, y=103
 ```
 
 ### `0x36` — `LABEL_120C`
@@ -15931,9 +15931,9 @@ video type=1, offset=CINEMATIC_052, x=2, y=103
 Defined at `src/levels/_unified/capsule/amiga__post_INIT_VARS_E6_E7_1.inc:37`.
 
 ```
-video type=1, offset=CINEMATIC_005, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_BUDDY_PULLS_LESTER_0, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_006, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_BUDDY_PULLS_LESTER_1, x=[0xe9], y=[0xea]
 ```
 
 ### `0x36` — `LABEL_1233`
@@ -15941,7 +15941,7 @@ video type=1, offset=CINEMATIC_006, x=[0xe9], y=[0xea], zoom=0x40
 Defined at `src/levels/_unified/capsule/amiga__post_INIT_VARS_E6_E7_1.inc:53`.
 
 ```
-video type=1, offset=CINEMATIC_120, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_120, x=[0xe9], y=[0xea]
 break
 HANG_DRAW_CIN_005_AT_1239:
 ```
@@ -15952,7 +15952,7 @@ Defined at `src/levels/_unified/tank/amiga__post_DRAW_CIN_6_AND_RET.inc:35`.
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_120, x=[0x0f], y=[0x10], zoom=0x40
+video offset=CINEMATIC_120, x=[0x0f], y=[0x10]
 mov [HACK_VAR_67], 0x0003
 ```
 
@@ -15961,9 +15961,9 @@ mov [HACK_VAR_67], 0x0003
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:39`.
 
 ```
-video type=1, offset=CINEMATIC_125, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_125, x=160, y=[0xe8]
 break
-video type=1, offset=CINEMATIC_126, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_126, x=160, y=[0xe8]
 ```
 
 ### `0x36` — `LABEL_19E2`
@@ -15971,9 +15971,9 @@ video type=1, offset=CINEMATIC_126, x=160, y=[0xe8], zoom=0x40
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:203`.
 
 ```
-video type=1, offset=CINEMATIC_129, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_130, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_134, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_129, x=65506, y=114
+video offset=CINEMATIC_130, x=65506, y=114
+video offset=CINEMATIC_134, x=65506, y=114
 ```
 
 ### `0x36` — `LABEL_1A81`
@@ -15992,7 +15992,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:10
 
 ```
 call INCREMENT_VAR27_AND_DISPATCH
-video type=1, offset=CINEMATIC_017, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_017, x=[0x24], y=[0x25]
 break
 ```
 
@@ -16001,8 +16001,8 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:98`.
 
 ```
-video type=1, offset=CINEMATIC_394, x=160, y=100
-video type=1, offset=CINEMATIC_379, x=160, y=100, zoom=[0x43]	;@enc=alt
+video offset=CINEMATIC_394, x=160, y=100
+video offset=CINEMATIC_379, x=160, y=100, zoom=[0x43]	;@enc=alt
 play id=0x0052, freq=0x1E, vol=0x40, channel=0x03
 ```
 
@@ -16011,7 +16011,7 @@ play id=0x0052, freq=0x1E, vol=0x40, channel=0x03
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:86`.
 
 ```
-video type=1, offset=CINEMATIC_382, x=160, y=100, zoom=[0x50]	;@enc=alt
+video offset=CINEMATIC_382, x=160, y=100, zoom=[0x50]	;@enc=alt
 play id=0x0075, freq=0x0C, vol=0x10, channel=0x03
 break
 ```
@@ -16021,8 +16021,8 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:98`.
 
 ```
-video type=1, offset=CINEMATIC_397, x=160, y=100
-video type=1, offset=CINEMATIC_382, x=160, y=100, zoom=[0x43]	;@enc=alt
+video offset=CINEMATIC_397, x=160, y=100
+video offset=CINEMATIC_382, x=160, y=100, zoom=[0x43]	;@enc=alt
 play id=0x0052, freq=0x1E, vol=0x40, channel=0x03
 ```
 
@@ -16041,9 +16041,9 @@ selectVideoPage 0xFF
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_E6_E7_1.inc:40`.
 
 ```
-video type=1, offset=CINEMATIC_351, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_351, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_352, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_352, x=[0xe9], y=[0xea]
 ```
 
 ### `0x36` — `LABEL_23BA`
@@ -16051,7 +16051,7 @@ video type=1, offset=CINEMATIC_352, x=[0xe9], y=[0xea], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_E6_E7_1.inc:56`.
 
 ```
-video type=1, offset=CINEMATIC_431, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_431, x=[0xe9], y=[0xea]
 break
 HANG_DRAW_CIN_351_AT_23C0:
 ```
@@ -16061,9 +16061,9 @@ HANG_DRAW_CIN_351_AT_23C0:
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAREF_TO_A0.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_400, x=2, y=103
+video offset=CINEMATIC_400, x=2, y=103
 je [0xDB], 0x01, LABEL_23DC
-video type=1, offset=CINEMATIC_407, x=2, y=103
+video offset=CINEMATIC_407, x=2, y=103
 ```
 
 ### `0x36` — `LABEL_24E7`
@@ -16071,9 +16071,9 @@ video type=1, offset=CINEMATIC_407, x=2, y=103
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7_1.inc:47`.
 
 ```
-video type=1, offset=CINEMATIC_352, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_352, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_353, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_353, x=[0xe9], y=[0xea]
 ```
 
 ### `0x36` — `LABEL_250E`
@@ -16081,7 +16081,7 @@ video type=1, offset=CINEMATIC_353, x=[0xe9], y=[0xea], zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7_1.inc:63`.
 
 ```
-video type=1, offset=CINEMATIC_435, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_435, x=[0xe9], y=[0xea]
 break
 HANG_DRAW_CIN_352_AT_2514:
 ```
@@ -16092,8 +16092,8 @@ Defined at `src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_3
 
 ```
 break
-jl [0x01], 0x91, LABEL_28BD
-video type=1, offset=CINEMATIC_426, x=[0x01], y=[0x02], zoom=[0xc8]	;@enc=alt
+jl [HERO_X], 0x91, LABEL_28BD
+video offset=CINEMATIC_426, x=[HERO_X], y=[HERO_Y], zoom=[0xc8]	;@enc=alt
 ```
 
 ### `0x36` — `LABEL_2A3E`
@@ -16101,9 +16101,9 @@ video type=1, offset=CINEMATIC_426, x=[0x01], y=[0x02], zoom=[0xc8]	;@enc=alt
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:130`.
 
 ```
-video type=1, offset=CINEMATIC_436, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_436, x=160, y=[0xe7]
 break
-video type=1, offset=CINEMATIC_437, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_437, x=160, y=[0xe7]
 ```
 
 ### `0x36` — `LABEL_2A56`
@@ -16112,7 +16112,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:13
 
 ```
 call LABEL_63B1
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -16121,9 +16121,9 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:133`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_440, x=160, y=[0xe7]
 break
-video type=1, offset=CINEMATIC_441, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_441, x=160, y=[0xe7]
 ```
 
 ### `0x36` — `LABEL_2BD3`
@@ -16131,9 +16131,9 @@ video type=1, offset=CINEMATIC_441, x=160, y=[0xe7], zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:143`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_440, x=160, y=[0xe8]
 break
-video type=1, offset=CINEMATIC_441, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_441, x=160, y=[0xe8]
 ```
 
 ### `0x36` — `LABEL_2C05`
@@ -16141,9 +16141,9 @@ video type=1, offset=CINEMATIC_441, x=160, y=[0xe8], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:304`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_441, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_440, x=65506, y=114
+video offset=CINEMATIC_441, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
 ```
 
 ### `0x36` — `LABEL_2CA4`
@@ -16151,9 +16151,9 @@ video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:351`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_441, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_446, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_440, x=65506, y=114
+video offset=CINEMATIC_441, x=65506, y=114
+video offset=CINEMATIC_446, x=65506, y=114
 ```
 
 ### `0x36` — `LABEL_2D82`
@@ -16161,9 +16161,9 @@ video type=1, offset=CINEMATIC_446, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:307`.
 
 ```
-video type=1, offset=CINEMATIC_444, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_449, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_444, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
+video offset=CINEMATIC_449, x=65506, y=114
 ```
 
 ### `0x36` — `LABEL_2E21`
@@ -16171,9 +16171,9 @@ video type=1, offset=CINEMATIC_449, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:354`.
 
 ```
-video type=1, offset=CINEMATIC_444, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_450, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_444, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
+video offset=CINEMATIC_450, x=65506, y=114
 ```
 
 ### `0x36` — `LABEL_3DD3`
@@ -16182,7 +16182,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARE6_TO_F.inc:235
 
 ```
 break
-jl [0x01], 0x91, LABEL_3DD3
+jl [HERO_X], 0x91, LABEL_3DD3
 setup channel=0x05, address=KILL_CHANNEL_LANDING
 ```
 
@@ -16192,7 +16192,7 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN489_AT_X21_Y27_ZOOM_4
 
 ```
 jne [0x13], 0x82, LABEL_3E17
-video type=1, offset=CINEMATIC_471, x=[0x21], y=[0x27], zoom=0x40
+video offset=CINEMATIC_471, x=[0x21], y=[0x27]
 ret
 ```
 
@@ -16202,7 +16202,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VAR29_TO_4.inc:11
 
 ```
 mov [0x32], 0x0001
-video type=1, offset=CINEMATIC_421, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_421, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -16222,7 +16222,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_0E_29.inc:175`.
 
 ```
 break
-jl [0x01], 0xC3, LABEL_0655
+jl [HERO_X], 0xC3, LABEL_0655
 mov [0x63], 0x0064
 ```
 
@@ -16252,8 +16252,8 @@ Defined at `src/levels/_unified/capsule/cart__post_PLAY_FX_56_CH3_SET_VAREE_F.in
 
 ```
 mov [0xEB], 0x00A0
-video type=1, offset=CINEMATIC_238, x=[0xeb], y=[0x40], zoom=0x40
-video type=1, offset=CINEMATIC_602, x=[0xeb], y=[0x40], zoom=0x40
+video offset=CINEMATIC_238, x=[0xeb], y=[0x40]
+video offset=CINEMATIC_602, x=[0xeb], y=[0x40]
 ```
 
 ### `0x37` — `LABEL_0AE1`
@@ -16263,7 +16263,7 @@ Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_E6_E7.inc:66`.
 ```
 break
 jne [HACK_VAR_67], 0xCA, LABEL_0AE1
-jg [0x01], 0x6E, LABEL_0B08
+jg [HERO_X], 0x6E, LABEL_0B08
 ```
 
 ### `0x37` — `LABEL_0B97`
@@ -16273,7 +16273,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7.inc:66`.
 ```
 break
 jne [HACK_VAR_67], 0xCA, LABEL_0B97
-jg [0x01], 0x6E, LABEL_0BC1
+jg [HERO_X], 0x6E, LABEL_0BC1
 ```
 
 ### `0x37` — `LABEL_0BD3`
@@ -16302,7 +16302,7 @@ Defined at `src/levels/_unified/code_wheel/amiga__post_COMPUTE_VAR07_TIMES_44_PL
 
 ```
 jne [0x06], 0x63, LABEL_0CDD
-video type=1, offset=CINEMATIC_031, x=[0x07], y=[0x08], zoom=[0x04]
+video offset=CINEMATIC_031, x=[0x07], y=[0x08], zoom=[0x04]
 ret
 ```
 
@@ -16313,7 +16313,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7.inc:241`.
 ```
 break
 jne [HACK_VAR_67], 0x8E, LABEL_0DA7
-jl [0x01], 0xBB, LABEL_0DA7
+jl [HERO_X], 0xBB, LABEL_0DA7
 ```
 
 ### `0x37` — `LABEL_0ED5`
@@ -16321,9 +16321,9 @@ jl [0x01], 0xBB, LABEL_0DA7
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:122`.
 
 ```
-video type=1, offset=CINEMATIC_034, x=160, y=100
+video offset=CINEMATIC_034, x=160, y=100
 break
-video type=1, offset=CINEMATIC_035, x=160, y=100
+video offset=CINEMATIC_035, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_0F9F`
@@ -16341,9 +16341,9 @@ play id=0x0052, freq=0x1E, vol=0x40, channel=0x02
 Defined at `src/levels/_unified/caves/amiga__post_INIT_VARS_6C_6D_71_70.inc:291`.
 
 ```
-video type=1, offset=CINEMATIC_249, x=160, y=100
-video type=1, offset=CINEMATIC_250, x=164, y=100
-video type=1, offset=CINEMATIC_251, x=168, y=100
+video offset=CINEMATIC_249, x=160, y=100
+video offset=CINEMATIC_250, x=164, y=100
+video offset=CINEMATIC_251, x=168, y=100
 ```
 
 ### `0x37` — `LABEL_130E`
@@ -16351,9 +16351,9 @@ video type=1, offset=CINEMATIC_251, x=168, y=100
 Defined at `src/levels/_unified/caves/dos__post_INIT_VARS_E6_E7_E9_E8.inc:73`.
 
 ```
-video type=1, offset=CINEMATIC_192, x=[0xe6], y=[0x02], zoom=0x40
+video offset=CINEMATIC_192, x=[0xe6], y=[HERO_Y]
 break
-video type=1, offset=CINEMATIC_193, x=[0xe6], y=[0x02], zoom=0x40
+video offset=CINEMATIC_193, x=[0xe6], y=[HERO_Y]
 ```
 
 ### `0x37` — `LABEL_13FB`
@@ -16362,7 +16362,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAR29_TO_4.inc:112
 
 ```
 mov [0x32], 0x0001
-video type=1, offset=CINEMATIC_244, x=[0x01], y=[0x02], zoom=0x40
+video offset=CINEMATIC_244, x=[HERO_X], y=[HERO_Y]
 break
 ```
 
@@ -16371,9 +16371,9 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAREC_TO_AF.inc:83`.
 
 ```
-mov [0x01], 0x0097
-mov [0x02], 0x00C8
-video type=1, offset=CINEMATIC_334, x=[0x01], y=[0x02], zoom=0x40
+mov [HERO_X], 0x0097
+mov [HERO_Y], 0x00C8
+video offset=CINEMATIC_334, x=[HERO_X], y=[HERO_Y]
 ```
 
 ### `0x37` — `LABEL_1951`
@@ -16382,7 +16382,7 @@ Defined at `src/levels/_unified/tank/cart__post_INIT_VAR1_NEG50_PLAY_8B_TWICE.in
 
 ```
 jne [0x06], 0x02, LABEL_195E
-video type=1, offset=CINEMATIC_220, x=[0x07], y=[0x08], zoom=[0x09]
+video offset=CINEMATIC_220, x=[0x07], y=[0x08], zoom=[0x09]
 ret
 ```
 
@@ -16391,9 +16391,9 @@ ret
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:130`.
 
 ```
-video type=1, offset=CINEMATIC_380, x=160, y=100
+video offset=CINEMATIC_380, x=160, y=100
 break
-video type=1, offset=CINEMATIC_381, x=160, y=100
+video offset=CINEMATIC_381, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_1EFB`
@@ -16401,9 +16401,9 @@ video type=1, offset=CINEMATIC_381, x=160, y=100
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:177`.
 
 ```
-video type=1, offset=CINEMATIC_557, x=0, y=137
-jl [0x01], 0xA0, LABEL_1F09
-video type=1, offset=CINEMATIC_558, x=160, y=100
+video offset=CINEMATIC_557, x=0, y=137
+jl [HERO_X], 0xA0, LABEL_1F09
+video offset=CINEMATIC_558, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_1F0E`
@@ -16412,8 +16412,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:188`
 
 ```
 break
-jg [0x01], 0x28, LABEL_1F0E
-video type=1, offset=CINEMATIC_561, x=23, y=62
+jg [HERO_X], 0x28, LABEL_1F0E
+video offset=CINEMATIC_561, x=23, y=62
 ```
 
 ### `0x37` — `LABEL_1F40`
@@ -16422,8 +16422,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:208`
 
 ```
 break
-jl [0x02], 0xB1, LABEL_1F40
-video type=1, offset=CINEMATIC_498, x=270, y=210, zoom=0x40
+jl [HERO_Y], 0xB1, LABEL_1F40
+video offset=CINEMATIC_498, x=270, y=210
 ```
 
 ### `0x37` — `LABEL_1F55`
@@ -16432,8 +16432,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:217`
 
 ```
 break
-jg [0x01], 0x73, LABEL_1F55
-video type=1, offset=CINEMATIC_498, x=42, y=184
+jg [HERO_X], 0x73, LABEL_1F55
+video offset=CINEMATIC_498, x=42, y=184
 ```
 
 ### `0x37` — `LABEL_1F64`
@@ -16442,8 +16442,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:225`
 
 ```
 break
-jg [0x01], 0xBE, LABEL_1F64
-video type=1, offset=CINEMATIC_561, x=174, y=199
+jg [HERO_X], 0xBE, LABEL_1F64
+video offset=CINEMATIC_561, x=174, y=199
 ```
 
 ### `0x37` — `LABEL_1F89`
@@ -16451,9 +16451,9 @@ video type=1, offset=CINEMATIC_561, x=174, y=199
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:248`.
 
 ```
-video type=1, offset=CINEMATIC_335, x=280, y=101, zoom=0x40
-video type=1, offset=CINEMATIC_336, x=226, y=140
-jg [0x01], 0x82, LABEL_1FA8
+video offset=CINEMATIC_335, x=280, y=101
+video offset=CINEMATIC_336, x=226, y=140
+jg [HERO_X], 0x82, LABEL_1FA8
 ```
 
 ### `0x37` — `LABEL_1FB4`
@@ -16461,9 +16461,9 @@ jg [0x01], 0x82, LABEL_1FA8
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:130`.
 
 ```
-video type=1, offset=CINEMATIC_383, x=160, y=100
+video offset=CINEMATIC_383, x=160, y=100
 break
-video type=1, offset=CINEMATIC_384, x=160, y=100
+video offset=CINEMATIC_384, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_1FC7`
@@ -16471,9 +16471,9 @@ video type=1, offset=CINEMATIC_384, x=160, y=100
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:276`.
 
 ```
-video type=1, offset=CINEMATIC_335, x=65498, y=30, zoom=0x40
-jg [0x02], 0x5A, LABEL_1FD9
-video type=1, offset=CINEMATIC_337, x=65534, y=31, zoom=0x40
+video offset=CINEMATIC_335, x=65498, y=30
+jg [HERO_Y], 0x5A, LABEL_1FD9
+video offset=CINEMATIC_337, x=65534, y=31
 ```
 
 ### `0x37` — `LABEL_1FDE`
@@ -16481,8 +16481,8 @@ video type=1, offset=CINEMATIC_337, x=65534, y=31, zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:287`.
 
 ```
-jl [0x01], 0xC8, LABEL_1FE8
-video type=1, offset=CINEMATIC_347, x=231, y=111
+jl [HERO_X], 0xC8, LABEL_1FE8
+video offset=CINEMATIC_347, x=231, y=111
 LABEL_1FE8:
 ```
 
@@ -16493,7 +16493,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:167
 ```
 db 0x11
 HANG_DRAW_CIN_460:
-video type=1, offset=CINEMATIC_460, x=160, y=100
+video offset=CINEMATIC_460, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_200F`
@@ -16501,9 +16501,9 @@ video type=1, offset=CINEMATIC_460, x=160, y=100
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:177`.
 
 ```
-video type=1, offset=CINEMATIC_563, x=0, y=137
-jl [0x01], 0xA0, LABEL_201D
-video type=1, offset=CINEMATIC_564, x=160, y=100
+video offset=CINEMATIC_563, x=0, y=137
+jl [HERO_X], 0xA0, LABEL_201D
+video offset=CINEMATIC_564, x=160, y=100
 ```
 
 ### `0x37` — `LABEL_2022`
@@ -16512,8 +16512,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:188
 
 ```
 break
-jg [0x01], 0x28, LABEL_2022
-video type=1, offset=CINEMATIC_570, x=23, y=62
+jg [HERO_X], 0x28, LABEL_2022
+video offset=CINEMATIC_570, x=23, y=62
 ```
 
 ### `0x37` — `LABEL_2054`
@@ -16522,8 +16522,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:208
 
 ```
 break
-jl [0x02], 0xB1, LABEL_2054
-video type=1, offset=CINEMATIC_501, x=270, y=210, zoom=0x40
+jl [HERO_Y], 0xB1, LABEL_2054
+video offset=CINEMATIC_501, x=270, y=210
 ```
 
 ### `0x37` — `LABEL_2069`
@@ -16531,9 +16531,9 @@ video type=1, offset=CINEMATIC_501, x=270, y=210, zoom=0x40
 Defined at `src/levels/_unified/caves/cart__post_INLINE_SET_VARE6_TO_1E.inc:204`.
 
 ```
-video type=1, offset=CINEMATIC_278, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_279, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_284, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_278, x=65506, y=114
+video offset=CINEMATIC_279, x=65506, y=114
+video offset=CINEMATIC_284, x=65506, y=114
 ```
 
 ### `0x37` — `LABEL_2078`
@@ -16542,8 +16542,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:225
 
 ```
 break
-jg [0x01], 0xBE, LABEL_2078
-video type=1, offset=CINEMATIC_570, x=174, y=199
+jg [HERO_X], 0xBE, LABEL_2078
+video offset=CINEMATIC_570, x=174, y=199
 ```
 
 ### `0x37` — `LABEL_209D`
@@ -16551,9 +16551,9 @@ video type=1, offset=CINEMATIC_570, x=174, y=199
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:248`.
 
 ```
-video type=1, offset=CINEMATIC_336, x=280, y=101, zoom=0x40
-video type=1, offset=CINEMATIC_337, x=226, y=140
-jg [0x01], 0x82, LABEL_20BC
+video offset=CINEMATIC_336, x=280, y=101
+video offset=CINEMATIC_337, x=226, y=140
+jg [HERO_X], 0x82, LABEL_20BC
 ```
 
 ### `0x37` — `LABEL_20B7`
@@ -16561,7 +16561,7 @@ jg [0x01], 0x82, LABEL_20BC
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:368`.
 
 ```
-video type=1, offset=CINEMATIC_448, x=160, y=100
+video offset=CINEMATIC_448, x=160, y=100
 play id=0x0052, freq=0x22, vol=0x40, channel=0x02
 setPalette 0x02
 ```
@@ -16573,7 +16573,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:38
 ```
 call LABEL_5811
 mov [0x0E], 0x0005
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x37` — `LABEL_20DB`
@@ -16581,9 +16581,9 @@ sub [0x07], 0x0001
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:276`.
 
 ```
-video type=1, offset=CINEMATIC_336, x=65498, y=30, zoom=0x40
-jg [0x02], 0x5A, LABEL_20ED
-video type=1, offset=CINEMATIC_338, x=65534, y=31, zoom=0x40
+video offset=CINEMATIC_336, x=65498, y=30
+jg [HERO_Y], 0x5A, LABEL_20ED
+video offset=CINEMATIC_338, x=65534, y=31
 ```
 
 ### `0x37` — `LABEL_20F2`
@@ -16591,8 +16591,8 @@ video type=1, offset=CINEMATIC_338, x=65534, y=31, zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:287`.
 
 ```
-jl [0x01], 0xC8, LABEL_20FC
-video type=1, offset=CINEMATIC_348, x=231, y=111
+jl [HERO_X], 0xC8, LABEL_20FC
+video offset=CINEMATIC_348, x=231, y=111
 LABEL_20FC:
 ```
 
@@ -16602,7 +16602,7 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:303
 
 ```
 break
-video type=1, offset=CINEMATIC_348, x=56, y=60
+video offset=CINEMATIC_348, x=56, y=60
 jmp LABEL_2119
 ```
 
@@ -16642,8 +16642,8 @@ Defined at `src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:27
 
 ```
 call LABEL_652F
-mov [0x21], [0x07]
-mov [0x22], [0x08]
+mov [0x21], [BUDDY_X]
+mov [0x22], [BUDDY_Y]
 ```
 
 ### `0x37` — `LABEL_2274`
@@ -16651,7 +16651,7 @@ mov [0x22], [0x08]
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAREF_TO_A0.inc:48`.
 
 ```
-video type=1, offset=CINEMATIC_397, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_397, x=[0xeb], y=[0xec]
 play id=0x008D, freq=0x14, vol=0x40, channel=0x03
 break
 ```
@@ -16661,9 +16661,9 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_E6_E7_1.inc:40`.
 
 ```
-video type=1, offset=CINEMATIC_351, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_351, x=[0xe9], y=[0xea]
 break
-video type=1, offset=CINEMATIC_352, x=[0xe9], y=[0xea], zoom=0x40
+video offset=CINEMATIC_352, x=[0xe9], y=[0xea]
 ```
 
 ### `0x37` — `LABEL_39EC`
@@ -16672,8 +16672,8 @@ Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VAR29_TO_8.inc:84`.
 
 ```
 break
-jg [0x02], 0x7F, LABEL_39EC
-jl [0x02], 0x64, LABEL_39EC
+jg [HERO_Y], 0x7F, LABEL_39EC
+jl [HERO_Y], 0x64, LABEL_39EC
 ```
 
 ### `0x37` — `LABEL_3A55`
@@ -16682,8 +16682,8 @@ Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VAR29_TO_8.inc:84`
 
 ```
 break
-jg [0x02], 0x7F, LABEL_3A55
-jl [0x02], 0x64, LABEL_3A55
+jg [HERO_Y], 0x7F, LABEL_3A55
+jl [HERO_Y], 0x64, LABEL_3A55
 ```
 
 ### `0x38` — `LABEL_0F14`
@@ -16701,7 +16701,7 @@ mov [0xF8], [0x6E]
 Defined at `src/levels/_unified/capsule/amiga__post_INLINE_SET_VARED_TO_5.inc:169`.
 
 ```
-video type=1, offset=CINEMATIC_137, x=160, y=100
+video offset=CINEMATIC_137, x=160, y=100
 play id=0x0052, freq=0x22, vol=0x40, channel=0x02
 setPalette 0x02
 ```
@@ -16711,7 +16711,7 @@ setPalette 0x02
 Defined at `src/levels/_unified/capsule/amiga__post_INIT_VARS_E6_E7_1.inc:28`.
 
 ```
-video type=1, offset=CINEMATIC_120, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_120, x=[0xeb], y=[0xec]
 break
 HANG_DRAW_CIN_005_AT_1203:
 ```
@@ -16721,9 +16721,9 @@ HANG_DRAW_CIN_005_AT_1203:
 Defined at `src/levels/_unified/capsule/amiga__post_INIT_VARS_E6_E7_1.inc:62`.
 
 ```
-video type=1, offset=CINEMATIC_005, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_BUDDY_PULLS_LESTER_0, x=[0xeb], y=[0xec]
 break
-video type=1, offset=CINEMATIC_006, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_BUDDY_PULLS_LESTER_1, x=[0xeb], y=[0xec]
 ```
 
 ### `0x38` — `LABEL_1918`
@@ -16731,8 +16731,8 @@ video type=1, offset=CINEMATIC_006, x=[0xeb], y=[0xec], zoom=0x40
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:139`.
 
 ```
-video type=1, offset=CINEMATIC_129, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_130, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_129, x=65506, y=114
+video offset=CINEMATIC_130, x=65506, y=114
 break
 ```
 
@@ -16741,9 +16741,9 @@ break
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:296`.
 
 ```
-video type=1, offset=CINEMATIC_129, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_130, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_136, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_129, x=65506, y=114
+video offset=CINEMATIC_130, x=65506, y=114
+video offset=CINEMATIC_136, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_1EDF`
@@ -16751,7 +16751,7 @@ video type=1, offset=CINEMATIC_136, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:175`.
 
 ```
-video type=1, offset=CINEMATIC_005, x=[0x24], y=[0x25], zoom=0x40
+video offset=CINEMATIC_005, x=[0x24], y=[0x25]
 break
 call COPY_HASH_AND_SPLIT_VAR38_3F_3E
 ```
@@ -16761,9 +16761,9 @@ call COPY_HASH_AND_SPLIT_VAR38_3F_3E
 Defined at `src/levels/_unified/capsule/cart__post_INLINE_SET_VARED_TO_5.inc:157`.
 
 ```
-video type=1, offset=CINEMATIC_394, x=160, y=100
+video offset=CINEMATIC_394, x=160, y=100
 break
-video type=1, offset=CINEMATIC_395, x=160, y=100
+video offset=CINEMATIC_395, x=160, y=100
 ```
 
 ### `0x38` — `LABEL_20B7`
@@ -16771,7 +16771,7 @@ video type=1, offset=CINEMATIC_395, x=160, y=100
 Defined at `src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:368`.
 
 ```
-video type=1, offset=CINEMATIC_448, x=160, y=100
+video offset=CINEMATIC_448, x=160, y=100
 play id=0x0052, freq=0x22, vol=0x40, channel=0x02
 setPalette 0x02
 ```
@@ -16791,7 +16791,7 @@ call LABEL_61E0
 Defined at `src/levels/_unified/capsule/dos__post_INIT_VARS_E6_E7_1.inc:31`.
 
 ```
-video type=1, offset=CINEMATIC_431, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_431, x=[0xeb], y=[0xec]
 break
 HANG_DRAW_CIN_351_AT_238A:
 ```
@@ -16811,9 +16811,9 @@ break
 Defined at `src/levels/_unified/caves/cart__post_INIT_VARS_E6_68_69_6B.inc:100`.
 
 ```
-jg [0x02], 0x46, LABEL_2505
-jl [0x01], 0xC2, LABEL_2505
-jg [0x01], 0xD0, LABEL_24FB
+jg [HERO_Y], 0x46, LABEL_2505
+jl [HERO_X], 0xC2, LABEL_2505
+jg [HERO_X], 0xD0, LABEL_24FB
 ```
 
 ### `0x38` — `LABEL_251D`
@@ -16821,9 +16821,9 @@ jg [0x01], 0xD0, LABEL_24FB
 Defined at `src/levels/_unified/capsule/cart__post_INIT_VARS_E6_E7_1.inc:72`.
 
 ```
-video type=1, offset=CINEMATIC_352, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_352, x=[0xeb], y=[0xec]
 break
-video type=1, offset=CINEMATIC_353, x=[0xeb], y=[0xec], zoom=0x40
+video offset=CINEMATIC_353, x=[0xeb], y=[0xec]
 ```
 
 ### `0x38` — `LABEL_2B3B`
@@ -16831,8 +16831,8 @@ video type=1, offset=CINEMATIC_353, x=[0xeb], y=[0xec], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:240`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_441, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_440, x=65506, y=114
+video offset=CINEMATIC_441, x=65506, y=114
 break
 ```
 
@@ -16841,9 +16841,9 @@ break
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:304`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_441, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_440, x=65506, y=114
+video offset=CINEMATIC_441, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_2CB8`
@@ -16861,9 +16861,9 @@ sub [0x86], 0x0001
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:397`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_441, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_447, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_440, x=65506, y=114
+video offset=CINEMATIC_441, x=65506, y=114
+video offset=CINEMATIC_447, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_2D82`
@@ -16871,9 +16871,9 @@ video type=1, offset=CINEMATIC_447, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:307`.
 
 ```
-video type=1, offset=CINEMATIC_444, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_449, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_444, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
+video offset=CINEMATIC_449, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_2EBF`
@@ -16881,9 +16881,9 @@ video type=1, offset=CINEMATIC_449, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:400`.
 
 ```
-video type=1, offset=CINEMATIC_444, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_451, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_444, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
+video offset=CINEMATIC_451, x=65506, y=114
 ```
 
 ### `0x38` — `LABEL_3D5C`
@@ -16912,7 +16912,7 @@ Defined at `src/levels/_unified/tank/amiga__post_DRAW_CIN_6_AND_RET.inc:35`.
 
 ```
 selectVideoPage 0x00
-video type=1, offset=CINEMATIC_120, x=[0x0f], y=[0x10], zoom=0x40
+video offset=CINEMATIC_120, x=[0x0f], y=[0x10]
 mov [HACK_VAR_67], 0x0003
 ```
 
@@ -16921,9 +16921,9 @@ mov [HACK_VAR_67], 0x0003
 Defined at `src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:39`.
 
 ```
-video type=1, offset=CINEMATIC_125, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_125, x=160, y=[0xe8]
 break
-video type=1, offset=CINEMATIC_126, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_126, x=160, y=[0xe8]
 ```
 
 ### `0x39` — `LABEL_2A3E`
@@ -16931,9 +16931,9 @@ video type=1, offset=CINEMATIC_126, x=160, y=[0xe8], zoom=0x40
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:130`.
 
 ```
-video type=1, offset=CINEMATIC_436, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_436, x=160, y=[0xe7]
 break
-video type=1, offset=CINEMATIC_437, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_437, x=160, y=[0xe7]
 ```
 
 ### `0x39` — `LABEL_2A56`
@@ -16942,7 +16942,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:13
 
 ```
 call LABEL_63B1
-add [0x07], 0x0001
+add [BUDDY_X], 0x0001
 break
 ```
 
@@ -16951,9 +16951,9 @@ break
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:133`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_440, x=160, y=[0xe7]
 break
-video type=1, offset=CINEMATIC_441, x=160, y=[0xe7], zoom=0x40
+video offset=CINEMATIC_441, x=160, y=[0xe7]
 ```
 
 ### `0x39` — `LABEL_2BD3`
@@ -16961,9 +16961,9 @@ video type=1, offset=CINEMATIC_441, x=160, y=[0xe7], zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:143`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_440, x=160, y=[0xe8]
 break
-video type=1, offset=CINEMATIC_441, x=160, y=[0xe8], zoom=0x40
+video offset=CINEMATIC_441, x=160, y=[0xe8]
 ```
 
 ### `0x39` — `LABEL_3596`
@@ -17003,7 +17003,7 @@ Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:38
 ```
 call LABEL_5811
 mov [0x0E], 0x0005
-sub [0x07], 0x0001
+sub [BUDDY_X], 0x0001
 ```
 
 ### `0x3A` — `LABEL_21EE`
@@ -17021,9 +17021,9 @@ mov [0xE9], 0x0032
 Defined at `src/levels/_unified/capsule/dos__post_SET_VARB3_TO_0000.inc:351`.
 
 ```
-video type=1, offset=CINEMATIC_440, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_441, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_446, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_440, x=65506, y=114
+video offset=CINEMATIC_441, x=65506, y=114
+video offset=CINEMATIC_446, x=65506, y=114
 ```
 
 ### `0x3A` — `LABEL_2E21`
@@ -17031,9 +17031,9 @@ video type=1, offset=CINEMATIC_446, x=65506, y=114, zoom=0x40
 Defined at `src/levels/_unified/capsule/cart__post_SET_VARB3_TO_0000.inc:354`.
 
 ```
-video type=1, offset=CINEMATIC_444, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_445, x=65506, y=114, zoom=0x40
-video type=1, offset=CINEMATIC_450, x=65506, y=114, zoom=0x40
+video offset=CINEMATIC_444, x=65506, y=114
+video offset=CINEMATIC_445, x=65506, y=114
+video offset=CINEMATIC_450, x=65506, y=114
 ```
 
 ### `0x3C` — `LABEL_21C5`
@@ -17103,7 +17103,7 @@ Defined at `src/levels/_unified/capsule/amiga__post_DERIVE_VAR12_11_10_FROM_VAR9
 ```
 je [0x4D], 0x7FFF, LABEL_2EA6
 jge [0x4D], 0x4000, LABEL_2EA6
-mov [0x07], [0x4C]
+mov [BUDDY_X], [0x4C]
 ```
 
 ### `0x3C` — `LABEL_2F4F`
@@ -17282,7 +17282,7 @@ mov [0x03], 0x0040
 
 ### `0x0D` — `LABEL_00AF`
 
-Defined at `src/levels/_unified/ending/dos__post_DRAW_CIN_103_LOOP.inc:4`.
+Defined at `src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:4`.
 
 ```
 mov [0x01], 0x00A0
@@ -17305,9 +17305,9 @@ mov [0x03], 0x0040
 Defined at `src/levels/_unified/ending/amiga__post_DRAW_CIN_106_107_FX_57.inc:61`.
 
 ```
-video type=1, offset=CINEMATIC_075, x=[0x01], y=[0x02], zoom=[0x03]
+video offset=CINEMATIC_075, x=[0x01], y=[0x02], zoom=[0x03]
 break
-video type=1, offset=CINEMATIC_076, x=[0x01], y=[0x02], zoom=[0x03]
+video offset=CINEMATIC_076, x=[0x01], y=[0x02], zoom=[0x03]
 ```
 
 ### `0x1E` — `LABEL_0558`

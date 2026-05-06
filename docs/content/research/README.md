@@ -192,6 +192,17 @@ finding is comparative) records which releases it applies to.
   2 DOS-only (POLY_ANIM at 0x12, 0x13). dos↔msdos extractions
   agree byte-for-byte across all 146 indices.
 
+- [21 — Unified-source chunk audit](#/research/21-unified-chunk-audit):
+  per-stage review of every `.inc` chunk file under
+  `another-world-source-reconstruction/src/levels/_unified/`,
+  reading actual contents (not just filenames) to validate the
+  one-line `;@include` purpose comments and to identify chunks
+  that mix unrelated topics, are tiny fragments of a larger
+  subsystem, or are arbitrary byte-address cuts. Living document —
+  fills in as each stage's audit completes; LAKE is the first
+  stage. Currently flags ~9 LAKE regrouping candidates (e.g.,
+  the beast-AI dispatcher fragmented across 4 files; `BEAST_AMBIENT_CASE_5/6` stranded in a "spawn" file; a 100-line dead block tacked onto a particle-burst loop).
+
 - [06 — Unused-polygon survey (level 2 first pass)](#/research/06-unused-polygons-survey):
   **64 polygons in Amiga level 2 + 57 in DOS level 2 are not
   referenced from any bytecode `video` call** and aren't children

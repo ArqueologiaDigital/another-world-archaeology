@@ -4,7 +4,7 @@ Each AW VM `setup channel=NN, address=ROUTINE` opcode starts a thread on channel
 
 This is a STATIC scan: every `setup` opcode in the unified source is collected and grouped by stage. A channel listed with multiple routines means the bytecode REASSIGNS that channel during execution — the channel hosts a sequence of features as the level progresses.
 
-Total `setup` opcodes scanned: **4082**.
+Total `setup` opcodes scanned: **4075**.
 
 ## Channel-usage frequency (across all stages)
 
@@ -18,13 +18,13 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x15` | 184 |
 | `0x23` | 157 |
 | `0x16` | 145 |
-| `0x3B` | 135 |
+| `0x3B` | 133 |
 | `0x02` | 133 |
 | `0x36` | 124 |
 | `0x25` | 120 |
 | `0x04` | 119 |
-| `0x37` | 117 |
 | `0x27` | 116 |
+| `0x37` | 116 |
 | `0x34` | 100 |
 | `0x05` | 99 |
 | `0x03` | 93 |
@@ -40,20 +40,20 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x06` | 45 |
 | `0x28` | 44 |
 | `0x24` | 43 |
-| `0x0A` | 40 |
+| `0x0A` | 39 |
 | `0x1A` | 37 |
 | `0x3E` | 34 |
 | `0x2D` | 33 |
-| `0x0F` | 28 |
 | `0x09` | 28 |
+| `0x0F` | 27 |
 | `0x26` | 26 |
 | `0x2A` | 26 |
 | `0x31` | 25 |
 | `0x2B` | 25 |
 | `0x08` | 25 |
-| `0x0B` | 25 |
 | `0x11` | 25 |
 | `0x3A` | 24 |
+| `0x0B` | 24 |
 | `0x10` | 23 |
 | `0x1B` | 22 |
 | `0x0C` | 22 |
@@ -62,7 +62,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x18` | 18 |
 | `0x2F` | 18 |
 | `0x29` | 18 |
-| `0x0E` | 18 |
+| `0x0E` | 17 |
 | `0x13` | 15 |
 | `0x21` | 15 |
 | `0x0D` | 14 |
@@ -81,66 +81,66 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | channel | branch | routine | source |
 | ---: | --- | --- | --- |
 | `0x01` | shared | `CH_01_INIT_VAR_04_06` | src/levels/_unified/intro/intro_late_pages_fill.inc:172 |
-| `0x01` | shared | `DRAW_CIN_190_LOOP` | src/levels/_unified/intro/intro_music_marks_and_city.inc:51 |
-| `0x01` | shared | `DRAW_CIN_426_427_TWICE` | src/levels/_unified/intro/intro_music_marks_and_city.inc:212 (+1 more) |
-| `0x01` | shared | `DRAW_CIN_431_LOOP` | src/levels/_unified/intro/intro_music_marks_and_city.inc:109 |
+| `0x01` | shared | `DRAW_CIN_190_LOOP` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:51 |
+| `0x01` | shared | `DRAW_CIN_426_427_TWICE` | src/levels/_unified/intro/intro_city_seq_draws.inc:59 (+1 more) |
+| `0x01` | shared | `DRAW_CIN_431_LOOP` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:109 |
 | `0x01` | shared | `FILL_FF_8_AND_DRAW_CIN_517_518` | src/levels/_unified/intro/intro_scene_late_phase.inc:87 |
 | `0x01` | shared | `FILL_FF_PAGE_LOOP` | src/levels/_unified/intro/intro_particle_channels.inc:102 (+1 more) |
 | `0x01` | shared | `INTRO_FILL_AND_DRAW_413_414` | src/levels/_unified/intro/intro_lake_transition.inc:84 |
 | `0x01` | shared | `INTRO_FILL_AND_DRAW_CIN_103` | src/levels/_unified/intro/intro_dna_animation.inc:244 |
-| `0x01` | shared | `INTRO_FILL_AND_DRAW_CIN_429_430` | src/levels/_unified/intro/intro_music_marks_and_city.inc:148 |
+| `0x01` | shared | `INTRO_FILL_AND_DRAW_CIN_429_430` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:148 |
 | `0x01` | shared | `INTRO_SCENE_INIT_PARTICLES` | src/levels/_unified/intro/intro_entry_and_dispatchers.inc:44 (+1 more) |
-| `0x01` | shared | `INTRO_SET_PAL_7_FILL_PAGE0_5` | src/levels/_unified/intro/intro_scene_final.inc:433 |
-| `0x01` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:515 (+3 more) |
-| `0x02` | shared | `CH_02_INIT_VARS_01_02_03` | src/levels/_unified/intro/intro_scene_final.inc:434 |
-| `0x02` | shared | `COPY_BG_PAGE_AND_DISPLAY_TEXT_23` | src/levels/_unified/intro/intro_music_marks_and_city.inc:32 |
+| `0x01` | shared | `INTRO_SET_PAL_7_FILL_PAGE0_5` | src/levels/_unified/intro/intro_scene_final_fx_phase.inc:139 |
+| `0x01` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:274 (+3 more) |
+| `0x02` | shared | `CH_02_INIT_VARS_01_02_03` | src/levels/_unified/intro/intro_scene_final_fx_phase.inc:140 |
+| `0x02` | shared | `COPY_BG_PAGE_AND_DISPLAY_TEXT_23` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:32 |
 | `0x02` | shared | `INIT_PAGE0_PAUSE2_FILL1` | src/levels/_unified/intro/intro_lake_transition.inc:308 |
 | `0x02` | shared | `INIT_VAR_04_PAL_E_VAR_01` | src/levels/_unified/intro/intro_lake_transition.inc:410 |
-| `0x02` | shared | `INTRO_FILL_AND_DRAW_CIN_385` | src/levels/_unified/intro/intro_music_marks_and_city.inc:426 |
-| `0x02` | shared | `INTRO_FILL_PAGE0_DRAW_CIN_118` | src/levels/_unified/intro/intro_lake_transition.inc:516 |
+| `0x02` | shared | `INTRO_FILL_AND_DRAW_CIN_385` | src/levels/_unified/intro/intro_city_seq_draws.inc:273 |
+| `0x02` | shared | `INTRO_FILL_PAGE0_DRAW_CIN_118` | src/levels/_unified/intro/intro_lake_phase_fx_drifts.inc:102 |
 | `0x02` | shared | `INTRO_PAUSE_3_AND_DRAW_CIN_138` | src/levels/_unified/intro/intro_song_init_and_decor.inc:74 |
 | `0x02` | shared | `INTRO_PAUSE_3_PLAY_SONG_INIT` | src/levels/_unified/intro/intro_scene_late_phase.inc:88 |
 | `0x02` | shared | `INTRO_PLAY_BG_AUDIO_LOOP` | src/levels/_unified/intro/intro_entry_and_dispatchers.inc:48 |
 | `0x02` | shared | `INTRO_PLAY_FX_AND_PALETTE_4_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:245 |
 | `0x02` | shared | `INTRO_TRANSITION_TO_LAKE_SCENE` | src/levels/_unified/intro/intro_first_scene_init.inc:46 |
-| `0x02` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:482 |
+| `0x02` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_phase_fx_drifts.inc:68 |
 | `0x02` | shared | `SETUP_CITY_SEQ_CHANNELS` | src/levels/_unified/intro/intro_lake_transition.inc:85 |
-| `0x02` | shared | `SETUP_INTRO_CITY_CHANNELS` | src/levels/_unified/intro/intro_music_marks_and_city.inc:149 |
-| `0x02` | shared | `SETUP_INTRO_PARTICLE_CHANNELS` | src/levels/_unified/intro/intro_music_marks_and_city.inc:511 |
+| `0x02` | shared | `SETUP_INTRO_CITY_CHANNELS` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:149 |
+| `0x02` | shared | `SETUP_INTRO_PARTICLE_CHANNELS` | src/levels/_unified/intro/intro_city_seq_draws.inc:358 |
 | `0x03` | shared | `CH_03_INIT_VAR_01_02_FFF6` | src/levels/_unified/intro/intro_song_init_and_decor.inc:21 |
 | `0x03` | shared | `CH_03_INIT_VAR_03_04` | src/levels/_unified/intro/intro_lake_transition.inc:73 |
 | `0x03` | shared | `DRAW_CINEMATIC_005_LOOP` | src/levels/_unified/intro/intro_entry_and_dispatchers.inc:49 |
 | `0x03` | shared | `DRAW_CINEMATIC_053_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:246 |
-| `0x03` | shared | `DRAW_CIN_112_AT_143_94_LOOP` | src/levels/_unified/intro/intro_scene_final.inc:435 |
-| `0x03` | shared | `DRAW_CIN_120_LOOP_VAR03` | src/levels/_unified/intro/intro_lake_transition.inc:517 |
-| `0x03` | shared | `DRAW_CIN_128_521_ZOOM_VAR04` | src/levels/_unified/intro/intro_lake_transition.inc:494 |
+| `0x03` | shared | `DRAW_CIN_112_AT_143_94_LOOP` | src/levels/_unified/intro/intro_scene_final_fx_phase.inc:141 |
+| `0x03` | shared | `DRAW_CIN_120_LOOP_VAR03` | src/levels/_unified/intro/intro_lake_phase_fx_drifts.inc:103 |
+| `0x03` | shared | `DRAW_CIN_128_521_ZOOM_VAR04` | src/levels/_unified/intro/intro_lake_phase_fx_drifts.inc:80 |
 | `0x03` | shared | `DRAW_CIN_468_509_ZOOM_VAR04` | src/levels/_unified/intro/intro_late_pages_fill.inc:173 |
 | `0x03` | shared | `DRAW_CIN_505_LOOP_VAR_02` | src/levels/_unified/intro/intro_lake_transition.inc:309 |
-| `0x03` | shared | `DRAW_CITY_SEQ_432_433` | src/levels/_unified/intro/intro_music_marks_and_city.inc:50 |
-| `0x03` | shared | `INIT_VAR_02_AND_BREAK_LOOP` | src/levels/_unified/intro/intro_music_marks_and_city.inc:436 |
+| `0x03` | shared | `DRAW_CITY_SEQ_432_433` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:50 |
+| `0x03` | shared | `INIT_VAR_02_AND_BREAK_LOOP` | src/levels/_unified/intro/intro_city_seq_draws.inc:283 |
 | `0x03` | shared | `INTRO_TRANSITION_TO_LAKE_SETUP` | src/levels/_unified/intro/intro_particle_channels.inc:62 |
-| `0x03` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:244 (+6 more) |
+| `0x03` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:357 (+6 more) |
 | `0x04` | shared | `CH_04_INIT_VAR_04_05` | src/levels/_unified/intro/intro_song_init_and_decor.inc:22 |
 | `0x04` | shared | `CH_04_INIT_VAR_05` | src/levels/_unified/intro/intro_lake_transition.inc:74 |
 | `0x04` | shared | `INTRO_DRAW_CIN_528_AT_96_131` | src/levels/_unified/intro/intro_scene_late_phase.inc:26 |
-| `0x04` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:87 (+7 more) |
+| `0x04` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:284 (+7 more) |
 | `0x04` | shared | `SET_PALETTE_17_INIT_VAR_14` | src/levels/_unified/intro/intro_particle_channels.inc:313 |
 | `0x04` | shared | `SET_PALETTE_18` | src/levels/_unified/intro/intro_particle_channels.inc:221 |
 | `0x05` | shared | `CH_05_INIT_VARS_06_07_08` | src/levels/_unified/intro/intro_scene_late_phase.inc:45 |
 | `0x05` | shared | `CH_05_INIT_VAR_06_07` | src/levels/_unified/intro/intro_song_init_and_decor.inc:23 |
 | `0x05` | shared | `CH_05_INIT_VAR_07_08` | src/levels/_unified/intro/intro_lake_transition.inc:75 |
-| `0x05` | shared | `DISPLAY_TEXT_21` | src/levels/_unified/intro/intro_music_marks_and_city.inc:249 |
-| `0x05` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:88 (+5 more) |
+| `0x05` | shared | `DISPLAY_TEXT_21` | src/levels/_unified/intro/intro_city_seq_draws.inc:96 |
+| `0x05` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:285 (+5 more) |
 | `0x06` | shared | `CH_06_DRAW_CIN_457_PARTICLES` | src/levels/_unified/intro/intro_song_init_and_decor.inc:24 |
 | `0x06` | shared | `DRAW_CIN_450_451_SEQ` | src/levels/_unified/intro/intro_lake_transition.inc:59 |
-| `0x06` | shared | `DRAW_CITY_SEQ_439_440` | src/levels/_unified/intro/intro_music_marks_and_city.inc:48 |
-| `0x06` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:92 (+5 more) |
+| `0x06` | shared | `DRAW_CITY_SEQ_439_440` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:48 |
+| `0x06` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:286 (+5 more) |
 | `0x06` | shared | `SCENE_TRANSITION_NEXT_PHASE` | src/levels/_unified/intro/intro_first_scene_init.inc:23 |
 | `0x07` | shared | `CH_07_INIT_VAR_08_09` | src/levels/_unified/intro/intro_song_init_and_decor.inc:25 |
-| `0x07` | shared | `DRAW_CIN_382_TWICE_AT_DIFF_Y` | src/levels/_unified/intro/intro_music_marks_and_city.inc:349 (+1 more) |
-| `0x07` | shared | `DRAW_CITY_SEQ_435_436` | src/levels/_unified/intro/intro_music_marks_and_city.inc:49 |
-| `0x07` | shared | `INIT_VAR_03_AND_LOOP` | src/levels/_unified/intro/intro_music_marks_and_city.inc:321 |
-| `0x07` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_music_marks_and_city.inc:76 (+3 more) |
+| `0x07` | shared | `DRAW_CIN_382_TWICE_AT_DIFF_Y` | src/levels/_unified/intro/intro_city_seq_draws.inc:196 (+1 more) |
+| `0x07` | shared | `DRAW_CITY_SEQ_435_436` | src/levels/_unified/intro/intro_music_marks_and_city_pans.inc:49 |
+| `0x07` | shared | `INIT_VAR_03_AND_LOOP` | src/levels/_unified/intro/intro_city_seq_draws.inc:168 |
+| `0x07` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:360 (+3 more) |
 | `0x08` | shared | `DELETE_CHANNELS_0A_TO_1F` | src/levels/_unified/intro/intro_first_scene_init.inc:43 |
 | `0x08` | shared | `DRAW_CIN_128_521_ZOOM_VAR04` | src/levels/_unified/intro/intro_scene_late_phase.inc:43 |
 | `0x08` | shared | `INIT_VARS_10_11_AND_SELECT_PAGE0` | src/levels/_unified/intro/intro_song_init_and_decor.inc:28 |
@@ -152,17 +152,17 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x09` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_scene_late_phase.inc:86 (+1 more) |
 | `0x0A` | shared | `CH_0A_INIT_VAR_02` | src/levels/_unified/intro/intro_particle_channels.inc:74 |
 | `0x0A` | shared | `DNA_VAR_05_HOLD_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:44 |
-| `0x0A` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:89 (+3 more) |
+| `0x0A` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:272 (+3 more) |
 | `0x0A` | shared | `SELECT_PAGE0_AND_DISPATCH_BLIT` | src/levels/_unified/intro/intro_lake_transition.inc:76 |
-| `0x0A` | shared | `SHOW_PAGE_0_LOOP_INTRO` | src/levels/_unified/intro/intro_music_marks_and_city.inc:213 (+1 more) |
+| `0x0A` | shared | `SHOW_PAGE_0_LOOP_INTRO` | src/levels/_unified/intro/intro_city_seq_draws.inc:60 (+1 more) |
 | `0x0B` | shared | `CH_0B_INIT_VAR_03` | src/levels/_unified/intro/intro_particle_channels.inc:75 |
 | `0x0B` | shared | `DRAW_CIN_442_443_444_DESC_Y` | src/levels/_unified/intro/intro_lake_transition.inc:77 |
-| `0x0B` | shared | `DRAW_CITY_SEQ_419_420` | src/levels/_unified/intro/intro_music_marks_and_city.inc:257 |
+| `0x0B` | shared | `DRAW_CITY_SEQ_419_420` | src/levels/_unified/intro/intro_city_seq_draws.inc:104 |
 | `0x0B` | shared | `DRAW_DNA_ANIMATION_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:45 |
 | `0x0B` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_lake_transition.inc:90 (+1 more) |
 | `0x0B` | shared | `PLAY_FX_2C_AND_DRAW_CIN_000` | src/levels/_unified/intro/intro_particle_channels.inc:314 |
 | `0x0C` | shared | `CH_0C_INIT_VAR_04` | src/levels/_unified/intro/intro_particle_channels.inc:76 |
-| `0x0C` | shared | `DISPLAY_TEXT_0A_0B_PLAY_FX` | src/levels/_unified/intro/intro_music_marks_and_city.inc:248 |
+| `0x0C` | shared | `DISPLAY_TEXT_0A_0B_PLAY_FX` | src/levels/_unified/intro/intro_city_seq_draws.inc:95 |
 | `0x0C` | shared | `DNA_VAR_05_DRIFT_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:49 |
 | `0x0C` | shared | `DRAW_INTRO_DECOR_340` | src/levels/_unified/intro/intro_particle_channels.inc:315 |
 | `0x0C` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_particle_channels.inc:370 |
@@ -182,8 +182,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x10` | shared | `CH_10_DRAW_CIN_353_PARTICLE` | src/levels/_unified/intro/intro_particle_channels.inc:80 |
 | `0x10` | shared | `DNA_VAR_05_DRIFT_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:59 |
 | `0x10` | shared | `DRAW_INTRO_DECOR_329` | src/levels/_unified/intro/intro_particle_channels.inc:319 |
-| `0x10` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_music_marks_and_city.inc:424 (+2 more) |
-| `0x10` | shared | `SHOW_PAGE_FF_LOOP_INTRO` | src/levels/_unified/intro/intro_music_marks_and_city.inc:214 (+1 more) |
+| `0x10` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/intro/intro_city_seq_draws.inc:271 (+2 more) |
+| `0x10` | shared | `SHOW_PAGE_FF_LOOP_INTRO` | src/levels/_unified/intro/intro_city_seq_draws.inc:61 (+1 more) |
 | `0x11` | shared | `CH_11_INIT_PARTICLE_POS_2` | src/levels/_unified/intro/intro_particle_channels.inc:81 |
 | `0x11` | shared | `DRAW_CIN_453_454_SEQ` | src/levels/_unified/intro/intro_song_init_and_decor.inc:36 (+2 more) |
 | `0x11` | shared | `DRAW_DNA_ANIMATION_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:60 |
@@ -209,9 +209,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x1D` | shared | `DRAW_DNA_ANIMATION_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:90 |
 | `0x1E` | shared | `DNA_VAR_05_DRIFT_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:94 |
 | `0x1F` | shared | `DRAW_DNA_ANIMATION_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:95 |
-| `0x3C` | shared | `BLIT_AND_COPY_PAGE_FF_LOOP` | src/levels/_unified/intro/intro_dna_animation.inc:186 (+51 more) |
+| `0x3C` | shared | `BLIT_AND_COPY_PAGE_FF_LOOP` | src/levels/_unified/intro/intro_city_seq_draws.inc:110 (+51 more) |
 | `0x3C` | shared | `BLIT_AND_DISPATCH_HERO_ACTION` | src/levels/_unified/intro/intro_entry_and_dispatchers.inc:4 (+1 more) |
-| `0x3C` | shared | `BLIT_AND_DISPATCH_VAR3` | src/levels/_unified/intro/intro_dna_animation.inc:177 (+2 more) |
+| `0x3C` | shared | `BLIT_AND_DISPATCH_VAR3` | src/levels/_unified/intro/intro_city_seq_draws.inc:74 (+2 more) |
 | `0x3C` | shared | `BLIT_DISPATCH_HERO_ACTION_ALT` | src/levels/_unified/intro/intro_lake_transition.inc:256 (+3 more) |
 
 ## LAKE
@@ -223,9 +223,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x00` | dos | `DISPLAY_TEXT_01FA_AND_FADE_TO_PAL_2` | src/levels/_unified/lake/scene_transition_and_decor.inc:105 |
 | `0x00` | shared | `ENTRY_POINT_OF_LAKE_LEVEL` | src/levels/_unified/lake/lake_entry_and_init.inc:163 |
 | `0x00` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lester_drift_and_swing.inc:256 |
-| `0x00` | shared | `LAKE_LEVEL_INIT` | src/levels/_unified/lake/beast_kills_lester_and_respawn.inc:151 |
+| `0x00` | shared | `LAKE_LEVEL_INIT` | src/levels/_unified/lake/beast_kills_lester_and_respawn.inc:143 |
 | `0x01` | shared | `DRAW_INSIDE_ALIEN_POOL_SCENARIO` | src/levels/_unified/lake/pool_underwater_cinematic.inc:93 |
-| `0x01` | shared | `DROPLET_DRIP_LOOP_RANDOM_X` | src/levels/_unified/lake/screen_to_the_right_setups.inc:151 |
+| `0x01` | shared | `DROPLET_DRIP_LOOP_RANDOM_X` | src/levels/_unified/lake/screen_to_the_right_setups.inc:147 |
 | `0x01` | shared | `DROPLET_FALL_AND_IMPACT_LOOP` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:29 |
 | `0x01` | shared | `INIT_HERO_AT_POOL_EXIT` | src/levels/_unified/lake/random_init_and_music_setup.inc:75 |
 | `0x01` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/channel_cleanup_helpers.inc:2 |
@@ -252,7 +252,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x07` | dos | `POOL_WATER_WAVY_GLARE_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:140 |
 | `0x07` | shared | `THE_BEAST_APPEARS_FOR_THE_FIRST_TIME_IN_THE_BACKGROUND` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:54 |
 | `0x07` | shared | `THE_BEAST_WANDERS_ON_THE_FIRST_SCREEN_TO_THE_RIGHT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:25 |
-| `0x07` | shared | `THE_BEAST_WANDERS_ON_THE_SECOND_SCREEN_TO_THE_RIGHT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:109 |
+| `0x07` | shared | `THE_BEAST_WANDERS_ON_THE_SECOND_SCREEN_TO_THE_RIGHT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:105 |
 | `0x08` | shared | `SNEAKY_TENTACLE_FROM_THE_POOL` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:60 |
 | `0x09` | shared | `BEETLE_ANIM_DRIFT_RIGHT` | src/levels/_unified/lake/beetle_walking_and_kick_detector.inc:99 |
 | `0x09` | shared | `BEETLE_ANIM_HOVER_BOBBING_LOOP` | src/levels/_unified/lake/beetle.inc:210 (+1 more) |
@@ -269,32 +269,32 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0A` | shared | `SCENE_TRANSITION_TO_GETTING_OUT_OF_POOL` | src/levels/_unified/lake/screen_edge_loops.inc:161 |
 | `0x0B` | shared | `LAB_CONSOLE_SINKING_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:126 |
 | `0x0B` | shared | `MULTIPLEX_ANIM_RING1_SLOT_0` | src/levels/_unified/lake/screen_to_the_right_setups.inc:28 |
-| `0x0B` | shared | `MULTIPLEX_ANIM_RING2_SLOT_0` | src/levels/_unified/lake/screen_to_the_right_setups.inc:112 |
+| `0x0B` | shared | `MULTIPLEX_ANIM_RING2_SLOT_0` | src/levels/_unified/lake/screen_to_the_right_setups.inc:108 |
 | `0x0B` | shared | `MULTIPLEX_ANIM_RING3_SLOT_0` | src/levels/_unified/lake/scene_transition_and_decor.inc:29 |
 | `0x0C` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:29 (+1 more) |
 | `0x0C` | shared | `DRAW_LAKE_051_SEQ_FROM_WORKING_POS` | src/levels/_unified/lake/scene_transition_and_decor.inc:30 |
 | `0x0C` | shared | `SINKING_AT_CONSOLE` | src/levels/_unified/lake/pool_underwater_cinematic.inc:130 |
-| `0x0C` | shared | `SWIMMING_UP_LEGS_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:546 |
+| `0x0C` | shared | `SWIMMING_UP_LEGS_ANIMATION` | src/levels/_unified/lake/pool_lab_console_and_bubbles.inc:55 |
 | `0x0D` | shared | `DECOR_F7_BLINK_3X_LOOP` | src/levels/_unified/lake/scene_transition_and_decor.inc:31 |
 | `0x0D` | shared | `MULTIPLEX_ANIM_RING1_SLOT_1` | src/levels/_unified/lake/screen_to_the_right_setups.inc:30 |
-| `0x0D` | shared | `MULTIPLEX_ANIM_RING2_SLOT_1` | src/levels/_unified/lake/screen_to_the_right_setups.inc:114 |
-| `0x0D` | shared | `SWIMMING_UP_TORSO_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:547 |
+| `0x0D` | shared | `MULTIPLEX_ANIM_RING2_SLOT_1` | src/levels/_unified/lake/screen_to_the_right_setups.inc:110 |
+| `0x0D` | shared | `SWIMMING_UP_TORSO_ANIMATION` | src/levels/_unified/lake/pool_lab_console_and_bubbles.inc:56 |
 | `0x0E` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:31 (+1 more) |
 | `0x0E` | shared | `MULTIPLEX_ANIM_RING3_SLOT_1` | src/levels/_unified/lake/scene_transition_and_decor.inc:32 |
 | `0x0E` | shared | `UPDATE_POSITION_OF_BUBBLES` | src/levels/_unified/lake/pool_underwater_cinematic.inc:127 |
 | `0x0F` | shared | `BUBBLES_A_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:128 |
 | `0x0F` | shared | `DRAW_LAKE_051_SEQ_FROM_WORKING_POS` | src/levels/_unified/lake/scene_transition_and_decor.inc:33 |
 | `0x0F` | shared | `MULTIPLEX_ANIM_RING1_SLOT_2` | src/levels/_unified/lake/screen_to_the_right_setups.inc:32 |
-| `0x0F` | shared | `MULTIPLEX_ANIM_RING2_SLOT_2` | src/levels/_unified/lake/screen_to_the_right_setups.inc:116 |
+| `0x0F` | shared | `MULTIPLEX_ANIM_RING2_SLOT_2` | src/levels/_unified/lake/screen_to_the_right_setups.inc:112 |
 | `0x10` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:33 (+1 more) |
 | `0x10` | shared | `BUBBLES_B_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:129 |
 | `0x10` | shared | `DECOR_F7_BLINK_3X_LOOP` | src/levels/_unified/lake/scene_transition_and_decor.inc:34 |
 | `0x11` | shared | `MULTIPLEX_ANIM_RING1_SLOT_3` | src/levels/_unified/lake/screen_to_the_right_setups.inc:34 |
 | `0x11` | shared | `MULTIPLEX_ANIM_RING3_SLOT_2` | src/levels/_unified/lake/scene_transition_and_decor.inc:35 |
-| `0x11` | shared | `MULTIPLEX_RING4_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:118 |
+| `0x11` | shared | `MULTIPLEX_RING4_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:114 |
 | `0x12` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:35 (+1 more) |
 | `0x13` | shared | `MULTIPLEX_RING3_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:36 |
-| `0x13` | shared | `MULTIPLEX_RING5_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:120 |
+| `0x13` | shared | `MULTIPLEX_RING5_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:116 |
 | `0x14` | shared | `DRAW_LAKE_051_SEQ_FROM_WORKING_POS` | src/levels/_unified/lake/scene_transition_and_decor.inc:36 |
 | `0x14` | shared | `ENTITY_DROP_THEN_F15_LOOP` | src/levels/_unified/lake/lake_intro_setup.inc:37 |
 | `0x14` | shared | `GETTING_OUT_OF_THE_POOL__ANIMATION_PART_4` | src/levels/_unified/lake/random_init_and_music_setup.inc:76 |
@@ -326,14 +326,14 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x14` | cart | `RESUME_R_AFTER_VINE_LAND` | src/levels/_unified/lake/lester_drift_and_swing.inc:290 (+1 more) |
 | `0x15` | shared | `DECOR_AT_327_164_BLINK_LOOP` | src/levels/_unified/lake/lester_at_pool_animations.inc:44 |
 | `0x15` | shared | `DECOR_F9_THEN_F10_LOOP` | src/levels/_unified/lake/scene_transition_and_decor.inc:37 |
-| `0x15` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_walk_run_movement.inc:119 (+5 more) |
-| `0x15` | dos | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_walk_run_movement.inc:352 |
+| `0x15` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_walk_run_movement.inc:113 (+5 more) |
+| `0x15` | dos | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/hero_walk_run_movement.inc:336 |
 | `0x15` | shared | `LOOP_DRAW_DECOR_215_AT_327_164` | src/levels/_unified/lake/lake_intro_setup.inc:126 |
 | `0x15` | shared | `POST_RUN_LEFT_DECEL_LOOP` | src/levels/_unified/lake/hero_dispatch_and_leap_left.inc:47 |
 | `0x15` | amiga | `WAIT_RUN_LEFT_THEN_DECEL` | src/levels/_unified/lake/hero_dispatch_and_leap_left.inc:49 |
 | `0x15` | shared | `WAIT_RUN_RIGHT_THEN_DECEL` | src/levels/_unified/lake/hero_leap_and_land.inc:122 |
 | `0x16` | shared | `HERO_AI_DISPATCH` | src/levels/_unified/lake/getting_out_of_pool_animation.inc:249 |
-| `0x16` | shared | `HERO_PHYSICS_TICK` | src/levels/_unified/lake/pool_underwater_cinematic.inc:548 |
+| `0x16` | shared | `HERO_PHYSICS_TICK` | src/levels/_unified/lake/pool_lab_console_and_bubbles.inc:57 |
 | `0x16` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lake_intro_setup.inc:39 (+2 more) |
 | `0x16` | shared | `LAKE_PALETTE_FADE_IN` | src/levels/_unified/lake/lester_at_pool_animations.inc:90 |
 | `0x16` | shared | `LESTER_FALLING_PLAY_AND_ANIM` | src/levels/_unified/lake/scene_transition_and_decor.inc:38 |
@@ -341,7 +341,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x17` | shared | `DECOR_AT_305_155_F14_F9_BG` | src/levels/_unified/lake/lake_intro_setup.inc:36 |
 | `0x17` | shared | `GETTING_OUT_POOL_PART_3_RPT` | src/levels/_unified/lake/getting_out_of_pool_animation.inc:262 |
 | `0x17` | shared | `MAIN_TENTACLE_INSIDE_POOL_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:198 |
-| `0x18` | shared | `SETUP_TENTACLE_ANIMATIONS` | src/levels/_unified/lake/pool_underwater_cinematic.inc:508 |
+| `0x18` | shared | `SETUP_TENTACLE_ANIMATIONS` | src/levels/_unified/lake/pool_lab_console_and_bubbles.inc:17 |
 | `0x24` | shared | `AMBIENT_CH24_DELAY_F1` | src/levels/_unified/lake/opening_bg_droplet_sprinkles.inc:45 |
 | `0x24` | shared | `AMBIENT_LOOP_CH24` | src/levels/_unified/lake/beast_surprises_lester.inc:162 (+1 more) |
 | `0x25` | shared | `AMBIENT_CH25_RESTART` | src/levels/_unified/lake/opening_bg_droplet_sprinkles.inc:46 |
@@ -350,15 +350,15 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x28` | shared | `BEAST_AI_SPAWN_FAR_RIGHT` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:26 |
 | `0x28` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/scene_transition_and_decor.inc:48 |
 | `0x28` | shared | `THE_BEAST_KILLS_LESTER` | src/levels/_unified/lake/beast_distance_check_and_spawns.inc:35 |
-| `0x28` | shared | `WAIT_BEAST_TRIGGER_THEN_INIT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:148 |
+| `0x28` | shared | `WAIT_BEAST_TRIGGER_THEN_INIT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:144 |
 | `0x29` | shared | `CHECK_IF_THE_BEAST_HAS_ALREADY_REACHED_LESTER` | src/levels/_unified/lake/beast_approach_decel.inc:183 (+1 more) |
 | `0x29` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/beast_approach_decel.inc:81 (+2 more) |
 | `0x29` | dos | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/beast_approach_decel.inc:84 |
 | `0x29` | shared | `THE_BEAST_IS_KILLED_BY_A_LASER_SHOT` | src/levels/_unified/lake/scene_transition_and_decor.inc:49 |
 | `0x29` | shared | `WAIT_UNTIL_BEAST_CLOSE` | src/levels/_unified/lake/beast_approach_decel.inc:185 (+1 more) |
-| `0x2B` | shared | `LESTER_FRAME_LOOP` | src/levels/_unified/lake/slug_attack_cinematic.inc:220 |
-| `0x2C` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/slug_attack_cinematic.inc:217 |
-| `0x2C` | shared | `SLUG_ATTACK_LEG_LOOP` | src/levels/_unified/lake/slug_attack_cinematic.inc:166 |
+| `0x2B` | shared | `LESTER_FRAME_LOOP` | src/levels/_unified/lake/slug_attack_cinematic.inc:212 |
+| `0x2C` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/slug_attack_cinematic.inc:209 |
+| `0x2C` | shared | `SLUG_ATTACK_LEG_LOOP` | src/levels/_unified/lake/slug_attack_cinematic.inc:158 |
 | `0x2D` | shared | `BEAST_FLASH_LOOP` | src/levels/_unified/lake/beast_surprise_scene.inc:37 |
 | `0x2D` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/beast_surprise_scene.inc:2 |
 | `0x2D` | shared | `TRIGGER_SCENE_RESUME` | src/levels/_unified/lake/slug_anim_and_flip.inc:197 (+1 more) |
@@ -377,14 +377,14 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x36` | shared | `DRAW_8_SCATTER_DOTS_CYCLE` | src/levels/_unified/lake/screen_to_the_right_setups.inc:38 |
 | `0x36` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/scatter_dots_burst_right_drift.inc:16 (+3 more) |
 | `0x36` | shared | `PARTICLE_BURST_CYCLE_LOOP` | src/levels/_unified/lake/scatter_dots_burst_right_drift.inc:10 (+1 more) |
-| `0x36` | shared | `SCATTER_3DOT_BURST_RIGHT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:121 |
-| `0x37` | shared | `DRAW_8_SCATTER_DOTS_CYCLE` | src/levels/_unified/lake/screen_to_the_right_setups.inc:122 |
-| `0x37` | shared | `PARTICLE_BURST_7X_ENTRY` | src/levels/_unified/lake/screen_to_the_right_setups.inc:40 (+1 more) |
+| `0x36` | shared | `SCATTER_3DOT_BURST_RIGHT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:117 |
+| `0x37` | shared | `DRAW_8_SCATTER_DOTS_CYCLE` | src/levels/_unified/lake/screen_to_the_right_setups.inc:118 |
+| `0x37` | shared | `PARTICLE_BURST_7X_ENTRY` | src/levels/_unified/lake/screen_to_the_right_setups.inc:39 |
 | `0x37` | shared | `SCATTER_8DOT_F3_BLINK_LOOP` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:65 |
 | `0x38` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/channel_cleanup_helpers.inc:4 (+1 more) |
-| `0x38` | shared | `LOOP_DRAW_LAKE_018_AT_CENTER` | src/levels/_unified/lake/screen_to_the_right_setups.inc:123 |
+| `0x38` | shared | `LOOP_DRAW_LAKE_018_AT_CENTER` | src/levels/_unified/lake/screen_to_the_right_setups.inc:119 |
 | `0x38` | shared | `LOOP_DRAW_VINE_FG` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:20 |
-| `0x38` | shared | `PARTICLE_BURST_7X_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:44 |
+| `0x38` | shared | `PARTICLE_BURST_7X_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:40 |
 | `0x38` | shared | `REED_PLANT_ANIMATION` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:66 |
 | `0x3B` | shared | `GOO_DRIPPING_FROM_SLUGS_CLAW_ANIMATION` | src/levels/_unified/lake/slug_attack_cinematic.inc:120 |
 | `0x3C` | shared | `BLIT_FROM_PAGE_0_LOOP` | src/levels/_unified/lake/beast_approach_decel.inc:210 (+15 more) |
@@ -543,9 +543,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x10` | cart | `LABEL_136A` | src/levels/_unified/prison/cart__post_INIT_VARS_A1_A4_A7_AA_PLUS4.inc:24 |
 | `0x11` | amiga | `DRAW_CIN_569_TO_572_6F_AT_F8680E45` | src/levels/_unified/prison/amiga__post_DECREMENT_VAR29_BY_1.inc:54 (+1 more) |
 | `0x11` | dos | `DRAW_CIN_569_TO_572_6F_AT_F8680E45` | src/levels/_unified/prison/dos__post_DECREMENT_VAR29_BY_1.inc:54 (+1 more) |
+| `0x11` | cart | `DRAW_CIN_570_574_BLOCK` | src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:503 |
 | `0x11` | amiga | `DRAW_CIN_570_574_BLOCK` | src/levels/_unified/prison/amiga__post_DRAW_CIN_576_578_BLOCK.inc:198 |
 | `0x11` | dos | `DRAW_CIN_570_574_BLOCK` | src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:198 |
-| `0x11` | cart | `DRAW_CIN_570_574_BLOCK__CART__POST_FOLD_BODY_144B_C55279EA` | src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:503 |
 | `0x11` | cart | `LABEL_1FA0` | src/levels/_unified/prison/cart__post_DECREMENT_VAR29_BY_1.inc:54 (+1 more) |
 | `0x12` | cart | `DRAW_CIN_576_578_BLOCK` | src/levels/_unified/prison/cart__post_STEP_VAR1A_DOWN5_VAR1B_UP2.inc:331 |
 | `0x12` | amiga | `DRAW_CIN_576_578_BLOCK` | src/levels/_unified/prison/amiga__post_DRAW_CIN_037.inc:54 |
@@ -647,9 +647,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x14` | cart | `STEP_DRAW_CIN555_LEFT4_RIGHT1` | src/levels/_unified/prison/cart__post_SET_VAR04_TO_0008.inc:34 |
 | `0x14` | amiga | `STEP_DRAW_CIN555_LEFT4_RIGHT1` | src/levels/_unified/prison/amiga__post_SET_VAR04_TO_0008.inc:11 |
 | `0x14` | dos | `STEP_DRAW_CIN555_LEFT4_RIGHT1` | src/levels/_unified/prison/dos__post_SET_VAR04_TO_0008.inc:34 |
+| `0x15` | cart | `DRAW_CIN_284_BLOCK_95B` | src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:178 |
 | `0x15` | amiga | `DRAW_CIN_284_BLOCK_95B` | src/levels/_unified/prison/amiga__post_DRAW_CIN_280_TO_281_2F_AT_75ED3E60.inc:5 |
 | `0x15` | dos | `DRAW_CIN_284_BLOCK_95B` | src/levels/_unified/prison/dos__post_DRAW_CIN_280_TO_281_2F_AT_75ED3E60.inc:5 |
-| `0x15` | cart | `DRAW_CIN_284_BLOCK_95B__CART__POST_INLINE_KILL_040` | src/levels/_unified/prison/cart__post_INLINE_KILL_040.inc:178 |
 | `0x15` | cart | `DRAW_CIN_694_695_PROGRESSIVE` | src/levels/_unified/prison/cart__post_FOLD_BODY_144B_C55279EA.inc:1230 |
 | `0x15` | dos | `DRAW_CIN_694_695_PROGRESSIVE` | src/levels/_unified/prison/dos__post_DRAW_CIN_576_578_BLOCK.inc:925 |
 | `0x15` | cart | `INLINE_SET_VAR03_TO_7` | src/levels/_unified/prison/cart__post_INLINE_KILL_039.inc:353 |
@@ -831,18 +831,18 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x34` | cart | `HANG_DRAW_CIN_275` | src/levels/_unified/prison/cart__post_COPY_PAGE0_TO_FF_KILL_CHANNEL.inc:155 (+1 more) |
 | `0x34` | amiga | `HANG_DRAW_CIN_275` | src/levels/_unified/prison/amiga__post_COPY_PAGE0_TO_FF_KILL_CHANNEL.inc:147 (+1 more) |
 | `0x34` | dos | `HANG_DRAW_CIN_275` | src/levels/_unified/prison/dos__post_COPY_PAGE0_TO_FF_KILL_CHANNEL.inc:151 (+1 more) |
+| `0x34` | cart | `HANG_DRAW_CIN_549` | src/levels/_unified/prison/cart__post_STEP_VAR1A_DOWN5_VAR1B_UP2.inc:353 |
 | `0x34` | amiga | `HANG_DRAW_CIN_549` | src/levels/_unified/prison/amiga__post_DRAW_CIN_037.inc:76 |
 | `0x34` | dos | `HANG_DRAW_CIN_549` | src/levels/_unified/prison/dos__post_DRAW_CIN_037.inc:76 |
-| `0x34` | cart | `HANG_DRAW_CIN_549__CART__POST_STEP_VAR1A_DOWN5_VAR1B_UP2` | src/levels/_unified/prison/cart__post_STEP_VAR1A_DOWN5_VAR1B_UP2.inc:353 |
 | `0x34` | dos | `LABEL_0DC2` | src/levels/_unified/prison/dos__post_COPY_PAGE3_TO_PAGE0.inc:79 |
 | `0x34` | amiga | `LABEL_0DE2` | src/levels/_unified/prison/amiga__post_COPY_PAGE3_TO_PAGE0.inc:79 |
 | `0x34` | cart | `LABEL_0E4A` | src/levels/_unified/prison/cart__post_COPY_PAGE3_TO_PAGE0.inc:79 |
 | `0x34` | amiga | `LABEL_7EC8` | src/levels/_unified/prison/amiga__post_COPY_PAGE3_TO_PAGE0.inc:101 (+3 more) |
 | `0x34` | dos | `LABEL_7F9A` | src/levels/_unified/prison/dos__post_COPY_PAGE3_TO_PAGE0.inc:101 (+3 more) |
 | `0x34` | cart | `LABEL_80C9` | src/levels/_unified/prison/cart__post_COPY_PAGE3_TO_PAGE0.inc:102 (+3 more) |
+| `0x35` | cart | `DRAW_CIN_540_543_WITH_SFX_57` | src/levels/_unified/prison/cart__post_STEP_VAR1A_DOWN5_VAR1B_UP2.inc:354 |
 | `0x35` | amiga | `DRAW_CIN_540_543_WITH_SFX_57` | src/levels/_unified/prison/amiga__post_DRAW_CIN_037.inc:77 |
 | `0x35` | dos | `DRAW_CIN_540_543_WITH_SFX_57` | src/levels/_unified/prison/dos__post_DRAW_CIN_037.inc:77 |
-| `0x35` | cart | `DRAW_CIN_540_543_WITH_SFX_57__CART__POST_STEP_VAR1A_DOWN5_VAR1B_UP2` | src/levels/_unified/prison/cart__post_STEP_VAR1A_DOWN5_VAR1B_UP2.inc:354 |
 | `0x35` | amiga | `LABEL_018D` | src/levels/_unified/prison/amiga__post_COPY_PAGE3_TO_PAGE0.inc:301 |
 | `0x35` | dos | `LABEL_01AF` | src/levels/_unified/prison/dos__post_COPY_PAGE3_TO_PAGE0.inc:312 |
 | `0x35` | cart | `LABEL_021D` | src/levels/_unified/prison/cart__post_COPY_PAGE3_TO_PAGE0.inc:314 |
@@ -1076,8 +1076,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x04` | amiga | `LABEL_CBD3` | src/levels/_unified/caves/amiga__post_INLINE_SUB_VAR50_BY_14.inc:274 |
 | `0x04` | dos | `LABEL_D079` | src/levels/_unified/caves/dos__post_INLINE_SUB_VAR50_BY_14.inc:292 |
 | `0x04` | cart | `LABEL_D0A2` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:309 |
-| `0x05` | amiga | `INCR_VARE6_PLAY_FX55_2X_CH0_CH2__AMIGA__POST_PLAY_FX_6B_THEN_KILL_CHANNEL` | src/levels/_unified/caves/amiga__post_PLAY_FX_6B_THEN_KILL_CHANNEL.inc:38 |
-| `0x05` | dos | `INCR_VARE6_PLAY_FX55_2X_CH0_CH2__DOS__POST_PLAY_FX_6B_THEN_KILL_CHANNEL` | src/levels/_unified/caves/dos__post_PLAY_FX_6B_THEN_KILL_CHANNEL.inc:38 |
+| `0x05` | amiga | `INCR_VARE6_PLAY_FX55_2X_CH0_CH2` | src/levels/_unified/caves/amiga__post_PLAY_FX_6B_THEN_KILL_CHANNEL.inc:38 |
+| `0x05` | dos | `INCR_VARE6_PLAY_FX55_2X_CH0_CH2` | src/levels/_unified/caves/dos__post_PLAY_FX_6B_THEN_KILL_CHANNEL.inc:38 |
 | `0x05` | cart | `INIT_VARS_E6_EA` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:1206 |
 | `0x05` | amiga | `INIT_VARS_E6_EA` | src/levels/_unified/caves/amiga__post_INLINE_SUB_VAR50_BY_14.inc:1115 |
 | `0x05` | dos | `INIT_VARS_E6_EA` | src/levels/_unified/caves/dos__post_INLINE_SUB_VAR50_BY_14.inc:1182 |
@@ -1286,9 +1286,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x14` | cart | `STEP_DRAW_CV352_LEFT4_RIGHT1` | src/levels/_unified/caves/cart__post_SET_VAR18_TO_0122.inc:169 |
 | `0x14` | amiga | `STEP_DRAW_CV352_LEFT4_RIGHT1` | src/levels/_unified/caves/amiga__post_SET_VAR18_TO_0122.inc:146 |
 | `0x14` | dos | `STEP_DRAW_CV352_LEFT4_RIGHT1` | src/levels/_unified/caves/dos__post_SET_VAR18_TO_0122.inc:169 |
-| `0x15` | amiga | `DRAW_CIN_110_BLOCK__AMIGA__POST_INCREMENT_VAR07_BY_4` | src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:201 |
-| `0x15` | cart | `DRAW_CIN_110_BLOCK__CART__POST_INCREMENT_VAR07_BY_4` | src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:231 |
-| `0x15` | dos | `DRAW_CIN_110_BLOCK__DOS__POST_INCREMENT_VAR07_BY_4` | src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:231 |
+| `0x15` | cart | `DRAW_CIN_110_BLOCK` | src/levels/_unified/caves/cart__post_INCREMENT_VAR07_BY_4.inc:231 |
+| `0x15` | amiga | `DRAW_CIN_110_BLOCK` | src/levels/_unified/caves/amiga__post_INCREMENT_VAR07_BY_4.inc:201 |
+| `0x15` | dos | `DRAW_CIN_110_BLOCK` | src/levels/_unified/caves/dos__post_INCREMENT_VAR07_BY_4.inc:231 |
 | `0x15` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/cart__entry.inc:3182 (+7 more) |
 | `0x15` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/amiga__entry.inc:3187 (+7 more) |
 | `0x15` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/dos__entry.inc:3195 (+7 more) |
@@ -1663,8 +1663,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x36` | cart | `LABEL_CA62` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:401 |
 | `0x36` | dos | `LABEL_CA7D` | src/levels/_unified/caves/dos__post_INLINE_SUB_VAR50_BY_14.inc:382 |
 | `0x37` | amiga | `HANG_DRAW_CIN_269` | src/levels/_unified/caves/amiga__post_INIT_VARS_E6_EA.inc:318 |
-| `0x37` | cart | `HANG_DRAW_CIN_287__CART__POST_INIT_VARS_E6_EA` | src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:344 |
-| `0x37` | dos | `HANG_DRAW_CIN_288__DOS__POST_INIT_VARS_E6_EA` | src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:318 |
+| `0x37` | cart | `HANG_DRAW_CIN_287` | src/levels/_unified/caves/cart__post_INIT_VARS_E6_EA.inc:344 |
+| `0x37` | dos | `HANG_DRAW_CIN_288` | src/levels/_unified/caves/dos__post_INIT_VARS_E6_EA.inc:318 |
 | `0x37` | cart | `INIT_VARS_E6_E7_EB` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:901 |
 | `0x37` | dos | `INIT_VARS_E6_E7_EB` | src/levels/_unified/caves/dos__post_INLINE_SUB_VAR50_BY_14.inc:882 |
 | `0x37` | cart | `INLINE_SET_VARE6_TO_1E` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:175 |
@@ -1738,9 +1738,10 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x3B` | amiga | `HANG_DRAW_CIN_637` | src/levels/_unified/caves/amiga__post_INLINE_SUB_VAR50_BY_14.inc:749 |
 | `0x3B` | cart | `HANG_DRAW_CIN_648` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:786 |
 | `0x3B` | dos | `HANG_DRAW_CIN_658` | src/levels/_unified/caves/dos__post_INLINE_SUB_VAR50_BY_14.inc:767 |
-| `0x3B` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/cart__post_DELETE_GAME_AND_FX_CHANNELS.inc:43 (+2 more) |
-| `0x3B` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/amiga__post_DELETE_GAME_AND_FX_CHANNELS.inc:42 (+2 more) |
-| `0x3B` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/dos__post_DELETE_GAME_AND_FX_CHANNELS.inc:43 (+2 more) |
+| `0x3B` | shared | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/post_INIT_VARS_A1_A4_A7.inc:3 |
+| `0x3B` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/cart__post_DELETE_GAME_AND_FX_CHANNELS.inc:43 (+1 more) |
+| `0x3B` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/amiga__post_DELETE_GAME_AND_FX_CHANNELS.inc:42 (+1 more) |
+| `0x3B` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/caves/dos__post_DELETE_GAME_AND_FX_CHANNELS.inc:43 (+1 more) |
 | `0x3B` | cart | `LABEL_0492` | src/levels/_unified/caves/cart__post_INLINE_SUB_VAR50_BY_14.inc:1567 |
 | `0x3B` | amiga | `LABEL_04DF` | src/levels/_unified/caves/amiga__post_INLINE_SUB_VAR50_BY_14.inc:1461 |
 | `0x3B` | dos | `LABEL_04F8` | src/levels/_unified/caves/dos__post_INLINE_SUB_VAR50_BY_14.inc:1528 |
@@ -1942,8 +1943,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x01` | cart | `LABEL_0C43` | src/levels/_unified/tank/cart__post_INIT_VAR1_NEG50_PLAY_8B_TWICE.inc:21 |
 | `0x01` | dos | `LABEL_0C44` | src/levels/_unified/tank/dos__post_INIT_VAR1_NEG50_PLAY_8B_TWICE.inc:21 |
 | `0x01` | cart | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:23 (+2 more) |
+| `0x01` | amiga | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:400 |
 | `0x01` | dos | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:23 (+2 more) |
-| `0x01` | amiga | `RESET_PAGES_AND_SETUP_CH_0A__AMIGA__POST_SETUP_TANK_HERO_VARS_PLAY_4SFX` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:400 |
 | `0x02` | cart | `DRAW_CIN_224_MULTI_FRAME` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:16 (+1 more) |
 | `0x02` | amiga | `LABEL_16D4` | src/levels/_unified/tank/amiga__entry.inc:439 (+1 more) |
 | `0x02` | dos | `LABEL_1BDA` | src/levels/_unified/tank/dos__post_INLINE_SET_VAR6D_TO_0.inc:14 (+1 more) |
@@ -1962,7 +1963,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x09` | cart | `LABEL_0E32` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:10 |
 | `0x0A` | cart | `DRAW_CIN_260_AT_3_POSITIONS` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:261 |
 | `0x0A` | amiga | `HANG_DRAW_CIN_173` | src/levels/_unified/tank/amiga__post_COPY_VAR62_TO_VAR5F.inc:302 |
-| `0x0A` | dos | `HANG_DRAW_CIN_225__DOS__POST_COPY_VAR62_TO_VAR5F` | src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:405 |
+| `0x0A` | dos | `HANG_DRAW_CIN_225` | src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:405 |
 | `0x0A` | amiga | `LABEL_0101` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:14 |
 | `0x0A` | dos | `LABEL_0113` | src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:14 |
 | `0x0A` | amiga | `LABEL_0114` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:173 |
@@ -2042,7 +2043,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x26` | dos | `LABEL_0F1E` | src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:647 |
 | `0x28` | amiga | `HANG_DRAW_CIN_034` | src/levels/_unified/tank/amiga__entry.inc:467 |
 | `0x28` | dos | `HANG_DRAW_CIN_036` | src/levels/_unified/tank/dos__post_INLINE_SET_VAR6D_TO_0.inc:44 |
-| `0x28` | cart | `HANG_DRAW_CIN_222__CART__POST_INLINE_SET_VAR6D_TO_0` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:46 |
+| `0x28` | cart | `HANG_DRAW_CIN_222` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:46 |
 | `0x28` | amiga | `LABEL_050E` | src/levels/_unified/tank/amiga__entry.inc:452 |
 | `0x28` | cart | `LABEL_085A` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:29 |
 | `0x28` | dos | `LABEL_0866` | src/levels/_unified/tank/dos__post_INLINE_SET_VAR6D_TO_0.inc:27 |
@@ -2075,8 +2076,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x35` | cart | `LABEL_066A` | src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:112 |
 | `0x35` | dos | `LABEL_0692` | src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:112 |
 | `0x35` | cart | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:223 |
+| `0x35` | amiga | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:399 |
 | `0x35` | dos | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:214 |
-| `0x35` | amiga | `RESET_PAGES_AND_SETUP_CH_0A__AMIGA__POST_SETUP_TANK_HERO_VARS_PLAY_4SFX` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:399 |
 | `0x37` | dos | `HANG_DRAW_CIN_119` | src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:111 |
 | `0x37` | cart | `HANG_DRAW_CIN_143` | src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:111 |
 | `0x37` | amiga | `LABEL_0328` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:227 |
@@ -2091,8 +2092,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x37` | dos | `LABEL_1323` | src/levels/_unified/tank/dos__post_INIT_VAR1_NEG50_PLAY_8B_TWICE.inc:72 (+1 more) |
 | `0x37` | dos | `LABEL_1336` | src/levels/_unified/tank/dos__post_COPY_VAR62_TO_VAR5F.inc:454 |
 | `0x37` | cart | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:306 |
+| `0x37` | amiga | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:218 |
 | `0x37` | dos | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:218 |
-| `0x37` | amiga | `RESET_PAGES_AND_SETUP_CH_0A__AMIGA__POST_SETUP_TANK_HERO_VARS_PLAY_4SFX` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:218 |
 | `0x38` | amiga | `LABEL_0C53` | src/levels/_unified/tank/amiga__post_INLINE_SET_VAR66_TO_32.inc:76 |
 | `0x38` | cart | `LABEL_1045` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR66_TO_32.inc:76 |
 | `0x38` | dos | `LABEL_1131` | src/levels/_unified/tank/dos__post_INLINE_SET_VAR66_TO_32.inc:76 |
@@ -2101,7 +2102,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x39` | amiga | `HANG_DRAW_CIN_123` | src/levels/_unified/tank/amiga__post_INIT_VARS_50_NEG40_51_32.inc:254 |
 | `0x39` | cart | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:21 (+1 more) |
 | `0x39` | dos | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/dos__post_INCR_VAR_6C_BY_10_3X.inc:21 (+1 more) |
-| `0x3B` | amiga | `HANG_DRAW_CIN_222__AMIGA__POST_SETUP_TANK_HERO_VARS_PLAY_4SFX` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:183 (+1 more) |
+| `0x3B` | amiga | `HANG_DRAW_CIN_222` | src/levels/_unified/tank/amiga__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:183 (+1 more) |
 | `0x3B` | cart | `HANG_DRAW_CIN_259` | src/levels/_unified/tank/cart__post_INLINE_SET_VAR6D_TO_0.inc:271 (+1 more) |
 | `0x3B` | dos | `HANG_DRAW_CIN_274` | src/levels/_unified/tank/dos__post_SETUP_TANK_HERO_VARS_PLAY_4SFX.inc:183 (+2 more) |
 | `0x3B` | cart | `RESET_PAGES_AND_SETUP_CH_0A` | src/levels/_unified/tank/cart__post_INCR_VAR_6C_BY_10_3X.inc:22 (+1 more) |
@@ -2125,9 +2126,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 
 | channel | branch | routine | source |
 | ---: | --- | --- | --- |
-| `0x14` | amiga | `SETUP_PASSCODE_SCREEN__AMIGA__ENTRY` | src/levels/_unified/passcode/amiga__entry.inc:122 |
-| `0x14` | cart | `SETUP_PASSCODE_SCREEN__CART__ENTRY` | src/levels/_unified/passcode/cart__entry.inc:71 |
-| `0x14` | dos | `SETUP_PASSCODE_SCREEN__DOS__ENTRY` | src/levels/_unified/passcode/dos__entry.inc:125 |
+| `0x14` | cart | `SETUP_PASSCODE_SCREEN` | src/levels/_unified/passcode/cart__entry.inc:71 |
+| `0x14` | amiga | `SETUP_PASSCODE_SCREEN` | src/levels/_unified/passcode/amiga__entry.inc:122 |
+| `0x14` | dos | `SETUP_PASSCODE_SCREEN` | src/levels/_unified/passcode/dos__entry.inc:125 |
 | `0x3C` | amiga | `AMIGA_PASSCODE_BANK_INIT` | src/levels/_unified/passcode/amiga__entry.inc:254 |
 | `0x3C` | cart | `BLITTER_LOOP_COPY_PAGE_00` | src/levels/_unified/passcode/cart__entry.inc:65 |
 | `0x3C` | amiga | `BLITTER_LOOP_COPY_PAGE_00` | src/levels/_unified/passcode/amiga__entry.inc:116 |
@@ -2288,7 +2289,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x08` | dos | `INCREMENT_VAR31` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:1001 |
 | `0x0F` | amiga | `HANG_DRAW_CIN_083` | src/levels/_unified/capsule/amiga__post_INLINE_SET_VARE8_TO_F.inc:157 |
 | `0x0F` | dos | `HANG_DRAW_CIN_429` | src/levels/_unified/capsule/dos__post_INLINE_SET_VARE8_TO_F.inc:197 |
-| `0x0F` | cart | `HANG_DRAW_CIN_433__CART__POST_INLINE_SET_VARE8_TO_F` | src/levels/_unified/capsule/cart__post_INLINE_SET_VARE8_TO_F.inc:205 |
+| `0x0F` | cart | `HANG_DRAW_CIN_433` | src/levels/_unified/capsule/cart__post_INLINE_SET_VARE8_TO_F.inc:205 |
 | `0x0F` | cart | `INIT_VAR6F_TO_A_PAUSE_3` | src/levels/_unified/capsule/cart__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:438 |
 | `0x0F` | dos | `INIT_VAR6F_TO_A_PAUSE_3` | src/levels/_unified/capsule/dos__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:545 |
 | `0x0F` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:150 (+1 more) |
@@ -2473,7 +2474,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x1B` | cart | `LABEL_2A1F` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:741 (+1 more) |
 | `0x1B` | dos | `LABEL_67C2` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:92 |
 | `0x1B` | cart | `LABEL_67CB` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:99 |
-| `0x1D` | amiga | `HANG_DRAW_CIN_119__AMIGA__POST_INLINE_SET_VARE8_TO_F` | src/levels/_unified/capsule/amiga__post_INLINE_SET_VARE8_TO_F.inc:158 |
+| `0x1D` | amiga | `HANG_DRAW_CIN_119` | src/levels/_unified/capsule/amiga__post_INLINE_SET_VARE8_TO_F.inc:158 |
 | `0x1D` | dos | `HANG_DRAW_CIN_430` | src/levels/_unified/capsule/dos__post_INLINE_SET_VARE8_TO_F.inc:198 |
 | `0x1D` | cart | `HANG_DRAW_CIN_434` | src/levels/_unified/capsule/cart__post_INLINE_SET_VARE8_TO_F.inc:206 |
 | `0x1D` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:149 (+1 more) |
@@ -2876,8 +2877,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x05` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:64 |
 | `0x05` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:64 |
 | `0x05` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:64 |
-| `0x0A` | amiga | `LABEL_0149` | src/levels/_unified/ending/amiga__post_DRAW_CIN_103_LOOP.inc:25 |
-| `0x0A` | dos | `LABEL_0149` | src/levels/_unified/ending/dos__post_DRAW_CIN_103_LOOP.inc:25 |
+| `0x0A` | shared | `LABEL_0149` | src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:25 |
 | `0x0A` | cart | `LABEL_0159` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:86 |
 | `0x0A` | cart | `SET_VAR_E6_5_PAL_B` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:65 |
 | `0x0A` | amiga | `SET_VAR_E6_5_PAL_B` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:65 |
@@ -2888,10 +2888,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0B` | cart | `DRAW_CIN_101_102_FADE_PAL_C` | src/levels/_unified/ending/cart__post_SET_VAR_E6_5_PAL_B.inc:35 |
 | `0x0B` | amiga | `DRAW_CIN_101_102_FADE_PAL_C` | src/levels/_unified/ending/amiga__post_SET_VAR_E6_5_PAL_B.inc:35 |
 | `0x0B` | dos | `DRAW_CIN_101_102_FADE_PAL_C` | src/levels/_unified/ending/dos__post_SET_VAR_E6_5_PAL_B.inc:35 |
-| `0x0B` | amiga | `DRAW_CIN_58_ANIM_LOOP` | src/levels/_unified/ending/amiga__post_DRAW_CIN_103_LOOP.inc:26 |
-| `0x0B` | dos | `DRAW_CIN_58_ANIM_LOOP` | src/levels/_unified/ending/dos__post_DRAW_CIN_103_LOOP.inc:26 |
-| `0x0B` | cart | `DRAW_CIN_58_ANIM_LOOP__CART__POST_DELETE_ALL_CHANS_AND_KILL` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:87 |
-| `0x0B` | shared | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/ending_channel_cleanup.inc:128 |
+| `0x0B` | shared | `DRAW_CIN_58_ANIM_LOOP` | src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:26 |
+| `0x0B` | cart | `DRAW_CIN_58_ANIM_LOOP` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:87 |
+| `0x0B` | shared | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/ending_channel_cleanup.inc:122 |
 | `0x0B` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:138 |
 | `0x0C` | dos | `DRAW_CIN_086_087_088_SEQ` | src/levels/_unified/ending/dos__post_DRAW_CIN_59_TO_64_VAR_POS.inc:15 |
 | `0x0C` | cart | `DRAW_CIN_086_087_SEQ` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:130 |
@@ -2899,9 +2898,9 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0C` | cart | `DRAW_CIN_97_TO_100` | src/levels/_unified/ending/cart__post_SET_VAR_E6_5_PAL_B.inc:36 |
 | `0x0C` | amiga | `DRAW_CIN_97_TO_100` | src/levels/_unified/ending/amiga__post_SET_VAR_E6_5_PAL_B.inc:36 |
 | `0x0C` | dos | `DRAW_CIN_97_TO_100` | src/levels/_unified/ending/dos__post_SET_VAR_E6_5_PAL_B.inc:36 |
-| `0x0C` | amiga | `DRIFT_VAR07_PLUS_2_3X__AMIGA__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:20 |
-| `0x0C` | cart | `DRIFT_VAR07_PLUS_2_3X__CART__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:20 |
-| `0x0C` | dos | `DRIFT_VAR07_PLUS_2_3X__DOS__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:20 |
+| `0x0C` | cart | `DRIFT_VAR07_PLUS_2_3X` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:20 |
+| `0x0C` | amiga | `DRIFT_VAR07_PLUS_2_3X` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:20 |
+| `0x0C` | dos | `DRIFT_VAR07_PLUS_2_3X` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:20 |
 | `0x0C` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:26 |
 | `0x0C` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:26 |
 | `0x0C` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:26 |
@@ -2911,25 +2910,23 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0D` | dos | `LABEL_00AF` | src/levels/_unified/ending/dos__post_SET_VAR_E6_5_PAL_B.inc:37 |
 | `0x0D` | cart | `LABEL_00BF` | src/levels/_unified/ending/cart__post_SET_VAR_E6_5_PAL_B.inc:37 |
 | `0x0D` | amiga | `LABEL_046F` | src/levels/_unified/ending/amiga__post_DRAW_CIN_59_TO_64_VAR_POS.inc:16 |
+| `0x0E` | shared | `HANG_DRAWING_CIN_066_VAR03` | src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:27 |
 | `0x0E` | cart | `HANG_DRAWING_CIN_066_VAR03` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:88 |
-| `0x0E` | amiga | `HANG_DRAWING_CIN_066_VAR03` | src/levels/_unified/ending/amiga__post_DRAW_CIN_103_LOOP.inc:27 |
-| `0x0E` | dos | `HANG_DRAWING_CIN_066_VAR03` | src/levels/_unified/ending/dos__post_DRAW_CIN_103_LOOP.inc:27 |
-| `0x0F` | amiga | `DRAW_CIN_59_TO_64_VAR_POS` | src/levels/_unified/ending/amiga__post_DRAW_CIN_103_LOOP.inc:28 |
-| `0x0F` | dos | `DRAW_CIN_59_TO_64_VAR_POS` | src/levels/_unified/ending/dos__post_DRAW_CIN_103_LOOP.inc:28 |
-| `0x0F` | cart | `DRAW_CIN_59_TO_64_VAR_POS__CART__POST_DELETE_ALL_CHANS_AND_KILL` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:89 |
-| `0x10` | shared | `INIT_VARE_TO_12` | src/levels/_unified/ending/ending_channel_cleanup.inc:138 |
+| `0x0F` | shared | `DRAW_CIN_59_TO_64_VAR_POS` | src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:28 |
+| `0x0F` | cart | `DRAW_CIN_59_TO_64_VAR_POS` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:89 |
+| `0x10` | shared | `INIT_VARE_TO_12` | src/levels/_unified/ending/ending_channel_cleanup.inc:132 |
 | `0x10` | cart | `INIT_VARE_TO_12` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:145 |
-| `0x11` | amiga | `DRAW_CIN_024_LOOP__AMIGA__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:17 |
-| `0x11` | cart | `DRAW_CIN_024_LOOP__CART__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:17 |
-| `0x11` | dos | `DRAW_CIN_024_LOOP__DOS__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:17 |
-| `0x11` | shared | `DRAW_CIN_70_ANIM_LOOP` | src/levels/_unified/ending/ending_channel_cleanup.inc:139 |
+| `0x11` | cart | `DRAW_CIN_024_LOOP` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:17 |
+| `0x11` | amiga | `DRAW_CIN_024_LOOP` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:17 |
+| `0x11` | dos | `DRAW_CIN_024_LOOP` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:17 |
+| `0x11` | shared | `DRAW_CIN_70_ANIM_LOOP` | src/levels/_unified/ending/ending_channel_cleanup.inc:133 |
 | `0x11` | cart | `DRAW_CIN_70_ANIM_LOOP` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:146 |
 | `0x12` | amiga | `DRAW_COMMON_VIDS_148_151_152_153` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:18 |
-| `0x12` | cart | `DRAW_CV_192_195_196_SEQ__CART__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:18 |
-| `0x12` | dos | `DRAW_CV_192_195_196_SEQ__DOS__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:18 |
+| `0x12` | cart | `DRAW_CV_192_195_196_SEQ` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:18 |
+| `0x12` | dos | `DRAW_CV_192_195_196_SEQ` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:18 |
 | `0x13` | amiga | `DRAW_COMMON_VIDS_149_141_137_10` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:19 |
-| `0x13` | cart | `DRAW_CV_193_185_181_SEQ__CART__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:19 |
-| `0x13` | dos | `DRAW_CV_193_185_181_SEQ__DOS__POST_INIT_VARS_07_08_09` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:19 |
+| `0x13` | cart | `DRAW_CV_193_185_181_SEQ` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:19 |
+| `0x13` | dos | `DRAW_CV_193_185_181_SEQ` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:19 |
 | `0x14` | cart | `INIT_VARS_07_08_09` | src/levels/_unified/ending/cart__post_SET_VAR_E6_5_PAL_B.inc:123 |
 | `0x14` | amiga | `INIT_VARS_07_08_09` | src/levels/_unified/ending/amiga__post_SET_VAR_E6_5_PAL_B.inc:123 |
 | `0x14` | dos | `INIT_VARS_07_08_09` | src/levels/_unified/ending/dos__post_SET_VAR_E6_5_PAL_B.inc:123 |
