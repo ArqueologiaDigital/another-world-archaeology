@@ -394,6 +394,110 @@ called BY the state machine, not the state machine itself).
 
 PRISON Phase 3 limited to RP1.
 
-## CAPSULE, CAVES, TANK, ENDING, CODE_WHEEL, PASSCODE
+## CAPSULE
 
-*Pending — sequenced after PRISON.*
+4 stage-shared chunks under `src/levels/_unified/capsule/` plus
+366 arm-specific chunks. Like PRISON, CAPSULE is heavily folded;
+each shared chunk is a topical bundle of fold helpers.
+
+### Per-chunk findings
+
+- `capsule_init_dispatch.inc` (816, **largest**) — **OK**.
+  INIT_VARS_2F_29_12 + various INIT_VARS_* + DRAW_CV*_PLAY_*
+  helpers + INLINE_*. The "init dispatch" name is broad but
+  accurate.
+- `capsule_init_vars_cluster.inc` (182) — **OK**. INIT_VARS_29_0E
+  / E6_07_08 / 0E_29 / 63_01_02_03 / E7_E8 / E9_EA, INLINE_SET_*
+  for VARE6, plus 4 PLAY_FX_* helpers — the per-frame state-init
+  cluster.
+- `capsule_inline_setters_and_init.inc` (424) — **OK**.
+- `capsule_load_helpers_and_anim.inc` (286) — **NEW FINDING**:
+  contains `INIT_BIRD_AI_VARS`. There's a BIRD subsystem in
+  CAPSULE that nobody flagged in earlier work — worth following
+  up as a separate research note (bird character + animation +
+  AI). For now the file's scope is roughly load helpers +
+  position/projection setters + bird init; comment OK.
+
+### Regrouping proposals (CAPSULE)
+
+CAPSULE's structure mirrors PRISON's (heavily folded helpers).
+No regroupings beyond audit-doc updates; file structure stays.
+
+## CAVES
+
+10 stage-shared chunks under `src/levels/_unified/caves/` plus
+587 arm-specific chunks (highest count of any stage). Same
+pattern as PRISON / CAPSULE: heavily folded.
+
+### Per-chunk findings (label-based — full reads pending in
+follow-up cron tick)
+
+- `caves_action_helpers.inc` — INIT_VARS_E6_EA + action helpers.
+- `caves_dedup_helpers_cluster.inc` (786 lines, **largest** in
+  CAVES) — DEDUP_CAVES_6B_* cluster; ~36 routines salvaged from
+  match_arms.py rounds.
+- `caves_inline_breaks.inc` — INLINE break sequences with VAR18
+  setters.
+- `caves_inline_setters_and_init.inc` — small inline init
+  helpers, var-derivation chains.
+- `caves_inline_setters_part1c.inc` — INIT_VARS_E6_68_69_6B
+  cluster.
+- `caves_preload_resources.inc` — PRELOAD_RES_6A_77_6D_6E_74_76
+  _78_7C (8 resources).
+- `caves_scroll_init_and_sfx.inc` — INIT_VARS_2F_29_12 + scroll
+  init + SFX setup.
+- `caves_scroll_setup_and_helpers.inc` — SCROLL_BLIT_P83_TO_PFF
+  + scroll-blit helpers.
+- `caves_var22_setters_and_projections.inc` — SET_VAR22_TO_*
+  setters and projection helpers.
+
+### Regrouping proposals (CAVES)
+
+Same disposition as PRISON / CAPSULE — heavily folded structure
+mostly cohesive at the file level. No structural moves; deep-
+read pass during follow-up cron tick may surface specific
+mixed-content cases.
+
+## TANK
+
+6 stage-shared chunks under `src/levels/_unified/tank/`. TANK is
+short (battle-arena cinematic). 58 arm-specific chunks.
+
+- `tank_animation_timing.inc` — ALTERNATE_VAR06_VAR04_TIMING.
+- `tank_drawing_helpers.inc` — INIT_VARS_A_B_PAL_1.
+- `tank_drive_vars.inc` — INCREMENT_VAR44_BY_37.
+- `tank_inline_setters_and_hash.inc` — inline setters + hash
+  bookkeeping.
+- `tank_var5f_manipulation.inc` — INCREMENT_VAR5F_BY_8 + related.
+
+All small helper aggregations; comments accurate.
+
+## ENDING
+
+7 stage-shared chunks under `src/levels/_unified/ending/`.
+Ending is cinematic-only; 32 arm-specific chunks.
+
+- `ending_channel_cleanup.inc` — DELETE_ALL_CHANS_AND_KILL.
+- `ending_palette_fades.inc` — PAL_FADE_18_TO_1D + cross-fades.
+- `ending_pal_var_setup.inc` — SET_VAR_E6_5_PAL_B + related.
+- `ending_var_setups.inc` — INIT_VARE_TO_12 + init helpers.
+
+Comments accurate.
+
+## CODE_WHEEL
+
+1 stage-shared chunk: `code_wheel_palette_fades.inc` (palette
+fades shared between amiga and dos arms). 21 arm-specific
+chunks. The cartridge port skips CODE_WHEEL; cart entry chunk
+is just 17 lines.
+
+- `code_wheel_palette_fades.inc` — PAL_FADE_DOWN_17_TO_11 etc.
+
+Audit OK; no regroupings.
+
+## PASSCODE
+
+1 stage-shared chunk: `passcode_var_init.inc` (SET_VAR_E6_F_PAUSE_4).
+17 arm-specific chunks.
+
+Audit OK; no regroupings.
