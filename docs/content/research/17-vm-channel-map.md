@@ -2890,7 +2890,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0B` | dos | `DRAW_CIN_101_102_FADE_PAL_C` | src/levels/_unified/ending/dos__post_SET_VAR_E6_5_PAL_B.inc:35 |
 | `0x0B` | shared | `DRAW_CIN_58_ANIM_LOOP` | src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:26 |
 | `0x0B` | cart | `DRAW_CIN_58_ANIM_LOOP` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:87 |
-| `0x0B` | shared | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/ending_channel_cleanup.inc:122 |
+| `0x0B` | shared | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/ending_drift_and_delay_helpers.inc:13 |
 | `0x0B` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:138 |
 | `0x0C` | dos | `DRAW_CIN_086_087_088_SEQ` | src/levels/_unified/ending/dos__post_DRAW_CIN_59_TO_64_VAR_POS.inc:15 |
 | `0x0C` | cart | `DRAW_CIN_086_087_SEQ` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:130 |
@@ -2914,12 +2914,12 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0E` | cart | `HANG_DRAWING_CIN_066_VAR03` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:88 |
 | `0x0F` | shared | `DRAW_CIN_59_TO_64_VAR_POS` | src/levels/_unified/ending/post_DRAW_CIN_103_LOOP.inc:28 |
 | `0x0F` | cart | `DRAW_CIN_59_TO_64_VAR_POS` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:89 |
-| `0x10` | shared | `INIT_VARE_TO_12` | src/levels/_unified/ending/ending_channel_cleanup.inc:132 |
+| `0x10` | shared | `INIT_VARE_TO_12` | src/levels/_unified/ending/ending_drift_and_delay_helpers.inc:23 |
 | `0x10` | cart | `INIT_VARE_TO_12` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:145 |
 | `0x11` | cart | `DRAW_CIN_024_LOOP` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:17 |
 | `0x11` | amiga | `DRAW_CIN_024_LOOP` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:17 |
 | `0x11` | dos | `DRAW_CIN_024_LOOP` | src/levels/_unified/ending/dos__post_INIT_VARS_07_08_09.inc:17 |
-| `0x11` | shared | `DRAW_CIN_70_ANIM_LOOP` | src/levels/_unified/ending/ending_channel_cleanup.inc:133 |
+| `0x11` | shared | `DRAW_CIN_70_ANIM_LOOP` | src/levels/_unified/ending/ending_drift_and_delay_helpers.inc:24 |
 | `0x11` | cart | `DRAW_CIN_70_ANIM_LOOP` | src/levels/_unified/ending/cart__post_DELETE_ALL_CHANS_AND_KILL.inc:146 |
 | `0x12` | amiga | `DRAW_COMMON_VIDS_148_151_152_153` | src/levels/_unified/ending/amiga__post_INIT_VARS_07_08_09.inc:18 |
 | `0x12` | cart | `DRAW_CV_192_195_196_SEQ` | src/levels/_unified/ending/cart__post_INIT_VARS_07_08_09.inc:18 |

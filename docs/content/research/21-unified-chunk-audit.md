@@ -411,17 +411,37 @@ each shared chunk is a topical bundle of fold helpers.
   for VARE6, plus 4 PLAY_FX_* helpers — the per-frame state-init
   cluster.
 - `capsule_inline_setters_and_init.inc` (424) — **OK**.
-- `capsule_load_helpers_and_anim.inc` (286) — **NEW FINDING**:
-  contains `INIT_BIRD_AI_VARS`. There's a BIRD subsystem in
-  CAPSULE that nobody flagged in earlier work — worth following
-  up as a separate research note (bird character + animation +
-  AI). For now the file's scope is roughly load helpers +
-  position/projection setters + bird init; comment OK.
+- `capsule_load_helpers_and_anim.inc` (286) — **DEEP-READ FINDING**:
+  contains `INIT_BIRD_AI_VARS` (cart/dos only — gated by
+  `;@if BRANCH in ("cartridge_1992", "dos_1992")`). The routine
+  resets `HERO_X` to 0x91 (145), `HERO_Y` to 0x8F (143), saves
+  prior `HERO_X` to var 0x28, sets gun-energy var 0x06 to 0x3DE
+  (990 — same value Lester gets at PRISON entry per
+  research/01), sets scene-state var 0x2A to 0x0F. The routine
+  is the "ride the bird" scene init — overwrites HERO_X/Y to
+  treat the bird's position as Lester's position for that scene.
+  The file also contains SET_VAR22_* setters, PROJ_VAR22_*
+  projection helpers, the SET_VAR04_* / INLINE_SET_VAR63_*
+  shared-helper chain, and WALK_LEFT/RIGHT_DRAW_CV multistep
+  helpers. Comment in CAPSULE.asm.in sharpened to mention the
+  bird init.
 
 ### Regrouping proposals (CAPSULE)
 
 CAPSULE's structure mirrors PRISON's (heavily folded helpers).
-No regroupings beyond audit-doc updates; file structure stays.
+No file moves; the 4 chunks each represent a distinct topical
+bundle of helpers.
+
+### CAPSULE BIRD subsystem — follow-up research note
+
+The `INIT_BIRD_AI_VARS` finding warrants its own research note:
+this is a cart/dos-only initialiser that sets up the **alien city
+bird scene** (Lester rides a bird to escape). The fact that the
+routine reuses `HERO_X` / `HERO_Y` for the bird's position
+(saving Lester's prior X to var 0x28) is the kind of variable-
+overloading pattern documented in research/14 (`;@raw=` residue)
+and the ACTOR_X / BUDDY_X discussions. Worth a dedicated entry
+when somebody traces the full bird-flight bytecode.
 
 ## CAVES
 
@@ -477,12 +497,30 @@ All small helper aggregations; comments accurate.
 7 stage-shared chunks under `src/levels/_unified/ending/`.
 Ending is cinematic-only; 32 arm-specific chunks.
 
-- `ending_channel_cleanup.inc` — DELETE_ALL_CHANS_AND_KILL.
-- `ending_palette_fades.inc` — PAL_FADE_18_TO_1D + cross-fades.
-- `ending_pal_var_setup.inc` — SET_VAR_E6_5_PAL_B + related.
-- `ending_var_setups.inc` — INIT_VARE_TO_12 + init helpers.
+**Deep-read findings**:
 
-Comments accurate.
+- `ending_channel_cleanup.inc` was **MIXED** (5 unrelated topics
+  in one file). Split applied as RE1 (commit `826e17a`):
+  - `ending_channel_cleanup.inc` — DELETE_ALL_CHANS_AND_KILL +
+    PRELOAD_RESOURCES_8_TO_1.
+  - `ending_credits_cinematics.inc` — DRAW_CIN_97_TO_100,
+    DRAW_CIN_101_102_FADE_PAL_C, DRAW_CIN_103_LOOP,
+    DRAW_CIN_58_ANIM_LOOP, DRAW_CIN_59_TO_64_VAR_POS (credits
+    cinematic draws).
+  - `ending_drift_and_delay_helpers.inc` — DRIFT_VAR_4_PLUS_10,
+    DRIFT_VAR_3_MINUS_1 variants, DELAY_VAR6_THEN_* (utility
+    loops gating channel transitions).
+- `ending_palette_fades.inc` (79) — **OK** (PAL_FADE_18_TO_1D
+  6-step cross-fade + DRAW_CIN_71_72_FADE + DRAW_CIN_106_107_FX_57).
+- `ending_pal_var_setup.inc` (143) — **OK** (palette + var setup
+  + DRAW_STARS_PAGE0/3 + DRAW_STARS_CIN_38_39_40 — the closing
+  star-field draws).
+- `ending_var_setups.inc` (63) — **OK** (INIT_VARE + drift loops
+  + DRAW_CIN_70_ANIM_LOOP).
+- `post_DRAW_CIN_103_LOOP.inc` / `post_DRAW_CIN_58_ANIM_LOOP.inc` /
+  `post_DRAW_CIN_97_TO_100.inc` — nested-include 5-line helpers
+  (LABEL_NNNN entries with `db 0x11` sentinel byte). Pattern
+  identical to PRISON's `post_DRAW_CIN_168/240`. **OK**.
 
 ## CODE_WHEEL
 
