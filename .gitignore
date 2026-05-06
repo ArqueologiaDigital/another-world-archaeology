@@ -36,3 +36,9 @@ __pycache__/
 .DS_Store
 *.cache
 tmp/
+
+# Local-only Claude Code session-state lock file (per-session, not durable)
+/.claude/scheduled_tasks.lock
+
+# Personal speculative working drafts (svg sketches, notes-in-progress)
+/speculation/
