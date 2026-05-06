@@ -331,6 +331,69 @@ reflects narrative phases, and splitting further would obscure
 the linear flow. Reopen if a specific chunk surfaces as a real
 mixed-content blocker during later cross-stage work.
 
-## PRISON, CAVES, CAPSULE, TANK, ENDING, CODE_WHEEL, PASSCODE
+## PRISON
 
-*Pending — sequenced after INTRO comment fixes.*
+13 stage-shared chunks under `src/levels/_unified/prison/` plus
+515 arm-specific chunks. PRISON has been heavily folded by
+match_arms.py rounds, so most stage-shared chunks are
+**collections of INLINE_SET_VARN_TO_M / DEDUP_* / DRAW_CIN_NNN
+helpers** that share a topical theme rather than narratively-
+sequential routines. Each helper has its own `;@if BRANCH ==`
+arm-include chain.
+
+**Important architectural note**: PRISON has a NESTED INCLUDE
+pattern not seen elsewhere yet —
+`prison/prison_dedups_and_landing_kill.inc` includes
+`post_DRAW_CIN_168.inc` mid-routine (reaching the helper
+`DRAW_CIN_169_IF_VAR09_EQ_1`), and similarly
+`prison/prison_pagefill_inits.inc` includes `post_DRAW_CIN_240.inc`.
+These tiny (5-line) files exist to allow the same helper to be
+inserted at two byte addresses in the parent chunk's flow.
+
+### Per-chunk findings
+
+- `prison_equ_aliases.inc` (19) — **OK** (auto-generated EQU
+  aliases header).
+- `post_DRAW_CIN_168.inc` (5) — **OK** (nested-include helper).
+- `post_DRAW_CIN_240.inc` (5) — **OK** (nested-include helper).
+- `prison_delay_preload_resources.inc` (94) — **OK** (delay +
+  preload + bank4 + step-position draw).
+- `prison_step_draws_and_breaks.inc` (102) — **OK** (step-draw of
+  CIN555 left/right + INLINE_BREAK_035 + a few CIN block draws).
+- `prison_var29_state_machine.inc` (208) — **REVISE**. Title
+  overstates: file is a collection of `INLINE_SET_VAR29_TO_N`
+  setters (5/6/28/A/...) plus a few DRAW_CIN_406_408_BLOCK and
+  DECREMENT_VAR29_BY_1 helpers, each with arm-specific
+  post-bodies via `;@include "<arm>__post_*.inc"`. The actual
+  var-29 state-machine *logic* lives in arm-specific entry
+  chunks; this file is the SHARED setter / draw helpers the
+  state machine calls into.
+- `prison_var2f_state_machine.inc` (248) — **REVISE** (same as
+  var29: collection of `SET_VAR2F_TO_NN` setters + INIT_VARS_*
+  helpers; not the state machine itself).
+- `prison_late_phase_var_setup.inc` (361) — **OK**.
+- `prison_late_phase_scroll_and_pages.inc` (288) — **OK**.
+- `prison_pagefill_inits.inc` (470) — **OK**.
+- `prison_inline_setters_and_init.inc` (434) — **OK**.
+- `prison_dedups_and_landing_kill.inc` (575) — **OK** (heavy
+  fold-output: ~26 DEDUP_*, INLINE_DRAW_CV_*, DRAW_CIN_* labels
+  with arm-specific tails).
+- `prison_sfx_and_dedup_helpers.inc` (368) — **OK** (PLAY_SFX +
+  DRAW_CIN draw helpers + dedup tails).
+
+### Regrouping proposals (PRISON)
+
+PRISON's structure is the output of careful match_arms.py
+folding rounds. Re-organising into subdirectories would scatter
+related fold helpers across directories without obvious gain,
+so deliberately restrained:
+
+**RP1.** Sharper comments on the two state-machine files in
+PRISON.asm.in (note the contents are setters + draw helpers
+called BY the state machine, not the state machine itself).
+
+PRISON Phase 3 limited to RP1.
+
+## CAPSULE, CAVES, TANK, ENDING, CODE_WHEEL, PASSCODE
+
+*Pending — sequenced after PRISON.*
