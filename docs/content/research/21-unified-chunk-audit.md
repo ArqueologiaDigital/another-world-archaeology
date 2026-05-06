@@ -262,6 +262,75 @@ To apply directly without regrouping:
 6. `scene_transition_and_decor.inc`: irrelevant once R5 splits the file.
 7. `beast_ai_spawn_mid_right.inc`: irrelevant once R1+R2 collapse the file.
 
-## INTRO, PRISON, CAVES, CAPSULE, TANK, ENDING, CODE_WHEEL, PASSCODE
+## INTRO
 
-*Pending — sequenced after LAKE.*
+19 stage-shared chunks under `src/levels/_unified/intro/`. INTRO
+is a long cinematic with many phases; the existing chunk
+breakdown is by phase / scene-element, and the labels reflect
+their content.
+
+### Per-chunk findings
+
+- `intro_entry_and_dispatchers.inc` (110) — **OK** (entry point,
+  resource-load setup, top-level dispatcher).
+- `intro_first_scene_init.inc` (49) — **OK** (pause, draw 6 frames
+  of CIN_138..143 establishing-shot, display two text strings —
+  the "Good evening professor" / "I see you have driven here in
+  your Ferrari." dialogue).
+- `intro_song_init_and_decor.inc` (169) — **OK**.
+- `intro_reset_and_lab_decor.inc` (281) — **OK**.
+- `intro_lab_decor_late_phase.inc` (244) — **OK**.
+- `intro_dna_animation.inc` (249) — **REVISE**. Filename suggests
+  just the DNA helix, but the file actually covers BOTH the DNA
+  intro animation (first ~13 labels) AND a tail of lab-cinematic
+  draws (`DRAW_CIN_453_454_SEQ`, `DRAW_CIN_035_PAL_3_REPEAT_HEAD`,
+  `DRAW_CIN_048_15_FRAMES_LOOP`) that hand off to the next phase
+  via setup-channel calls. Conceptually adjacent (DNA →
+  lab-establishing) but the filename misleads. Comment should
+  say so explicitly; not split because they are sequential phases
+  of one narrative beat.
+- `intro_channel_inits.inc` (259) — **OK** (CH_0A through CH_1F
+  channel-init helpers).
+- `intro_late_pages_fill.inc` (226) — **OK** (page-fill init +
+  drift loops by per-frame increments).
+- `intro_particle_channels.inc` (393) — **OK**.
+- `intro_page_show_and_text.inc` (319) — **OK** (SHOW_PAGE_0 /
+  SHOW_PAGE_FF loops + text setup).
+- `intro_lake_phase_fx_drifts.inc` (107) — **OK** (drift loops +
+  per-phase FX play).
+- `intro_lake_transition.inc` (414, **largest**) — **REVISE**
+  (large; keep as-is but comment should hint that this is the
+  multi-phase transition cinematic that owns the channel inits,
+  cinematic slides/rises, and city-seq setup for the LAKE
+  hand-off).
+- `intro_music_marks_and_city_pans.inc` (153) — **OK**.
+- `intro_city_seq_draws.inc` (397) — **OK** (CIN_190 / CIN_431 /
+  CIN_432-433 city-sequence draw loops).
+- `intro_scene_late_phase.inc` (217) — **OK** (parallax loops,
+  zoom-out, palette E init).
+- `intro_scene_final_fx_phase.inc` (172) — **OK**.
+- `intro_scene_final.inc` (294) — **OK** (final-scene draws +
+  particle init + bg audio).
+- `intro_scene_transitions.inc` (71) — **OK** (4 wait-scene
+  routines + the next-phase scene transition).
+- `intro_transition_to_lake_setup.inc` (260) — **OK** (preloads
+  LAKE bytecode + state ready for the bank switch).
+
+### Regrouping proposals (INTRO)
+
+Given INTRO's nature (long linear cinematic, each chunk is a
+phase), aggressive regrouping risks scattering the narrative.
+Two minor proposals:
+
+**RI1.** Sharper comments on the two flagged files
+(intro_dna_animation, intro_lake_transition) per audit findings —
+applied as a comment-fix commit, no file moves.
+
+INTRO Phase 3 deliberately minimal: the chunk structure
+reflects narrative phases, and splitting further would obscure
+the linear flow. Reopen if a specific chunk surfaces as a real
+mixed-content blocker during later cross-stage work.
+
+## PRISON, CAVES, CAPSULE, TANK, ENDING, CODE_WHEEL, PASSCODE
+
+*Pending — sequenced after INTRO comment fixes.*
