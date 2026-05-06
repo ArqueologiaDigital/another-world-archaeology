@@ -45,10 +45,58 @@ After audit:
 Verification after every change: `verify_stage 29/29` and
 `verify_unified 27/27` must stay green.
 
-## LAKE
+## LAKE — Phase 3 complete (regrouping landed); Phase 1 deep-read in progress
 
 70 stage-shared chunks under `src/levels/_unified/lake/`,
-totalling ~14,000 lines.
+totalling ~14,000 lines. After regrouping the directory tree now
+includes two subdirectories (`lake/beast_ai/` and
+`lake/scatter_dots/`) and one `_dead_*.inc` for unreachable
+preserved bytecode.
+
+**Regrouping commits applied** (one per R-proposal,
+verify_stage 29/29 + verify_unified 27/27 after each):
+
+  - R1+R2 (`04d8fcd`): collapsed beast-AI fragmentation into
+    `lake/beast_ai/` — `dispatch.inc`, `pick_dir_and_proximity.inc`,
+    `spawn.inc`. Moved `BEAST_AMBIENT_CASE_5/6` from
+    `spawn_mid_right.inc` to `beast_ambient_sound.inc` where the
+    rest of the 6-case chain lives.
+  - R3 (`d3e4489`): split `multiplex_ring5_and_beast_proximity.inc`
+    — `MULTIPLEX_RING5_SAVE_LOOP` appended to
+    `multiplex_anim_rings.inc`; beast-proximity check moved to
+    `lake/beast_ai/proximity.inc`.
+  - R4 (`018eb35`): renamed `proximity_helpers_and_dispatch.inc`
+    → `lake/beast_ai/range_check_and_dispatch.inc`. Audit found
+    the file is fully beast-AI-specific despite the generic name;
+    `;@if BRANCH ==` interlocks make a finer split unsafe.
+  - R5 (`b7f2bc2`): split `scene_transition_and_decor.inc` (5
+    unrelated topics) into 4 typed files: scene-transition head,
+    beast-intro-cinematic kill timing, LAKE-intro palette+title
+    fade, decor loops.
+  - R6 (`5d01b56`): split `beast_drift_and_screen_shift.inc` into
+    `lake/beast_ai/drift_left.inc` (beast-specific) and
+    `lake/screen_shift_helpers.inc` (generic, called from hero /
+    Lester / screen-edge code too).
+  - R7 (`8d02fee`): split `decor_f7_through_f14.inc` (which
+    actually held two unrelated topics — decor-blink-cycle AND
+    Lester-emerges-from-pool narrative) into
+    `lake_decor_at_305_155.inc` and
+    `lake_intro_lester_emerges_from_pool.inc`.
+  - R8 (`747108c`): extracted ~70-line dead-code mov-zero block
+    from `particle_burst_cycle_loop_2.inc` into
+    `lake/_dead_var_reset_block.inc`. Documented in a header
+    comment as unreachable shipped bytecode preserved for
+    round-trip byte identity.
+  - R9 (`f00780f`): grouped 4 scatter_dots files into a
+    `lake/scatter_dots/` subdirectory.
+
+**Phase 1 deep-read status**: 22 of 70 chunks deep-read so far
+(beast subsystem, several large hero files, the 6 chunks involved
+in R5/R6/R7/R8). Remaining 48 chunks: comments validated against
+filenames + first labels in earlier passes; deep-reads continuing
+across cron ticks. Verdicts updated as each chunk is read.
+
+### Per-chunk findings (interim)
 
 ### Per-chunk findings
 
