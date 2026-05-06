@@ -407,45 +407,56 @@ inserted at two byte addresses in the parent chunk's flow.
 - `prison_var29_state_machine.inc` (208) — **REVISED comment**.
 - `prison_var2f_state_machine.inc` (248) — **REVISED comment**.
 - `prison_late_phase_var_setup.inc` (361, 35 labels) —
-  **MIXED-but-keep**. Contains INIT_VARS + STEP_VAR1A + 30+
-  DRAW_CIN036..076 sequential frames (cellmate animation
-  cycle?) + DRAW_CIN_540_543_WITH_SFX_57 + INIT_VARS_15_19_18
-  + 2 DEDUP. The 30+ DRAW_CIN_NNN frames in the 036..076 range
-  could plausibly be split into a `prison/buddy_animation_
-  frames.inc`, but byte-order is tight and the frames are
-  interleaved with `_AT_X03_Y04` variants. **Flagging as a
-  potential future split**, not applied this round.
+  **MIXED-but-keep — left for future work**. Contains 27
+  DRAW_CINNNN_AT_X03_Y04 + DRAW_CIN_NNN sequential frames
+  (CIN_036..076, in descending pairs) drawn at coords
+  `[0x03] / [0x04]`. **NOT BUDDY_X / BUDDY_Y** (those are
+  0x07/0x08 in PRISON). The character identity at these coords
+  is unclear without further research — possibly the cell
+  cage animation, possibly the guard, possibly a different
+  buddy-state-machine frame range. Splitting prematurely with
+  a misleading name (cellmate / guard / etc.) would be worse
+  than the current "late_phase_var_setup" name. Flagged for
+  future split *after* the [0x03]/[0x04] character is
+  identified.
 - `prison_late_phase_scroll_and_pages.inc` (288) — **OK**
   (scroll + page + DRAW_CIN_552/550 + add helpers).
-- `prison_pagefill_inits.inc` (470, 32 labels) — **MIXED-but-keep**.
-  INIT_VARS_16_17 + 25+ DRAW_CIN_225..239 sequential frames +
-  some INLINE_DRAW_CV helpers + nested include of post_DRAW_
-  CIN_240. Same kind of "many sequential frames" pattern as
-  prison_late_phase_var_setup. **Flagging**.
+- `prison_pagefill_inits.inc` (470, 32 labels) —
+  **MIXED-but-keep — left for future work**. Same kind of
+  "many sequential frames" pattern as prison_late_phase_var_
+  setup: INIT_VARS_16_17 + DRAW_CIN657_AT_X1A_Y1B +
+  INLINE_DRAW_CIN_659 + 17 DRAW_CIN_225..239 sequential
+  frames + 7 INLINE_DRAW_CV helpers + nested include of
+  post_DRAW_CIN_240. Coord vars 0x1A / 0x1B for the named
+  draw, plus various others. Same character-identity
+  uncertainty as prison_late_phase_var_setup; left flagged.
 - `prison_inline_setters_and_init.inc` (434, 26 labels) —
   **OK**. INLINE_SET helpers + DRAW_CIN_311_TO_*_2F_AT_<HASH>
   variants (cellmate buddy animation poses) +
   KILL_CHANNEL_LANDING_001 + more DRAW_CIN_NNN_BLOCK helpers.
   Coherent cluster of cellmate-state animation helpers.
-- `prison_dedups_and_landing_kill.inc` (575, 26 labels) —
-  **MIXED-but-keep**. 7 DEDUP/INLINE_DRAW_CV helpers + 13
-  DRAW_CIN_157..169 cellmate-animation frames + KILL_CHANNEL_
-  LANDING_002 + 5 DRAW_CV*_PLAY_* helpers. The DRAW_CIN_157..169
-  cluster is the cellmate animation sequence (drawn at
-  BUDDY_X / BUDDY_Y per the audit-doc's PRISON section);
-  splittable to `prison/buddy_animation_frames.inc` in
-  principle but byte-order is tight. **Flagging**.
+- `prison_dedups_and_landing_kill.inc` (now 474 lines after RP1) —
+  **RP1 SPLIT APPLIED** (`071ec81`). 13 cellmate animation
+  DRAW_CIN_157..169 frames extracted to
+  `prison/buddy_animation_frames/cellmate_cin_157_169.inc`.
+  Parent file keeps a single-line nested include at the same
+  byte position. The remaining contents (7 dedup/inline helpers
+  + KILL_CHANNEL_LANDING_002 + 5 DRAW_CV*_PLAY_* helpers) match
+  the parent's name better.
 - `prison_sfx_and_dedup_helpers.inc` (368, 19 labels) — **OK**.
   PLAY_SFX_005C_CH01 + DRAW_CIN_486/483/473/502/499/489 +
   DEDUP/INLINE helpers. The DRAW_CIN frames are SFX-paired;
   coherent cluster.
 
-Three PRISON files marked **MIXED-but-keep** because they
-contain sequential cellmate-animation DRAW_CIN cluster mixed
-with other helpers, but the existing structure is the heavily-
-folded fold-output and aggressive splits would risk disrupting
-the careful match_arms.py byte-ordering. Flagged for possible
-future restructuring — out of scope this round.
+Of the three PRISON files originally flagged MIXED-but-keep,
+RP1 split applied to `prison_dedups_and_landing_kill.inc`. The
+other two (`prison_late_phase_var_setup.inc`,
+`prison_pagefill_inits.inc`) remain flagged because the
+extractable DRAW_CIN clusters there draw at non-BUDDY coords
+(`[0x03]/[0x04]` and `[0x1A]/[0x1B]`); the character those vars
+hold is not yet identified, so naming a new file `cellmate_*`
+or `buddy_*` would be premature. Reopen these splits after
+the relevant character-position research lands.
 
 ### Regrouping proposals (PRISON)
 
