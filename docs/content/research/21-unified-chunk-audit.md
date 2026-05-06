@@ -90,11 +90,25 @@ verify_stage 29/29 + verify_unified 27/27 after each):
   - R9 (`f00780f`): grouped 4 scatter_dots files into a
     `lake/scatter_dots/` subdirectory.
 
-**Phase 1 deep-read status**: 22 of 70 chunks deep-read so far
-(beast subsystem, several large hero files, the 6 chunks involved
-in R5/R6/R7/R8). Remaining 48 chunks: comments validated against
-filenames + first labels in earlier passes; deep-reads continuing
-across cron ticks. Verdicts updated as each chunk is read.
+**Phase 1 deep-read status**: 22 of 70 chunks deep-read in the
+first pass. Cron-tick continuation has now confirmed several
+more LAKE chunks via labels-deep + spot-checks: the 4 large
+hero files (`hero_fall_right_and_drawers`, `hero_walk_run_
+movement`, `hero_kicks_and_crouches`, `hero_leap_and_land`) are
+all cohesive hero-state-machine collections; `pool_underwater_
+cinematic.inc` (487 lines) is narrative-named throughout
+(`A_CALM_ALIEN_POOL_BEFORE_LESTERS_ARRIVAL`, etc.) and clearly
+the pool-cinematic flow; `slug_phase_1_birth_and_death.inc` and
+`getting_out_of_pool_animation.inc` both use sequential `_PART_N`
+naming and are coherent.
+
+One minor observation: `hero_kicks_and_crouches.inc` contains
+`HERO_GETTING_OUT_OF_POOL_LOOP` and `HOLD_POOL_LESTER_F0_WAIT`
+at the end — pool-narrative labels mixed in with kicks /
+crouches. By byte-order they belong here; the original chunk
+naming captured the dominant topic but the tail is technically
+mixed. Not worth a split (would scatter related hero animations
+without clarity gain; byte-order constraint).
 
 ### Per-chunk findings (interim)
 
