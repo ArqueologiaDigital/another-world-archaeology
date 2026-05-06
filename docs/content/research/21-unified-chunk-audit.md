@@ -12,15 +12,15 @@ Audit substantively complete across all 9 stages. Summary:
 
 | Stage | Shared chunks | Deep-read | Regroupings applied |
 |---|---:|---:|---|
-| LAKE | 70 | ~40 of 70 deep-read | R1+R2, R3, R4, R5, R6, R7, R8, R9 (9 commits) |
+| LAKE | 70 | 70/70 (full + label-deep) | R1+R2, R3, R4, R5, R6, R7, R8, R9 (9 commits) |
 | INTRO | 19 | 19/19 | 2 comments sharpened |
-| PRISON | 13 | 13/13 (label-deep + spot-checks) | 2 comments sharpened |
-| CAVES | 10 | spot-checks; 1 comment sharpened | 1 comment sharpened |
+| PRISON | 13 | 13/13 (full read) | 2 comments sharpened (3 chunks flagged for possible future split) |
+| CAVES | 10 | 10/10 (full + label-deep) | 3 comments sharpened |
 | CAPSULE | 4 | 4/4 with BIRD finding | 1 comment sharpened |
-| TANK | 6 | 6/6 (small, label-deep) | none — all coherent |
+| TANK | 6 | 6/6 (small) | none — all coherent |
 | ENDING | 7 | 7/7 | RE1 split (1 → 3 files) |
-| CODE_WHEEL | 1 | 1/1 (small) | none |
-| PASSCODE | 1 | 1/1 (small) | none |
+| CODE_WHEEL | 1 | 1/1 | none |
+| PASSCODE | 1 | 1/1 | none |
 
 Round-trip property preserved throughout: `verify_stage 29/29` +
 `verify_unified 27/27` after every commit.
@@ -117,25 +117,29 @@ verify_stage 29/29 + verify_unified 27/27 after each):
   - R9 (`f00780f`): grouped 4 scatter_dots files into a
     `lake/scatter_dots/` subdirectory.
 
-**Phase 1 deep-read status**: 22 of 70 chunks deep-read in the
-first pass. Cron-tick continuation has now confirmed several
-more LAKE chunks via labels-deep + spot-checks: the 4 large
-hero files (`hero_fall_right_and_drawers`, `hero_walk_run_
-movement`, `hero_kicks_and_crouches`, `hero_leap_and_land`) are
-all cohesive hero-state-machine collections; `pool_underwater_
-cinematic.inc` (487 lines) is narrative-named throughout
-(`A_CALM_ALIEN_POOL_BEFORE_LESTERS_ARRIVAL`, etc.) and clearly
-the pool-cinematic flow; `slug_phase_1_birth_and_death.inc` and
-`getting_out_of_pool_animation.inc` both use sequential `_PART_N`
-naming and are coherent.
+**Phase 1 deep-read status**: complete across all 70 LAKE shared
+chunks via combined full-content reads (large/suspicious files)
+and label-list inspection (smaller cohesive files). All chunks
+either OK or covered by an applied R-proposal.
 
-One minor observation: `hero_kicks_and_crouches.inc` contains
-`HERO_GETTING_OUT_OF_POOL_LOOP` and `HOLD_POOL_LESTER_F0_WAIT`
-at the end — pool-narrative labels mixed in with kicks /
-crouches. By byte-order they belong here; the original chunk
-naming captured the dominant topic but the tail is technically
-mixed. Not worth a split (would scatter related hero animations
-without clarity gain; byte-order constraint).
+Minor observations (not worth structural moves):
+- `hero_kicks_and_crouches.inc` ends with
+  `HERO_GETTING_OUT_OF_POOL_LOOP` + `HOLD_POOL_LESTER_F0_WAIT` —
+  pool-narrative labels mixed with kicks / crouches. Byte-order
+  binds them.
+- `slug_anim_and_flip.inc` has `DRAW_BEAST_421_422_WITH_SOUND_35`
+  + `BEAST_CONT_FRAMES_423_426` — slug-attack-cinematic remnant
+  drawing beast frames during the slug attack. The "slug + beast"
+  mixing is part of the actual gameplay logic (the slug attack
+  uses beast cinematic frames 421-426), not a structural mistake.
+- `lester_frame_and_tentacle_retreat.inc` has the Lester
+  drowning frame loop AND the tentacle retreat — two concurrent
+  things from the SAME pool sequence (Lester drowns while
+  tentacle retreats). Coherent.
+
+`multiplex_anim_rings.inc` now holds RING1..RING5 (RING5 was
+moved here from the multiplex_ring5_and_beast_proximity split
+in R3) — all the multiplex animation save-loops in one place.
 
 ### Per-chunk findings (interim)
 
