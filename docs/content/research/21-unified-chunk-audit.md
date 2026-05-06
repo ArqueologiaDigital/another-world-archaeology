@@ -6,24 +6,36 @@ include-comment that currently describes it in the parent
 `.asm.in`, and decisions taken about regrouping when the chunk's
 contents and its name no longer match.
 
-## Status (2026-05-06)
+## Status — DONE (2026-05-06)
 
-Audit substantively complete across all 9 stages. Summary:
+Audit complete across all 9 stages. Every shared chunk has been
+deep-read and every R-proposal has been either applied as a
+commit or explicitly closed with rationale.
 
-| Stage | Shared chunks | Deep-read | Regroupings applied |
-|---|---:|---:|---|
-| LAKE | 70 | 70/70 (full + label-deep) | R1+R2, R3, R4, R5, R6, R7, R8, R9 (9 commits) |
-| INTRO | 19 | 19/19 | 2 comments sharpened |
-| PRISON | 13 | 13/13 (full read) | 2 comments sharpened (3 chunks flagged for possible future split) |
-| CAVES | 10 | 10/10 (full + label-deep) | 3 comments sharpened |
-| CAPSULE | 4 | 4/4 with BIRD finding | 1 comment sharpened |
-| TANK | 6 | 6/6 (small) | none — all coherent |
-| ENDING | 7 | 7/7 | RE1 split (1 → 3 files) |
-| CODE_WHEEL | 1 | 1/1 | none |
-| PASSCODE | 1 | 1/1 | none |
+| Stage | Shared chunks | Deep-read | Regroupings applied | DONE |
+|---|---:|---:|---|---|
+| LAKE | 70 | 70/70 | R1+R2, R3, R4, R5, R6, R7, R8, R9 (9 commits) | ✅ |
+| INTRO | 19 | 19/19 | 2 comments sharpened (RI1) | ✅ |
+| PRISON | 13 | 13/13 | RP1 split + 2 comments + 2 closed-pending-research | ✅ |
+| CAVES | 10 | 10/10 | 3 comments sharpened | ✅ |
+| CAPSULE | 4 | 4/4 (with BIRD finding) | 1 comment sharpened | ✅ |
+| TANK | 6 | 6/6 | none — all coherent | ✅ |
+| ENDING | 7 | 7/7 | RE1 split (1 → 3 files) | ✅ |
+| CODE_WHEEL | 1 | 1/1 | none | ✅ |
+| PASSCODE | 1 | 1/1 | none | ✅ |
 
-Round-trip property preserved throughout: `verify_stage 29/29` +
-`verify_unified 27/27` after every commit.
+Total **11 regrouping commits** landed across the project:
+LAKE R1..R9 (9), ENDING RE1, PRISON RP1.
+
+Round-trip property preserved throughout every commit:
+`verify_stage 29/29` + `verify_unified 27/27`.
+
+LAKE source-tree now has nested subdirectories
+(`lake/beast_ai/`, `lake/scatter_dots/`) and one `_dead_*`
+prefix for unreachable preserved bytecode. PRISON has
+`prison/buddy_animation_frames/` for the cellmate animation
+cluster. ENDING has 3 narrowly-typed files where the
+"channel cleanup" mega-blob used to be.
 
 Cross-cutting findings flagged for follow-up research:
 - CAPSULE has a BIRD subsystem (`INIT_BIRD_AI_VARS`, cart/dos
