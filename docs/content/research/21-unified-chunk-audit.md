@@ -490,34 +490,55 @@ when somebody traces the full bird-flight bytecode.
 587 arm-specific chunks (highest count of any stage). Same
 pattern as PRISON / CAPSULE: heavily folded.
 
-### Per-chunk findings (label-based — full reads pending in
-follow-up cron tick)
+### Per-chunk findings (deep-read complete)
 
-- `caves_action_helpers.inc` — INIT_VARS_E6_EA + action helpers.
-- `caves_dedup_helpers_cluster.inc` (786 lines, **largest** in
-  CAVES) — DEDUP_CAVES_6B_* cluster; ~36 routines salvaged from
-  match_arms.py rounds.
-- `caves_inline_breaks.inc` — INLINE break sequences with VAR18
-  setters.
-- `caves_inline_setters_and_init.inc` — small inline init
-  helpers, var-derivation chains.
-- `caves_inline_setters_part1c.inc` — INIT_VARS_E6_68_69_6B
-  cluster.
-- `caves_preload_resources.inc` — PRELOAD_RES_6A_77_6D_6E_74_76
-  _78_7C (8 resources).
-- `caves_scroll_init_and_sfx.inc` — INIT_VARS_2F_29_12 + scroll
-  init + SFX setup.
-- `caves_scroll_setup_and_helpers.inc` — SCROLL_BLIT_P83_TO_PFF
-  + scroll-blit helpers.
-- `caves_var22_setters_and_projections.inc` — SET_VAR22_TO_*
-  setters and projection helpers.
+- `caves_action_helpers.inc` (163 lines, 7 labels) — **REVISED
+  comment**. Filename "action helpers" understated: contains 6
+  distinct topics (INIT_VARS_E6_EA + 2 resource-load helpers +
+  channel teardown + AI-position init + 2 dedup helpers).
+  Comment in CAVES.asm.in now describes all 6 topics; no split
+  (sequential byte-order is tight).
+- `caves_dedup_helpers_cluster.inc` (786 lines, 21 labels) —
+  **OK**. All labels are DEDUP_CAVES_*_NNN, INLINE_DRAW_CV_*,
+  or DRAW_CV*_PLAY_* — coherent cluster of fold-helper routines.
+- `caves_inline_breaks.inc` (161 lines, 7 labels) — **REVISED
+  comment**. Filename describes only 3 of 7 routines (the
+  INLINE_BREAK_035 helpers); other 4 are SET_VAR18 + 3 multi-
+  step walking-draw helpers (STEP_LEFT4_DRAW_CV140_LEFT4,
+  STEP_DRAW_CV336_THEN_CV340, STEP_DRAW_CV329_THEN_CV335).
+- `caves_inline_setters_and_init.inc` (267, 22) — **OK**. All
+  labels are INIT_VARS_*, INLINE_SET_*, DERIVE_VAR*, COPY_VAR*
+  — coherent inline-setter cluster.
+- `caves_inline_setters_part1c.inc` (294, 25) — **OK**. Same
+  pattern (INIT_VARS_*, INLINE_SET_*, COPY_VAR*, STEP_VAR*,
+  RESET_VAR*, MUL_VAR*).
+- `caves_preload_resources.inc` (57) — **OK**.
+- `caves_scroll_init_and_sfx.inc` (254 lines, 3 labels) —
+  **REVISED comment**. The 3 directly-defined labels
+  (INIT_VARS_2F_29_12 + PLAY_SFX_005C_CH00 +
+  DEDUP_CAVES_5B_003__CAVES_INLINE_SETTERS_AND_INIT) are mixed
+  topics; bulk of the file is `;@include "_helpers/*.inc"` of
+  shared math/projection helpers with arm-specific tails (a
+  scroll-init-phase fold output).
+- `caves_scroll_setup_and_helpers.inc` (280, 13) — **OK**.
+  SCROLL_BLIT_* + INIT_VARS_E6_E7_EB + 5 SETUP_67_* channel-
+  setup helpers + INIT_HASH_VARS_67_66_65_68_69 + a few var
+  setters. All scroll-related.
+- `caves_var22_setters_and_projections.inc` (440 lines, 34
+  labels) — **OK**. Almost all SET_VAR22_TO_NN setters + many
+  PROJ_VAR22_* projection helpers + 4 DEDUP/INIT/PLAY tail
+  helpers. Coherent var22-management cluster.
+- `post_INIT_VARS_A1_A4_A7.inc` (9 lines) — **OK**.
+  Nested-include helper (SETUP_KILL_CHAN_3B_AT_LANDING +
+  DELETE_GAME_CHANS_AND_TEARDOWN), pattern matches
+  PRISON's `post_DRAW_CIN_*` files.
 
 ### Regrouping proposals (CAVES)
 
 Same disposition as PRISON / CAPSULE — heavily folded structure
-mostly cohesive at the file level. No structural moves; deep-
-read pass during follow-up cron tick may surface specific
-mixed-content cases.
+cohesive at the file level. Three comments sharpened
+(`caves_action_helpers`, `caves_inline_breaks`,
+`caves_scroll_init_and_sfx`); no structural moves.
 
 ## TANK
 
