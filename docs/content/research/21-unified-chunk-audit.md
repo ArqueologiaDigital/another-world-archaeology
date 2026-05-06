@@ -391,7 +391,7 @@ pattern not seen elsewhere yet —
 These tiny (5-line) files exist to allow the same helper to be
 inserted at two byte addresses in the parent chunk's flow.
 
-### Per-chunk findings
+### Per-chunk findings (deep-read complete 2nd cron pass)
 
 - `prison_equ_aliases.inc` (19) — **OK** (auto-generated EQU
   aliases header).
@@ -399,28 +399,49 @@ inserted at two byte addresses in the parent chunk's flow.
 - `post_DRAW_CIN_240.inc` (5) — **OK** (nested-include helper).
 - `prison_delay_preload_resources.inc` (94) — **OK** (delay +
   preload + bank4 + step-position draw).
-- `prison_step_draws_and_breaks.inc` (102) — **OK** (step-draw of
-  CIN555 left/right + INLINE_BREAK_035 + a few CIN block draws).
-- `prison_var29_state_machine.inc` (208) — **REVISE**. Title
-  overstates: file is a collection of `INLINE_SET_VAR29_TO_N`
-  setters (5/6/28/A/...) plus a few DRAW_CIN_406_408_BLOCK and
-  DECREMENT_VAR29_BY_1 helpers, each with arm-specific
-  post-bodies via `;@include "<arm>__post_*.inc"`. The actual
-  var-29 state-machine *logic* lives in arm-specific entry
-  chunks; this file is the SHARED setter / draw helpers the
-  state machine calls into.
-- `prison_var2f_state_machine.inc` (248) — **REVISE** (same as
-  var29: collection of `SET_VAR2F_TO_NN` setters + INIT_VARS_*
-  helpers; not the state machine itself).
-- `prison_late_phase_var_setup.inc` (361) — **OK**.
-- `prison_late_phase_scroll_and_pages.inc` (288) — **OK**.
-- `prison_pagefill_inits.inc` (470) — **OK**.
-- `prison_inline_setters_and_init.inc` (434) — **OK**.
-- `prison_dedups_and_landing_kill.inc` (575) — **OK** (heavy
-  fold-output: ~26 DEDUP_*, INLINE_DRAW_CV_*, DRAW_CIN_* labels
-  with arm-specific tails).
-- `prison_sfx_and_dedup_helpers.inc` (368) — **OK** (PLAY_SFX +
-  DRAW_CIN draw helpers + dedup tails).
+- `prison_step_draws_and_breaks.inc` (102) — **OK**.
+- `prison_var29_state_machine.inc` (208) — **REVISED comment**.
+- `prison_var2f_state_machine.inc` (248) — **REVISED comment**.
+- `prison_late_phase_var_setup.inc` (361, 35 labels) —
+  **MIXED-but-keep**. Contains INIT_VARS + STEP_VAR1A + 30+
+  DRAW_CIN036..076 sequential frames (cellmate animation
+  cycle?) + DRAW_CIN_540_543_WITH_SFX_57 + INIT_VARS_15_19_18
+  + 2 DEDUP. The 30+ DRAW_CIN_NNN frames in the 036..076 range
+  could plausibly be split into a `prison/buddy_animation_
+  frames.inc`, but byte-order is tight and the frames are
+  interleaved with `_AT_X03_Y04` variants. **Flagging as a
+  potential future split**, not applied this round.
+- `prison_late_phase_scroll_and_pages.inc` (288) — **OK**
+  (scroll + page + DRAW_CIN_552/550 + add helpers).
+- `prison_pagefill_inits.inc` (470, 32 labels) — **MIXED-but-keep**.
+  INIT_VARS_16_17 + 25+ DRAW_CIN_225..239 sequential frames +
+  some INLINE_DRAW_CV helpers + nested include of post_DRAW_
+  CIN_240. Same kind of "many sequential frames" pattern as
+  prison_late_phase_var_setup. **Flagging**.
+- `prison_inline_setters_and_init.inc` (434, 26 labels) —
+  **OK**. INLINE_SET helpers + DRAW_CIN_311_TO_*_2F_AT_<HASH>
+  variants (cellmate buddy animation poses) +
+  KILL_CHANNEL_LANDING_001 + more DRAW_CIN_NNN_BLOCK helpers.
+  Coherent cluster of cellmate-state animation helpers.
+- `prison_dedups_and_landing_kill.inc` (575, 26 labels) —
+  **MIXED-but-keep**. 7 DEDUP/INLINE_DRAW_CV helpers + 13
+  DRAW_CIN_157..169 cellmate-animation frames + KILL_CHANNEL_
+  LANDING_002 + 5 DRAW_CV*_PLAY_* helpers. The DRAW_CIN_157..169
+  cluster is the cellmate animation sequence (drawn at
+  BUDDY_X / BUDDY_Y per the audit-doc's PRISON section);
+  splittable to `prison/buddy_animation_frames.inc` in
+  principle but byte-order is tight. **Flagging**.
+- `prison_sfx_and_dedup_helpers.inc` (368, 19 labels) — **OK**.
+  PLAY_SFX_005C_CH01 + DRAW_CIN_486/483/473/502/499/489 +
+  DEDUP/INLINE helpers. The DRAW_CIN frames are SFX-paired;
+  coherent cluster.
+
+Three PRISON files marked **MIXED-but-keep** because they
+contain sequential cellmate-animation DRAW_CIN cluster mixed
+with other helpers, but the existing structure is the heavily-
+folded fold-output and aggressive splits would risk disrupting
+the careful match_arms.py byte-ordering. Flagged for possible
+future restructuring — out of scope this round.
 
 ### Regrouping proposals (PRISON)
 
