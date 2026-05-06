@@ -31,7 +31,7 @@ Round-trip property preserved throughout every commit:
 `verify_stage 29/29` + `verify_unified 27/27`.
 
 LAKE source-tree now has nested subdirectories
-(`lake/beast_ai/`, `lake/scatter_dots/`) and one `_dead_*`
+(`lake/beast/`, `lake/scatter_dots/`) and one `_dead_*`
 prefix for unreachable preserved bytecode. PRISON has
 `prison/buddy_animation_frames/` for the cellmate animation
 cluster. ENDING has 3 narrowly-typed files where the
@@ -42,8 +42,8 @@ Cross-cutting findings flagged for follow-up research:
   only) — Lester rides a bird to escape the alien city, with
   HERO_X / HERO_Y temporarily reused for the bird's position.
 - PRISON's nested-include pattern (`post_DRAW_CIN_168/240`) is
-  the precedent we adopted for LAKE's `lake/beast_ai/` subdir.
-- LAKE structure now has 2 subdirs (`lake/beast_ai/`,
+  the precedent we adopted for LAKE's `lake/beast/` subdir.
+- LAKE structure now has 2 subdirs (`lake/beast/`,
   `lake/scatter_dots/`) and a `_dead_var_reset_block.inc` for
   unreachable preserved bytecode — a model the other stages can
   follow if/when their own restructuring becomes necessary.
@@ -88,7 +88,7 @@ Verification after every change: `verify_stage 29/29` and
 
 70 stage-shared chunks under `src/levels/_unified/lake/`,
 totalling ~14,000 lines. After regrouping the directory tree now
-includes two subdirectories (`lake/beast_ai/` and
+includes two subdirectories (`lake/beast/` and
 `lake/scatter_dots/`) and one `_dead_*.inc` for unreachable
 preserved bytecode.
 
@@ -96,16 +96,16 @@ preserved bytecode.
 verify_stage 29/29 + verify_unified 27/27 after each):
 
   - R1+R2 (`04d8fcd`): collapsed beast-AI fragmentation into
-    `lake/beast_ai/` — `dispatch.inc`, `pick_dir_and_proximity.inc`,
+    `lake/beast/` — `dispatch.inc`, `pick_dir_and_proximity.inc`,
     `spawn.inc`. Moved `BEAST_AMBIENT_CASE_5/6` from
     `spawn_mid_right.inc` to `beast_ambient_sound.inc` where the
     rest of the 6-case chain lives.
   - R3 (`d3e4489`): split `multiplex_ring5_and_beast_proximity.inc`
     — `MULTIPLEX_RING5_SAVE_LOOP` appended to
     `multiplex_anim_rings.inc`; beast-proximity check moved to
-    `lake/beast_ai/proximity.inc`.
+    `lake/beast/proximity.inc`.
   - R4 (`018eb35`): renamed `proximity_helpers_and_dispatch.inc`
-    → `lake/beast_ai/range_check_and_dispatch.inc`. Audit found
+    → `lake/beast/range_check_and_dispatch.inc`. Audit found
     the file is fully beast-AI-specific despite the generic name;
     `;@if BRANCH ==` interlocks make a finer split unsafe.
   - R5 (`b7f2bc2`): split `scene_transition_and_decor.inc` (5
@@ -113,7 +113,7 @@ verify_stage 29/29 + verify_unified 27/27 after each):
     beast-intro-cinematic kill timing, LAKE-intro palette+title
     fade, decor loops.
   - R6 (`5d01b56`): split `beast_drift_and_screen_shift.inc` into
-    `lake/beast_ai/drift_left.inc` (beast-specific) and
+    `lake/beast/drift_left.inc` (beast-specific) and
     `lake/screen_shift_helpers.inc` (generic, called from hero /
     Lester / screen-edge code too).
   - R7 (`8d02fee`): split `decor_f7_through_f14.inc` (which

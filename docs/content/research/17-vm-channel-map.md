@@ -395,7 +395,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x3C` | shared | `CLEAR_FRAMEBUFFER_TO_COLOR_4_LOOP` | src/levels/_unified/lake/slug_attack_cinematic.inc:93 (+1 more) |
 | `0x3C` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lake_entry_and_init.inc:111 |
 | `0x3C` | shared | `LOOP_BLIT_AND_CLEAR_FF` | src/levels/_unified/lake/beast_kills_lester_and_respawn.inc:86 |
-| `0x3C` | shared | `RENDER_FRAME_DISPATCH` | src/levels/_unified/lake/beast_ai/drift_left.inc:40 (+2 more) |
+| `0x3C` | shared | `RENDER_FRAME_DISPATCH` | src/levels/_unified/lake/beast/drift_left.inc:40 (+2 more) |
 | `0x3F` | shared | `OUTSIDE_POOL_SCREEN` | src/levels/_unified/lake/lester_drift_and_swing.inc:253 |
 | `0x3F` | shared | `START_LAKE_BG_MUSIC_AND_DELETE_CH_0_2` | src/levels/_unified/lake/random_init_and_music_setup.inc:61 |
 
