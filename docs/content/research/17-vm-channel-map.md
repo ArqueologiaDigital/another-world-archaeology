@@ -267,7 +267,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0B` | shared | `MULTIPLEX_ANIM_RING1_SLOT_0` | src/levels/_unified/lake/screen_to_the_right_setups.inc:25 |
 | `0x0B` | shared | `MULTIPLEX_ANIM_RING2_SLOT_0` | src/levels/_unified/lake/screen_to_the_right_setups.inc:102 |
 | `0x0B` | shared | `MULTIPLEX_ANIM_RING3_SLOT_0` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:11 |
-| `0x0C` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:26 (+1 more) |
+| `0x0C` | shared | `BEAST_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:26 (+1 more) |
 | `0x0C` | shared | `DRAW_LAKE_051_SEQ_FROM_WORKING_POS` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:12 |
 | `0x0C` | shared | `SINKING_AT_CONSOLE` | src/levels/_unified/lake/pool_underwater_cinematic.inc:130 |
 | `0x0C` | shared | `SWIMMING_UP_LEGS_ANIMATION` | src/levels/_unified/lake/pool_lab_console_and_bubbles.inc:48 |
@@ -275,20 +275,20 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x0D` | shared | `MULTIPLEX_ANIM_RING1_SLOT_1` | src/levels/_unified/lake/screen_to_the_right_setups.inc:27 |
 | `0x0D` | shared | `MULTIPLEX_ANIM_RING2_SLOT_1` | src/levels/_unified/lake/screen_to_the_right_setups.inc:104 |
 | `0x0D` | shared | `SWIMMING_UP_TORSO_ANIMATION` | src/levels/_unified/lake/pool_lab_console_and_bubbles.inc:49 |
-| `0x0E` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:28 (+1 more) |
+| `0x0E` | shared | `BEAST_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:28 (+1 more) |
 | `0x0E` | shared | `MULTIPLEX_ANIM_RING3_SLOT_1` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:14 |
 | `0x0E` | shared | `UPDATE_POSITION_OF_BUBBLES` | src/levels/_unified/lake/pool_underwater_cinematic.inc:127 |
 | `0x0F` | shared | `BUBBLES_A_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:128 |
 | `0x0F` | shared | `DRAW_LAKE_051_SEQ_FROM_WORKING_POS` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:15 |
 | `0x0F` | shared | `MULTIPLEX_ANIM_RING1_SLOT_2` | src/levels/_unified/lake/screen_to_the_right_setups.inc:29 |
 | `0x0F` | shared | `MULTIPLEX_ANIM_RING2_SLOT_2` | src/levels/_unified/lake/screen_to_the_right_setups.inc:106 |
-| `0x10` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:30 (+1 more) |
+| `0x10` | shared | `BEAST_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:30 (+1 more) |
 | `0x10` | shared | `BUBBLES_B_ANIMATION` | src/levels/_unified/lake/pool_underwater_cinematic.inc:129 |
 | `0x10` | shared | `DECOR_F7_BLINK_3X_LOOP` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:16 |
 | `0x11` | shared | `MULTIPLEX_ANIM_RING1_SLOT_3` | src/levels/_unified/lake/screen_to_the_right_setups.inc:31 |
 | `0x11` | shared | `MULTIPLEX_ANIM_RING3_SLOT_2` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:17 |
 | `0x11` | shared | `MULTIPLEX_RING4_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:108 |
-| `0x12` | shared | `BEAST_AI_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:32 (+1 more) |
+| `0x12` | shared | `BEAST_DISPATCH_BY_X_AND_VAR_0D` | src/levels/_unified/lake/screen_to_the_right_setups.inc:32 (+1 more) |
 | `0x13` | shared | `MULTIPLEX_RING3_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:33 |
 | `0x13` | shared | `MULTIPLEX_RING5_SAVE_LOOP` | src/levels/_unified/lake/screen_to_the_right_setups.inc:110 |
 | `0x14` | shared | `DRAW_LAKE_051_SEQ_FROM_WORKING_POS` | src/levels/_unified/lake/scene_transition_to_getting_out_of_pool.inc:18 |
@@ -337,8 +337,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x24` | shared | `AMBIENT_LOOP_CH24` | src/levels/_unified/lake/beast_surprises_lester.inc:159 (+1 more) |
 | `0x25` | shared | `AMBIENT_CH25_RESTART` | src/levels/_unified/lake/opening_bg_droplet_sprinkles.inc:46 |
 | `0x25` | shared | `AMBIENT_LOOP_CH25` | src/levels/_unified/lake/beast_surprises_lester.inc:160 (+1 more) |
-| `0x28` | shared | `BEAST_AI_SPAWN_FAR_LEFT` | src/levels/_unified/lake/lester_drift_and_swing.inc:305 |
-| `0x28` | shared | `BEAST_AI_SPAWN_FAR_RIGHT` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:23 |
+| `0x28` | shared | `BEAST_SPAWN_FAR_LEFT` | src/levels/_unified/lake/lester_drift_and_swing.inc:305 |
+| `0x28` | shared | `BEAST_SPAWN_FAR_RIGHT` | src/levels/_unified/lake/vine_and_outside_pool_screens.inc:23 |
 | `0x28` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/beast_intro_cinematic_kill.inc:6 |
 | `0x28` | shared | `THE_BEAST_KILLS_LESTER` | src/levels/_unified/lake/beast_distance_check_and_spawns.inc:35 |
 | `0x28` | shared | `WAIT_BEAST_TRIGGER_THEN_INIT` | src/levels/_unified/lake/screen_to_the_right_setups.inc:135 |
