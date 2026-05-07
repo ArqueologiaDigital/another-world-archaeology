@@ -159,24 +159,22 @@ So this is two separate alphabets in the bytecode: one live
 
 Possible interpretation: an earlier version of the passcode
 screen used CIN_000..015 as glyph art, then the alphabet was
-replaced (different polygon set, different layout) and the
-old chain was cordoned off behind a `killChannel` rather
-than physically removed. Authorship-wise, the `killChannel`
-+ dispatch-chain pattern is too structured to be accidental.
+replaced (different polygon set, different layout). The
+`killChannel` + dispatch-chain pattern is too structured to be
+accidental.
 
-> **Cross-port correction (2026-05-04)**: This reading
-> applies to **dos and amiga only**. Cross-port liveness audit
-> via `tools/cross_port_liveness_audit.py` reveals that **cart
-> has 4 of the 16 alphabet frames LIVE** (CIN_000..003),
-> 2 dead-only (CIN_004, 005), and the other 10 (CIN_006..015)
-> simply unreferenced in cart's source. Cart's passcode
-> rendering kept the early-alphabet glyph for the first 4 key
-> codes (or first 4 character positions) but used the new
-> blocky font for everything else — a hybrid of the two
-> alphabets. dos and amiga have the entire CIN_000..015
-> chain present but unreached. This refines the
-> "two-alphabet" reading: cart did a partial migration, dos
-> and amiga did a full migration but kept the dead chain.
+The cross-port liveness audit
+(`tools/cross_port_liveness_audit.py`) reveals different
+migration outcomes per port: **cart has 4 of the 16 alphabet
+frames LIVE** (CIN_000..003), 2 dead-only (CIN_004, 005), and the
+other 10 (CIN_006..015) simply unreferenced in cart's source.
+Cart's passcode rendering kept the early-alphabet glyph for the
+first 4 key codes (or first 4 character positions) but used the
+new blocky font for everything else — a hybrid of the two
+alphabets. **dos and amiga**, by contrast, have the entire
+CIN_000..015 chain present but unreached: a full migration where
+the old chain is cordoned off behind a `killChannel` rather than
+physically removed.
 
 ### Visual confirmation
 
@@ -227,11 +225,11 @@ break down into three contiguous-ish ranges:
     frames**; `cin_389/390` are smaller fragments — possibly
     beam fade/end states. See
     `docs/assets/research-19-capsule-silenced-cinematics/isolated_frames/`.)
-    **Cross-port correction**: CIN_378 and CIN_387 are LIVE
-    on cart and amiga (they're real shipped sprites in those
-    ports), only dead-only on DOS. Likely a port-specific
-    DOS regression similar to TANK CIN_146..149 — DOS lost
-    the live drawing site for these two specific frames.
+    Cross-port: CIN_378 and CIN_387 are LIVE on cart and amiga
+    (they're real shipped sprites in those ports), only
+    dead-only on DOS. Likely a port-specific DOS regression
+    similar to TANK CIN_146..149 — DOS lost the live drawing site
+    for these two specific frames.
   - **`CINEMATIC_614..676`** — 63 contiguous frames, called by
     a `if VAR_13 == X then draw CINEMATIC_Y` dispatch chain
     (each label a per-state video draw, e.g.

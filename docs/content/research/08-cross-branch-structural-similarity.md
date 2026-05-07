@@ -52,9 +52,9 @@ addresses.
 | chahi_amiga_1991 vs cartridge_1992 | 0.598 | 4077 / 7032 | 129 tokens |
 | chahi_amiga_1991 vs gba_2004 | 0.587 | 3911 / 6729 | 129 tokens |
 
-For the LAKE stage, the **Heineman lineage** (DOS + cartridge +
+For the LAKE stage, the **post-Amiga lineage** (DOS + cartridge +
 GBA) shows 88-92% structural overlap. The Chahi branch (Amiga)
-shares ~60% with all Heineman variants.
+shares ~60% with all three.
 
 ## Cross-branch matrix per stage (opcode_only)
 
@@ -71,8 +71,9 @@ shares ~60% with all Heineman variants.
 | PASSCODE | 0.501 | — | — | 0.528 | 0.375 |
 
 Headline numbers:
-- **The Heineman lineage shares 50-99% structure** depending on
-  stage — strong evidence of a common programming source.
+- **The post-Amiga lineage (DOS + cartridge + GBA) shares 50-99%
+  structure** depending on stage — strong evidence of a common
+  programming source.
 - **GBA ↔ cartridge similarity is 0.988 for CODE_WHEEL and 0.920
   for LAKE** — Foxy 2004 essentially refactored the cartridge
   bytecode rather than re-implementing from scratch.
@@ -129,8 +130,8 @@ implementation): SNES-EU + GBA `STAGE_TITLES[0]` should be
 
 **Foxy GBA's lineage**: 99% structural similarity to
 cartridge_1992 for INTRO, 92% for LAKE. Foxy 2004 is best
-described as **a refactor of Heineman's cartridge bytecode**, not
-a from-scratch implementation.
+described as **a refactor of the Heineman cartridge bytecode**,
+not a from-scratch implementation.
 
 ## Refined genealogy diagram
 
@@ -139,17 +140,17 @@ than byte-equality alone:
 
 ```
 Chahi 1991 master (Amiga + Atari ST)
-   │  60-92% structural similarity (Amiga → DOS preserved most code)
+   │  60-92% structural similarity to the 1992 ports
    ▼
-Delphine DOS 1992
-   │  68-91% structural similarity (DOS → cartridge re-encoded
-   │  but kept structure)
-   ▼
-Heineman cartridge 1992-93 (SNES-EU + Genesis-EU)
-   │  92-99% structural similarity (cartridge → GBA refactored
-   │  but kept ~9X% of structure)
-   ▼
-Foxy GBA 2004
+1992 Delphine internal source (lost — only inferred)
+   ├── Delphine DOS 1992 (Morais @ Delphine)
+   │      ↕  91% structural similarity (parallel re-encodings of
+   │      ↕  the same logical program by independent teams)
+   └── Heineman cartridge 1992-93 (SNES-EU + Genesis-EU)
+          │  92-99% structural similarity (cartridge → GBA
+          │  refactored but kept most of the structure)
+          ▼
+       Foxy GBA 2004
 ```
 
 This *programming genealogy* is consistent with the *byte-level
@@ -164,19 +165,19 @@ hypothesis that branches share too little for `#ifdef` merging
 to be useful.
 
 The structural-similarity matrix **revises this assessment**:
-within the Heineman lineage (DOS / cartridge / GBA), structural
+within the post-Amiga lineage (DOS / cartridge / GBA), structural
 overlap is 70-99% — large enough that a unified source is
 genuinely useful. Specifically:
 
 - LAKE: dos_1992 + cartridge_1992 share 91% structure +
   a 512-token longest matching block. A unified
-  `heineman_lineage/LAKE.asm` with `#ifdef CARTRIDGE` blocks for
-  the ~9% divergent regions is feasible.
+  `post_amiga/LAKE.asm` with `#ifdef CARTRIDGE` blocks for the
+  ~9% divergent regions is feasible.
 - ENDING / TANK / INTRO: chahi_amiga_1991 ↔ dos_1992 at 0.83-0.92
   — also good candidates for two-branch unification.
 
 What remains genuinely divergent (unification is *not* attractive):
-- chahi_amiga_1991 ↔ Heineman cartridge for most stages: ~55-65%
+- chahi_amiga_1991 ↔ cartridge for most stages: ~55-65%
   similarity. Crossing the codewheel-vs-cartridge format
   boundary loses a lot.
 - chahi_amiga_1991 ↔ dos_1992 for PASSCODE, CAPSULE: ~47-53%.
@@ -184,13 +185,14 @@ What remains genuinely divergent (unification is *not* attractive):
 
 So the revised Phase 3b plan was:
 
-1. Within the **Heineman lineage**, attempt a 3-target unified
+1. Within the **post-Amiga lineage**, attempt a 3-target unified
    source: DOS + cartridge + GBA all build from one .asm with
    `#ifdef`s for differences.
 2. Keep **chahi_amiga_1991** as its own source tree (~60% similarity
-   to Heineman lineage isn't worth merging — too many `#ifdef`s).
-3. Cherry-pick high-similarity Chahi/Heineman_DOS pairs (ENDING,
-   INTRO) as candidates for two-branch unification.
+   to the post-Amiga lineage isn't worth merging — too many
+   `#ifdef`s).
+3. Cherry-pick high-similarity Chahi/DOS pairs (ENDING, INTRO) as
+   candidates for two-branch unification.
 
 **Outcome (as of 2026-05-02): plan was too conservative on point
 2.** Research finding [#09](#/research/09-phase3b-first-unification)
@@ -221,4 +223,4 @@ python3 tools/bytecode_structural_diff.py --matrix \
   built using opcode-stream tokenization + difflib LCS. Cross-
   branch numbers reveal a much richer genealogy than byte-equality
   alone, and revise Phase 3b's feasibility assessment from
-  "deferred" to "attempt within Heineman lineage".
+  "deferred" to "attempt within the post-Amiga lineage".

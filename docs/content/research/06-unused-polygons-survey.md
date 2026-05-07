@@ -288,9 +288,9 @@ The Amiga-only wings (`0x005bde`) raise a related question: did
 the DOS branch's polygon resource never include the flight-wings,
 or were they removed? Two hypotheses:
 
-1. **DOS forked early**: the wings were drawn AFTER Heineman's
-   DOS port forked from Chahi's master. The Amiga master kept
-   them; DOS doesn't have them.
+1. **DOS forked early**: the wings were drawn AFTER the DOS port
+   forked from Chahi's master. The Amiga master kept them; DOS
+   doesn't have them.
 2. **DOS pruned**: the wings were in both originally, and DOS's
    asset-packing pipeline stripped them as unreferenced.
 
@@ -509,5 +509,5 @@ limbs. Compare against the cutscene's actual reused background
 
   TANK's 90 DOS-only USED sprites match the +94 size finding
   earlier — confirms the DOS-additive interpretation for TANK
-  (likely Heineman 1992 cart's tank-arena rework adding new
-  sprites).
+  (likely a 1992 tank-arena rework adding new sprites between
+  the Amiga 1991 master and the 1992 Delphine internal source).

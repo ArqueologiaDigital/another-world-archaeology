@@ -386,9 +386,8 @@ This is decisive lineage data:
   two SKUs.
 - **SNES-EU 1992 + Genesis-EU 1993** = single Heineman build, ported
   to two cartridge platforms with the AW VM bytecode resource
-  reused verbatim. Heineman's 1993 Genesis-EU port did **not**
-  re-derive bytecode from his earlier DOS port (which has its own
-  hash `3e95437f…`); it built on the SNES-EU bytecode.
+  reused verbatim. The 1993 Genesis-EU port built on the SNES-EU
+  bytecode rather than re-deriving from a different source.
 
   **String-layer divergence (2026-05-05)**: while the bytecode is
   byte-identical, `str_data.rom` is NOT — md5 `6e4f0bcf…` for
@@ -423,8 +422,9 @@ This is decisive lineage data:
   bytecode + adapted string layer", not full byte-identity. The
   bytecode reuse is verbatim; the strings were touched up for the
   Genesis release.
-- **DOS 1992** = its own Heineman build, distinct from the SNES
-  build despite sharing the gates 1+2 editorial choices.
+- **DOS 1992** (Morais @ Delphine) = its own build, distinct from
+  the SNES cartridge build despite sharing the gates 1+2 editorial
+  choices.
 - **GBA 2004 (Foxy)** = a separate later branch with modified
   bytecode (size 19,717), differing from all of the original 1991-93
   ports. The gates remained intact through Foxy's modifications.
@@ -827,8 +827,8 @@ beetle finding adds three new pieces:
    finding of pre-shipping content cuts visible in the bytecode
    itself.**
 
-2. **The Heineman lineage (DOS 1992 + Genesis-EU 1993) shares a
-   second editorial cut** — gate 2 (channel-0x09 beetle suppression).
+2. **Both 1992 ports (DOS + SNES-EU/Genesis-EU) share a second
+   editorial cut** — gate 2 (channel-0x09 beetle suppression).
    Verified 2026-04-30 against Genesis-EU level 0: it has the same
    double-`setup channel=0x09` pattern as DOS, with the second
    setup pointing at `KILL_CHANNEL_ROUTINE` (the same opcode).
@@ -842,9 +842,10 @@ beetle finding adds three new pieces:
    - Genesis-EU: at `0x4D5A..0x4E56` and `0x9FBC..0xA0B8`
      (**identical to DOS, not Amiga**).
 
-   So the cinematic resource is shared between DOS and Genesis-EU,
-   strongly suggesting Heineman built the Genesis-EU port from the
-   DOS port's resources rather than re-deriving from Amiga.
+   So the cinematic resource layout is shared between DOS and
+   Genesis-EU, suggesting both teams worked from the same 1992
+   Delphine internal asset bank rather than from the 1991 Amiga
+   master.
 
 Combined, this gives a clean lineage hypothesis:
 
@@ -857,16 +858,19 @@ Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
    └── Atari ST              ↗  (same memlist contents, same bank layout)
         │
         ▼
-1992 DOS port (Heineman):    inherits gate 1; adds gate 2 — beetle hidden too
-        │                    cinematic resource laid out at new offsets
+1992 DOS port (Morais @ Delphine):   inherits gate 1; adds gate 2 — beetle hidden too
+        │                            cinematic resource at new offsets
         ▼
-1993 Genesis-EU (Heineman):  inherits gate 1 + gate 2 + DOS cinematic offsets
-                             (does NOT re-derive from Amiga)
+1992 SNES-EU + 1993 Genesis-EU       inherits gate 1 + gate 2; cinematic
+   (Heineman @ Interplay):           offsets match DOS layout, not Amiga
+                                     (built from the 1992 Delphine asset
+                                     bank, not from Amiga upstream)
 ```
 
-The "Heineman built Genesis-EU from his DOS port, not from Amiga
-upstream" hypothesis is testable by spot-checking other resources
-(non-beetle cinematics, bytecode constants) for the same DOS-vs-
+The "Heineman's cartridge port built on the 1992 Delphine asset
+bank, not on Amiga upstream" hypothesis is testable by spot-checking
+other resources (non-beetle cinematics, bytecode constants) for the
+same DOS-vs-
 Amiga offset signature. Worth a follow-up.
 
 The Atari ST byte-identity finding has its own implication for
@@ -1054,10 +1058,9 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   and *immediately overwrites it* with the cleanup-watcher on the
   same channel (lines 1147–1148 Amiga, 1224–1225 DOS) — same
   override pattern as the DOS-only beetle suppression on channel
-  0x09. So the kick-detector never gets a thread to run on. The
-  finding's earlier framing — "kickable on Amiga" — was wrong; the
+  0x09. So the kick-detector never gets a thread to run on; the
   wing-flip is shipped content that is gated off at runtime even
-  on Amiga. Restructured the "suppression mechanisms" section to
+  on Amiga (refining the original "kickable on Amiga" framing). Restructured the "suppression mechanisms" section to
   describe gate 1 (channel 0x2E, both ports) and gate 2 (channel
   0x09, DOS-only) as two distinct editorial cuts. Reachability
   table updated to show **No** for all wing-flip animations on
@@ -1075,8 +1078,8 @@ awvm-disasm /path/to/amiga-banks all_levels amiga
   `setup channel=0x2E, address=LABEL_3684` (gate 1). Cinematic
   resource offsets are identical to DOS (`BEETLE_WALKING_LEFT_0`
   at `0x4D5A`, `BEETLE_WALKING_RIGHT_0` at `0x9FBC`) and different
-  from Amiga (`0x616A` and `0xB3CC`), suggesting Heineman built
-  the Genesis-EU port from his DOS port's resources rather than
+  from Amiga (`0x616A` and `0xB3CC`), suggesting the cartridge
+  port worked from the 1992 Delphine asset bank rather than
   re-deriving from Amiga. Reachability table widened to three
   columns. Genealogy implications expanded with a 4-step lineage
   diagram (Pre-1991 → Amiga 1991 → DOS 1992 → Genesis-EU 1993)

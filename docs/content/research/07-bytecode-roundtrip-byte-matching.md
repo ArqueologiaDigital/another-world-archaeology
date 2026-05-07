@@ -179,11 +179,12 @@ The original assessment was that a unified .asm with
 to read than the per-branch tree. **That turned out to be wrong**
 once two improvements landed:
 
-1. **Closer-than-expected lineage similarity.** Research finding
-   [#08](#/research/08-cross-branch-structural-similarity) measured
-   structural similarity within the Heineman lineage (cart ↔ gba ↔
-   dos ↔ amiga) at 60–99 % depending on the pair, not the worst-
-   case "different instruction sequences" we'd assumed.
+1. **Closer-than-expected cross-branch similarity.** Research
+   finding [#08](#/research/08-cross-branch-structural-similarity)
+   measured structural similarity across the four bytecode
+   branches (cart ↔ gba ↔ dos ↔ amiga) at 60–99 % depending on
+   the pair, not the worst-case "different instruction sequences"
+   we'd assumed.
 2. **A multi-stage canonicalization pipeline** that absorbs
    structural divergence into per-branch EQU values, so the
    conditional-compilation directives only fire on actual semantic
