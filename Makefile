@@ -6,11 +6,12 @@
 
 PYTHON ?= python3
 
-.PHONY: help all docs tools fetch extract disasm verify-references check clean
+.PHONY: help all docs docs-deploy tools fetch extract disasm verify-references check clean
 
 help:
 	@echo "Targets:"
-	@echo "  make docs                Regenerate docs/data/all.js from sessions/ + docs/content/"
+	@echo "  make docs                Full local rebuild: channel-map regen + docs/data/all.js"
+	@echo "  make docs-deploy         Bake docs/data/all.js only (CI-safe; no source-reconstruction needed)"
 	@echo "  make tools               Clone or update sibling AnotherWorld_VMTools at pinned commit"
 	@echo "  make fetch               Download release files listed in metadata.json into original_files/"
 	@echo "  make extract             Extract resources for every release"
@@ -22,14 +23,21 @@ help:
 
 all: docs
 
-docs: docs-channel-map
+docs: docs-channel-map docs-deploy
+
+# CI-safe subset: bakes the static site bundle from already-committed
+# markdown under docs/content/ and JSON/CSV under docs/. Does NOT touch
+# tools that read the sibling another-world-source-reconstruction repo
+# (those run via `docs-channel-map` only on machines that have it).
+docs-deploy:
 	@$(PYTHON) tools/gen_docs_data.py
 
 # Regenerate per-stage VM channel map (research/17), the
 # role-inference heatmap section, and the unnamed-setup-target
 # working list (`docs/unnamed_setup_targets.md`). Run whenever a
 # semantic-rename round lands so the docs reflect the current
-# source state.
+# source state. Requires the sibling `another-world-source-reconstruction`
+# checkout — not safe to run on CI without it.
 .PHONY: docs-channel-map
 docs-channel-map:
 	@$(PYTHON) tools/build_channel_map.py

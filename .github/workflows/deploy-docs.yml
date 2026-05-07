@@ -32,7 +32,11 @@ jobs:
           python-version: '3.12'
 
       - name: Generate docs/data/all.js
-        run: make docs
+        # `make docs-deploy` skips the channel-map regen step, which
+        # reads the sibling `another-world-source-reconstruction` repo
+        # (not checked out on CI). The committed markdown is up to
+        # date — local `make docs` regenerates and commits it.
+        run: make docs-deploy
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
