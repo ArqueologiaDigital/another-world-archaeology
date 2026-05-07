@@ -24,9 +24,6 @@ The site has three kinds of content:
 - **Research** (findings + open questions) — the actual investigation
   outputs; what we have learned and what we are still trying to
   answer.
-- **Audit trail** (session log) — verbatim Claude Code session
-  transcripts, including assistant thinking and all tool calls,
-  rendered for human review.
 
 ## The pipeline at a glance
 
@@ -61,8 +58,6 @@ blocked on a fixture (Jaguar — no public dump exists yet). The
   local `original_files/` permanent archive — never a cache, never
   deleted; once a file is fetched, it stays for the life of the
   project.
-- **Every Claude Code session is recorded verbatim** as a
-  version-controlled audit trail (see [Session log](#/sessions)).
 - **External tool dependencies are pinned**, not vendored. See
   `tools/AWVM_Tools.lock`.
 - **Frozen reference material** (e.g. archived walkthroughs) is

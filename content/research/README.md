@@ -67,6 +67,20 @@ finding is comparative) records which releases it applies to.
   cover for broken-by-design content, not an authorial accident.
   The beetle's polygon data is byte-stable across ports.
 
+- [11 — Unused-music scan & rendered cut-content gallery](#/research/11-unused-music-scan):
+  systematic counterpart of research/06 for the audio side. The
+  shipping AW soundtrack has only 2 music tracks (intro `0x07`,
+  ending `0x8A`); the rest of the game is scored by sound-effect
+  stingers over silence. A third track, **`0x89`**, is preloaded
+  inside an unreachable code block in LAKE.asm and never plays —
+  cut content. Rendered to WAV via the new
+  `tools/aw_music_to_wav.py` (a Python port of rawgl's
+  `sfxplayer.cpp`); listening confirms it as a tense ambient loop
+  that fits LAKE's actual narrative (Lester drowning + tentacle
+  threat) perfectly. The 12-byte dead-code preload pattern is
+  byte-identical across all 5 ports, so the cut goes back to
+  Chahi's original 1991 AMIGA release.
+
 - [10 — GBA `LABEL_26A6` mystery solved: 55 KB of trailing data is the level_0 cinematic.rom](#/research/10-gba-cinematic-data-found):
   the unified-INTRO `;@if` block at `LABEL_26A6` showed cartridge's
   trailing-padding (`FILL(55641, 0xFF)`) vs GBA's mysterious 55 KB
@@ -113,6 +127,81 @@ finding is comparative) records which releases it applies to.
   chunks are byte-identical, confirming research/05's SNES↔Genesis
   byte-identity finding now at the cartridge-ROM level (not just
   the bytecode resource).
+
+- [19 — Dead bytecode survey: 1,121 transitively-dead labels across 4 ports](#/research/19-dead-bytecode-survey):
+  Static reachability survey of every disassembled stage
+  across the 4 most-complete ports (`dos_1992`,
+  `cartridge_1992`, `chahi_amiga_1991`, `gba_2004`). Builds on
+  research/05 (beetle gates) and research/18 (gate inventory)
+  by tracing live entry points through call/jmp/branch/setup
+  and label-fall-through edges. Surfaces **511** trans-dead
+  labels in dos_1992 alone. Headline findings: PASSCODE has
+  a complete unused 16-glyph alphabet (CINEMATIC_000..015) —
+  the live UI uses a different glyph set (CIN_036+); LAKE's
+  43 trans-dead labels are exactly the silenced BEETLE_AI
+  subgraph; CAPSULE's 248 trans-dead are likely the entire
+  callee tree of the silenced LABEL_5C58 dispatcher.
+
+- [18 — Setup-then-overwrite gate inventory (4 ports × 9 stages)](#/research/18-setup-gate-inventory):
+  static survey of the `setup channel=N, address=X; setup
+  channel=N, address=Y` idiom across the whole game. **22 gates
+  surfaced** total: 12 silencers (7 LAKE beetle gates per
+  research/05, plus 5 newly-found CAPSULE/CAVES silencers
+  including a queued `CINEMATIC_870..873` frame loop that never
+  draws), 3 reschedules, 7 unclassified. Confirms research/05
+  quantitatively across all four ports and surfaces additional
+  shipped-but-unreachable code paths beyond the beetle stage.
+  Foundational input for the reachability oracle (#0058) that
+  the asset-scan family (#0054–#0057) needs.
+
+- [17 — VM thread-channel map (per stage)](#/research/17-vm-channel-map):
+  static scan of every `setup channel=NN, address=ROUTINE` opcode
+  in the unified source (4,082 total) grouped by stage and
+  channel. Each AW VM channel (0x00..0x3F) is a separate
+  cooperatively-scheduled thread. Surfaces canonical roles
+  (`0x3C` is the blit/pause loop with 349 setups; `0x14` is the
+  heaviest-used at 466) and per-stage feature wiring (which
+  channels host actor animation, music timing, cinematic
+  drawing, etc.).
+
+- [16 — Unused PALETTE slots (DOS port)](#/research/16-unused-palettes):
+  113 of the 32 × 9 = 288 palette slots across DOS's nine levels
+  are never selected by any reachable `setPalette N` opcode.
+  Notable: slot 28 is unused in EVERY level; PASSCODE uses only
+  2 of 32 (slots 0 and 5); ENDING skips the entire low half.
+  Visual catalogue at
+  `docs/assets/research-16-unused-palettes/level<N>_<STAGE>.svg`.
+
+- [15 — Unused SOUND resources (DOS port)](#/research/15-unused-sounds):
+  4 non-empty SOUNDs (0x2E, 0x37, 0x38, 0x42) are never `play`'d
+  OR `load`'d by any DOS bytecode. All one-shot samples,
+  0.15-0.67 s. Renders at
+  `docs/assets/research-15-unused-sounds/sound_0xNN.wav`.
+
+- [14 — `;@raw=` load-bearing residue: AW VM redundant encodings](#/research/14-raw-annotation-residue):
+  documentation of why ~98% of `;@raw=` annotations were
+  redundant noise vs the 580-strong load-bearing residue, which
+  cluster in three patterns (video alt-zoom-bit, bankSwitch
+  legacy operand, setPalette palette-0 trailing-0). Drove the
+  `;@enc=…` migration (`;@raw=` is now strictly forbidden).
+
+- [13 — Cross-release md5 index of extracted resources](#/research/13-cross-release-md5-index):
+  Amiga 1991 → DOS 1992 reused 117 / 144 resources verbatim and
+  rebuilt exactly the per-stage triplet (PALETTE + BYTECODE +
+  POLY_CINEMATIC) for all 9 stages. 0 Amiga-only resources;
+  2 DOS-only (POLY_ANIM at 0x12, 0x13). dos↔msdos extractions
+  agree byte-for-byte across all 146 indices.
+
+- [21 — Unified-source chunk audit](#/research/21-unified-chunk-audit):
+  per-stage review of every `.inc` chunk file under
+  `another-world-source-reconstruction/src/levels/_unified/`,
+  reading actual contents (not just filenames) to validate the
+  one-line `;@include` purpose comments and to identify chunks
+  that mix unrelated topics, are tiny fragments of a larger
+  subsystem, or are arbitrary byte-address cuts. Living document —
+  fills in as each stage's audit completes; LAKE is the first
+  stage. Currently flags ~9 LAKE regrouping candidates (e.g.,
+  the beast-AI dispatcher fragmented across 4 files; `BEAST_AMBIENT_CASE_5/6` stranded in a "spawn" file; a 100-line dead block tacked onto a particle-burst loop).
 
 - [06 — Unused-polygon survey (level 2 first pass)](#/research/06-unused-polygons-survey):
   **64 polygons in Amiga level 2 + 57 in DOS level 2 are not

@@ -1,0 +1,120 @@
+stage      cinematic                                cart       dos        amiga      pattern             
+----------------------------------------------------------------------------------------------------
+LAKE       COMMON_VIDEO_074                         live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_852                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_857                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_858                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_859                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_860                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_861                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_862                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_863                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_864                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_865                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_866                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_867                            live       live       dead-only  amiga-only-dead     
+CAVES      CINEMATIC_870                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_871                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_872                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_873                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_874                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_876                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_877                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_878                            dead-only  live       unref      mixed               
+CAVES      CINEMATIC_879                            dead-only  live       unref      mixed               
+CAVES      COMMON_VIDEO_161                         dead-only  dead-only  live       amiga-only-live     
+CAVES      COMMON_VIDEO_162                         dead-only  dead-only  live       amiga-only-live     
+TANK       CINEMATIC_018                            dead-only  live       live       cart-only-dead      
+TANK       CINEMATIC_096                            live       live       dead-only  amiga-only-dead     
+TANK       CINEMATIC_097                            live       live       dead-only  amiga-only-dead     
+TANK       CINEMATIC_098                            live       live       dead-only  amiga-only-dead     
+TANK       CINEMATIC_099                            live       live       dead-only  amiga-only-dead     
+TANK       CINEMATIC_146                            live       dead-only  live       dos-only-dead       
+TANK       CINEMATIC_147                            live       dead-only  dead-only  cart-only-live      
+TANK       CINEMATIC_148                            live       dead-only  live       dos-only-dead       
+TANK       CINEMATIC_149                            live       dead-only  live       dos-only-dead       
+TANK       CINEMATIC_170                            dead-only  live       live       cart-only-dead      
+TANK       CINEMATIC_171                            dead-only  live       live       cart-only-dead      
+TANK       CINEMATIC_172                            dead-only  live       live       cart-only-dead      
+TANK       CINEMATIC_173                            dead-only  live       live       cart-only-dead      
+TANK       CINEMATIC_199                            live       dead-only  live       dos-only-dead       
+TANK       CINEMATIC_261                            dead-only  live       unref      mixed               
+TANK       CINEMATIC_262                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_032                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_041                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_042                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_043                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_044                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_321                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_322                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_323                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_378                            live       dead-only  live       dos-only-dead       
+CAPSULE    CINEMATIC_381                            dead-only  live       live       cart-only-dead      
+CAPSULE    CINEMATIC_387                            live       dead-only  live       dos-only-dead       
+CAPSULE    CINEMATIC_388                            live       dead-only  live       dos-only-dead       
+CAPSULE    CINEMATIC_389                            live       dead-only  live       dos-only-dead       
+CAPSULE    CINEMATIC_390                            dead-only  dead-only  live       amiga-only-live     
+CAPSULE    CINEMATIC_391                            dead-only  live       live       cart-only-dead      
+CAPSULE    CINEMATIC_392                            dead-only  live       live       cart-only-dead      
+CAPSULE    CINEMATIC_393                            dead-only  live       live       cart-only-dead      
+CAPSULE    CINEMATIC_400                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_401                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_402                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_403                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_404                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_405                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_406                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_544                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_545                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_546                            live       live       dead-only  amiga-only-dead     
+CAPSULE    CINEMATIC_614                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_615                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_616                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_617                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_618                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_619                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_620                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_621                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_622                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_677                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_678                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_679                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_680                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_681                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_682                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_683                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_684                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_685                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_689                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_690                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_691                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_692                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_693                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_694                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_695                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_696                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_697                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_703                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_704                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_705                            dead-only  live       unref      mixed               
+CAPSULE    CINEMATIC_707                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_708                            live       dead-only  unref      mixed               
+CAPSULE    CINEMATIC_709                            live       dead-only  unref      mixed               
+CAPSULE    COMMON_VIDEO_136                         dead-only  dead-only  live       amiga-only-live     
+CAPSULE    COMMON_VIDEO_138                         dead-only  dead-only  live       amiga-only-live     
+CAPSULE    COMMON_VIDEO_161                         dead-only  dead-only  live       amiga-only-live     
+CAPSULE    COMMON_VIDEO_162                         dead-only  dead-only  live       amiga-only-live     
+PASSCODE   CINEMATIC_000                            live       dead-only  dead-only  cart-only-live      
+PASSCODE   CINEMATIC_001                            live       dead-only  dead-only  cart-only-live      
+PASSCODE   CINEMATIC_002                            live       dead-only  dead-only  cart-only-live      
+PASSCODE   CINEMATIC_003                            live       dead-only  dead-only  cart-only-live      
+
+Total cinematic names referenced: 5434; any-divergence: 908; behavioural (live↔dead) divergences: 108
+
+Behavioural divergence pattern counts:
+  mixed                44
+  amiga-only-dead      35
+  cart-only-dead       9
+  dos-only-dead        8
+  amiga-only-live      7
+  cart-only-live       5

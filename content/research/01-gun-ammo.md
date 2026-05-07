@@ -493,9 +493,28 @@ into the final stretch with whatever discipline they've trained.
 
 - **The "regular shot fires two laser pulses" insight has a side
   effect**: if you fire a regular at close range, the tap pulse and
-  the regular pulse may both reach the target. Whether this
+  the regular pulse may both reach the target. ~~Whether this
   means double damage in practice depends on the target's hit
-  semantics — open follow-up.
+  semantics — open follow-up.~~
+
+  **Update 2026-05-04**: traced through to closure (issue #0043
+  closed `done`). **No double damage**: the regular pulse's
+  per-frame routine `LABEL_42C2` is a pure renderer + range
+  counter — there is no collision detection along the regular
+  pipeline at all. The bullet just lives for 150 frames (initial
+  range `0x96`) as visual feedback and expires. *All* enemy
+  damage comes from the tap pulse fired on press; the regular's
+  `-10` energy cost is paying purely for the audiovisual layer
+  (louder sound, muzzle flash polygon CINEMATIC_037, longer
+  rendered trail). Superblasts do damage, but they reuse the
+  tap-class slot `0x88` with HP=`0x64` and the `OR 0x8000`
+  shield-piercing flag — they route through the tap collision
+  pipeline, not the regular one.
+
+  See issue #0043's final log entry for the full disassembly
+  trace (PRISON.asm DOS-1992; the unified source byte-matches
+  amiga and Genesis-EU as well, so the model is identical
+  cross-port).
 
 ## See also
 

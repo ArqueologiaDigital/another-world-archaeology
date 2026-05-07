@@ -102,8 +102,162 @@ project memory.
   codewheel check (it's the per-release `CODEWHEEL_CHECK=on/off`
   flag value); cartridge ports (SNES-EU, Genesis-EU, GBA Foxy)
   don't carry it (cartridges had no manual / codewheel insert).
-  Atari ST 1991 awaits its extractor (issue #0004); 3DO / Mac /
-  Apple IIgs await their respective parsers.
+  Atari ST 1991 — see "Atari ST does not carry the codewheel"
+  finding below. 3DO / Mac / Apple IIgs await their respective
+  parsers.
+
+## Presskit also patched the user-facing prompt (2026-05-05)
+
+Diffing the two Amiga `another` executables (presskit 2014 vs
+archive-org 2020 CC0) shows **50 bytes differ in 8 ranges**, all
+clustered at offset 0x3414..0x343d — a single embedded text
+string the executable prints as the codewheel-check prompt:
+
+      archive (codewheel intact, 2020):
+        "SELECT SYMBOLS CORRESPONDING TO\r THE POSITION\r ON THE CODE WHEEL"
+
+      presskit (codewheel stripped, 2014):
+        "SELECT 3 SYMBOLS THEN PRESS OK                                  "
+        (padded to original byte width)
+
+The cracker patched **both layers**:
+
+1. **Bytecode-level**: the `0x68 → 0x17` opcode swaps in
+   `resource-0x15.bin` neuter the codewheel comparison
+   (research/02's main finding).
+2. **User-facing-string-level**: the prompt string in the
+   executable's text segment is replaced from "look up symbols
+   on the codewheel" to "press OK after picking any 3 symbols",
+   so the user knows the check is bypassed and they don't need
+   to consult a codewheel insert.
+
+The two patches are complementary: the bytecode patch makes any
+input pass the check; the prompt patch tells the player they
+don't need to bother matching symbols. Outside `0x3400..0x343d`
+the two `another` executables are byte-identical.
+
+This is consistent with a polished community release rather than
+a hasty crack — the cracker took care to update the user-facing
+text to reflect the modified behaviour.
+
+## Atari ST 1991: codewheel-check absent (2026-05-05)
+
+The full Atari ST cross-port resource sweep (issue #0004,
+research/20) revealed exactly **one Atari-ST-unique resource**:
+`0x15 BYTECODE` (the CODE_WHEEL stage bytecode, 3544 bytes — same
+length as Amiga's). Byte-diffing Atari ST against the codewheel-
+intact Amiga (`tmp/output/amiga/resources/resource-0x15.bin`):
+
+      Atari ST: 3544 bytes
+      Amiga:    3544 bytes
+      Diff:     7 single-byte changes in 2 clusters
+      Coverage: 0.2%
+
+Diff offsets:
+
+      0x00B5  atari=0x19  amiga=0x0E
+      0x00B7  atari=0x47  amiga=0x00
+      0x0A01  atari=0x17  amiga=0x68
+      0x0A07  atari=0x17  amiga=0x68
+      0x0A0D  atari=0x17  amiga=0x68
+      0x0A13  atari=0x17  amiga=0x68
+      0x0A16  atari=0xD5  amiga=0x68
+
+These offsets sit **exactly inside the codewheel-check region**
+this finding identified above. The 0x00B5..0x00B7 cluster matches
+the "two-byte diff at the start of the level" (gate dispatch)
+location; the 0x0A01..0x0A16 cluster is inside `0x9fc..0xa88`
+(the conditional-jump cluster) and uses the SAME `0x68 → 0x17`
+opcode swap the presskit's codewheel-strip patch uses.
+
+So the Atari ST 1991 release ships with the codewheel-check
+**already neutralised** at the bytecode level, in a way that
+resembles the 2014 presskit cracker patch.
+
+Two interpretations:
+
+1. **Different protection regime at release**. The Atari ST port
+   used a *disk-format* protection scheme (custom-formatted
+   sectors, common on Atari ST commercial games of the era)
+   handled in `START.PRG` running natively on 68k *before* the
+   AW VM bytecode is loaded. The bytecode-level codewheel check
+   was therefore unnecessary, and shipping without it is
+   plausible for Delphine's Atari ST build.
+
+2. **Cracked-release dump**. The Atari ST extraction we have was
+   sourced from atarimania.com (PASTI .stx) — Pasti preserves
+   protection-track sectors but a Pasti image of an *already-
+   cracked* disc would carry the cracker's bytecode patch.
+
+Distinguishing these requires comparing against a known-pristine
+Atari ST dump (issue tracking the question filed as `#0092`).
+
+**Resolution (2026-05-05): interpretation #2 — cracked dump.**
+
+The atarimania.com PASTI dump's `START.PRG` still carries the
+**full codewheel prompt string intact**:
+
+      "B SELECT SYMBOLS CORRESPONDING TO"
+      "    AND PRESS BUTTON"
+
+(found via `strings` on the executable). This matches the
+codewheel-INTACT Amiga's prompt exactly. If Atari ST had
+genuinely shipped without the codewheel check, the executable
+wouldn't carry the prompt at all — the prompt's presence
+indicates the original release DID have a codewheel check, and
+what we have is a crack.
+
+Compared to the 2014 Amiga presskit (which patched BOTH the
+bytecode AND the prompt — replacing it with "SELECT 3 SYMBOLS
+THEN PRESS OK"), the Atari ST cracker was **less polished**: only
+the bytecode-level check was disabled; the prompt was left
+intact. Players see "select symbols corresponding to the
+codewheel" and just type their best guess — it works because the
+bytecode no longer validates.
+
+Atari ST's release-time copy protection is presumably the same
+codewheel manual that the Amiga release used (Delphine shared
+the manual across both 68k SKUs). To verify directly, a
+known-pristine Atari ST dump from a different source is still
+needed (issue #0092 closed with this resolution; a future
+acquisition would re-confirm).
+
+## Cross-platform UI architecture for the codewheel prompt
+
+The way each port renders the codewheel prompt itself splits along
+clean platform lines:
+
+- **Amiga / Atari ST 1991** (small loader executable + AW VM
+  bytecode loaded after): the codewheel prompt is **ASCII text
+  embedded in the executable's data segment** (offset 0x3414 in
+  Amiga `another`; mirror at the same logical position in Atari
+  ST `START.PRG`). The loader prints the prompt directly via
+  native OS calls, accepts user input, validates against a hard-
+  coded answer table, then loads the bytecode if the codewheel
+  matches. Amiga + Atari ST share this architecture; Atari ST's
+  prompt string is byte-identical to Amiga's.
+
+- **DOS 1992 / Mac 1993** (full AW VM is the application): the
+  codewheel prompt is **rendered as a graphical poly-screen via
+  the AW VM bytecode** (resource `0x15-BYTECODE`'s entry). No
+  ASCII codewheel text appears in any executable on these
+  platforms. The VM displays the codewheel screen using the
+  same polygon-rendering pipeline as in-game cinematics, then
+  collects user input via the AW VM's input layer. Verified by
+  `strings`-grepping `another.exe` (DOS) and the Estr_*.bin
+  resource-fork strings (Mac) — neither contains "SYMBOLS",
+  "CODEWHEEL", or related prompt fragments.
+
+- **Cartridge ports (SNES-EU, Genesis-EU, GBA Foxy)**: no
+  codewheel screen at all. Cartridges had no manual / codewheel
+  insert in the box, so the protection step was simply removed
+  from the cartridge bytecode (`CODEWHEEL_CHECK=off` in the
+  source-reconstruction flags).
+
+This is consistent with the per-platform "what is the
+application?" model: small-loader-plus-bytecode platforms do the
+codewheel prompt natively; full-VM platforms route everything
+through the VM.
 
 ## Reproducing
 

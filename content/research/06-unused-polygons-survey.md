@@ -393,3 +393,121 @@ limbs. Compare against the cutscene's actual reused background
   shortlist. New tool `tools/render_at_all_palettes.py` enables
   per-palette sweep for definitive identification of which game
   palette the polygon was authored for.
+
+- **2026-05-04** — extended scan to ALL levels (0..8) on both
+  the DOS and Amiga ports. Per-level unused-polygon counts
+  (output of `tools/find_unused_polygons.py`):
+
+  | Level | Stage             | DOS unused | Amiga unused |
+  |-------|-------------------|------------|--------------|
+  | 0     | CODE_WHEEL        | 54         | 59           |
+  | 1     | INTRO             | 37         | 37           |
+  | 2     | LAKE              | 57         | 64           |
+  | 3     | PRISON            | 253        | 333          |
+  | 4     | CAVES             | 227        | 299          |
+  | 5     | TANK              | 232        | 246          |
+  | 6     | CAPSULE           | 472        | **1117**     |
+  | 7     | ENDING (DOS) / PASSCODE (Amiga) | 240 | 221 |
+  | 8     | PASSCODE (DOS only) | 143      | n/a          |
+
+  **Largest cross-port discrepancy: CAPSULE.** Amiga's CAPSULE
+  poly resource has 1117 unused polygons vs DOS's 472 — 645 more.
+  This dovetails with [issue #0080](#/issues)'s finding that the
+  amiga 1991 polygon bank was repacked with a different cinematic
+  numbering for the 1992 ports; the 645 extras are likely
+  pre-renumbering vestiges that the DOS rebuild trimmed.
+
+  Combined with the LAKE-level cross-port finding from the
+  initial pass, this suggests the unused-polygon survey is most
+  productive when:
+  1. Targeted at specific scenes (level 2 beetle-attacker
+     cutscene was a clean win because the missing-actor hypothesis
+     was sharply defined).
+  2. Filtered to "unused on DOS / used on Amiga" — that delta
+     surfaces sprites that were physically present in 1991 but
+     stripped from the 1992 rebuild. CAPSULE is the next high-
+     value target with that filter.
+
+  Tooling note: the per-level counts include polygons reachable
+  only via group-polygon hierarchy. The naive scanner doesn't yet
+  do global cross-level reachability ([issue
+  #0058](#/issues)) — when a level shares polygon offsets with
+  another level via the engine's resource-loading pattern, those
+  cross-level uses are NOT counted as "reachable" in the current
+  per-level scan.
+
+- **2026-05-04** (later) — cross-port sprite-byte diff. Compared
+  every solid polygon's byte content between amiga and DOS ports
+  for each stage. Findings reveal three distinct rebuild patterns:
+
+  | Stage      | only-amiga | only-dos | Pattern             |
+  |------------|------------|----------|---------------------|
+  | CODE_WHEEL | 0          | 8        | DOS added 8 sprites |
+  | INTRO      | 2          | 2        | nearly stable       |
+  | LAKE       | 206        | 0        | dos trimmed 206     |
+  | PRISON     | 1          | 1        | nearly stable       |
+  | CAVES      | 10         | 20       | minor bidir         |
+  | TANK       | 0          | 94       | DOS added 94 sprites|
+  | CAPSULE    | 466        | 398      | major bidir rework  |
+  | ENDING     | 1          | 1        | nearly stable       |
+
+  - **DOS-additive** (CODE_WHEEL +8, TANK +94): the 1992 port
+    added new sprite content. TANK's +94 is striking — possibly
+    new tank-arena enemy variants or platform-specific UI.
+  - **Amiga-vestigial** (LAKE −206 in DOS): the 1992 rebuild
+    trimmed sprites that the 1991 amiga release had. Candidate
+    cut content.
+  - **Major rework** (CAPSULE 466+398 bidir): both ports have
+    unique content the other doesn't. Combined with the alien
+    sub-anim renumbering in [issue #0080](#/issues), CAPSULE
+    underwent significant content rework between 1991 and 1992
+    — not just a renumbering pass.
+
+  Tool: `tools/cross_port_polygon_diff.py`. Operates on solid
+  polygons only (skipping group polygons because their bytes
+  embed child references that differ per port even when the
+  rendered sprite matches).
+
+  Open avenue: render the only-in-amiga LAKE polygons (206
+  candidates) — these are the cleanest "1991-era cut content" set
+  in the survey. They should produce identifiable sprites under
+  amiga's LAKE palette.
+
+- **2026-05-04** (later still) — refined the cross-port diff to
+  show only sprites that are actually USED by that port's
+  bytecode (direct `video=1` refs + transitive group-child
+  closure). Tool: `tools/cross_port_used_polygon_diff.py`.
+
+  Per-stage USED sprite-content diff:
+
+  | Stage      | amiga-USES-but-dos-LACKS | dos-USES-but-amiga-LACKS |
+  |------------|--------------------------|--------------------------|
+  | CODE_WHEEL | 0                        | 8                        |
+  | INTRO      | 2                        | 2                        |
+  | LAKE       | **201**                  | 0                        |
+  | PRISON     | 0                        | 1                        |
+  | CAVES      | 0                        | 16                       |
+  | TANK       | 0                        | 90                       |
+  | CAPSULE    | **107**                  | **360**                  |
+  | ENDING     | 0                        | 1                        |
+  | PASSCODE   | 1                        | 1                        |
+
+  **LAKE's 201 sprites is the cleanest cut-content finding** in
+  the entire survey: the amiga 1991 build was actively rendering
+  201 unique solid polygons that the 1992 DOS rebuild removed
+  ENTIRELY from the polygon bank. Not "trimmed but kept around" —
+  literally absent. These are strong candidates for visual
+  inspection (rendering them at amiga's LAKE palettes 5–7 should
+  yield identifiable sprites with archaeological context).
+
+  CAPSULE shows the most bidirectional rework: amiga uses 107
+  sprites the DOS bank doesn't have, AND DOS uses 360 that the
+  amiga bank doesn't have. Combined with [issue
+  #0080](#/issues)'s alien-CIN renumbering finding, CAPSULE is
+  effectively a re-spritefication between 1991 and 1992 — not
+  just a renumbering pass.
+
+  TANK's 90 DOS-only USED sprites match the +94 size finding
+  earlier — confirms the DOS-additive interpretation for TANK
+  (likely Heineman 1992 cart's tank-arena rework adding new
+  sprites).
