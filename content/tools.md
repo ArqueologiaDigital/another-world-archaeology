@@ -2,10 +2,11 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**112 tools.**
+**113 tools.**
 
 | Tool | Purpose |
 | --- | --- |
+| `_paths.py` | Canonical filesystem paths for the archaeology repo + sibling repos. |
 | `add_stage_doc_headers.py` | Phase 2: prepend stage-narrative documentation headers to each |
 | `asset_references.py` | Scan a port's full disassembly tree for asset references — `video`, |
 | `attribute_cut_polygons.py` | For each stage's cut/added polygons, attribute the parent group |
