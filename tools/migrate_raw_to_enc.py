@@ -34,9 +34,9 @@ import re
 import sys
 from pathlib import Path
 
-SRC_ROOT = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AW_SRC
+
+SRC_ROOT = AW_SRC
 RE_RAW = re.compile(r"(?P<lead>\s*);@raw=(?P<bytes>[0-9a-fA-FxX,\s]+)\s*$")
 
 # Video opcodes we recognize as the bit-1 zoom-as-var alt encoding.

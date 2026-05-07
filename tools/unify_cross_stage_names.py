@@ -5,7 +5,8 @@ import hashlib
 from pathlib import Path
 from collections import defaultdict
 
-AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction")
+from _paths import AW_SRC
+
 
 stages = ['CAPSULE', 'CAVES', 'CODE_WHEEL', 'ENDING', 'PASSCODE', 'PRISON', 'TANK']
 

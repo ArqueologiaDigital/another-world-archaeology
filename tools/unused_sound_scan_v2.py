@@ -30,10 +30,9 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path("/home/fsanches/compartilhado/another-world-archaeology")
-SRC_TREE = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AW_SRC, REPO_ROOT
+
+SRC_TREE = AW_SRC
 LEVELS = SRC_TREE / "src" / "levels"
 
 sys.path.insert(0, str(REPO_ROOT / "tools"))

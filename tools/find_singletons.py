@@ -7,11 +7,12 @@ Usage: python3 /tmp/find_singletons.py STAGE
 import os, re, sys
 from pathlib import Path
 
+from _paths import AW_SRC
+
 if len(sys.argv) != 2:
     sys.exit(__doc__)
 
 STAGE = sys.argv[1].lower()
-AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction")
 STAGE_DIR = AW_SRC / "src/levels/_unified" / STAGE
 
 for arm_inc in sorted(STAGE_DIR.glob("*.inc")):

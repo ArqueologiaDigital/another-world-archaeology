@@ -20,9 +20,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-SRC_ROOT = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AW_SRC
+
+SRC_ROOT = AW_SRC
 LEVELS = SRC_ROOT / "src/levels"
 ALL_BRANCHES = frozenset({"chahi_amiga_1991", "cartridge_1992",
                           "dos_1992", "gba_2004"})

@@ -31,6 +31,8 @@ import re
 import sys
 from pathlib import Path
 
+from _paths import AW_SRC
+
 if len(sys.argv) < 3:
     sys.exit(__doc__)
 
@@ -49,7 +51,7 @@ for spec in sys.argv[2:]:
 
 AW_SRC = Path(os.environ.get(
     "AW_SRC",
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
+    str(AW_SRC)
 ))
 STAGE_DIR = AW_SRC / "src/levels/_unified" / STAGE.lower()
 

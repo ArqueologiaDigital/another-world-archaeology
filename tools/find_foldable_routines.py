@@ -31,8 +31,10 @@ import re
 import sys
 from pathlib import Path
 
+from _paths import AW_SRC
+
 AW_SRC = Path(os.environ.get("AW_SRC",
-              "/home/fsanches/compartilhado/another-world-source-reconstruction"))
+              str(AW_SRC)))
 
 
 def parse_routines(path):

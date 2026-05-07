@@ -40,15 +40,11 @@ import sys
 import tempfile
 from pathlib import Path
 
-REPO_ROOT = Path("/home/fsanches/compartilhado/another-world-archaeology")
-SRC_TREE = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AWVM_ASM, AW_SRC, REPO_ROOT
+
+SRC_TREE = AW_SRC
 LEVELS = SRC_TREE / "src" / "levels"
 RELEASES = SRC_TREE / "releases"
-AWVM_ASM = Path(
-    "/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm"
-)
 AWVM_PREPROCESS = REPO_ROOT / "tools" / "awvm_preprocess.py"
 
 RE_RAW = re.compile(r"\s*;@raw=([0-9a-fA-FxX,\s]+)\s*$")

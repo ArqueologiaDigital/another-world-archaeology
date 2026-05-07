@@ -12,8 +12,8 @@ For each level of a port, this driver:
 Reports per-level match status.
 
 Usage:
-    python3 tools/roundtrip_bytecode.py --port amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga
-    python3 tools/roundtrip_bytecode.py --port msdos --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/msdos
+    python3 tools/roundtrip_bytecode.py --port amiga --output-root tmp/output/amiga
+    python3 tools/roundtrip_bytecode.py --port msdos --output-root tmp/output/msdos
     python3 tools/roundtrip_bytecode.py --all
 """
 from __future__ import annotations
@@ -26,14 +26,13 @@ import sys
 import tempfile
 from pathlib import Path
 
+from _paths import AWVM_ASM
+
 # Repo-local scratch dir for per-port disasm outputs. Survives VM
 # reboots (unlike /tmp/) but is gitignored. Path is relative to this
 # script's location: <repo>/tools/<this>.py → <repo>/tmp/.
 TMP_ROOT = Path(__file__).resolve().parent.parent / "tmp"
 
-AWVM_ASM = Path(
-    "/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm"
-)
 
 # Per-port BYTECODE resource indices (one per level), copied from
 # AWVM_Tools/awvm/src/releases/<port>.rs `BYTECODE` constant.

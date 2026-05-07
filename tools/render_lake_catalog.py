@@ -17,10 +17,11 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-TMP_ROOT = REPO / "tmp"
+from _paths import AW_SRC, REPO_ROOT
 
-sys.path.insert(0, str(REPO / "tools"))
+TMP_ROOT = REPO_ROOT / "tmp"
+
+sys.path.insert(0, str(REPO_ROOT / "tools"))
 import polygon_render  # noqa: E402
 
 EQU_RE = re.compile(r"^(CINEMATIC_\S+)\s+EQU\s+(0x[0-9a-fA-F]+)\s*$")
@@ -39,8 +40,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument(
         "--src-asm", type=Path,
-        default=Path("/home/fsanches/compartilhado/another-world-source-reconstruction/"
-                     "src/levels/chahi_amiga_1991/LAKE.asm"),
+        default=AW_SRC / "src/levels/chahi_amiga_1991/LAKE.asm",
         help="branch source .asm with CINEMATIC EQU lines",
     )
     ap.add_argument(

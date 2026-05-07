@@ -19,9 +19,9 @@ import re
 import sys
 from pathlib import Path
 
-SRC_ROOT = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AW_SRC
+
+SRC_ROOT = AW_SRC
 LEVELS = SRC_ROOT / "src/levels"
 
 RE_EQU = re.compile(r"^\s*([A-Z_][A-Z_0-9]*)\s+EQU\s+")

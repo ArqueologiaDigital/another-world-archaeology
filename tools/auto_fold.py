@@ -6,8 +6,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction")
-ARCH = Path("/home/fsanches/compartilhado/another-world-archaeology")
+from _paths import AW_SRC, REPO_ROOT
+
+ARCH = REPO_ROOT
 
 if len(sys.argv) < 2:
     sys.exit("usage: auto_fold.py STAGE")

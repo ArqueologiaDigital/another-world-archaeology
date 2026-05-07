@@ -13,7 +13,8 @@ import ast
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path("/home/fsanches/compartilhado/another-world-archaeology")
+from _paths import REPO_ROOT
+
 TOOLS = REPO_ROOT / "tools"
 
 

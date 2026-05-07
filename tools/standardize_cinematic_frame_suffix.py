@@ -22,7 +22,7 @@ Usage:
     [--src-tree /path/to/src/levels] [--dry-run] [--verify]
 
 Default src-tree:
-  /home/fsanches/compartilhado/another-world-source-reconstruction/src/levels
+  ../another-world-source-reconstruction/src/levels
 """
 from __future__ import annotations
 
@@ -33,9 +33,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-DEFAULT_SRC = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction/src/levels"
-)
+from _paths import AW_SRC, REPO_ROOT
+
+DEFAULT_SRC = AW_SRC / "src/levels"
 
 RE_FN = re.compile(r"\bCINEMATIC_([A-Z_]+)_F(\d+)\b")
 RE_FRAME = re.compile(r"\bCINEMATIC_([A-Z_]+)_FRAME_(\d+)\b")
@@ -176,7 +176,7 @@ def main() -> int:
             r = subprocess.run(
                 [
                     "python3",
-                    f"/home/fsanches/compartilhado/another-world-archaeology/tools/{tool}",
+                    str(REPO_ROOT / "tools" / tool),
                     "--src-tree",
                     str(args.src_tree),
                 ],

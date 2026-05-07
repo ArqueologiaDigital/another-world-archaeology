@@ -17,7 +17,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from awvm_preprocess import expand_fill_macros
 
-AWVM_ASM = Path("/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm")
+from _paths import AWVM_ASM
+
 
 # An EQU line: <NAME>\t\tEQU 0xVALUE  or  <NAME> EQU <expr>
 RE_EQU = re.compile(r'^\s*([A-Z_][A-Z_0-9]*)\s+EQU\s+', re.M)

@@ -15,6 +15,8 @@ Output: 'old_label=new_name' lines (sed-friendly).
 import os, re, sys
 from pathlib import Path
 
+from _paths import AW_SRC
+
 if len(sys.argv) not in (3, 4):
     sys.exit(__doc__)
 
@@ -24,7 +26,6 @@ if len(sys.argv) == 3:
 else:
     FROM_ARM, TO_ARM = sys.argv[2], sys.argv[3]
 
-AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction")
 CART = AW_SRC / f"src/levels/_unified/{STAGE}/{FROM_ARM}.inc"
 ARM = AW_SRC / f"src/levels/_unified/{STAGE}/{TO_ARM}.inc"
 if not CART.is_file():

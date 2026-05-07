@@ -66,10 +66,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-REPO_ROOT = Path("/home/fsanches/compartilhado/another-world-archaeology")
-SRC_TREE = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AW_SRC, REPO_ROOT
+
+SRC_TREE = AW_SRC
 LEVELS = SRC_TREE / "src" / "levels"
 
 # We focus on dos_1992 first since it's the most complete and

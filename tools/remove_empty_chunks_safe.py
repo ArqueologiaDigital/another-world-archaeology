@@ -22,9 +22,9 @@ import re
 import sys
 from pathlib import Path
 
-SRC_ROOT = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
+from _paths import AW_SRC
+
+SRC_ROOT = AW_SRC
 
 
 def remove_for_stage(stage: str) -> tuple[int, int]:

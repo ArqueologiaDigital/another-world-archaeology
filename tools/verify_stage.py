@@ -21,9 +21,8 @@ import sys
 import tempfile
 from pathlib import Path
 
-AWVM_ASM = Path(
-    "/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm"
-)
+from _paths import AWVM_ASM
+
 
 # Repo-local scratch dir for per-port disasm outputs. Survives VM
 # reboots (unlike /tmp/) but is gitignored. Path is relative to this

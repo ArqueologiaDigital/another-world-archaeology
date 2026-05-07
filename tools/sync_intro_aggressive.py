@@ -4,7 +4,8 @@ import re
 import sys
 from pathlib import Path
 
-AW_SRC = Path("/home/fsanches/compartilhado/another-world-source-reconstruction")
+from _paths import AW_SRC
+
 
 
 def parse_routines(text):

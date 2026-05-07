@@ -13,8 +13,8 @@ beetle frames vs known BEETLE_WALKING_RIGHT_0 etc.).
 
 Usage:
     python3 tools/render_unused_assets.py amiga 2 \\
-        --unused-json /home/fsanches/compartilhado/another-world-archaeology/tmp/amiga_unused.json \\
-        --output-dir /home/fsanches/compartilhado/another-world-archaeology/tmp/gallery_amiga_l2
+        --unused-json tmp/amiga_unused.json \\
+        --output-dir tmp/gallery_amiga_l2
 """
 from __future__ import annotations
 

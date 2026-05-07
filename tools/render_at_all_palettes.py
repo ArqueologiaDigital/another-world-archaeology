@@ -12,10 +12,10 @@ known reference shapes), each at the same palette indices.
 
 Usage:
     python3 tools/render_at_all_palettes.py \\
-        /home/fsanches/compartilhado/another-world-archaeology/tmp/output/msdos/resources/resource-0x1c.bin \\
+        tmp/output/msdos/resources/resource-0x1c.bin \\
         0x007b0a \\
-        --palette /home/fsanches/compartilhado/another-world-archaeology/tmp/output/msdos/resources/resource-0x1d.bin \\
-        --output-dir /home/fsanches/compartilhado/another-world-archaeology/tmp/poly_007b0a_palettes \\
+        --palette tmp/output/msdos/resources/resource-0x1d.bin \\
+        --output-dir tmp/poly_007b0a_palettes \\
         --label "Candidate beetle attacker (DOS unused group)"
 """
 from __future__ import annotations

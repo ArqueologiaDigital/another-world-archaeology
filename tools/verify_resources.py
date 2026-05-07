@@ -28,8 +28,8 @@ the current contents of the output directory — useful for first-time
 populating the source-reconstruction repo's reference data.
 
 Usage:
-    python3 tools/verify_resources.py --port amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga
-    python3 tools/verify_resources.py --port amiga --output-root /home/fsanches/compartilhado/another-world-archaeology/tmp/output/amiga --bootstrap
+    python3 tools/verify_resources.py --port amiga --output-root tmp/output/amiga
+    python3 tools/verify_resources.py --port amiga --output-root tmp/output/amiga --bootstrap
 """
 from __future__ import annotations
 

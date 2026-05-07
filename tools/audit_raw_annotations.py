@@ -41,13 +41,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-REPO_ROOT = Path("/home/fsanches/compartilhado/another-world-archaeology")
-SRC_ROOT = Path(
-    "/home/fsanches/compartilhado/another-world-source-reconstruction"
-)
-AWVM_ASM = Path(
-    "/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm"
-)
+from _paths import AWVM_ASM, AW_SRC, REPO_ROOT
+
+SRC_ROOT = AW_SRC
 
 sys.path.insert(0, str(REPO_ROOT / "tools"))
 

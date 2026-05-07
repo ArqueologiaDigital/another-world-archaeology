@@ -30,7 +30,8 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-REPO_ROOT = Path("/home/fsanches/compartilhado/another-world-archaeology")
+from _paths import REPO_ROOT
+
 WORK_DIR = REPO_ROOT / "work"
 TMP_OUTPUT_DIR = REPO_ROOT / "tmp" / "output"
 

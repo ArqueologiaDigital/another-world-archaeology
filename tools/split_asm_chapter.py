@@ -30,6 +30,8 @@ import sys
 import re
 from pathlib import Path
 
+from _paths import AW_SRC
+
 if len(sys.argv) != 5:
     print(__doc__)
     sys.exit(1)
@@ -37,7 +39,7 @@ if len(sys.argv) != 5:
 stage, chapter, start_label, end_label = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 
 AW_SRC = Path(os.environ.get("AW_SRC",
-              "/home/fsanches/compartilhado/another-world-source-reconstruction"))
+              str(AW_SRC)))
 MAIN = AW_SRC / "src/levels/_unified" / f"{stage.upper()}.asm.in"
 INC_DIR = AW_SRC / "src/levels/_unified" / stage.lower()
 

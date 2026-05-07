@@ -24,7 +24,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from awvm_preprocess import expand_fill_macros
 
-AWVM_ASM = Path("/home/fsanches/compartilhado/AnotherWorld_VMTools/target/release/awvm-asm")
+from _paths import AWVM_ASM
+
 
 KEEP_PATTERN = re.compile(r'^\s*(bankSwitch|video|setPalette)\b')
 
