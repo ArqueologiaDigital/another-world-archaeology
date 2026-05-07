@@ -110,10 +110,10 @@ finding is comparative) records which releases it applies to.
   byte-level diff said the four bytecode branches share no
   byte-identical stages outside SNES↔Genesis. Structural diff
   (tokenize opcodes, ignore addresses) reveals a much richer
-  genealogy: the Heineman lineage (DOS → cartridge → GBA) shares
-  70-99% structure stage-by-stage; even Chahi → Delphine DOS
-  preserves 60-92% of structure. Foxy GBA's level_0 has 0.988
-  similarity to cartridge level_0 — Foxy refactored Heineman's
+  genealogy: the post-Amiga lineage (DOS + cartridge + GBA)
+  shares 70-99% structure stage-by-stage; even Chahi → Delphine
+  DOS preserves 60-92% of structure. Foxy GBA's level_0 has 0.988
+  similarity to cartridge level_0 — Foxy refactored the Heineman
   cartridge bytecode rather than re-implementing. This finding
   motivated the Phase 3b plan that delivered the 4-way LAKE
   unification in finding #09.

@@ -1,15 +1,5 @@
 # Genealogy
 
-> **Attribution correction (2026-05-01)**: earlier research findings
-> on this page (and in research/05, /06) attribute the DOS 1992 port
-> to "Heineman" by extension from the SNES port's documented author.
-> Per the project owner: **the DOS port was actually made by Daniel
-> Morais (Delphine Software)**, not Rebecca Heineman. The bytecode
-> analyses themselves are unaffected; only the porter-name
-> attribution changes. Source-reconstruction branch renamed
-> `heineman_dos` → `dos_1992` accordingly. SNES + Genesis-EU
-> attributions to Heineman / Interplay are unchanged.
-
 The goal: reconstruct a "family tree" of Another World ports — which
 release inherited what from which predecessor, where new code was
 introduced, and where forks diverged.
@@ -182,14 +172,14 @@ Pre-1991 dev build (Chahi):  beetle alive, wing-flip working
    ├── Amiga                 ↘  byte-identical level-2 bytecode
    └── Atari ST              ↗  (same memlist contents, same bank layout)
         │
-        ▼ (Heineman ports — separate branch from Chahi master)
-   ┌── DOS 1992 ────────────────── own bytecode hash `3e95437f…`
-   │                               gates 1 + 2 added
+        ▼ (1992 ports — parallel forks of a shared 1992 Delphine source)
+   ┌── DOS 1992 (Morais @ Delphine) ──── own bytecode hash `3e95437f…`
+   │                                     gates 1 + 2 added
    │
-   └── SNES-EU 1992 ──┐
-                      ├── byte-identical bytecode `68b4c327…`
-       Genesis-EU 1993 ┘   (cartridge cross-port reuse)
-        │                  gates 1 + 2 added
+   └── SNES-EU 1992 (Heineman @ Interplay) ──┐
+                                             ├── byte-identical bytecode `68b4c327…`
+       Genesis-EU 1993 (Heineman @ Interplay) ┘   (cartridge cross-port reuse)
+        │                                         gates 1 + 2 added
         ▼
 2004 GBA Foxy/Magic Pockets: own modified bytecode `37487368…`
                              gates 1 + 2 preserved
@@ -231,21 +221,20 @@ intentional" with this evidence. Recording:
 
 ### DOS 1992 vs cartridge 1992: parallel ports from a shared 1992 Delphine source (2026-05-05)
 
-The DOS 1992 and cartridge 1992 ports were originally puzzling
-because they share **identical editorial decisions** (gates 1 + 2,
-gun-ammo costs, beetle-cut content) but produce **different
-bytecode bytes**. With the 2026-05-01 attribution correction (DOS =
-Morais / Delphine, not Heineman / Interplay), the picture is clear:
+The DOS 1992 and cartridge 1992 ports share **identical editorial
+decisions** (gates 1 + 2, gun-ammo costs, beetle-cut content) but
+produce **different bytecode bytes**. They are parallel forks built
+by **different teams**:
 
-- **Different teams**. DOS shipped from Delphine Software (Daniel
-  Morais); SNES-EU + Genesis-EU shipped from Interplay (Rebecca
+- **DOS 1992** shipped from Delphine Software (Daniel Morais).
+- **SNES-EU 1992 + Genesis-EU 1993** shipped from Interplay (Rebecca
   Heineman + Joe Hitchens).
-- **Different toolchains**. Each team independently encoded the
-  same logical program for their target.
-- **Same source-of-truth design**. Editorial decisions (which
-  features to gate, which constants to use, what the gameplay
-  flow is) were specified once at Delphine and shared with both
-  teams.
+
+Each team independently encoded the same logical program for their
+target — different toolchains, same source-of-truth design.
+Editorial decisions (which features to gate, which constants to use,
+what the gameplay flow is) were specified once at Delphine and
+shared with both teams.
 
 The structural-similarity matrix from research/08 (LAKE stage,
 opcode-only) quantifies the result:
@@ -328,14 +317,13 @@ Secondary signals to check as the data fills in:
   ROM and the Apple IIgs WOZ disk image (issues
   [#0050](#/issues), [#0052](#/issues)).
 - ~~**Why does DOS 1992 bytecode differ from SNES-EU 1992 bytecode?**~~
-  *Resolved 2026-05-05*: different teams, not "same author" — the
-  earlier framing assumed Heineman authored both. With the
-  attribution correction (DOS = Morais @ Delphine, cartridge =
-  Heineman @ Interplay), the two 1992 ports are parallel forks of
-  a shared 1992 Delphine internal source: 91% opcode-only
-  similarity preserved, 9% per-team encoding edits explain the
-  remainder. See the "DOS 1992 vs cartridge 1992" finding above.
-  Issue #0051 closed.
+  *Resolved 2026-05-05*: the two 1992 ports are parallel forks of
+  a shared 1992 Delphine internal source — DOS produced by Morais
+  at Delphine, cartridge produced by Heineman at Interplay. Each
+  team independently encoded the same design for their target,
+  yielding 91% opcode-only similarity with 9% per-team encoding
+  edits explaining the remainder. See the "DOS 1992 vs cartridge
+  1992" finding above. Issue #0051 closed.
 - **var `0x06` cross-check on the cartridge ports.** SNES-EU + GBA
   + Genesis-EU all carry only 2 disassembled levels (lake stage
   primarily). The prison/cave levels — where the gun mechanics

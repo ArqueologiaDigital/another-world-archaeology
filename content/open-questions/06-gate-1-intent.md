@@ -147,7 +147,7 @@ analysis.
 
 The remaining uncertainty narrows to the question of *who* made
 that decision and *when* — Chahi during 1991 finalisation, or
-Heineman during the 1992 DOS port? The presence of gate 1 in
+Morais during the 1992 DOS port? The presence of gate 1 in
 both branches suggests it was inherited from Chahi's master
 (consistent with the Amiga + Atari ST byte-identity finding from
 research/05). The Amiga-only wings asset suggests Chahi continued
