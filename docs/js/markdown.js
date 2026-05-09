@@ -145,6 +145,12 @@ const Markdown = (function () {
     const lines = src.replace(/\r\n/g, "\n").split("\n");
     let out = [];
     let i = 0;
+    // Track heading slugs to disambiguate duplicates within the
+    // same document (genealogy.md repeats "Working hypothesis";
+    // 21-unified-chunk-audit.md repeats "Per-chunk findings"
+    // three times). First occurrence keeps the bare slug; later
+    // ones get `-2`, `-3`, … suffixes — same convention as GitHub.
+    const slugCounts = {};
 
     while (i < lines.length) {
       const line = lines[i];
@@ -170,13 +176,17 @@ const Markdown = (function () {
       // Heading — generate a slugified `id` so intra-doc anchor
       // links (`[label](#some-heading)`) resolve. Slug rules match
       // GitHub: lowercase, non-alphanumerics → "-", collapse runs,
-      // trim leading/trailing "-".
+      // trim leading/trailing "-". Repeated slugs get `-2`, `-3`,
+      // … suffixes within the same document.
       const h = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
       if (h) {
-        const slug = h[2]
+        const baseSlug = h[2]
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-+|-+$/g, "");
+        const seen = (slugCounts[baseSlug] || 0) + 1;
+        slugCounts[baseSlug] = seen;
+        const slug = seen === 1 ? baseSlug : baseSlug + "-" + seen;
         const lvl = h[1].length;
         out.push(`<h${lvl} id="${escapeHtml(slug)}">${inline(h[2])}</h${lvl}>`);
         i++;
