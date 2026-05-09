@@ -168,6 +168,20 @@ main blockquote {
   color: #334e68;
 }
 
+/* Task-list items (`- [ ]` / `- [x]`) — used heavily in
+   issues/<NNNN>-*.md "Acceptance criteria" sections. The bullet
+   `<li>` would normally show a disc marker before the checkbox;
+   remove it via list-style: none and a small negative-margin
+   pull-back so the checkbox aligns with sibling non-task items. */
+main li > input[type="checkbox"]:first-child {
+  margin-right: 0.4em;
+}
+main ul > li:has(> input[type="checkbox"]:first-child),
+main ol > li:has(> input[type="checkbox"]:first-child) {
+  list-style: none;
+  margin-left: -1.2em;
+}
+
 /* Audio figures (rendered from markdown links to .wav/.ogg/.mp3) */
 figure.audio-figure {
   margin: 1em 0;

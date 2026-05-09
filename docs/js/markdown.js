@@ -79,10 +79,23 @@ const Markdown = (function () {
         // Either the wrong indent or not a list item at all — done.
         break;
       }
+      // Task-list syntax: `- [ ] todo` and `- [x] done`. Emit a
+      // disabled checkbox at the start of the list-item body and
+      // strip the marker from the text.
+      let taskBox = "";
+      let bodyText = m[2];
+      const taskMatch = bodyText.match(/^\[([ xX])\]\s+(.*)$/);
+      if (taskMatch) {
+        const checked = taskMatch[1].toLowerCase() === "x";
+        taskBox = checked
+          ? '<input type="checkbox" disabled checked> '
+          : '<input type="checkbox" disabled> ';
+        bodyText = taskMatch[2];
+      }
       // Collect raw text fragments (so multi-line `**bold**` etc.
       // close correctly) AND nested-list HTML separately. Apply
       // inline() to the joined raw text at the end.
-      const textParts = [m[2]];
+      const textParts = [bodyText];
       const nestedParts = [];
       i++;
       while (i < lines.length) {
@@ -121,7 +134,7 @@ const Markdown = (function () {
         // Non-indented non-list line — done.
         break;
       }
-      html += "<li>" + inline(textParts.join(" ")) + nestedParts.join("") + "</li>";
+      html += "<li>" + taskBox + inline(textParts.join(" ")) + nestedParts.join("") + "</li>";
     }
     html += "</" + tag + ">";
     return { html: html, next: i };
