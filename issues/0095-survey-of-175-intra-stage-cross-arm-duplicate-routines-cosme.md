@@ -102,3 +102,37 @@ jump-free filter for tooling consistency.
   body-comparison + jump-free filter as
   `scan_cross_stage_helpers.py` so the two tools' outputs are
   directly comparable.
+
+- 2026-05-09 (later 2): probed ENDING's 6 candidates as the
+  smallest / safest sample. Result: **most aren't simple
+  un-gate hoists** because the per-arm chunk file
+  (`ending/cart__post_INIT_VARS_07_08_09.inc`) interleaves
+  cart-specific labels between the duplicated routines. Example:
+
+      LABEL_07BD..LABEL_0941   (cart-only setup)
+      DRAW_STARS_PAGE0_CIN_000 (3-arm-identical body)
+      LABEL_09F7               (cart-only)
+      DRAW_STARS_PAGE3_CIN_004 (3-arm-identical body)
+      LABEL_0A8D               (cart-only)
+      DRAW_STARS_CIN_38_39_40_5_6 (3-arm-identical body)
+      SCROLL_Y_BLIT_DISPATCHER (cart-only)
+
+  Moving DRAW_STARS_* out of cart's chunk and un-gating them in
+  `ending_pal_var_setup.inc` would shift the byte positions of
+  the LABEL_09F7 / LABEL_0A8D / SCROLL_Y_BLIT_DISPATCHER
+  cart-only labels, breaking byte equivalence.
+
+  So the sample-cluster fold needs additional work: either
+  promote LABEL_09F7 / LABEL_0A8D to the shared file too (with
+  appropriate `;@if BRANCH == "cartridge_1992"` gates so they
+  only appear in cart's bytecode), or split cart's chunk into
+  smaller pieces. Both options are moderate-scope —
+  significantly more involved than the cross-stage helper
+  hoists. Confirms the "borderline" verdict above.
+
+  CAVES / PRISON / CAPSULE clusters likely have similar
+  interleaving (the auto-fold pipeline that produced these
+  duplicates was operating on per-arm chunks where divergence
+  is genuinely arm-specific, not on already-shared files), so
+  the wholesale-hoist call is even more borderline than the
+  raw 175 number suggests.
