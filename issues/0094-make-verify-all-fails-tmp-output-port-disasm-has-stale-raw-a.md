@@ -93,3 +93,31 @@ AGGREGATE: 3/4 checks passed.
   cleanly. Likely path: `make extract` from archaeology, but
   needs verification that the current awvm-disasm output
   uses `;@enc=` (not `;@raw=`).
+
+- 2026-05-09 (later 2): regen path implemented for bank-format
+  ports in archaeology commit `ac12cba`. `tools/regen_disasm.py`
+  + `make disasm PORT=<port>` runs current awvm-disasm against
+  the unpacked game files and writes to `tmp/output/<port>/disasm/`.
+
+  Confirmed: current awvm-disasm emits **zero** `;@raw=`
+  annotations (the migrated encoder produces canonical output
+  directly). Round-trip: every regenerated per-level .asm
+  re-assembles through awvm-asm cleanly. msdos and amiga both
+  pass.
+
+  One upstream awvm-disasm quirk: amiga's `all_levels` mode
+  panics at `pdata_offset out of bounds` in
+  `awvm/src/polygons.rs:100` AFTER successfully writing all 9
+  per-level disasm files. The regen tool tolerates this case
+  (treats "non-zero rc but per-level files present" as partial
+  success). The panic is a separate awvm-disasm bug worth
+  filing upstream — not blocking this issue.
+
+  Cartridge-format ports (snes_eu, genesis_europe, gba_usa) get
+  their disasm trees from `extractors/cartridge_rom.py` during
+  `make extract`; that path is not covered by `make disasm`. To
+  finish closing this issue: re-run `make extract` for the
+  cartridge ports OR extend `regen_disasm.py` with cart support.
+
+  After regen, `make verify-all` reaches gba_usa as the next
+  blocker (cart disasm tree is still stale).
