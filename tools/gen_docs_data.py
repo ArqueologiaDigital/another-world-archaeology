@@ -40,6 +40,14 @@ def load_content():
             else:
                 key = "issues/" + rel.as_posix()
             out[key] = path.read_text(encoding="utf-8")
+    # Repo-root markdown files that are still useful on the static
+    # site. Discoverable as ONBOARDING.md / etc. at the repo root
+    # (standard project-layout convention) but also reachable via
+    # the website at `#/onboarding`.
+    for fname in ("ONBOARDING.md",):
+        p = REPO / fname
+        if p.is_file():
+            out[p.stem.lower()] = p.read_text(encoding="utf-8")
     return out
 
 
