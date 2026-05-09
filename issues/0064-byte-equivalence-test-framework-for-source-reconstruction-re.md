@@ -1,10 +1,10 @@
 ---
 id: 0064
 title: Byte-equivalence test framework for source-reconstruction repo (CI gate)
-status: open
+status: done
 tier: C
 created: 2026-04-30
-updated: 2026-05-07
+updated: 2026-05-09
 depends_on: []
 blocks: []
 tags: [reconstruction, testing, build]
@@ -33,11 +33,17 @@ The test framework should:
 - [x] First instance: passes for Phase 1 (DOS level-0 bytecode
       byte-matching). Round-trip is now 29/29 stages + 27/27
       unified.
-- [ ] Standalone `tests/byte_equivalence.py` driver that produces
+- [x] Standalone `tests/byte_equivalence.py` driver that produces
       cleaner per-artifact PASS/FAIL output with byte-level diff
-      on FAIL. The existing per-stage / per-port verifiers in
-      `tools/` already cover the byte comparisons, so this is a
-      thin aggregator + reporter.
+      on FAIL. *(Done — landed in source-reconstruction. Wraps
+      verify-stages / verify-unified / verify-all / lint as
+      subprocess calls, parses each tool's `TOTAL: ...` line, and
+      aggregates into a single PASS/FAIL table. On FAIL, surfaces
+      the underlying tool's diagnostic lines (FAIL markers,
+      expected/got addresses, tracebacks). `--quick` flag skips
+      the resource-heavy verify-all step, `--no-lint` skips lint.
+      Verified: 3/4 checks pass on the current tree; verify-all
+      surfaced a real pre-existing bug now tracked as #0094.)*
 
 # Log
 
@@ -70,3 +76,12 @@ The test framework should:
   Remaining: write `tests/byte_equivalence.py` that produces
   cleaner per-artifact PASS/FAIL output with byte-level diff
   on FAIL.
+
+- 2026-05-09: closed `done`. `tests/byte_equivalence.py` shipped
+  in source-reconstruction. Aggregator over verify-stages /
+  verify-unified / verify-all / lint with structured PASS/FAIL
+  + on-FAIL diagnostic surfacing. Side effect: surfaced a
+  pre-existing infrastructure bug in `make verify-all` (stale
+  `;@raw=` annotations in legacy tmp/output/<port>/disasm/ tree)
+  now tracked as #0094 — that's a follow-up on the verifier
+  inputs, not this issue.
