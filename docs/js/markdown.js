@@ -167,10 +167,18 @@ const Markdown = (function () {
         continue;
       }
 
-      // Heading
+      // Heading — generate a slugified `id` so intra-doc anchor
+      // links (`[label](#some-heading)`) resolve. Slug rules match
+      // GitHub: lowercase, non-alphanumerics → "-", collapse runs,
+      // trim leading/trailing "-".
       const h = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
       if (h) {
-        out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`);
+        const slug = h[2]
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+        const lvl = h[1].length;
+        out.push(`<h${lvl} id="${escapeHtml(slug)}">${inline(h[2])}</h${lvl}>`);
         i++;
         continue;
       }
