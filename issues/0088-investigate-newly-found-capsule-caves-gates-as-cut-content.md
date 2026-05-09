@@ -199,3 +199,48 @@ polygon bank — render them.
   LABEL_3A26 CINEMATIC_870..873 frames, render LABEL_39E3 /
   LABEL_37D0 CINEMATIC_810.. frames, follow-up cinematic
   identification + dead-routine subroutine marking.
+
+- 2026-05-09 (later): static analysis of `LABEL_3A26` (CAVES
+  channel 0x15 silencer, cart) and `LABEL_39E3` (CAVES channel
+  0x14 swap, cart). **Both are real cut content** — unlike
+  LABEL_5C5B / LABEL_2A6E which were operational idioms.
+
+  `LABEL_3A26` body: 11-frame infinite-loop cinematic at
+  HERO_X/HERO_Y (CINEMATIC_870..880), terminating with
+  `jmp LABEL_3A26` (the trailing `killChannel` is unreachable
+  after the unconditional jmp). Channel 0x15 setup-then-kill at
+  lines 1299..1301 in cart's CAVES.asm; the second `setup
+  channel=0x15, address=KILL_CHAN_AT_7830` shadows the cinematic
+  scheduling so the 11 frames never play.
+
+  `LABEL_39E3` body: 2-frame cinematic (CINEMATIC_810, 811) plus
+  a state write (`mov [0x63], 0x0001`) and a conditional sound
+  (`play id=0x006C` if HACK_VAR_67 == 0x6E). Channel 0x14 swap
+  at lines 1298..1300 in cart's CAVES.asm; the second
+  `setup channel=0x14, address=LABEL_EA2E` overrides with the
+  walking-AI handler.
+
+  Cross-arm symmetry confirmed for the channel-0x14 swap: cart
+  uses LABEL_39E3/LABEL_EA2E (1298/1300), dos uses
+  LABEL_39F9/LABEL_E9A5 (1311/1313), amiga uses
+  LABEL_37D0/LABEL_E41E (1264/1266). All three arms shadow a
+  cinematic with walking-AI at this position. So the cut is from
+  the original Delphine 1992 source — same structural conclusion
+  as research/05's beetle-attack gates: the animation polygons
+  exist in the bank, the level-init scheduled them, but a
+  late-stage override replaced them with the operational
+  walking-AI.
+
+  The channel-0x15 silencer (LABEL_3A26) was found in cart only
+  in the 1299..1301 form; need to check whether dos and amiga have
+  the same gated cinematic at equivalent offsets — that's the next
+  cross-arm comparison.
+
+  Rendering the frames (acceptance items 1+2) needs the per-stage
+  POLY_CINEMATIC resource extracted for each port. Existing
+  `tmp/output/<port>/resources/resource-NN.bin` and
+  `work/<md5>/bin/<idx>-POLY_CINEMATIC.bin` paths exist for
+  amiga/msdos/gba_usa. Deferred to follow-up tick: needs the
+  CINEMATIC_<NNN>-to-bytecode-offset map (the per-stage `.asm.in`'s
+  EQU table for `CINEMATIC_*` → polygon offset) plus the right
+  palette resource per stage.
