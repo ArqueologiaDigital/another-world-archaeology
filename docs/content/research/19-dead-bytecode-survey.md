@@ -363,6 +363,19 @@ pattern (cart 1298/1300, dos 1311/1313, amiga 1264/1266) means
 the cut is from the original Delphine 1992 source. Tracked as
 issue #0088.
 
+**Visual identification**: a small horizontal figure rendered at
+HERO_X / HERO_Y with a red/orange head on the left, a green
+torso (largest element), and a blue tail/rear extending right.
+The 5-frame loop varies the body posture slightly between
+frames — looks like a "breathing" / "stirring" idle animation.
+Proportions (small head, long body, tail-like rear, ~4 polygon
+sub-elements per frame) suggest a small **cave creature** —
+plausibly an alien or quadruped specific to the CAVES
+environment. Combined with the walking-AI override
+(`LABEL_E9A5`), the gate likely simplified an originally
+cinematic creature encounter into the standard walking-AI
+behaviour.
+
 PRISON-`dos_1992`: 58 trans-dead, 21 dead-only video offsets:
 `CINEMATIC_127` (isolated) + `CINEMATIC_688..693` (6 frames) +
 `CINEMATIC_697..710` (14 frames). Sample renders from

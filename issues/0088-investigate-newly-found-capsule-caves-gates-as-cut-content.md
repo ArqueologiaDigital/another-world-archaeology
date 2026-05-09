@@ -124,9 +124,19 @@ polygon bank — render them.
       research/05's LAKE beetle gates. Present symmetrically
       across cart + dos + amiga, so the pattern is from the
       original Delphine source, not a port artefact.)*
-- [ ] If any of the cinematic frames depict identifiable
+- [x] If any of the cinematic frames depict identifiable
       content (creatures, scenes, etc.), file a follow-up
       issue or update research/18 with visual identification.
+      *(Done — research/19 channel-0x14 swap section updated
+      with visual identification for CINEMATIC_819..823:
+      small horizontal figure with red head + green torso +
+      blue tail, breathing/stirring 5-frame loop, plausibly
+      a cave creature whose original cinematic encounter was
+      simplified to standard walking-AI by the channel-0x14
+      override. The LABEL_3A3C cluster's CINEMATIC_880..890
+      visual identification was already covered in research/19
+      as "thin horizontal element... vine, tongue, or hinged
+      element opening downward".)*
 - [ ] If the dead routines include subroutines that aren't
       called from anywhere else, mark them as dead too (this
       is the stub for #0058's full reachability oracle).
