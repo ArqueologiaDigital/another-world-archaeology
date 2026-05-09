@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**114 tools.**
+**115 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -71,6 +71,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `raw_annotation_snapshot.py` | Snapshot the load-bearing `;@raw=` residue. |
 | `reconstruct_arms.py` | Reconstruct un-split per-arm `.inc` files from a folded `<STAGE>.asm.in` |
 | `redisasm_db.py` | Re-disassemble `db` blocks in an AW VM .asm source. |
+| `regen_disasm.py` | Regenerate `tmp/output/<port>/disasm/` for a given port by running |
 | `remove_empty_chunks.py` | Remove empty per-arm chunk files and their corresponding ;@include |
 | `remove_empty_chunks_safe.py` | Phase 5: remove empty per-arm chunk files (CAVES + ENDING). |
 | `rename_chunks.py` | Rename chunk files to match the routine name they follow. |

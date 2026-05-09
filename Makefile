@@ -16,7 +16,8 @@ help:
 	@echo "  make fetch               Download release files listed in metadata.json into original_files/"
 	@echo "  make extract             Extract resources for every release"
 	@echo "  make extract SLUG=<slug> Extract a single release (by metadata.json slug)"
-	@echo "  make disasm              Disassemble BYTECODE resources via awvm-disasm"
+	@echo "  make disasm              Regenerate tmp/output/<port>/disasm/ for bank-format ports"
+	@echo "  make disasm PORT=<port>  Same, scoped to one port (msdos, amiga)"
 	@echo "  make verify-references   Check sha256 of every file listed in references/MANIFEST.sha256"
 	@echo "  make check               Quick health checks: issue-tracker schema + ;@raw= ban + reference hashes"
 	@echo "  make clean               Remove generated artefacts (preserves original_files/, cruft/, sessions/)"
@@ -57,8 +58,7 @@ extract:
 	@$(PYTHON) extract.py $(if $(SLUG),--slug $(SLUG))
 
 disasm:
-	@echo "make disasm: not yet implemented (depends on AWVM_Tools sibling clone + extract output)"
-	@exit 1
+	@$(PYTHON) tools/regen_disasm.py $(if $(PORT),$(PORT),--all)
 
 verify-references:
 	@$(PYTHON) tools/verify_references.py
