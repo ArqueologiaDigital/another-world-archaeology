@@ -343,6 +343,26 @@ draws at runtime.
 with the same silencer pattern, but cart's polygon resource
 isn't yet extracted — gated on issue #0068.)
 
+A **second** CAVES cinematic is also silenced — the channel-0x14
+"cinematic-then-real" swap at level-init line 1311 (DOS) /
+1298 (cart) / 1264 (amiga). Each arm queues a cinematic loop
+on channel 0x14 and immediately overrides it with the walking-AI
+handler. DOS's silenced cinematic is `LABEL_39F9`, which loops
+`CINEMATIC_819..823` (5 frames, with a state write
+`mov [0x63], 0x0001` and a conditional sound-cue), then
+`jmp LABEL_39F9` from the tail of the longer continuation
+chain (CINEMATIC_822 → 823 → 822 → 821 → 820 → jmp). Rendered
+at `docs/assets/research-19-caves-channel-14-swap-cinematic/`:
+
+![CAVES silenced channel-0x14 cinematic](../assets/research-19-caves-channel-14-swap-cinematic/swap_loop_grid.png)
+
+5 visible frames of a multi-element scene (~11 polygon paths
+each — significantly more complex than the LABEL_3A3C silenced
+loop's thin-line decoration). Cross-arm symmetry of the swap
+pattern (cart 1298/1300, dos 1311/1313, amiga 1264/1266) means
+the cut is from the original Delphine 1992 source. Tracked as
+issue #0088.
+
 PRISON-`dos_1992`: 58 trans-dead, 21 dead-only video offsets:
 `CINEMATIC_127` (isolated) + `CINEMATIC_688..693` (6 frames) +
 `CINEMATIC_697..710` (14 frames). Sample renders from

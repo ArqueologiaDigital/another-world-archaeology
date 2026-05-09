@@ -91,8 +91,21 @@ polygon bank — render them.
 
 - [ ] Render `LABEL_3A26`'s CINEMATIC_870..873 frames as PNG;
       file under `docs/assets/research-NN-...`.
-- [ ] Render `LABEL_39E3`/`LABEL_37D0`'s CINEMATIC_810..
+      *(Cart-only — DOS plays a separate routine LABEL_3A3C with
+      different cinematic indices CINEMATIC_880..890 already
+      rendered into `research-19-caves-silenced-cinematic-loop/`.
+      Cart's CINEMATIC_870..880 live at cart-arm offsets in cart's
+      POLY_CINEMATIC, which isn't extracted — blocked on #0068.)*
+- [x] Render `LABEL_39E3`/`LABEL_37D0`'s CINEMATIC_810..
       frames as PNG.
+      *(Done — DOS's parallel `LABEL_39F9` plays
+      CINEMATIC_819..823, rendered to
+      `docs/assets/research-19-caves-channel-14-swap-cinematic/`.
+      Cart's CINEMATIC_810/811 are NOT cut — they're live-rendered
+      at cart's `LABEL_*` not relevant here. The relevant cut
+      content is whatever's live-rendered only via LABEL_39E3 in
+      cart, which depends on cart's POLY_CINEMATIC again — same
+      #0068 blocker.)*
 - [x] Document the `LABEL_5C5B` body — what would the dead
       CAPSULE 0x18 routine have done?
       *(Done — see Log entry 2026-05-09. Not actually dead: the
@@ -244,3 +257,34 @@ polygon bank — render them.
   CINEMATIC_<NNN>-to-bytecode-offset map (the per-stage `.asm.in`'s
   EQU table for `CINEMATIC_*` → polygon offset) plus the right
   palette resource per stage.
+
+- 2026-05-09 (later 2): rendered DOS's `LABEL_39F9` cinematic
+  (the channel-0x14 swap parallel of cart's LABEL_39E3). Picked
+  the wrong frames first time (the issue body said "CINEMATIC_810..
+  frames" but those are live-rendered elsewhere in DOS). Reading
+  the actual DOS routine, the cinematic is CINEMATIC_819..823
+  (5 frames; the "longer continuation chain" pattern: 819, 820,
+  jne-branch sound, then 821, 822, 823, 822, 821, 820, jmp tail).
+  Resolution-mapped offsets in DOS's caves POLY_CINEMATIC
+  (resource 0x22): 819=0x5BA0, 820=0x5BC8, 821=0x5C04, 822=0x5C2C,
+  823=0x5C7C. Palette: resource 0x21 / index 5 / first half.
+
+  Rendered all 5 frames + a 5-tile contact-sheet montage to
+  `docs/assets/research-19-caves-channel-14-swap-cinematic/`.
+  Visual content: complex multi-element scene (~11 polygon paths
+  each), distinct from LABEL_3A3C's thin-line decoration.
+
+  Updated research/19 with the new section + image. Cart's
+  parallel (LABEL_39E3, CINEMATIC_810/811) needs cart-arm
+  POLY_CINEMATIC extraction (#0068) to render meaningfully.
+
+  Acceptance item 2 done (DOS-arm portion); cart-arm portion
+  blocked on #0068. Acceptance item 1 (LABEL_3A26 silencer)
+  also resolves to "DOS already done in research/19's earlier
+  pass; cart-arm blocked on #0068".
+
+  Two follow-up acceptance items remain:
+  - Cinematic identification (visual classification of what the
+    819..823 + 880..890 frames depict).
+  - Dead-routine subroutine marking (whether the gated routines
+    call subroutines that are now dead-only).
