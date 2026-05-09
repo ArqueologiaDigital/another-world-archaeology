@@ -331,8 +331,19 @@ between each, then `jmp LABEL_3A3C` to repeat). Rendered at
 ![CAVES silenced 11-frame cinematic loop](../assets/research-19-caves-silenced-cinematic-loop/silenced_loop_full_grid.png)
 
 The visible animation is a thin horizontal element (one or two
-small green segments) that progressively rotates and bends —
-perhaps a vine, tongue, or hinged element opening downward.
+small green segments) that progressively rotates and bends.
+Reading the 11 frames as an animation cycle: starts as a
+near-horizontal line (frames 1-2), develops a slight angle
+(frames 3-4), then bends progressively into a hook / L-shape
+(frames 5-7), and finally opens out into a wide V / open-mouth
+shape (frames 8-11). The most parsimonious visual reading is a
+**jaw or hinged mouth opening** — plausibly a creature attack
+animation (jaw snapping open to bite). Alternative readings
+(vine unfurling, hinged trap lid) fit the kinematics but the
+"jaw" interpretation aligns with research/05's pattern of
+silenced-creature-encounter cinematics in the original
+Delphine 1992 source.
+
 Each frame is 5–10 polygon paths. The loop is queued onto
 channel 0x15 then immediately silenced via `setup channel=0x15,
 address=KILL_CHAN_AT_7830` (research/18 silencer). The 11-frame
