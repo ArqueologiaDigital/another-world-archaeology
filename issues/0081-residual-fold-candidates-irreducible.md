@@ -4,7 +4,7 @@ title: 39 fold candidates remain irreducible after auto-fold rounds
 status: open
 tier: D
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-05-09
 tags: [tooling, fold, archaeology]
 ---
 
@@ -103,3 +103,16 @@ across arms. NOT a fold candidate (different semantics).
   routines at different bytecode positions there, so the
   numerical suffixes are doing real disambiguation work, not
   gratuitous. Leaving CAVES untouched.
+
+- 2026-05-09: state-check confirmation. Ran
+  `python3 tools/find_foldable_routines.py <stage>` across all
+  9 stages (INTRO, LAKE, PRISON, CAPSULE, CAVES, TANK, ENDING,
+  CODE_WHEEL, PASSCODE). Every stage reports
+  `Found 0 cross-arm fold-safe routine bodies`. So the live
+  auto-fold pipeline finds **zero new candidates**; the original
+  39 irreducibles documented in Categories 1-4 above are the
+  standing residue. Confirms this issue is "tracking residue for
+  future second-pass tooling" rather than "active backlog" —
+  status correctly stays `open` at tier-D until either Category 1
+  gets dedicated tooling or the residue is closed `wontfix` per
+  category.
