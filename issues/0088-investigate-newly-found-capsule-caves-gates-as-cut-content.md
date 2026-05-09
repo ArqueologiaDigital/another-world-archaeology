@@ -4,7 +4,7 @@ title: Investigate newly-found CAPSULE / CAVES gates as cut-content candidates
 status: open
 tier: B
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-05-09
 depends_on: [0058]
 blocks: []
 tags: [research, bytecode, cut-content, capsule, caves, gates]
@@ -93,8 +93,14 @@ polygon bank — render them.
       file under `docs/assets/research-NN-...`.
 - [ ] Render `LABEL_39E3`/`LABEL_37D0`'s CINEMATIC_810..
       frames as PNG.
-- [ ] Document the `LABEL_5C5B` body — what would the dead
+- [x] Document the `LABEL_5C5B` body — what would the dead
       CAPSULE 0x18 routine have done?
+      *(Done — see Log entry 2026-05-09. Not actually dead: the
+      routine is also setup'd on channel 0x2F at line 17941
+      after the channel-0x18 kill, so it still runs on a
+      different channel. The gate is a deferred-init pattern,
+      not cut content. Cart-only gate; amiga uses LABEL_5054
+      directly on channel 0x18 with no kill.)*
 - [ ] Document the `LABEL_2A6E` body — what does the real
       CAPSULE 0x2E logic do, and what's the placeholder kill
       for?
@@ -110,3 +116,39 @@ polygon bank — render them.
 - 2026-05-04: opened. Surfaced by the body-aware update to
   `tools/detect_setup_gates.py` (commit `b5ed749`). All
   details from research/18.
+
+- 2026-05-09: investigated `LABEL_5C5B` (CAPSULE channel 0x18
+  silencer in cart). **Finding: not actually dead — it's a
+  deferred-init pattern.** Full setup-channel-0x18 + 0x2F sequence
+  in cart's CAPSULE.asm:
+
+      16802: setup channel=0x18, address=LABEL_5C5B           ; the routine we want
+      16803: setup channel=0x18, address=KILL_CHAN_AT_59A3    ; immediately killed
+      16806: setup channel=0x2F, address=KILL_CHAN_AT_59A3    ; channel 0x2F also killed
+      ...
+      17940: setup channel=0x18, address=LABEL_67CB           ; channel 0x18 reused for different routine
+      17941: setup channel=0x2F, address=LABEL_5C5B           ; LABEL_5C5B FINALLY runs, on channel 0x2F
+
+  So the channel-0x18 setup-then-kill pair is a **placeholder
+  during init** — channel 0x2F is the actual home for `LABEL_5C5B`,
+  and channel 0x18 gets reassigned later in the same init block to
+  `LABEL_67CB`. The gate is not cut content; it's a port-specific
+  init-ordering choice. Amiga's CAPSULE doesn't have this gate —
+  it sets `channel=0x18, address=LABEL_5054` directly (LABEL_5054
+  being amiga's equivalent of cart's LABEL_5C5B at a different
+  bytecode address) with no kill follow-up. The cartridge port's
+  rebuild reorganised the init sequence so that channels 0x18 and
+  0x2F could be swapped, requiring the kill-channel placeholders
+  to release the channel for later reassignment.
+
+  `LABEL_5C5B` body itself is a save→call→restore pattern: saves
+  vars 0x88/0x90/0x91 into temp slots 0x13/0x21/0x27, calls
+  `LABEL_5D83` (which dispatches on var0x27 high bits, `0x4000` →
+  one path, else mask + scene jump), then commits the temps back.
+  Looks like a per-frame entity state-update — likely the BUDDY
+  companion's frame-update routine (var07/08 are `BUDDY_X/Y` in
+  CAPSULE).
+
+  Acceptance item 3 done. Next: investigate LABEL_2A6E (CAPSULE
+  channel 0x2E reschedule), LABEL_3A26 + LABEL_39E3 (cinematic
+  rendering), LABEL_2A6E body.
