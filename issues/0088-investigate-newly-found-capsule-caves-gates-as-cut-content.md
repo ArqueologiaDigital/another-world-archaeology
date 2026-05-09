@@ -1,7 +1,7 @@
 ---
 id: 0088
 title: Investigate newly-found CAPSULE / CAVES gates as cut-content candidates
-status: open
+status: done
 tier: B
 created: 2026-05-04
 updated: 2026-05-09
@@ -137,9 +137,26 @@ polygon bank — render them.
       visual identification was already covered in research/19
       as "thin horizontal element... vine, tongue, or hinged
       element opening downward".)*
-- [ ] If the dead routines include subroutines that aren't
+- [x] If the dead routines include subroutines that aren't
       called from anywhere else, mark them as dead too (this
       is the stub for #0058's full reachability oracle).
+      *(Done — none of the cut cinematics include `call`
+      instructions. The gated routines are self-contained
+      animation loops:*
+      - *LABEL_3A26 (CAVES ch15): `video CIN_870..880; jmp
+        LABEL_3A26; killChannel` — no `call`s; killChannel
+        is dead after the jmp.*
+      - *LABEL_39E3 / LABEL_39F9 (CAVES ch14 swap): `video
+        CIN_810..811` (cart) / `CIN_819..823` (dos) loop with
+        a state write and conditional `play` — no `call`s.*
+      - *LABEL_5C5B / LABEL_2A6E (CAPSULE — turned out NOT
+        cut, idiomatic): they DO call LABEL_5D83 / LABEL_3385,
+        but those are still live since the routines themselves
+        still run on the surviving channel.*
+
+      *So no additional dead subroutines surface from these
+      gates. The cut cinematics are self-contained loops; the
+      idiomatic gates' gated routines aren't actually dead.)*
 
 # Log
 
@@ -298,3 +315,30 @@ polygon bank — render them.
     819..823 + 880..890 frames depict).
   - Dead-routine subroutine marking (whether the gated routines
     call subroutines that are now dead-only).
+
+- 2026-05-09 (later 4): both follow-ups closed (commit `83c3c93`
+  + this commit).
+
+  - **Cinematic identification.** Read the rendered 5-frame grid
+    at docs/assets/research-19-caves-channel-14-swap-cinematic/.
+    The figure depicts a small horizontal creature: red/orange
+    head on the left, green torso (largest element), blue
+    tail/rear extending right; ~4 polygon sub-elements per frame;
+    body posture varies subtly across the loop ("breathing" /
+    "stirring" idle). Plausibly a CAVES-environment cave
+    creature whose original scripted encounter was simplified to
+    walking-AI by the channel-0x14 override. Documented in
+    research/19's channel-0x14 swap section.
+  - **Dead subroutine marking.** None of the cut cinematics have
+    `call` instructions in their bodies — they're self-contained
+    `video … break … jmp tail` loops. The idiomatic gates
+    (LABEL_5C5B / LABEL_2A6E) DO call subroutines (LABEL_5D83 /
+    LABEL_3385) but those are still live because the routines
+    themselves still run on the surviving channel. So no
+    additional dead routines surface from these gates.
+
+  Issue closed `done`. The one acceptance item that ISN'T fully
+  satisfied is cart-arm rendering for LABEL_3A26 (CINEMATIC_870..880
+  in cart's POLY_CINEMATIC), which is genuinely blocked on #0068
+  (cartridge cinematic.rom extraction). That's tracked there
+  rather than as a follow-up on this issue.
