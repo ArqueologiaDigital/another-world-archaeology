@@ -43,16 +43,23 @@ because level 4 doesn't reference it.
       and POLY_ANIM resources linearly, recognising each shape
       header and emitting `(start_offset, byte_size, shape_kind)`
       for every polygon present.
-      *(Python implementation at `tools/polygon_walker.py`. Per
-      Log entry 2026-05-04: scan complete for DOS + Amiga.
-      cart/snes/genesis/gba per-port runs are unblocked since
-      #0094 regenerated their disasm trees on 2026-05-09.)*
+      *(Python implementation at `tools/polygon_walker.py`,
+      driven via `tools/find_unused_polygons.py`. Scan complete
+      for the two bank-format ports (DOS + Amiga) — see Log
+      2026-05-04. **Cart-format ports (gba_usa, snes_eu,
+      genesis_europe) need additional tool support**: their
+      polygon data is in a single `romset/cinematic.rom` file
+      shared across both levels, not per-level resource banks
+      keyed by `CINEMATIC_PER_LEVEL[port]`. Adding cart support
+      is a separate piece of tooling work beyond #0094's disasm
+      regen.)*
 - [x] **(2) Reference scanner.** Scan every level's BYTECODE
       disasm for `video type=N, offset=…` opcodes. Resolve
       port-specific addresses to absolute offsets within the
       polygon resource.
-      *(Done — `tools/asset_references.py`. Same per-port status
-      as item 1.)*
+      *(Done — `tools/asset_references.py`. Same bank-only
+      status as item 1; cart ports need a separate
+      single-file-pool reference resolver.)*
 - [x] **(3) Global reachability filter.** Closed by
       `tools/unused_polygon_scan_v2.py` (commit landing this
       check). Uses the `ReachabilityOracle` from #0058 + intra-
@@ -68,9 +75,9 @@ because level 4 doesn't reference it.
       referenced** (no `video` opcode targets that offset) vs
       **dead-referenced** (referenced only from gated/dead-code
       paths — same category as the kick-detector itself).
-      *(Done for DOS + Amiga per Log 2026-05-04; cart/snes/genesis/gba
-      runs unblocked by #0094 but not yet executed in this issue's
-      scope.)*
+      *(Done for DOS + Amiga per Log 2026-05-04. Cart ports need
+      the single-file-pool refactor noted in items 1/2 before
+      this can extend to all 5 ports.)*
 - [ ] **(5) Render.** Each unused polygon → PNG / SVG via
       AWVM_Tools' polygon renderer (which is already wired up).
 - [ ] **(6) Cross-port comparison.** A polygon unused on **all**
@@ -187,3 +194,14 @@ because level 4 doesn't reference it.
   trees. Items #5 (render unused), #6 (cross-port comparison
   document), #7 (catalog as research/06 update) remain to be
   done.
+
+- 2026-05-09 (later): the previous tick's note that "cart per-port
+  runs are unblocked by #0094" was over-optimistic. The disasm
+  trees ARE regenerated, but `tools/find_unused_polygons.py`
+  rejects cart ports with "unknown port 'gba_usa'; known ports:
+  ['amiga', 'msdos']". The tool's `CINEMATIC_PER_LEVEL` table
+  assumes a per-level POLY_CINEMATIC resource bank — the cart
+  ports use a single shared `romset/cinematic.rom` instead. So
+  extending items 1/2/4 to all 5 ports needs a tool refactor
+  (single-file-pool resolver) on top of the disasm regen, not
+  just a config table addition.
