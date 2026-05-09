@@ -34,15 +34,27 @@ from _paths import AWVM_TOOLS, REPO_ROOT
 
 AWVM_DISASM = AWVM_TOOLS / "target" / "release" / "awvm-disasm"
 
-# Per-port input layout. Each entry: (input_dir relative to package
-# work-dir, awvm-disasm release slug). The work-dir is
-# `work/<package_md5>/...`; we expect `make extract` to have already
-# populated it.
+# Per-port input layout for bank-format ports. Each entry:
+# (input_dir relative to package work-dir, awvm-disasm release slug).
+# The work-dir is `work/<package_md5>/...`; we expect `make extract`
+# to have already populated it.
 PORT_LAYOUTS = {
     # msdos: bank files at original/aworld/aworld/
     "msdos": ("original/aworld/aworld", "msdos"),
     # amiga: bank files at bin/
     "amiga": ("bin", "amiga"),
+}
+
+# Cartridge-format ports. `extractors/cartridge_rom.py` runs awvm-disasm
+# during `make extract` and writes the fresh disasm tree to
+# `work/<metadata_slug>/disasm/`. For these ports, regen_disasm just
+# orchestrates `extract.py --slug <metadata_slug>` and then copies
+# the result over to `tmp/output/<port>/disasm/`.
+CART_PORTS = {
+    # port_name: metadata_slug
+    "gba_usa": "gba-foxy-2004",
+    "snes_eu": "snes-eu",
+    "genesis_europe": "genesis-eu",
 }
 
 
@@ -64,10 +76,44 @@ def _package_md5_for_port(port: str) -> str | None:
     return None
 
 
+def regen_cart_port(port: str) -> int:
+    """Regenerate a cart-format port's disasm tree by re-running
+    `extract.py` (which delegates to extractors/cartridge_rom.py)
+    and copying its output to tmp/output/<port>/disasm/."""
+    metadata_slug = CART_PORTS[port]
+    print(f"regen_disasm: running extract.py for {port} (slug={metadata_slug})...")
+    rc = subprocess.run(
+        [sys.executable, "extract.py", "--slug", metadata_slug],
+        cwd=REPO_ROOT,
+    ).returncode
+    if rc != 0:
+        print(f"regen_disasm: extract.py exited {rc}", file=sys.stderr)
+        return rc
+
+    src_disasm = REPO_ROOT / "work" / metadata_slug / "disasm"
+    if not src_disasm.is_dir():
+        print(f"regen_disasm: no disasm output at {src_disasm}",
+              file=sys.stderr)
+        return 1
+    dst_disasm = REPO_ROOT / "tmp" / "output" / port / "disasm"
+    if dst_disasm.exists():
+        shutil.rmtree(dst_disasm)
+    dst_disasm.parent.mkdir(parents=True, exist_ok=True)
+    # Copy (don't move) — we want work/<slug>/ to remain a reference
+    # so re-running extract.py is idempotent.
+    shutil.copytree(src_disasm, dst_disasm)
+    n_levels = sum(1 for _ in dst_disasm.glob("level_*"))
+    print(f"regen_disasm: {port} -> {dst_disasm} ({n_levels} level(s))")
+    return 0
+
+
 def regen_port(port: str) -> int:
+    if port in CART_PORTS:
+        return regen_cart_port(port)
     if port not in PORT_LAYOUTS:
         print(f"regen_disasm: unsupported port {port!r}", file=sys.stderr)
-        print(f"  Supported: {', '.join(PORT_LAYOUTS.keys())}", file=sys.stderr)
+        all_ports = list(PORT_LAYOUTS.keys()) + list(CART_PORTS.keys())
+        print(f"  Supported: {', '.join(sorted(all_ports))}", file=sys.stderr)
         return 2
     if not AWVM_DISASM.is_file():
         print(f"regen_disasm: awvm-disasm not built at {AWVM_DISASM}",
@@ -150,7 +196,7 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.all:
-        ports = list(PORT_LAYOUTS.keys())
+        ports = list(PORT_LAYOUTS.keys()) + list(CART_PORTS.keys())
     elif args.port:
         ports = [args.port]
     else:
