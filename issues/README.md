@@ -10,8 +10,8 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 
 | status | A | B | C | D | other |
 |---|---|---|---|---|---|
-| **open** | 3 | 10 | 22 | 4 | · |
-| **in-progress** | · | 3 | · | · | · |
+| **open** | 3 | 10 | 21 | 4 | · |
+| **in-progress** | · | 3 | 1 | · | · |
 | **blocked** | 2 | · | 12 | · | · |
 | **done** | 14 | 14 | 5 | 4 | · |
 | **wontfix** | 1 | · | 1 | · | · |
@@ -76,7 +76,7 @@ See [SCHEMA.md](./SCHEMA.md) for the issue file format + policies.
 - ○ [#0070](./0070-unify-asm-strip-raw-comments-regresses-gba-in-3-way-mode.md) — unify_asm: --strip-raw-comments regresses GBA in 3-way mode (2 bytes diff at offset 0x14) `unify-asm` `bug` `phase-3b`
 - ○ [#0071](./0071-unify-asm-extend-block-aware-folding-to-n-greater-than-3-way.md) — unify_asm: extend block-aware folding to N > 3-way (full N-way unifier) `unify-asm` `phase-3b`
 - ○ [#0093](./0093-disambiguate-helper-suffixed-cross-stage-helpers-init-vars-2.md) — Disambiguate __HELPER-suffixed cross-stage helpers (INIT_VARS_2F_29_12, DEDUP_CAVES_6B_001) `reconstruction` `naming` `helpers` `cross-stage`
-- ○ [#0094](./0094-make-verify-all-fails-tmp-output-port-disasm-has-stale-raw-a.md) — make verify-all fails: tmp/output/<port>/disasm/ has stale ;@raw= annotations `reconstruction` `testing` `verify` `raw-to-enc`
+- ⏵ [#0094](./0094-make-verify-all-fails-tmp-output-port-disasm-has-stale-raw-a.md) — make verify-all fails: tmp/output/<port>/disasm/ has stale ;@raw= annotations `reconstruction` `testing` `verify` `raw-to-enc`
 - ○ [#0095](./0095-survey-of-175-intra-stage-cross-arm-duplicate-routines-cosme.md) — Survey of 175 intra-stage cross-arm duplicate routines (cosmetic dedup) `reconstruction` `helpers` `dedup` `survey`
 
 ### Tier D
