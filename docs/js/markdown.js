@@ -115,6 +115,19 @@ const Markdown = (function () {
         continue;
       }
 
+      // Blockquote: contiguous lines beginning with `>`. Strips the
+      // marker (and one optional space) from each line, then runs
+      // the result back through inline formatting. No nesting.
+      if (/^>\s?/.test(line)) {
+        const buf = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) {
+          buf.push(lines[i].replace(/^>\s?/, ""));
+          i++;
+        }
+        out.push(`<blockquote>${inline(buf.join(" "))}</blockquote>`);
+        continue;
+      }
+
       // Lists (unordered or ordered, no nesting)
       const ulMatch = line.match(/^(\s*)[-*+]\s+(.*)$/);
       const olMatch = line.match(/^(\s*)\d+\.\s+(.*)$/);
