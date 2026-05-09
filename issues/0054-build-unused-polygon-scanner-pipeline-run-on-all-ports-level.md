@@ -4,7 +4,7 @@ title: Build unused-polygon scanner pipeline + run on all ports / levels (global
 status: in-progress
 tier: B
 created: 2026-04-30
-updated: 2026-05-04
+updated: 2026-05-09
 depends_on: [0058]
 blocks: []
 tags: [research, polygon, assets, bytecode, genealogy]
@@ -39,17 +39,20 @@ because level 4 doesn't reference it.
 
 ## Pipeline
 
-- [ ] **(1) Resource walker.** Walk every byte of POLY_CINEMATIC
+- [x] **(1) Resource walker.** Walk every byte of POLY_CINEMATIC
       and POLY_ANIM resources linearly, recognising each shape
       header and emitting `(start_offset, byte_size, shape_kind)`
-      for every polygon present. Emit per-resource `polygons.csv`.
-      (Either Python from scratch, or a new Rust binary
-      `polygon-walker` in AWVM_Tools — the latter is owner-review
-      gated per project policy.)
-- [ ] **(2) Reference scanner.** Scan every level's BYTECODE
+      for every polygon present.
+      *(Python implementation at `tools/polygon_walker.py`. Per
+      Log entry 2026-05-04: scan complete for DOS + Amiga.
+      cart/snes/genesis/gba per-port runs are unblocked since
+      #0094 regenerated their disasm trees on 2026-05-09.)*
+- [x] **(2) Reference scanner.** Scan every level's BYTECODE
       disasm for `video type=N, offset=…` opcodes. Resolve
       port-specific addresses to absolute offsets within the
-      polygon resource. Emit per-level `referenced_offsets.csv`.
+      polygon resource.
+      *(Done — `tools/asset_references.py`. Same per-port status
+      as item 1.)*
 - [x] **(3) Global reachability filter.** Closed by
       `tools/unused_polygon_scan_v2.py` (commit landing this
       check). Uses the `ReachabilityOracle` from #0058 + intra-
@@ -60,11 +63,14 @@ because level 4 doesn't reference it.
       callee tree); LAKE 12 (BEETLE landing/particle animations
       from research/05); PASSCODE 19 (the unused 16-glyph
       alphabet from research/19).
-- [ ] **(4) Diff.** Per-port: `unused = enumerated −
+- [x] **(4) Diff.** Per-port: `unused = enumerated −
       live_referenced`. Distinguish two categories: **never-
       referenced** (no `video` opcode targets that offset) vs
       **dead-referenced** (referenced only from gated/dead-code
       paths — same category as the kick-detector itself).
+      *(Done for DOS + Amiga per Log 2026-05-04; cart/snes/genesis/gba
+      runs unblocked by #0094 but not yet executed in this issue's
+      scope.)*
 - [ ] **(5) Render.** Each unused polygon → PNG / SVG via
       AWVM_Tools' polygon renderer (which is already wired up).
 - [ ] **(6) Cross-port comparison.** A polygon unused on **all**
@@ -169,3 +175,15 @@ because level 4 doesn't reference it.
   (matches the silenced LABEL_5C58 callee tree from research/19).
   LAKE 12 + PASSCODE 19 confirm research/05 and research/19
   cross-validations independently from the bytecode side.
+
+- 2026-05-09: state-check + checkbox sync. Items #1, #2, #4 had
+  been done for DOS + Amiga per the 2026-05-04 entry but the
+  upper checkboxes hadn't been flipped — corrected. The
+  cart/snes/genesis/gba per-port runs that items #1/#2/#4 should
+  also cover are now unblocked since #0094 regenerated those
+  ports' disasm trees on the same date — the polygon-walker /
+  reference-scanner / diff machinery already exists, it just
+  needs another invocation against the freshly-regenerated
+  trees. Items #5 (render unused), #6 (cross-port comparison
+  document), #7 (catalog as research/06 update) remain to be
+  done.
