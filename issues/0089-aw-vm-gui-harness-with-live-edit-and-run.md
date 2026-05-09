@@ -4,7 +4,7 @@ title: AW VM GUI harness with live build-and-run + var/thread inspection
 status: open
 tier: B
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-05-07
 depends_on: []
 blocks: [0090]
 tags: [tooling, vm, gui, interactive, dev-experience]
@@ -101,15 +101,25 @@ awvm-asm).
 
 # Acceptance criteria
 
-- [ ] Phase 1 (VM backend with IPC) builds and accepts the
-      core commands.
-- [ ] Phase 2 (build pipeline) wired so editing source +
-      clicking play assembles+runs in <1s for typical .asm
-      sizes.
-- [ ] Phase 3 (GUI) shows editor + canvas + var grid +
-      thread list, with all four interactive controls
-      (var edit, channel enable/disable/freeze/unfreeze)
-      functional.
+The Phase 1 / 2 / 3 / 4 split below was reframed after the
+2026-05-04 pivot to extending the existing **another-world-suite**
+(Rust+WASM AW VM + Vue debugger frontend) with a source-editor
+window, rather than building a from-scratch tool. Suite work
+lives on a local `source-editor` branch in
+`../another-world-suite`.
+
+- [x] **Phase 1 (UI shell)** — SourceEditor window in the Suite
+      with "assemble" / "assemble + load" buttons, engine stubs.
+      Suite commit `4a2ea55`.
+- [ ] **Phase 2 (engine: actually call awvm-asm)** — BLOCKED on
+      #0090 (in-memory `assemble_bytes()` API proposal awaiting
+      AWVM_Tools owner review).
+- [x] **Phase 3 (engine: replace bytecode + reset VM)** — Suite
+      commit `d6db7a2`; wasm-bindgen bumped 0.2.62 → 0.2.93;
+      both native and `wasm32-unknown-unknown` builds verified.
+      Frontend `onSourceLoaded()` refreshes views.
+- [ ] **Phase 4 (audio + breakpoints + debug map)** — deferred
+      until 1+2+3 are settled.
 - [ ] Bonus: load existing per-port stage source files
       (`src/levels/dos_1992/LAKE.asm`) and replay them.
 

@@ -4,7 +4,7 @@ title: Byte-equivalence test framework for source-reconstruction repo (CI gate)
 status: open
 tier: C
 created: 2026-04-30
-updated: 2026-05-05
+updated: 2026-05-07
 depends_on: []
 blocks: []
 tags: [reconstruction, testing, build]
@@ -27,12 +27,17 @@ The test framework should:
 
 # Acceptance criteria
 
-- [ ] `tests/byte_equivalence.py` (or similar) that, given a
-      target slug, verifies all produced files match the
-      archive's reference.
-- [ ] Hooked into the Makefile (`make test TARGET=<slug>`).
-- [ ] First instance: passes for Phase 1 (DOS level-0 bytecode
-      byte-matching).
+- [x] Hooked into the Makefile (aggregate `make test` rule landed
+      in source-recon `c5346bd`; wraps `verify-stages` +
+      `verify-unified` + `verify-all` + `lint`).
+- [x] First instance: passes for Phase 1 (DOS level-0 bytecode
+      byte-matching). Round-trip is now 29/29 stages + 27/27
+      unified.
+- [ ] Standalone `tests/byte_equivalence.py` driver that produces
+      cleaner per-artifact PASS/FAIL output with byte-level diff
+      on FAIL. The existing per-stage / per-port verifiers in
+      `tools/` already cover the byte comparisons, so this is a
+      thin aggregator + reporter.
 
 # Log
 

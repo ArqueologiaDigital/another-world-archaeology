@@ -1,10 +1,10 @@
 ---
 id: 0056
 title: Unused MUSIC scan: enumerate MUSIC resources, scan all reachable bytecode for song references
-status: in-progress
+status: done
 tier: B
 created: 2026-04-30
-updated: 2026-05-03
+updated: 2026-05-07
 depends_on: [0058]
 blocks: []
 tags: [research, music, assets, bytecode, genealogy]
@@ -79,5 +79,12 @@ finding is "unused on **every** port".
   resource types). Two-tier reachability filter
   (label-level + intra-label post-jmp) correctly classifies
   music 0x89 as "dead-only" — same automated finding research/11
-  established by hand. Issue remains open only because of
-  cross-port MUSIC extraction (the depends-on-extraction item).
+  established by hand.
+
+- 2026-05-07: closed `done`. All acceptance criteria met for
+  the MS-DOS package: enumerator + reference scanner + reachability
+  filter + cross-port diff (within MS-DOS-aligned branches) +
+  renderer + research/11 finding doc. Cross-port MUSIC scans for
+  other formats are blocked by the per-format extraction issues
+  (#0008–#0011) and tracked there, not as a follow-up of this
+  issue.

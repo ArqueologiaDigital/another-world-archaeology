@@ -4,7 +4,7 @@ title: Unused PALETTE scan: enumerate palette indices in PALETTE resources, scan
 status: in-progress
 tier: B
 created: 2026-04-30
-updated: 2026-05-04
+updated: 2026-05-07
 depends_on: [0058]
 blocks: []
 tags: [research, palette, assets, bytecode, genealogy]
@@ -47,7 +47,10 @@ are excluded from the unused set conservatively.
       `docs/assets/research-16-unused-palettes/level<N>_<STAGE>.svg`).
 - [x] Build setPalette-reference scanner (literal-index only,
       with a separate report on variable-index uses).
-- [ ] Reachability filter (depends on #0058).
+- [x] Reachability filter (depends on #0058).
+      *(`tools/unused_palette_scan_v2.py` wires in
+      `ReachabilityOracle` from #0058; surfaces 5 additional
+      dead-only slots beyond v1's literal-reference scan.)*
 - [ ] Diff at both layers (unused resources, unused slots within
       resources). (Slot-level diff done via
       `tools/unused_palette_scan.py`; resource-level needs new

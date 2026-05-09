@@ -4,7 +4,7 @@ title: Render LAKE's 201 cut sprites (amiga-only-USED) for visual identification
 status: open
 tier: B
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-05-07
 depends_on: []
 blocks: []
 tags: [research, polygon, visualisation, lake, cut-content]
@@ -12,7 +12,7 @@ tags: [research, polygon, visualisation, lake, cut-content]
 
 # Context
 
-[research/12](#/research/12-cross-port-sprite-rebuild) identified
+[research/20](#/research/20-port-rebuild-patterns) identified
 **201 unique solid polygons** that the amiga 1991 LAKE bytecode
 actively renders but which DON'T exist in the dos 1992 LAKE
 polygon bank at all. These are the strongest cut-content
@@ -34,6 +34,16 @@ Rendering each polygon will let a human reviewer:
 3. Cross-reference with [research/05](#/research/05-beetle-in-the-lake-stage)'s
    beetle-stage findings — the cut content might be the missing
    actor frames already hypothesised.
+
+**Reframing (2026-05-07):** the 2026-05-04 refinement (Log entry
+below) found the "cut content" framing overstated — the 1991→1992
+DOS rebuild is best characterised as a sprite-pipeline rebuild
+(per-stage detail sprites → shared COMMON_VIDEO bank), not a
+content cut. The functionality survives via different sprite
+composition. Findings folded into
+[research/20-port-rebuild-patterns.md](#/research/20-port-rebuild-patterns).
+Remaining work below is per-cluster cataloguing rather than
+"identify lost gameplay".
 
 # Acceptance criteria
 
@@ -85,7 +95,7 @@ for off in offsets:
 # Related
 
 - [research/06 — Unused-polygons survey](#/research/06-unused-polygons-survey)
-- [research/12 — Cross-port sprite-byte rebuild](#/research/12-cross-port-sprite-rebuild)
+- [research/20 — Port-rebuild patterns](#/research/20-port-rebuild-patterns)
 - [issue #0054 — Build unused-polygon scanner pipeline](#/issues/0054-build-unused-polygon-scanner-pipeline-run-on-all-ports-level)
 - [issue #0053 — Identify the missing beetle-attack actor frames](#/issues)
 

@@ -4,7 +4,7 @@ title: Propose AWVM_Tools STAGE_TITLES fix: cartridge ports' level_0 is INTRO no
 status: open
 tier: C
 created: 2026-05-01
-updated: 2026-05-01
+updated: 2026-05-07
 depends_on: []
 blocks: []
 tags: [awvm-tools, proposal, research, cartridge]
@@ -45,9 +45,15 @@ Empirical evidence:
 
 - [ ] Surface this finding to AWVM_Tools owner before
       implementing.
-- [ ] Update STAGE_TITLES in releases/snes/snes.rs (and snes-eu
-      if separate), releases/gba_usa.rs to use "Intro Sequence"
-      instead of "Code-wheel screen" for level_0.
+- [x] `releases/snes.rs` and `releases/genesis_europe.rs` —
+      STAGE_TITLES[0] now reads "Arrival at the Lake & Beast Chase"
+      (no "Code-wheel screen" entry). These two are no longer in
+      scope.
+- [ ] `releases/gba_usa.rs:10` and `releases/symbian_demo.rs:10`
+      still have `"Code-wheel screen"` as STAGE_TITLES[0]. Update
+      to `"Intro Sequence"`. (Note: `amiga.rs` and `msdos.rs`
+      keep `"Code-wheel screen"` — those disk-based ports do
+      have a codewheel level_0, so the title is correct there.)
 - [ ] Verify no downstream tooling assumes level_0 == codewheel
       for cartridge ports.
 
@@ -56,3 +62,5 @@ Empirical evidence:
 - 2026-05-01: opened. Surfaced from research/08 + the labelling
   fix in source-reconstruction repo (heineman_cartridge/INTRO.asm,
   foxy_gba_2004/INTRO.asm).
+- 2026-05-07: scoped down to gba_usa + symbian_demo. snes and
+  genesis_europe already carry the corrected STAGE_TITLES.
