@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**113 tools.**
+**115 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -71,6 +71,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `raw_annotation_snapshot.py` | Snapshot the load-bearing `;@raw=` residue. |
 | `reconstruct_arms.py` | Reconstruct un-split per-arm `.inc` files from a folded `<STAGE>.asm.in` |
 | `redisasm_db.py` | Re-disassemble `db` blocks in an AW VM .asm source. |
+| `regen_disasm.py` | Regenerate `tmp/output/<port>/disasm/` for a given port by running |
 | `remove_empty_chunks.py` | Remove empty per-arm chunk files and their corresponding ;@include |
 | `remove_empty_chunks_safe.py` | Phase 5: remove empty per-arm chunk files (CAVES + ENDING). |
 | `rename_chunks.py` | Rename chunk files to match the routine name they follow. |
@@ -86,6 +87,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `resymbolize_literals.py` | Re-symbolise literal-address operands inserted by |
 | `roundtrip_bytecode.py` | Per-target round-trip test for AW VM bytecode. |
 | `scan_cross_stage_helpers.py` | Phase 6 prep: find routines defined in 2+ stages with byte-identical |
+| `scan_intra_stage_duplicates.py` | Find routines defined byte-identically in 2+ chunks within the |
 | `simulate_gun_budget.py` | Illustrate the gun-energy quota mechanics from research finding #01. |
 | `split_asm_chapter.py` | Helper to split a chapter out of a unified .asm.in into a .inc file. |
 | `standardize_cinematic_frame_suffix.py` | Standardize CINEMATIC frame-index suffixes to bare `_N`. |

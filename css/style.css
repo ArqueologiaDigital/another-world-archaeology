@@ -146,6 +146,42 @@ main hr {
 
 main ul, main ol { padding-left: 1.5em; }
 
+/* Inline images from markdown `![alt](path)` syntax — usually
+   rendered cut-content galleries under docs/assets/. The native
+   sizes vary widely (single sprites are ~300×200, contact-sheet
+   grids run to 3000+px wide), so cap to the main column width. */
+main img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.5em 0;
+}
+
+/* Blockquotes — used for callouts (e.g. forward_plan.md's
+   "Use the tracker, not this page" notice) and for quoted
+   research questions. */
+main blockquote {
+  margin: 1em 0;
+  padding: 0.6em 0.9em;
+  border-left: 3px solid #d9e2ec;
+  background: #f7f9fc;
+  color: #334e68;
+}
+
+/* Task-list items (`- [ ]` / `- [x]`) — used heavily in
+   issues/<NNNN>-*.md "Acceptance criteria" sections. The bullet
+   `<li>` would normally show a disc marker before the checkbox;
+   remove it via list-style: none and a small negative-margin
+   pull-back so the checkbox aligns with sibling non-task items. */
+main li > input[type="checkbox"]:first-child {
+  margin-right: 0.4em;
+}
+main ul > li:has(> input[type="checkbox"]:first-child),
+main ol > li:has(> input[type="checkbox"]:first-child) {
+  list-style: none;
+  margin-left: -1.2em;
+}
+
 /* Audio figures (rendered from markdown links to .wav/.ogg/.mp3) */
 figure.audio-figure {
   margin: 1em 0;

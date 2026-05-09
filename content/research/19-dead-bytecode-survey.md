@@ -331,8 +331,19 @@ between each, then `jmp LABEL_3A3C` to repeat). Rendered at
 ![CAVES silenced 11-frame cinematic loop](../assets/research-19-caves-silenced-cinematic-loop/silenced_loop_full_grid.png)
 
 The visible animation is a thin horizontal element (one or two
-small green segments) that progressively rotates and bends —
-perhaps a vine, tongue, or hinged element opening downward.
+small green segments) that progressively rotates and bends.
+Reading the 11 frames as an animation cycle: starts as a
+near-horizontal line (frames 1-2), develops a slight angle
+(frames 3-4), then bends progressively into a hook / L-shape
+(frames 5-7), and finally opens out into a wide V / open-mouth
+shape (frames 8-11). The most parsimonious visual reading is a
+**jaw or hinged mouth opening** — plausibly a creature attack
+animation (jaw snapping open to bite). Alternative readings
+(vine unfurling, hinged trap lid) fit the kinematics but the
+"jaw" interpretation aligns with research/05's pattern of
+silenced-creature-encounter cinematics in the original
+Delphine 1992 source.
+
 Each frame is 5–10 polygon paths. The loop is queued onto
 channel 0x15 then immediately silenced via `setup channel=0x15,
 address=KILL_CHAN_AT_7830` (research/18 silencer). The 11-frame
@@ -342,6 +353,39 @@ draws at runtime.
 (Cart `LABEL_3A26` plays a parallel `CINEMATIC_870..875` range
 with the same silencer pattern, but cart's polygon resource
 isn't yet extracted — gated on issue #0068.)
+
+A **second** CAVES cinematic is also silenced — the channel-0x14
+"cinematic-then-real" swap at level-init line 1311 (DOS) /
+1298 (cart) / 1264 (amiga). Each arm queues a cinematic loop
+on channel 0x14 and immediately overrides it with the walking-AI
+handler. DOS's silenced cinematic is `LABEL_39F9`, which loops
+`CINEMATIC_819..823` (5 frames, with a state write
+`mov [0x63], 0x0001` and a conditional sound-cue), then
+`jmp LABEL_39F9` from the tail of the longer continuation
+chain (CINEMATIC_822 → 823 → 822 → 821 → 820 → jmp). Rendered
+at `docs/assets/research-19-caves-channel-14-swap-cinematic/`:
+
+![CAVES silenced channel-0x14 cinematic](../assets/research-19-caves-channel-14-swap-cinematic/swap_loop_grid.png)
+
+5 visible frames of a multi-element scene (~11 polygon paths
+each — significantly more complex than the LABEL_3A3C silenced
+loop's thin-line decoration). Cross-arm symmetry of the swap
+pattern (cart 1298/1300, dos 1311/1313, amiga 1264/1266) means
+the cut is from the original Delphine 1992 source. Tracked as
+issue #0088.
+
+**Visual identification**: a small horizontal figure rendered at
+HERO_X / HERO_Y with a red/orange head on the left, a green
+torso (largest element), and a blue tail/rear extending right.
+The 5-frame loop varies the body posture slightly between
+frames — looks like a "breathing" / "stirring" idle animation.
+Proportions (small head, long body, tail-like rear, ~4 polygon
+sub-elements per frame) suggest a small **cave creature** —
+plausibly an alien or quadruped specific to the CAVES
+environment. Combined with the walking-AI override
+(`LABEL_E9A5`), the gate likely simplified an originally
+cinematic creature encounter into the standard walking-AI
+behaviour.
 
 PRISON-`dos_1992`: 58 trans-dead, 21 dead-only video offsets:
 `CINEMATIC_127` (isolated) + `CINEMATIC_688..693` (6 frames) +

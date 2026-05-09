@@ -6454,7 +6454,7 @@ mov [0x2A], 0x0014
 
 ### `0x15` — `LABEL_3BA9`
 
-Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_37B_9FD2CEA6.inc:21`.
+Defined at `src/levels/_unified/prison/dos__post_RET_THEN_KILL_CHANNEL.inc:21`.
 
 ```
 break
@@ -6474,7 +6474,7 @@ mov [0x19], 0x0000
 
 ### `0x15` — `LABEL_3BE3`
 
-Defined at `src/levels/_unified/prison/dos__post_FOLD_BODY_37B_9FD2CEA6.inc:44`.
+Defined at `src/levels/_unified/prison/dos__post_RET_THEN_KILL_CHANNEL.inc:44`.
 
 ```
 db 0x11
@@ -6914,7 +6914,7 @@ LABEL_752D:
 
 ### `0x18` — `LABEL_6EC3`
 
-Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_041.inc:468`.
+Defined at `src/levels/_unified/prison/amiga__post_INLINE_KILL_041.inc:440`.
 
 ```
 video type=0, offset=COMMON_VIDEO_269, x=[HERO_X], y=[HERO_Y], zoom=0x40
@@ -10170,7 +10170,7 @@ selectVideoPage 0xFF
 
 ### `0x3C` — `LABEL_3D49`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:88`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:88`.
 
 ```
 jle [0x13], 0x01, DRAW_CIN_483
@@ -10190,7 +10190,7 @@ jmp LABEL_D82A
 
 ### `0x3C` — `LABEL_3D5B`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:97`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:97`.
 
 ```
 jge [0x13], 0xC8, LABEL_3E6A
@@ -10290,7 +10290,7 @@ LABEL_3F63:
 
 ### `0x3C` — `LABEL_3F67`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:301`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:301`.
 
 ```
 jne [0x13], 0x82, LABEL_3F73
@@ -10340,7 +10340,7 @@ LABEL_3F8D:
 
 ### `0x3C` — `LABEL_3F8B`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:316`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:316`.
 
 ```
 jne [0x13], 0x85, LABEL_3F97
@@ -10370,7 +10370,7 @@ jmp LABEL_DD3E
 
 ### `0x3C` — `LABEL_3F97`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:321`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:321`.
 
 ```
 jne [0x13], 0x86, LABEL_3FA3
@@ -10390,7 +10390,7 @@ mov [0x21], [0x10]
 
 ### `0x3C` — `LABEL_3FA3`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:326`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:326`.
 
 ```
 jne [0x13], 0x87, LABEL_3FAF
@@ -11996,7 +11996,7 @@ jne [0x6E], 0x02, LABEL_05D6
 
 ### `0x01` — `LABEL_0636`
 
-Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:236`.
+Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:235`.
 
 ```
 selectVideoPage 0x00
@@ -12026,7 +12026,7 @@ mov [0xBA], 0x0001
 
 ### `0x01` — `LABEL_1599`
 
-Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:114`.
+Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:113`.
 
 ```
 setPalette 0x0E
@@ -12036,7 +12036,7 @@ play id=0x005D, freq=0x14, vol=0x40, channel=0x02
 
 ### `0x01` — `LABEL_15E4`
 
-Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:143`.
+Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:142`.
 
 ```
 selectVideoPage 0x00
@@ -12056,7 +12056,7 @@ video offset=CINEMATIC_185, x=[0x78], y=[0x79]
 
 ### `0x01` — `LABEL_16F2`
 
-Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:143`.
+Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:142`.
 
 ```
 selectVideoPage 0x00
@@ -12442,7 +12442,7 @@ db 0x11
 
 ### `0x04` — `LABEL_068B`
 
-Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:268`.
+Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:267`.
 
 ```
 jl [HERO_X], 0x78, LABEL_06B2
@@ -12532,7 +12532,7 @@ jg [0x39], 0x01, LABEL_1654
 
 ### `0x04` — `LABEL_1747`
 
-Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:175`.
+Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:174`.
 
 ```
 jl [HERO_X], 0x78, LABEL_176E
@@ -12682,7 +12682,7 @@ play id=0x005F, freq=0x0A, vol=0x40, channel=0x02
 
 ### `0x05` — `LABEL_0771`
 
-Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:350`.
+Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:349`.
 
 ```
 video offset=CINEMATIC_407, x=[0xea], y=157
@@ -12702,7 +12702,7 @@ add [0x68], 0x0001
 
 ### `0x05` — `LABEL_171F`
 
-Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:257`.
+Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:256`.
 
 ```
 video offset=CINEMATIC_229, x=[0xea], y=157
@@ -12712,7 +12712,7 @@ break
 
 ### `0x05` — `LABEL_182D`
 
-Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:257`.
+Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:256`.
 
 ```
 video offset=CINEMATIC_230, x=[0xea], y=157
@@ -12822,7 +12822,7 @@ mov [0x2A], 0x0006
 
 ### `0x06` — `LABEL_078F`
 
-Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:361`.
+Defined at `src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:360`.
 
 ```
 video offset=CINEMATIC_407, x=[0xeb], y=157
@@ -12842,7 +12842,7 @@ video offset=CINEMATIC_050, x=160, y=100
 
 ### `0x06` — `LABEL_173D`
 
-Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:268`.
+Defined at `src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:267`.
 
 ```
 video offset=CINEMATIC_229, x=[0xeb], y=157
@@ -12852,7 +12852,7 @@ break
 
 ### `0x06` — `LABEL_184B`
 
-Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:268`.
+Defined at `src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:267`.
 
 ```
 video offset=CINEMATIC_230, x=[0xeb], y=157
@@ -13860,7 +13860,7 @@ video offset=CINEMATIC_162, x=[HERO_X], y=[HERO_Y]
 
 ### `0x15` — `LABEL_6051`
 
-Defined at `src/levels/_unified/capsule/dos__post_FOLD_BODY_37B_9FD2CEA6.inc:1`.
+Defined at `src/levels/_unified/capsule/dos__post_RET_THEN_KILL_CHANNEL.inc:1`.
 
 ```
 video offset=CINEMATIC_703, x=[HERO_X], y=[HERO_Y]
@@ -13870,7 +13870,7 @@ break
 
 ### `0x15` — `LABEL_605A`
 
-Defined at `src/levels/_unified/capsule/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:1`.
+Defined at `src/levels/_unified/capsule/cart__post_RET_THEN_KILL_CHANNEL.inc:1`.
 
 ```
 video offset=CINEMATIC_706, x=[HERO_X], y=[HERO_Y]
@@ -14010,7 +14010,7 @@ video offset=CINEMATIC_283, x=[HERO_X], y=103
 
 ### `0x16` — `LABEL_3E2E`
 
-Defined at `src/levels/_unified/prison/cart__post_FOLD_BODY_37B_9FD2CEA6.inc:176`.
+Defined at `src/levels/_unified/prison/cart__post_RET_THEN_KILL_CHANNEL.inc:176`.
 
 ```
 jne [0x13], 0x85, LABEL_3E3A
@@ -14210,7 +14210,7 @@ video offset=CINEMATIC_338, x=61, y=100
 
 ### `0x1A` — `LABEL_7E0E`
 
-Defined at `src/levels/_unified/capsule/amiga__post_DECREMENT_VAR08_BY_D.inc:1008`.
+Defined at `src/levels/_unified/capsule/amiga__post_DECREMENT_VAR08_BY_D.inc:966`.
 
 ```
 jg [HERO_Y], [0x51], COPY_VAR51_TO_VAR02_KILL_CHANNEL
