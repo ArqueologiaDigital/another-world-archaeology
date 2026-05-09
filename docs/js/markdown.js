@@ -21,6 +21,17 @@ const Markdown = (function () {
     text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     text = text.replace(/\b_([^_]+)_\b/g, "<em>$1</em>");
     text = text.replace(/(^|[^\*])\*([^\*\n]+)\*([^\*]|$)/g, "$1<em>$2</em>$3");
+    // Images — handle BEFORE links so the `!` prefix isn't lost.
+    // Source markdown uses `../assets/...` paths relative to
+    // docs/content/<section>/foo.md. The deployed site is served
+    // from `docs/`, so `../assets/foo` would resolve outside the
+    // site root; rewrite to `assets/foo` (root-relative under
+    // docs/) before emitting the <img>.
+    text = text.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt, src) => {
+      const rewritten = src.replace(/^\.\.\/assets\//, "assets/");
+      const altEsc = escapeHtml(alt);
+      return '<img alt="' + altEsc + '" src="' + rewritten + '">';
+    });
     // Links — but if the URL points at an audio file (.wav/.ogg/.mp3),
     // render an <audio controls> player instead of a plain anchor. The
     // link text becomes the player's caption (rendered before the player).
