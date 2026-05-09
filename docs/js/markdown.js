@@ -47,6 +47,86 @@ const Markdown = (function () {
     return /^[\s\-:|]+$/.test(line) && line.includes("-") && line.includes("|");
   }
 
+  // Render a list (and any nested lists / continuation prose under
+  // its items) starting at lines[startIdx]. The first list item's
+  // bullet must be at column `indent`. Returns {html, next} where
+  // `next` is the index of the first line NOT consumed by the list.
+  function renderList(lines, startIdx, indent) {
+    const isOrdered = /^\s*\d+\.\s/.test(lines[startIdx]);
+    const bulletRe = isOrdered
+      ? /^(\s*)\d+\.\s+(.*)$/
+      : /^(\s*)[-*+]\s+(.*)$/;
+    const anyBulletRe = /^(\s*)(?:[-*+]|\d+\.)\s+(.*)$/;
+    const tag = isOrdered ? "ol" : "ul";
+    let html = "<" + tag + ">";
+    let i = startIdx;
+    while (i < lines.length) {
+      const line = lines[i];
+      if (line.trim() === "") {
+        // Blank line — peek ahead. If the next non-blank line is
+        // a sibling bullet (same indent) or deeper, the list
+        // continues. Otherwise we're done.
+        let j = i + 1;
+        while (j < lines.length && lines[j].trim() === "") j++;
+        if (j >= lines.length) break;
+        const peek = lines[j].match(anyBulletRe);
+        if (!peek || peek[1].length < indent) break;
+        i = j;
+        continue;
+      }
+      const m = line.match(bulletRe);
+      if (!m || m[1].length !== indent) {
+        // Either the wrong indent or not a list item at all — done.
+        break;
+      }
+      // Collect raw text fragments (so multi-line `**bold**` etc.
+      // close correctly) AND nested-list HTML separately. Apply
+      // inline() to the joined raw text at the end.
+      const textParts = [m[2]];
+      const nestedParts = [];
+      i++;
+      while (i < lines.length) {
+        const next = lines[i];
+        if (next.trim() === "") {
+          // Blank — peek to decide
+          let j = i + 1;
+          while (j < lines.length && lines[j].trim() === "") j++;
+          if (j >= lines.length) break;
+          const peek = lines[j].match(anyBulletRe);
+          if (peek && peek[1].length > indent) {
+            // Nested list after a blank line — descend
+            const sub = renderList(lines, j, peek[1].length);
+            nestedParts.push(sub.html);
+            i = sub.next;
+            continue;
+          }
+          break;
+        }
+        const nm = next.match(anyBulletRe);
+        if (nm && nm[1].length === indent) break; // sibling
+        if (nm && nm[1].length < indent) break;   // outdented
+        if (nm && nm[1].length > indent) {
+          // Nested list
+          const sub = renderList(lines, i, nm[1].length);
+          nestedParts.push(sub.html);
+          i = sub.next;
+          continue;
+        }
+        if (/^\s+\S/.test(next)) {
+          // Indented prose — continuation of the current item
+          textParts.push(next.trim());
+          i++;
+          continue;
+        }
+        // Non-indented non-list line — done.
+        break;
+      }
+      html += "<li>" + inline(textParts.join(" ")) + nestedParts.join("") + "</li>";
+    }
+    html += "</" + tag + ">";
+    return { html: html, next: i };
+  }
+
   function render(src) {
     if (!src) return "";
     const lines = src.replace(/\r\n/g, "\n").split("\n");
@@ -129,21 +209,14 @@ const Markdown = (function () {
         continue;
       }
 
-      // Lists (unordered or ordered, no nesting)
+      // Lists (unordered or ordered) with continuation-line absorption
+      // and one level of nesting.
       const ulMatch = line.match(/^(\s*)[-*+]\s+(.*)$/);
       const olMatch = line.match(/^(\s*)\d+\.\s+(.*)$/);
       if (ulMatch || olMatch) {
-        const isOrdered = !!olMatch;
-        const re = isOrdered ? /^\s*\d+\.\s+(.*)$/ : /^\s*[-*+]\s+(.*)$/;
-        const tag = isOrdered ? "ol" : "ul";
-        let html = `<${tag}>`;
-        while (i < lines.length && re.test(lines[i])) {
-          const m = lines[i].match(re);
-          html += `<li>${inline(m[1])}</li>`;
-          i++;
-        }
-        html += `</${tag}>`;
-        out.push(html);
+        const result = renderList(lines, i, (ulMatch || olMatch)[1].length);
+        out.push(result.html);
+        i = result.next;
         continue;
       }
 
