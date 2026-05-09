@@ -20,9 +20,11 @@ consistent.
 Usage:
 
     python3 tools/scan_intra_stage_duplicates.py
+    python3 tools/scan_intra_stage_duplicates.py --stage CAVES   # full list for one stage
 """
 from __future__ import annotations
 
+import argparse
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -94,6 +96,14 @@ def has_jumps(body: str) -> bool:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument(
+        "--stage",
+        help="dump the full candidate list for one stage (e.g. CAVES); "
+             "default is summary + top-30 across all stages",
+    )
+    args = ap.parse_args()
+
     # (stage, label) -> {body_normalized: [chunk_filenames]}
     by_stage_label: dict[tuple[str, str], dict[str, list[str]]] = defaultdict(
         lambda: defaultdict(list)
@@ -121,6 +131,18 @@ def main() -> int:
         candidates.append((len(files), len(body), stage, label, files, body))
 
     candidates.sort(key=lambda c: (-c[0], -c[1], c[2], c[3]))
+
+    if args.stage:
+        stage_filter = args.stage.upper()
+        per_stage = [c for c in candidates if c[2] == stage_filter]
+        print(f"Intra-stage duplicate routines for stage={stage_filter}:")
+        print(f"  Count: {len(per_stage)}\n")
+        for n_files, body_len, _, label, files, body in per_stage:
+            first_line = body.splitlines()[0].strip() if body else "(empty)"
+            print(f"  {label:<40s} n={n_files}  body_len={body_len}")
+            print(f"    files: {files}")
+            print(f"    body: {first_line[:80]}")
+        return 0
 
     print(f"Intra-stage duplicate routine definitions (jump-free, "
           f"byte-identical across 2+ chunks in the same stage):")
