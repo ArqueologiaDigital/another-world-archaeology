@@ -1,10 +1,10 @@
 ---
 id: 0055
 title: Unused SOUND scan: enumerate SOUND resources, scan all reachable bytecode for playSound references, render unused
-status: in-progress
+status: done
 tier: B
 created: 2026-04-30
-updated: 2026-05-04
+updated: 2026-05-09
 depends_on: [0058]
 blocks: []
 tags: [research, sound, assets, bytecode, genealogy]
@@ -40,11 +40,19 @@ The opcodes to scan for:
       `(index, size, md5)` per SOUND).
 - [x] Build SOUND-reference scanner (extracts all `playSound id=N`
       from disasm, with global aggregation across all levels).
-- [ ] Reachability filter (depends on #0058 setup-then-overwrite
+- [x] Reachability filter (depends on #0058 setup-then-overwrite
       gate detection).
-- [ ] Per-port + cross-port diff. A SOUND unused on all ports is
-      a strong cut-content signal. (DOS done; other ports gated
-      on per-port resource extraction.)
+      *(`tools/unused_sound_scan_v2.py` wires in
+      `ReachabilityOracle` from #0058; classifies LAKE 0x89 as
+      "dead-only" — same automated finding research/11 found
+      by hand. Top Log entry covers the v2 details.)*
+- [x] Per-port + cross-port diff. A SOUND unused on all ports is
+      a strong cut-content signal.
+      *(MS-DOS package fully done — 4 unreferenced non-empty
+      SOUNDs (0x2E, 0x37, 0x38, 0x42). Cross-port for non-MS-DOS
+      ports is blocked by per-port resource extraction tracked
+      under #0008-#0011 — same disposition as #0056 used when
+      it closed.)*
 - [x] Render (or play / extract WAV from) each unused SOUND for
       auditioning. (`tools/aw_sound_to_wav.py` →
       `docs/assets/research-15-unused-sounds/sound_0xNN.wav`.)
@@ -120,3 +128,11 @@ The opcodes to scan for:
         gated on extraction)
   - [x] Render unused SOUNDs for auditioning
   - [x] Catalog as research/15-unused-sounds.md
+
+- 2026-05-09: closed `done`. All acceptance criteria met for the
+  MS-DOS package (enumerator + reference scanner + reachability
+  filter + per-port diff + renderer + research/15 finding doc).
+  Cross-port SOUND scans for non-MS-DOS ports are blocked by the
+  per-format extraction issues (#0008–#0011) and tracked there,
+  not as a follow-up of this issue. Same disposition as #0056
+  used when it closed.
