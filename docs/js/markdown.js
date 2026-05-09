@@ -17,10 +17,11 @@ const Markdown = (function () {
     text = escapeHtml(text);
     // Code spans first (so other inline rules don't interfere with their content)
     text = text.replace(/`([^`]+)`/g, "<code>$1</code>");
-    // Bold + italic
+    // Bold + italic + strikethrough
     text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     text = text.replace(/\b_([^_]+)_\b/g, "<em>$1</em>");
     text = text.replace(/(^|[^\*])\*([^\*\n]+)\*([^\*]|$)/g, "$1<em>$2</em>$3");
+    text = text.replace(/~~([^~]+)~~/g, "<del>$1</del>");
     // Images — handle BEFORE links so the `!` prefix isn't lost.
     // Source markdown uses `../assets/...` paths relative to
     // docs/content/<section>/foo.md. The deployed site is served
