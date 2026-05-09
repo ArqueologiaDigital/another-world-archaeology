@@ -26,8 +26,21 @@ with one normalised body (count = 1, filtered out).
 
 ## Findings
 
-175 duplicate routine sets identified, dominated by per-stage
-DRAW_CIN_<NNN> single-line draw routines:
+175 duplicate routine sets identified by
+`tools/scan_intra_stage_duplicates.py`. Per-stage breakdown:
+
+  | stage    | count |
+  |----------|------:|
+  | CAVES    | 71    |
+  | PRISON   | 50    |
+  | CAPSULE  | 47    |
+  | ENDING   | 6     |
+  | PASSCODE | 1     |
+
+(LAKE, INTRO, TANK, CODE_WHEEL contribute 0 — those stages have
+already been substantially folded.)
+
+Dominated by per-stage DRAW_CIN_<NNN> single-line draw routines:
 
   - **CAVES**: 17+ `DRAW_CIN_<NNN>` routines defined identically
     across all 3 arms in `<arm>__post_DECREMENT_VAR08_BY_D.inc`
@@ -36,7 +49,7 @@ DRAW_CIN_<NNN> single-line draw routines:
   - **CAVES**: 14+ more `DRAW_CIN_<NNN>` (CIN_026..053 range) in
     `<arm>__post_DEDUP_CAVES_6B_002.inc`, body shape
     `video offset=CINEMATIC_<NNN>, x=[0x07], y=[0x08]`.
-  - Other clusters across CAPSULE, PRISON, etc.
+  - Other clusters across CAPSULE, PRISON, ENDING.
 
 ## Hoist verdict — borderline
 
@@ -69,13 +82,23 @@ Cons:
 
 ## Reproduction
 
-The ad-hoc scan that surfaced this lives inline in the
-2026-05-09 cron-tick conversation. Promote to a proper tool
-(`tools/scan_intra_stage_duplicates.py`) if hoisting goes
-ahead.
+```
+python3 tools/scan_intra_stage_duplicates.py
+```
+
+(Tool landed alongside this issue update.) Companion to
+`tools/scan_cross_stage_helpers.py`; same body-comparison +
+jump-free filter for tooling consistency.
 
 # Log
 
 - 2026-05-09: opened. 175 candidates surfaced. Skipped wholesale
   hoist pending owner call — the source-quality vs file-count
   trade-off is a project-style decision.
+
+- 2026-05-09 (later): promoted the ad-hoc scan to
+  `tools/scan_intra_stage_duplicates.py`. Tool produces per-stage
+  count summary plus top-30 candidate listing. Same
+  body-comparison + jump-free filter as
+  `scan_cross_stage_helpers.py` so the two tools' outputs are
+  directly comparable.

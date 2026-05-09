@@ -2,7 +2,7 @@
 
 Auto-generated alphabetical list of every `tools/*.py` script in this repo, with the first line of each tool's module docstring as a one-line description. Re-run `python3 tools/build_tool_index.py` after adding a tool (or wire it into `make docs` if you forget often).
 
-**113 tools.**
+**114 tools.**
 
 | Tool | Purpose |
 | --- | --- |
@@ -86,6 +86,7 @@ Auto-generated alphabetical list of every `tools/*.py` script in this repo, with
 | `resymbolize_literals.py` | Re-symbolise literal-address operands inserted by |
 | `roundtrip_bytecode.py` | Per-target round-trip test for AW VM bytecode. |
 | `scan_cross_stage_helpers.py` | Phase 6 prep: find routines defined in 2+ stages with byte-identical |
+| `scan_intra_stage_duplicates.py` | Find routines defined byte-identically in 2+ chunks within the |
 | `simulate_gun_budget.py` | Illustrate the gun-energy quota mechanics from research finding #01. |
 | `split_asm_chapter.py` | Helper to split a chapter out of a unified .asm.in into a .inc file. |
 | `standardize_cinematic_frame_suffix.py` | Standardize CINEMATIC frame-index suffixes to bare `_N`. |
