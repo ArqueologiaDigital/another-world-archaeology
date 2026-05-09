@@ -220,7 +220,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | ---: | --- | --- | --- |
 | `0x00` | shared | `DISPLAY_TEXT_01FA_AND_FADE_TO_PAL_2` | src/levels/_unified/lake/lake_intro_palette_fade_and_title.inc:46 |
 | `0x00` | amiga | `DISPLAY_TEXT_01FA_AND_FADE_TO_PAL_2` | src/levels/_unified/lake/lake_intro_palette_fade_and_title.inc:52 |
-| `0x00` | shared | `ENTRY_POINT_OF_LAKE_LEVEL` | src/levels/_unified/lake/lake_entry_and_init.inc:157 |
+| `0x00` | shared | `ENTRY_POINT_OF_LAKE_LEVEL` | src/levels/_unified/lake/lake_entry_and_init.inc:156 |
 | `0x00` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lester_drift_and_swing.inc:256 |
 | `0x00` | shared | `LAKE_LEVEL_INIT` | src/levels/_unified/lake/beast_kills_lester_and_respawn.inc:134 |
 | `0x01` | shared | `DRAW_INSIDE_ALIEN_POOL_SCENARIO` | src/levels/_unified/lake/pool_underwater_cinematic.inc:93 |
@@ -382,7 +382,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x3C` | shared | `BLIT_FROM_PAGE_3_LOOP` | src/levels/_unified/lake/pool_underwater_cinematic.inc:85 |
 | `0x3C` | shared | `BLIT_FROM_PAGE_40_LOOP` | src/levels/_unified/lake/lake_entry_and_init.inc:61 |
 | `0x3C` | shared | `CLEAR_FRAMEBUFFER_TO_COLOR_4_LOOP` | src/levels/_unified/lake/slug_attack_cinematic.inc:93 (+1 more) |
-| `0x3C` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lake_entry_and_init.inc:111 |
+| `0x3C` | shared | `KILL_CHANNEL_ROUTINE` | src/levels/_unified/lake/lake_entry_and_init.inc:110 |
 | `0x3C` | shared | `LOOP_BLIT_AND_CLEAR_FF` | src/levels/_unified/lake/beast_kills_lester_and_respawn.inc:83 |
 | `0x3C` | shared | `RENDER_FRAME_DISPATCH` | src/levels/_unified/lake/beast/drift_left.inc:40 (+2 more) |
 | `0x3F` | shared | `OUTSIDE_POOL_SCREEN` | src/levels/_unified/lake/lester_drift_and_swing.inc:253 |
@@ -2140,14 +2140,14 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x01` | cart | `INLINE_SET_VARED_TO_6` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:120 |
 | `0x01` | amiga | `INLINE_SET_VARED_TO_6` | src/levels/_unified/capsule/amiga__post_LOAD_RES90_COPY_PAGE0_TO_3_LOAD_RES91.inc:56 |
 | `0x01` | dos | `INLINE_SET_VARED_TO_6` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:113 |
-| `0x01` | amiga | `LABEL_05C5` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:167 |
-| `0x01` | amiga | `LABEL_0636` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:188 |
+| `0x01` | amiga | `LABEL_05C5` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:166 |
+| `0x01` | amiga | `LABEL_0636` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:187 |
 | `0x01` | dos | `LABEL_07A6` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:785 |
 | `0x01` | cart | `LABEL_085C` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:801 |
-| `0x01` | dos | `LABEL_1599` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:89 |
-| `0x01` | dos | `LABEL_15E4` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:110 |
-| `0x01` | cart | `LABEL_16A7` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:89 |
-| `0x01` | cart | `LABEL_16F2` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:110 |
+| `0x01` | dos | `LABEL_1599` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:88 |
+| `0x01` | dos | `LABEL_15E4` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:109 |
+| `0x01` | cart | `LABEL_16A7` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:88 |
+| `0x01` | cart | `LABEL_16F2` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:109 |
 | `0x01` | amiga | `LABEL_1FD3` | src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:447 |
 | `0x01` | amiga | `LABEL_1FFB` | src/levels/_unified/capsule/amiga__post_SET_VARB3_TO_0000.inc:444 |
 | `0x01` | dos | `LABEL_289B` | src/levels/_unified/capsule/dos__post_INIT_VARS_29_2F.inc:4 (+1 more) |
@@ -2210,7 +2210,7 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x04` | cart | `HANG_DRAW_CIN_521` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:410 |
 | `0x04` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/cart__post_INIT_VAR6F_TO_A_PAUSE_3.inc:114 (+3 more) |
 | `0x04` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/dos__post_INIT_VAR6F_TO_A_PAUSE_3.inc:114 (+3 more) |
-| `0x04` | amiga | `LABEL_068B` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:265 |
+| `0x04` | amiga | `LABEL_068B` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:264 |
 | `0x04` | dos | `LABEL_0A97` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:957 |
 | `0x04` | amiga | `LABEL_0AC4` | src/levels/_unified/capsule/amiga__post_ACCUMULATE_HASH_INTO_VAR37_38.inc:306 (+3 more) |
 | `0x04` | cart | `LABEL_0B4D` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:993 |
@@ -2218,8 +2218,8 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x04` | dos | `LABEL_0FAA` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:663 |
 | `0x04` | cart | `LABEL_1087` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:673 |
 | `0x04` | amiga | `LABEL_12E0` | src/levels/_unified/capsule/amiga__post_LOAD_RES90_COPY_PAGE0_TO_3_LOAD_RES91.inc:58 |
-| `0x04` | dos | `LABEL_1639` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:172 |
-| `0x04` | cart | `LABEL_1747` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:172 |
+| `0x04` | dos | `LABEL_1639` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:171 |
+| `0x04` | cart | `LABEL_1747` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:171 |
 | `0x04` | dos | `LABEL_1A72` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:465 (+3 more) |
 | `0x04` | cart | `LABEL_1B80` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:471 (+3 more) |
 | `0x04` | dos | `LABEL_1D9B` | src/levels/_unified/capsule/dos__post_INLINE_SET_VARED_TO_5.inc:15 |
@@ -2264,12 +2264,12 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x06` | cart | `TWEEN_VARE8_DOWN_8_STEPS` | src/levels/_unified/capsule/cart__post_SET_VAR01_TO_6E_KILL_CHANNEL.inc:49 |
 | `0x06` | amiga | `TWEEN_VARE8_DOWN_8_STEPS` | src/levels/_unified/capsule/amiga__post_SET_VAR01_TO_6E_KILL_CHANNEL.inc:48 |
 | `0x06` | dos | `TWEEN_VARE8_DOWN_8_STEPS` | src/levels/_unified/capsule/dos__post_SET_VAR01_TO_6E_KILL_CHANNEL.inc:48 |
-| `0x07` | cart | `INLINE_SET_VAREC_TO_AF` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:219 |
-| `0x07` | amiga | `INLINE_SET_VAREC_TO_AF` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:312 |
-| `0x07` | dos | `INLINE_SET_VAREC_TO_AF` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:219 |
-| `0x07` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:183 (+1 more) |
-| `0x07` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:276 (+1 more) |
-| `0x07` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:183 (+1 more) |
+| `0x07` | cart | `INLINE_SET_VAREC_TO_AF` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:218 |
+| `0x07` | amiga | `INLINE_SET_VAREC_TO_AF` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:311 |
+| `0x07` | dos | `INLINE_SET_VAREC_TO_AF` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:218 |
+| `0x07` | cart | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:182 (+1 more) |
+| `0x07` | amiga | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:275 (+1 more) |
+| `0x07` | dos | `KILL_CHANNEL_LANDING` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:182 (+1 more) |
 | `0x07` | amiga | `LABEL_130E` | src/levels/_unified/capsule/amiga__post_LOAD_RES90_COPY_PAGE0_TO_3_LOAD_RES91.inc:108 |
 | `0x07` | dos | `LABEL_2500` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:165 |
 | `0x07` | cart | `LABEL_2671` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:175 |
@@ -2824,20 +2824,20 @@ Channels listed with their total `setup` count across every stage. Channel `0x3C
 | `0x3C` | amiga | `LABEL_21C5` | src/levels/_unified/capsule/amiga__entry.inc:1541 (+2 more) |
 | `0x3C` | amiga | `LABEL_21F2` | src/levels/_unified/capsule/amiga__post_ADD_VAR11_TO_VAR34.inc:95 (+1 more) |
 | `0x3C` | amiga | `LABEL_2268` | src/levels/_unified/capsule/amiga__post_LOAD_RES90_COPY_PAGE0_TO_3_LOAD_RES91.inc:187 |
-| `0x3C` | amiga | `LABEL_22A4` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:194 (+1 more) |
+| `0x3C` | amiga | `LABEL_22A4` | src/levels/_unified/capsule/amiga__post_BREAK_5X_THEN_INIT_VAR03_14.inc:193 (+1 more) |
 | `0x3C` | dos | `LABEL_2E43` | src/levels/_unified/capsule/dos__entry.inc:1684 (+3 more) |
 | `0x3C` | dos | `LABEL_2E73` | src/levels/_unified/capsule/dos__post_DRAW_CV139_AT_X01_Y02.inc:30 |
 | `0x3C` | dos | `LABEL_2E8C` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:598 (+1 more) |
 | `0x3C` | dos | `LABEL_2F4F` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:864 |
 | `0x3C` | dos | `LABEL_2F8F` | src/levels/_unified/capsule/dos__post_INLINE_SET_VAR02_TO_97.inc:1002 |
 | `0x3C` | cart | `LABEL_2FC0` | src/levels/_unified/capsule/cart__entry.inc:1677 (+3 more) |
-| `0x3C` | dos | `LABEL_2FCB` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:116 (+1 more) |
+| `0x3C` | dos | `LABEL_2FCB` | src/levels/_unified/capsule/dos__post_DRAW_TEXT_0174_AT_26_180.inc:115 (+1 more) |
 | `0x3C` | dos | `LABEL_2FE9` | src/levels/_unified/capsule/dos__post_SET_VAR13_TO_FFFF.inc:75 |
 | `0x3C` | cart | `LABEL_2FF0` | src/levels/_unified/capsule/cart__post_DRAW_CV139_AT_X01_Y02.inc:31 |
 | `0x3C` | cart | `LABEL_3009` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:605 (+1 more) |
 | `0x3C` | cart | `LABEL_30CC` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:900 |
 | `0x3C` | cart | `LABEL_310C` | src/levels/_unified/capsule/cart__post_INLINE_SET_VAR02_TO_97.inc:1039 |
-| `0x3C` | cart | `LABEL_3148` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:116 (+1 more) |
+| `0x3C` | cart | `LABEL_3148` | src/levels/_unified/capsule/cart__post_DRAW_TEXT_0174_AT_26_180.inc:115 (+1 more) |
 | `0x3C` | cart | `LABEL_3166` | src/levels/_unified/capsule/cart__post_SET_VAR13_TO_FFFF.inc:75 |
 | `0x3E` | amiga | `LABEL_81EF` | src/levels/_unified/capsule/amiga__post_SET_VAR04_TO_0024.inc:236 (+2 more) |
 | `0x3F` | cart | `BREAK_5X_THEN_INIT_VAR03_14` | src/levels/_unified/capsule/cart__post_DRAW_CV139_AT_X01_Y02.inc:18 (+4 more) |
