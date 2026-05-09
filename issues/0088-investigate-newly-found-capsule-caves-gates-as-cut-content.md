@@ -101,9 +101,16 @@ polygon bank — render them.
       different channel. The gate is a deferred-init pattern,
       not cut content. Cart-only gate; amiga uses LABEL_5054
       directly on channel 0x18 with no kill.)*
-- [ ] Document the `LABEL_2A6E` body — what does the real
+- [x] Document the `LABEL_2A6E` body — what does the real
       CAPSULE 0x2E logic do, and what's the placeholder kill
       for?
+      *(Done — see Log entry 2026-05-09. LABEL_2A6E is a
+      HACK_VAR_67-gated scene-state dispatcher (active when
+      0x4B <= HACK_VAR_67 <= 0x4D); the pre-kill is the
+      defensive "second setup wins" idiom — same pattern as
+      research/05's LAKE beetle gates. Present symmetrically
+      across cart + dos + amiga, so the pattern is from the
+      original Delphine source, not a port artefact.)*
 - [ ] If any of the cinematic frames depict identifiable
       content (creatures, scenes, etc.), file a follow-up
       issue or update research/18 with visual identification.
@@ -152,3 +159,43 @@ polygon bank — render them.
   Acceptance item 3 done. Next: investigate LABEL_2A6E (CAPSULE
   channel 0x2E reschedule), LABEL_3A26 + LABEL_39E3 (cinematic
   rendering), LABEL_2A6E body.
+
+- 2026-05-09 (later): investigated `LABEL_2A6E` (CAPSULE channel
+  0x2E reschedule, all three arms). **Finding: idiomatic
+  "second-setup-wins" pattern — same shape as research/05's LAKE
+  beetle gates.** The kill-then-real sequence:
+
+      cart  17942-17943: setup channel=0x2E, KILL_CHAN_AT_59A3 ; LABEL_2A6E
+      dos   17933-17934: setup channel=0x2E, KILL_CHAN_AT_59A3 ; LABEL_28F7
+      amiga 12568-12569: setup channel=0x2E, KILL_CHAN_AT_59A3 ; LABEL_17D8
+
+  Cross-arm symmetry (all three arms have this exact pattern with
+  per-arm bytecode addresses for the real handler) means the
+  pattern is from the original Delphine 1992 source, not a port-
+  specific reorganisation. Same engine semantics as the beetle
+  gates: both `setup`s queue an address for channel 0x2E's next
+  tick; the second overwrites the first, so the kill is shadowed
+  and the real handler always runs. Likely defensive programming
+  in the source generator — the kill is the safe fallback if for
+  any reason the second `setup` is skipped.
+
+  `LABEL_2A6E` body (the surviving real handler):
+
+      LABEL_2A6E:
+          jg [HACK_VAR_67], 0x4D, LABEL_2AAF
+          jl [HACK_VAR_67], 0x4B, LABEL_2BB6
+          jl [0x73], 0x4000, LABEL_2A93
+          je [0xB0], 0x00, LABEL_2A8A
+          call LABEL_3385
+
+  HACK_VAR_67 is the scene flag; the dispatcher only operates
+  when it's in the [0x4B, 0x4D] range, otherwise it bails to
+  parallel scene branches (LABEL_2AAF / LABEL_2BB6). Within the
+  active range, var0x73 high-bits + var0xB0 select sub-states,
+  with LABEL_3385 as the active-state action. Standard scene-
+  state dispatcher.
+
+  Acceptance item 4 done. Three remaining: render
+  LABEL_3A26 CINEMATIC_870..873 frames, render LABEL_39E3 /
+  LABEL_37D0 CINEMATIC_810.. frames, follow-up cinematic
+  identification + dead-routine subroutine marking.
