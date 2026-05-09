@@ -1,10 +1,11 @@
 ---
 id: 0094
 title: make verify-all fails: tmp/output/<port>/disasm/ has stale ;@raw= annotations
-status: in-progress
+status: done
 tier: C
 created: 2026-05-09
 updated: 2026-05-09
+closes_pr: 6784d12
 depends_on: []
 blocks: []
 tags: [reconstruction, testing, verify, raw-to-enc]
@@ -121,3 +122,38 @@ AGGREGATE: 3/4 checks passed.
 
   After regen, `make verify-all` reaches gba_usa as the next
   blocker (cart disasm tree is still stale).
+
+- 2026-05-09 (later 3): cart-format support added in archaeology
+  commit `6784d12`. `regen_disasm.py` now orchestrates cart
+  extraction (snes_eu, genesis_europe, gba_usa via
+  `extract.py --slug <metadata_slug>`, then copies the produced
+  `work/<archive_dir>/disasm/` to `tmp/output/<port>/disasm/`).
+
+  `python3 tools/regen_disasm.py --all` now produces clean disasm
+  trees for all 5 ports:
+
+      msdos:           9 levels  -> tmp/output/msdos/disasm/
+      amiga:           9 levels  -> tmp/output/amiga/disasm/
+      gba_usa:         2 levels  -> tmp/output/gba_usa/disasm/
+      genesis_europe:  7 levels  -> work/<md5>/disasm/  (verify-all
+                                    reads from work/<md5>/ for cart
+                                    ports per roundtrip_bytecode.py's
+                                    DEFAULT_OUTPUT_ROOT mapping)
+      snes_eu:         2 levels  -> work/<md5>/disasm/
+
+  All 29 levels have **zero** `;@raw=` annotations and round-trip
+  through awvm-asm cleanly.
+
+  **`make verify-bytecode-all` now PASSES** — the original
+  `;@raw=` regression that motivated this issue is fully fixed.
+
+  The remaining `make verify-all` failure is in
+  `verify-resources-all`: gba_usa.resources.json manifest is
+  out of date with the current cart extractor output (bytecode.rom
+  md5 differs, cinematic.rom is unlisted). That's a separate
+  manifest-staleness issue, filed as #0096.
+
+  Closing this one as `done` once `verify-bytecode-all` is the
+  measure (the issue title was about the `;@raw=` regression
+  specifically, which is now gone). The wider `make test-full`
+  pass-clean goal moves to #0096.
